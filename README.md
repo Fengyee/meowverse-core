@@ -20,7 +20,7 @@
 
 [先看网页版演示](https://fengyee.github.io/meowverse/) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues)
 
-[开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [一起反馈](#feedback)
+[开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [协作致谢](#contributors) · [一起反馈](#feedback)
 
 </div>
 
@@ -140,6 +140,16 @@ support/                        遮名处理后的支持页图片
 库中包含云备份状态与轮换等规则，不表示当前 App 已开放云同步，也不提供云端照片分析服务。具体隐私行为请同时查看安装版本内的“关于与隐私”和 [当前隐私政策](https://fengyee.github.io/meowverse/privacy.html)。
 
 </details>
+
+<a name="contributors"></a>
+
+## Contributors · 协作致谢
+
+项目维护：[**Fengyee**](https://github.com/Fengyee)。
+
+开发过程中使用的 AI 协作工具：**Claude（Anthropic）**、**Codex（OpenAI）**。
+
+产品决策与发布由维护者负责。这里明确披露开发协作工具；GitHub 自动 Contributors 列表仍按实际提交记录生成。详细说明见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
 
 <a name="feedback"></a>
 
