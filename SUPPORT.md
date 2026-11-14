@@ -24,7 +24,11 @@ Meowverse 由个人持续开发，希望用一个小房间，让猫咪那些平�
 
 打赏完全自愿，用于支持持续开发。**测试、反馈和后续反馈群都不要求打赏。** 打赏不构成 App 购买、预售、投资或付费服务订单，也不绑定专属功能、确定的上架时间或审核结果。
 
-可以通过 TestFlight 反馈、App 内“设置 › 反馈问题”，或 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com) 提交问题。QQ 反馈群计划名为 **Meowverse｜iOS 测试与反馈**，目前尚未开放，群号和入群入口待确定。
+可以通过 TestFlight 反馈、App 内“设置 › 反馈问题”，或 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com) 提交问题。也欢迎加入 **Meowverse/猫宇宙 QQ 群**，交流使用体验和反馈问题。
+
+**群号：`1132819295`。免费入群，打赏自愿。** 在 QQ 搜索群号，或扫描下方二维码；[README 下方](README.md#community) 也可直接查看群入口和打赏方式。
+
+<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="Meowverse/猫宇宙 QQ 群二维码，群号 1132819295"></a>
 
 分享问题时，请使用合成或已获授权的图片，并去掉私人照片、支付信息及设备标识。
 

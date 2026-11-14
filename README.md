@@ -18,7 +18,7 @@
 
 **iPhone / iPad · 简体中文 / English · 免费测试**
 
-[先看网页版演示](https://fengyee.github.io/meowverse/) · [支持持续开发](https://github.com/Fengyee/meowverse-core/blob/main/SUPPORT.md) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues)
+[先看网页版演示](https://fengyee.github.io/meowverse/) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues)
 
 [开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [一起反馈](#feedback)
 
@@ -147,8 +147,33 @@ support/                        遮名处理后的支持页图片
 
 可以在 [GitHub Issues](https://github.com/Fengyee/meowverse-core/issues) 提交问题，也可以使用 TestFlight 的反馈功能、App 内“设置 › 反馈问题”，或发邮件到 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。请带上版本、操作步骤和经过检查的截图，避免附上私人照片和支付信息。
 
-QQ 反馈群计划名为 **Meowverse｜iOS 测试与反馈**，目前尚未开放，群号和入群入口待确定。测试和反馈免费，打赏完全自愿。
+<a name="community"></a>
 
-开发者会员已经开通，TestFlight 已可体验。如果你希望支持已投入的首年会员费用及后续开发维护，可以查看 [支持说明](https://github.com/Fengyee/meowverse-core/blob/main/SUPPORT.md)。打赏不购买功能、测试名额或商业使用许可。
+### 加入 QQ 群 · Meowverse/猫宇宙
 
-官方仓库为 **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)**。支持方式请以该仓库的 [SUPPORT.md](https://github.com/Fengyee/meowverse-core/blob/main/SUPPORT.md) 为准。宣传截图和支持图仅供项目展示，其权利范围独立于代码许可，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。
+欢迎来群里交流使用体验、反馈问题和聊聊猫咪。**群号：`1132819295`**。可以在 QQ 搜索群号，也可以扫描下方二维码。
+
+**免费入群，打赏自愿。** 参与测试、反馈和交流都不需要打赏。
+
+<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="Meowverse/猫宇宙 QQ 群二维码，群号 1132819295"></a>
+
+<a name="support"></a>
+
+### 支持 Meowverse 继续开发
+
+开发者会员已经开通，TestFlight 已可体验。如果你喜欢这个小世界，欢迎自愿打赏，支持已投入的**首年 Apple 开发者会员费用与后续开发维护**。
+
+<table>
+  <tr>
+    <th align="center">微信</th>
+    <th align="center">支付宝</th>
+  </tr>
+  <tr>
+    <td align="center"><a href="support/wechat-name-hidden.png"><img src="support/wechat-name-hidden.png" width="240" alt="微信打赏收款码，图片上的姓名已遮盖"></a></td>
+    <td align="center"><a href="support/alipay-name-hidden.png"><img src="support/alipay-name-hidden.png" width="240" alt="支付宝打赏收款码，图片上的姓名已遮盖"></a></td>
+  </tr>
+</table>
+
+打赏完全自愿，不影响测试、反馈或入群，也不购买功能、确定的上架时间或商业使用许可。详细用途与支持说明见 [SUPPORT.md](SUPPORT.md)。
+
+请认准官方仓库 **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)** 内的收款图；图片上的姓名已遮盖，付款页面的收款信息由支付平台显示，付款前请核对。宣传截图、群二维码和支持图仅供本项目展示，其权利范围独立于代码许可，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。
