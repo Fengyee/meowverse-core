@@ -1,0 +1,49 @@
+name: 问题反馈 / Bug report
+description: App、网页 demo 或 Core 源码遇到了异常。
+title: "[问题] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        谢谢你帮 Meowverse 变得更好，知道多少就填多少。
+        **Issue 是公开的。** 请勿附上私人原照片、完整备份 ZIP、支付信息、API key、设备标识或住址；截图和日志请先检查并打码。
+        不习惯 GitHub？也可以用 TestFlight、App「设置 → 反馈问题」，或 QQ 群 **1132819295** 免费反馈。
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 在哪里遇到问题？
+      options:
+        - iPhone App（TestFlight）
+        - iPad App（TestFlight）
+        - 网页 demo
+        - MeowverseCore 源码 / 测试
+        - 不确定
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 版本与设备（选填）
+      description: 写 App 构建号、系统版本或浏览器名称即可，无需序列号、UDID 或账号。
+      placeholder: 例如 0.1.0 (3)，iPhone 15，iOS 18；或 Safari / macOS
+  - type: textarea
+    id: problem
+    attributes:
+      label: 发生了什么？怎样遇到的？
+      description: 请描述操作步骤和实际表现；偶发、暂时无法复现也可以说明。
+      placeholder: |
+        1. 打开……
+        2. 点击……
+        3. 出现……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本期待怎样的结果？（选填）
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图或诊断信息（选填）
+      description: 优先使用合成图片或已遮挡私人内容的截图。不要上传照片备份、付款截图或真实密钥。

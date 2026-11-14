@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 免费试用 iOS TestFlight
+    url: https://testflight.apple.com/join/WCuPQFsm
+    about: 先安装 TestFlight，再打开邀请接受测试。
+  - name: QQ 群 · Meowverse/猫宇宙 · 1132819295
+    url: https://github.com/Fengyee/meowverse-core#community
+    about: 查看群二维码，或直接在 QQ 搜索群号。免费入群，打赏自愿。

@@ -1,0 +1,38 @@
+name: 体验建议 / Feature idea
+description: 告诉我们使用场景、困惑或希望改善的小事。
+title: "[建议] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        欢迎聊聊你怎样使用 Meowverse，不需要提供技术方案。
+        **Issue 是公开的。** 请用文字描述场景，避免附上私人照片、完整备份、付款信息、API key、设备标识、住址或账号资料。
+        测试、建议与 QQ 群 **1132819295** 交流都免费，打赏完全自愿。
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 主要针对哪里？（选填）
+      options:
+        - iOS App
+        - 网页 demo
+        - MeowverseCore 源码
+        - 整体体验 / 不限平台
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 你想在什么场景使用？
+      placeholder: 例如照片越攒越多，想把同一张沙发上的回忆一起整理……
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: 希望 Meowverse 怎样帮你？
+      description: 描述希望得到的结果，或目前哪一步让你感到困惑。
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: 其他补充（选填）

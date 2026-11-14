@@ -18,7 +18,7 @@
 
 **iPhone / iPad · 简体中文 / English · 免费测试**
 
-[先看网页版演示](https://fengyee.github.io/meowverse/) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues)
+[先看网页版演示](https://fengyee.github.io/meowverse/) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [协作致谢](#contributors) · [一起反馈](#feedback)
 
@@ -155,7 +155,7 @@ support/                        遮名处理后的支持页图片
 
 ## 一起把它做好
 
-可以在 [GitHub Issues](https://github.com/Fengyee/meowverse-core/issues) 提交问题，也可以使用 TestFlight 的反馈功能、App 内“设置 › 反馈问题”，或发邮件到 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。请带上版本、操作步骤和经过检查的截图，避免附上私人照片和支付信息。
+可以选择 [问题反馈或体验建议模板](https://github.com/Fengyee/meowverse-core/issues/new/choose) 提交内容，也可以使用 TestFlight 的反馈功能、App 内“设置 › 反馈问题”，或发邮件到 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。问题反馈只需选择平台、描述操作与实际表现；版本、截图和日志选填。Issue 公开可见，请避免附上私人原照片、完整备份、支付信息、设备标识或真实密钥。
 
 <a name="community"></a>
 
