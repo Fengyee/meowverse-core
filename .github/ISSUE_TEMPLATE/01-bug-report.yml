@@ -1,49 +1,56 @@
 name: 问题反馈 / Bug report
-description: App、网页 demo 或 Core 源码遇到了异常。
-title: "[问题] "
+description: 反馈 App、网页或 Core 异常。Report a problem with the app, web demo or Core.
+title: "[Bug / 问题] "
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
         谢谢你帮 Meowverse 变得更好，知道多少就填多少。
-        **Issue 是公开的。** 请勿附上私人原照片、完整备份 ZIP、支付信息、API key、设备标识或住址；截图和日志请先检查并打码。
-        不习惯 GitHub？也可以用 TestFlight、App「设置 → 反馈问题」，或 QQ 群 **1132819295** 免费反馈。
+        Thanks for helping improve Meowverse. Share what you know; most fields are optional.
+
+        **Issue 是公开的 / Issues are public.**
+        请勿附上私人原照片、完整备份 ZIP、支付信息、API key、设备标识或住址；截图和日志请先检查并打码。
+        Leave out private photos, complete backup ZIPs, payment information, API keys, device identifiers and addresses. Check and redact screenshots or logs before attaching them.
+
+        也可以用 TestFlight、App「设置 → 反馈问题」，或 QQ 群 **1132819295** 免费反馈。
+        You can also use TestFlight feedback, Settings → Report a Problem in the app, or the free QQ community **1132819295**.
   - type: dropdown
     id: platform
     attributes:
-      label: 在哪里遇到问题？
+      label: 在哪里遇到问题？ / Where did it happen?
       options:
         - iPhone App（TestFlight）
         - iPad App（TestFlight）
-        - 网页 demo
-        - MeowverseCore 源码 / 测试
-        - 不确定
+        - 网页 demo / Web demo
+        - MeowverseCore 源码或测试 / Core source or tests
+        - 不确定 / Not sure
     validations:
       required: true
   - type: input
     id: environment
     attributes:
-      label: 版本与设备（选填）
-      description: 写 App 构建号、系统版本或浏览器名称即可，无需序列号、UDID 或账号。
-      placeholder: 例如 0.1.0 (3)，iPhone 15，iOS 18；或 Safari / macOS
+      label: 版本与设备（选填） / Version and device (optional)
+      description: 写构建号、系统版本或浏览器即可，无需序列号、UDID 或账号。App build, OS or browser is enough; no serial number, UDID or account details.
+      placeholder: "例如 / e.g. 0.1.0 (3), iPhone 15, iOS 18; Safari / macOS"
   - type: textarea
     id: problem
     attributes:
-      label: 发生了什么？怎样遇到的？
-      description: 请描述操作步骤和实际表现；偶发、暂时无法复现也可以说明。
+      label: 发生了什么？怎样遇到的？ / What happened, and how?
+      description: 描述操作与实际表现；偶发或无法复现也可以说明。Describe your steps and the result. Intermittent or hard-to-reproduce problems are welcome too.
       placeholder: |
-        1. 打开……
-        2. 点击……
-        3. 出现……
+        1. 打开…… / Open…
+        2. 点击…… / Tap or click…
+        3. 出现…… / This happens…
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: 你原本期待怎样的结果？（选填）
+      label: 预期结果（选填） / Expected result (optional)
+      placeholder: 你原本期待什么？ / What did you expect to happen?
   - type: textarea
     id: evidence
     attributes:
-      label: 截图或诊断信息（选填）
-      description: 优先使用合成图片或已遮挡私人内容的截图。不要上传照片备份、付款截图或真实密钥。
+      label: 截图或诊断信息（选填） / Screenshots or diagnostics (optional)
+      description: 优先用合成图或已打码截图，不要上传照片备份、付款截图或真实密钥。Use synthetic or redacted images; no photo backups, payment screenshots or real keys.

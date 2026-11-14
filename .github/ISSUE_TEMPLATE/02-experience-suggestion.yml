@@ -1,38 +1,48 @@
 name: 体验建议 / Feature idea
-description: 告诉我们使用场景、困惑或希望改善的小事。
-title: "[建议] "
+description: 分享使用场景和改进建议。Share a use case, confusion or idea for improvement.
+title: "[Idea / 建议] "
 labels: [enhancement]
 body:
   - type: markdown
     attributes:
       value: |
         欢迎聊聊你怎样使用 Meowverse，不需要提供技术方案。
-        **Issue 是公开的。** 请用文字描述场景，避免附上私人照片、完整备份、付款信息、API key、设备标识、住址或账号资料。
-        测试、建议与 QQ 群 **1132819295** 交流都免费，打赏完全自愿。
+        Tell us how you use Meowverse. You do not need to propose a technical solution.
+
+        **Issue 是公开的 / Issues are public.**
+        请用文字描述场景，避免附上私人照片、完整备份、付款信息、API key、设备标识、住址或账号资料。
+        Describe the situation in words. Leave out private photos, complete backups, payment information, API keys, device identifiers, addresses and account details.
+
+        测试、建议和 QQ 群 **1132819295** 交流都免费。
+        Testing, suggestions and participation in QQ group **1132819295** are free.
   - type: dropdown
     id: platform
     attributes:
-      label: 主要针对哪里？（选填）
+      label: 主要针对哪里？（选填） / Area (optional)
       options:
         - iOS App
-        - 网页 demo
-        - MeowverseCore 源码
-        - 整体体验 / 不限平台
+        - 网页 demo / Web demo
+        - MeowverseCore 源码 / Core source
+        - 整体体验或不限平台 / Overall experience or any platform
   - type: textarea
     id: scenario
     attributes:
-      label: 你想在什么场景使用？
-      placeholder: 例如照片越攒越多，想把同一张沙发上的回忆一起整理……
+      label: 使用场景 / Your use case
+      placeholder: |
+        例如照片越攒越多，想把同一张沙发上的回忆一起整理……
+        For example, your photos keep piling up and you want to group memories of the same sofa…
     validations:
       required: true
   - type: textarea
     id: improvement
     attributes:
-      label: 希望 Meowverse 怎样帮你？
-      description: 描述希望得到的结果，或目前哪一步让你感到困惑。
+      label: 希望改善什么？ / What would you like to improve?
+      description: 描述想达到的效果，或哪一步让你困惑。Describe the outcome you want, or the step that feels confusing.
+      placeholder: Meowverse 可以怎样帮到你？ / How could Meowverse help you?
     validations:
       required: true
   - type: textarea
     id: extra
     attributes:
-      label: 其他补充（选填）
+      label: 其他补充（选填） / Anything else (optional)
+      placeholder: 可以补充背景，但请去除私人信息。 / Add any useful context, without private information.
