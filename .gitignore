@@ -1,0 +1,16 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+Local.xcconfig
+.env
+.env.*
+private/
+backups/
+*.log
+*.p12
+*.p8
+*.mobileprovision

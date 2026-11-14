@@ -1,0 +1,956 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "id": "pet-lookout-tree",
+      "label": "瞭望台猫爬架",
+      "category": "catTree",
+      "defaultSize": [
+        4,
+        4
+      ],
+      "sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "catalog/pet/lookout-tree.json",
+      "sha256": "e765208d2c81f7577f47dc70f24f3cbffef7769734a411aef69fe8778153e340",
+      "bytes": 408859,
+      "bounds": {
+        "min": [
+          -5.25576,
+          0,
+          -4.18526
+        ],
+        "max": [
+          5.352,
+          14.427,
+          7.14
+        ]
+      },
+      "triangles": 3048,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          3.672,
+          5.55,
+          5.34
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "ball",
+          "label": "拍球台",
+          "position": [
+            3.672,
+            5.55,
+            5.34
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "play"
+          ],
+          "via": []
+        },
+        {
+          "id": "den",
+          "label": "底层猫洞",
+          "position": [
+            2.448,
+            1.26,
+            2.05065
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              2.448,
+              0.882,
+              4.743
+            ]
+          ]
+        },
+        {
+          "id": "landing",
+          "label": "中层跳台",
+          "position": [
+            2.16,
+            10.962,
+            2.232
+          ],
+          "facing": 1.5707963267948966,
+          "actions": [
+            "sit"
+          ],
+          "via": [
+            [
+              -3.03,
+              2.94,
+              1.77
+            ],
+            [
+              -3.168,
+              6.93,
+              0.4743
+            ]
+          ]
+        },
+        {
+          "id": "lookout",
+          "label": "顶层软垫",
+          "position": [
+            -2.16,
+            13.986,
+            -1.116
+          ],
+          "facing": 0.55,
+          "actions": [
+            "sit",
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              -3.03,
+              2.94,
+              1.77
+            ],
+            [
+              -3.168,
+              6.93,
+              0.4743
+            ],
+            [
+              2.16,
+              10.962,
+              2.232
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pet-sisal-post",
+      "label": "剑麻抓柱",
+      "category": "scratcher",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/sisal-post.json",
+      "sha256": "301949c3942210dfc60ca40421461bcaa082e9742aac4186dc5a60105e4cf2af",
+      "bytes": 68936,
+      "bounds": {
+        "min": [
+          -2.45735,
+          0,
+          -2.45735
+        ],
+        "max": [
+          2.45735,
+          6.53635,
+          2.45735
+        ]
+      },
+      "triangles": 588,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          3.12
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "post",
+          "label": "抓柱正面",
+          "position": [
+            0,
+            0,
+            3.12
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "scratch"
+          ],
+          "via": []
+        },
+        {
+          "id": "perch",
+          "label": "柱顶软台",
+          "position": [
+            0,
+            6.5364,
+            0
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-play-tunnel",
+      "label": "弹簧布隧道",
+      "category": "hideout",
+      "defaultSize": [
+        2,
+        4
+      ],
+      "sizes": [
+        [
+          2,
+          4
+        ]
+      ],
+      "path": "catalog/pet/play-tunnel.json",
+      "sha256": "dcbb3d2050066cfa9e1937140d6e537d248eab0f17cd2961827d511d91a9ed77",
+      "bytes": 254669,
+      "bounds": {
+        "min": [
+          -2.23448,
+          -0.00008,
+          -5.358
+        ],
+        "max": [
+          2.23448,
+          4.46888,
+          5.358
+        ]
+      },
+      "triangles": 1824,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.3,
+          2.91
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "inside",
+          "label": "隧道里",
+          "position": [
+            0,
+            0.3,
+            2.91
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0,
+              0.3,
+              5.16
+            ]
+          ]
+        },
+        {
+          "id": "mouth",
+          "label": "隧道口",
+          "position": [
+            0,
+            0.3,
+            3.75
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [
+            [
+              0,
+              0.3,
+              5.16
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pet-cave-bed",
+      "label": "薄荷毡窝",
+      "category": "hideout",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/cave-bed.json",
+      "sha256": "a20923b2a55ebe58ed6631b064557729b13cb6a6b092570e1d81eed0c02784d7",
+      "bytes": 232374,
+      "bounds": {
+        "min": [
+          -4.0455,
+          -0.00014,
+          -4.0455
+        ],
+        "max": [
+          4.0455,
+          4.22674,
+          4.0455
+        ]
+      },
+      "triangles": 1640,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.11,
+          0.78
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "cave",
+          "label": "窝口软垫",
+          "position": [
+            0,
+            1.11,
+            0.78
+          ],
+          "facing": 0,
+          "actions": [
+            "hide",
+            "sleep"
+          ],
+          "via": [
+            [
+              0,
+              0.63,
+              3.12
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pet-cushion-bed",
+      "label": "甜甜圈软垫",
+      "category": "bed",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/cushion-bed.json",
+      "sha256": "bd1acd90c89eb247c1366531545a5f37e785b5b60f3512d9e81b70c38a06927f",
+      "bytes": 112565,
+      "bounds": {
+        "min": [
+          -4.185,
+          -0.0001,
+          -4.185
+        ],
+        "max": [
+          4.185,
+          1.50303,
+          4.185
+        ]
+      },
+      "triangles": 832,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.96,
+          0
+        ],
+        "facing": 0.5
+      },
+      "sites": [
+        {
+          "id": "cushion",
+          "label": "内圈软垫",
+          "position": [
+            0,
+            0.96,
+            0
+          ],
+          "facing": 0.5,
+          "actions": [
+            "sleep",
+            "loaf"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-toy-mouse",
+      "label": "弹簧逗猫鼠",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        3
+      ],
+      "sizes": [
+        [
+          2,
+          3
+        ]
+      ],
+      "path": "catalog/pet/toy-mouse.json",
+      "sha256": "f3079a06bbb501542cbb0fa029f625fe556cf4196692e2401503750d7f27134a",
+      "bytes": 137729,
+      "bounds": {
+        "min": [
+          -1.29,
+          0,
+          -1.38
+        ],
+        "max": [
+          1.29,
+          2.17501,
+          1.38
+        ]
+      },
+      "triangles": 1092,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -0.36,
+          0,
+          2.88
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "mouse",
+          "label": "毛毡小鼠",
+          "position": [
+            -0.36,
+            0,
+            2.88
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "play"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-scratch-board",
+      "label": "瓦楞斜面抓板",
+      "category": "scratcher",
+      "defaultSize": [
+        2,
+        3
+      ],
+      "sizes": [
+        [
+          2,
+          3
+        ]
+      ],
+      "path": "catalog/pet/scratch-board.json",
+      "sha256": "6284ed0f63ed4b13073f2c56ea324d8ee06331f210d29aceaa265a73dd0d3e77",
+      "bytes": 283462,
+      "bounds": {
+        "min": [
+          -1.905,
+          0,
+          -3.72
+        ],
+        "max": [
+          1.905,
+          3.74294,
+          3.72
+        ]
+      },
+      "triangles": 2268,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.42,
+          2.52
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "ramp",
+          "label": "瓦楞斜面",
+          "position": [
+            0,
+            0.42,
+            2.52
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "scratch"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-two-step",
+      "label": "窗边双层小台",
+      "category": "platform",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/two-step.json",
+      "sha256": "426040d3ba16a026805607ab79965cf090c86242e169383c3688f2b6dd084f05",
+      "bytes": 77350,
+      "bounds": {
+        "min": [
+          -2.85,
+          0,
+          -3.345
+        ],
+        "max": [
+          2.85,
+          3.09,
+          3.24
+        ]
+      },
+      "triangles": 756,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          3.09,
+          -1.29
+        ],
+        "facing": 1.5707963267948966
+      },
+      "sites": [
+        {
+          "id": "upper",
+          "label": "上层软台",
+          "position": [
+            0,
+            3.09,
+            -1.29
+          ],
+          "facing": 1.5707963267948966,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [
+            [
+              0,
+              1.32,
+              1.74
+            ]
+          ]
+        },
+        {
+          "id": "step",
+          "label": "下层踏板",
+          "position": [
+            0,
+            1.32,
+            1.74
+          ],
+          "facing": 1.5707963267948966,
+          "actions": [
+            "sit"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-feeding-station",
+      "label": "木托双碗餐台",
+      "category": "water",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/feeding-station.json",
+      "sha256": "e71b450d63cb27539850b7bd24569881bf8fc127e96112f6ec756ecb91992bf3",
+      "bytes": 261258,
+      "bounds": {
+        "min": [
+          -3.15,
+          -0.00003,
+          -1.83617
+        ],
+        "max": [
+          3.12,
+          0.85864,
+          5.67
+        ]
+      },
+      "triangles": 1964,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.03474,
+          0.4495,
+          2.25104
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "water",
+          "label": "水碗前",
+          "position": [
+            1.03474,
+            0.4495,
+            2.25104
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "drink"
+          ],
+          "via": []
+        },
+        {
+          "id": "kibble",
+          "label": "干粮碗前",
+          "position": [
+            -1.61725,
+            0.7087,
+            2.13357
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "eat"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-flower-fountain",
+      "label": "花瓣循环饮水机",
+      "category": "water",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/flower-fountain.json",
+      "sha256": "7c0dd9339847e7e1e25afc49367f9c88e61a7b71e6576e42417b783984db5837",
+      "bytes": 331869,
+      "bounds": {
+        "min": [
+          -2.673,
+          -0.00006,
+          -2.673
+        ],
+        "max": [
+          3.00922,
+          2.1,
+          5.775
+        ]
+      },
+      "triangles": 2516,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -0.14125,
+          0.82486,
+          3.95354
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "basin",
+          "label": "花瓣下的水面",
+          "position": [
+            -0.14125,
+            0.82486,
+            3.95354
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "drink"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-window-seat",
+      "label": "软垫飘窗",
+      "category": "windowPerch",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "catalog/pet/window-seat.json",
+      "sha256": "0b71783eb63c53fc7947b34af4208e1af9272e4c3ddaa179d3b26978a790f309",
+      "bytes": 342292,
+      "bounds": {
+        "min": [
+          -5.56482,
+          0,
+          -2.47479
+        ],
+        "max": [
+          5.56482,
+          11.544,
+          5.37
+        ]
+      },
+      "triangles": 2660,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.44,
+          3.52683,
+          0.39
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "watch",
+          "label": "窗边座位",
+          "position": [
+            1.44,
+            3.52683,
+            0.39
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "sit"
+          ],
+          "via": [
+            [
+              0,
+              1.02,
+              4.5
+            ],
+            [
+              0,
+              2.04,
+              3.57
+            ],
+            [
+              0,
+              2.94,
+              2.94
+            ]
+          ]
+        },
+        {
+          "id": "nap",
+          "label": "窗台中央软席",
+          "position": [
+            0,
+            3.52731,
+            0.39
+          ],
+          "facing": 1.5707963267948966,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              0,
+              1.02,
+              4.5
+            ],
+            [
+              0,
+              2.04,
+              3.57
+            ],
+            [
+              0,
+              2.94,
+              2.94
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pet-feather-wand",
+      "label": "羽毛逗猫棒托盘",
+      "category": "toy",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/pet/feather-wand.json",
+      "sha256": "bfed152cf6f8cd1c5c46c2f9372c7b3ccad1511eb83bbf4530a4c0122bcc9422",
+      "bytes": 165682,
+      "bounds": {
+        "min": [
+          -2.205,
+          0,
+          -0.942
+        ],
+        "max": [
+          3.945,
+          2.25569,
+          1.8365
+        ]
+      },
+      "triangles": 1224,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          2.77862,
+          0,
+          3.64977
+        ],
+        "facing": 3.141592653589793
+      },
+      "sites": [
+        {
+          "id": "plume",
+          "label": "托盘前方",
+          "position": [
+            2.77862,
+            0,
+            3.64977
+          ],
+          "facing": 3.141592653589793,
+          "actions": [
+            "play"
+          ],
+          "via": []
+        }
+      ]
+    },
+    {
+      "id": "pet-litter-box",
+      "label": "鼠尾草绿开放猫砂盆",
+      "category": "litterBox",
+      "defaultSize": [
+        4,
+        4
+      ],
+      "sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "catalog/pet/litter-box.json",
+      "sha256": "fe1f13fb38a935b0ada7d73fd1fe03d59a800b14c3c6baa8939d5013e0434b05",
+      "bytes": 806908,
+      "bounds": {
+        "min": [
+          -4.044,
+          0,
+          -4.704
+        ],
+        "max": [
+          5.16,
+          1.90053,
+          5.88
+        ]
+      },
+      "triangles": 6880,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.525,
+          -0.6
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "sand",
+          "label": "盆内细砂",
+          "position": [
+            0,
+            0.525,
+            -0.6
+          ],
+          "facing": 0,
+          "actions": [
+            "dig"
+          ],
+          "via": [
+            [
+              0,
+              0.21,
+              4.47
+            ],
+            [
+              0,
+              1.164,
+              3.06
+            ],
+            [
+              0,
+              0.525,
+              2.1
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

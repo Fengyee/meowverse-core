@@ -1,0 +1,8 @@
+{
+  "note": "SHA-256 of each drawn original in web-v6-synthetic.zip, as computed by the web app.",
+  "originals": {
+    "web-photo-1": "2514dc2fb8af10b0ef37aec0459f2c1873f46e084d5e26688b92d24787bce2f5",
+    "web-photo-2": "d8b13a95445afe69b51594bce2392d5257748b16a159375ffbaf061cf34015ed",
+    "web-photo-3": "f422660c3ee049dfbc46217f5d6c3554e0883bfba5461a8fe39653649833bfee"
+  }
+}

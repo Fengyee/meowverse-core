@@ -1,0 +1,722 @@
+{
+  "version": 1,
+  "source": {
+    "author": "Kenney",
+    "pack": "Furniture Kit (2018 author release)",
+    "license": "CC0-1.0",
+    "homepage": "https://kenney.nl/assets/furniture-kit",
+    "releasePage": "https://opengameart.org/content/furniture-kit",
+    "archiveUrl": "https://opengameart.org/sites/default/files/kenney_furniturePack.zip",
+    "archiveSha256": "68afa4e6dc8a53942379fb47f1e84ec735d46b77bb1c1ceb968e245693dde067"
+  },
+  "models": [
+    {
+      "id": "kenney-chair",
+      "label": "木椅",
+      "category": "chair",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/chair.json",
+      "sha256": "3b5545330295a9429fe7b096f8085dcc9018ebcf9a249e04333e2c1e3b26d031",
+      "bytes": 24232,
+      "sourceFiles": {
+        "obj": "Models/chair.obj",
+        "objSha256": "395ba37182de517f58a2b0993ffcf4ae01a858285e269191509c6e2f1fd406f2",
+        "mtl": "Models/chair.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -2,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.699999809265137,
+          2
+        ]
+      },
+      "triangles": 168,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -1,
+          2.4000000953674316,
+          0.84
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-chairRounded",
+      "label": "圆背椅",
+      "category": "chair",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/chairRounded.json",
+      "sha256": "46ce453852875d9f206d5e1c2ed0a9a1e74a9bffd9c36adce9d74d645ff5c161",
+      "bytes": 42452,
+      "sourceFiles": {
+        "obj": "Models/chairRounded.obj",
+        "objSha256": "a33ce0e60e6c026ecac76a14b74119cc19f30e7bbf7448d8cccd467cad1ff322",
+        "mtl": "Models/chairRounded.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -2,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.550000190734863,
+          2
+        ]
+      },
+      "triangles": 260,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -1,
+          2.200000047683716,
+          0.84
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-loungeChair",
+      "label": "沙发椅",
+      "category": "chair",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/loungeChair.json",
+      "sha256": "9fcc9a2ef7979b15e5278a0351b70034733a2bffebe31872809f1b9de16e85df",
+      "bytes": 22371,
+      "sourceFiles": {
+        "obj": "Models/loungeChair.obj",
+        "objSha256": "7c38f348efe44ddb318fa09783254e21dccea3031f71e296ed4a587fde4733c1",
+        "mtl": "Models/loungeChair.mtl",
+        "mtlSha256": "13ee99712e516ddd57354d149de4d85feb7ecb39b2532a4fbd77e83c6603ef52"
+      },
+      "bounds": {
+        "min": [
+          -4.900000095367432,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.599999904632568,
+          4.099999904632568
+        ]
+      },
+      "triangles": 128,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -2.450000047683716,
+          2.299999952316284,
+          1.7219999599456788
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-stoolBar",
+      "label": "圆凳",
+      "category": "stool",
+      "defaultSize": [
+        1,
+        1
+      ],
+      "sizes": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "catalog/kenney/stoolBar.json",
+      "sha256": "9fdb1a75cde2a17802b1ebd4e4b117c6ffe95b858744eb4f18f080e46323d46c",
+      "bytes": 34926,
+      "sourceFiles": {
+        "obj": "Models/stoolBar.obj",
+        "objSha256": "38edfdef963cb6136e9b2483e2ce92394cbbb23b160dbaff90f7cc1c24ab8c0f",
+        "mtl": "Models/stoolBar.mtl",
+        "mtlSha256": "3bf3433451dfe3c96b9cbd080a2682dcdab4f25ce9cec87ff7576c5be7c14fe6"
+      },
+      "bounds": {
+        "min": [
+          -2.654400110244751,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.349999904632568,
+          2.2987780570983887
+        ]
+      },
+      "triangles": 176,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -1.3272000551223755,
+          4.349999904632568,
+          0.9654867839813233
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-stoolBarSquare",
+      "label": "方凳",
+      "category": "stool",
+      "defaultSize": [
+        1,
+        1
+      ],
+      "sizes": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "catalog/kenney/stoolBarSquare.json",
+      "sha256": "3f3f84427e05d49bb4fdcd3974b551e37d3a7425071fd8f1026b2401b13106eb",
+      "bytes": 24905,
+      "sourceFiles": {
+        "obj": "Models/stoolBarSquare.obj",
+        "objSha256": "8b5c18565274fa6bb45ca18abf0f90896f00a446d6810364406b8de4b70d355e",
+        "mtl": "Models/stoolBarSquare.mtl",
+        "mtlSha256": "3bf3433451dfe3c96b9cbd080a2682dcdab4f25ce9cec87ff7576c5be7c14fe6"
+      },
+      "bounds": {
+        "min": [
+          -2.0947000980377197,
+          0,
+          0.41126880049705505
+        ],
+        "max": [
+          -0.5597000122070312,
+          4.050000190734863,
+          1.8875089883804321
+        ]
+      },
+      "triangles": 142,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -1.3272000551223755,
+          4.050000190734863,
+          1.0312896794080735
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-bench",
+      "label": "木长凳",
+      "category": "bench",
+      "defaultSize": [
+        3,
+        1
+      ],
+      "sizes": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "path": "catalog/kenney/bench.json",
+      "sha256": "e156ee2ec22d1e458b16175828e8235379cd0a57d5d4e4ea19243bf06b3636e5",
+      "bytes": 24021,
+      "sourceFiles": {
+        "obj": "Models/bench.obj",
+        "objSha256": "82a7509d4520f5c665a7862f46eb9f8b07569335e7df493012ae33f80c6d634b",
+        "mtl": "Models/bench.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -4,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.699999809265137,
+          2
+        ]
+      },
+      "triangles": 168,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -2,
+          2.400000095367431,
+          0.84
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-benchCushion",
+      "label": "软垫长凳",
+      "category": "bench",
+      "defaultSize": [
+        3,
+        1
+      ],
+      "sizes": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "path": "catalog/kenney/benchCushion.json",
+      "sha256": "d0840c0471377961729f48d9e1ea7dbd3a588d5e16aa6918ba69e2168000932b",
+      "bytes": 28253,
+      "sourceFiles": {
+        "obj": "Models/benchCushion.obj",
+        "objSha256": "c9230d31b3a38f44422b50b43a400c53aa40e1cd3409a3b30a2df4544f483d8f",
+        "mtl": "Models/benchCushion.mtl",
+        "mtlSha256": "3bf3433451dfe3c96b9cbd080a2682dcdab4f25ce9cec87ff7576c5be7c14fe6"
+      },
+      "bounds": {
+        "min": [
+          -4,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.599999904632568,
+          2
+        ]
+      },
+      "triangles": 196,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -2,
+          2.400000095367432,
+          0.84
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-table",
+      "label": "长桌",
+      "category": "table",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/table.json",
+      "sha256": "b1e813f950cf44c74a51b597891e91f9282fb93bc6db1aa586bce49e51d3e053",
+      "bytes": 23416,
+      "sourceFiles": {
+        "obj": "Models/table.obj",
+        "objSha256": "cf5dae65dbf6d2251f66776d1718e01ae3997996072d1e5860cb9059b9cd7ddf",
+        "mtl": "Models/table.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -8.41487979888916,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          3.2673399448394775,
+          4.473732948303223
+        ]
+      },
+      "triangles": 120,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -4.20743989944458,
+          3.2673399448394775,
+          1.8789678382873536
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-tableRound",
+      "label": "圆桌",
+      "category": "table",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/tableRound.json",
+      "sha256": "b972838fadadb86374506a6e4064f308627f3d723a1a0f7948f76fdd11eb625d",
+      "bytes": 13343,
+      "sourceFiles": {
+        "obj": "Models/tableRound.obj",
+        "objSha256": "134d31b5360d02e3516c327ae0487f142be722efd3ca9de554a217acd6181da5",
+        "mtl": "Models/tableRound.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -6.928203105926514,
+          -2.700000047683716,
+          0
+        ],
+        "max": [
+          0,
+          0.967339813709259,
+          8
+        ]
+      },
+      "triangles": 80,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -3.464101552963257,
+          0.967339813709259,
+          3.36
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-tableCoffee",
+      "label": "茶几",
+      "category": "table",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/tableCoffee.json",
+      "sha256": "f35139de6b824e9dc7978de6ecb76ad5c6543e41d699305a269fed82b941edce",
+      "bytes": 17147,
+      "sourceFiles": {
+        "obj": "Models/tableCoffee.obj",
+        "objSha256": "8c81c31a74aadc1e89e334eb1ac43380f41c14f47e5dd9a6b029ebf74850adda",
+        "mtl": "Models/tableCoffee.mtl",
+        "mtlSha256": "dc0e8eeb2fef684cc9ab72e9532312ef8796c5035d3c5f23ba768ef6dae17806"
+      },
+      "bounds": {
+        "min": [
+          -2,
+          -3.609556789341316e-15,
+          -1
+        ],
+        "max": [
+          4.609961032867432,
+          2.299999952316284,
+          3
+        ]
+      },
+      "triangles": 124,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          1.3049805164337158,
+          2.299999952316284,
+          0.6799999999999999
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-bedSingle",
+      "label": "单人床",
+      "category": "bed",
+      "defaultSize": [
+        2,
+        4
+      ],
+      "sizes": [
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "path": "catalog/kenney/bedSingle.json",
+      "sha256": "f5f4f32316de0578231afc25b973aba0146214867fd228d11dd3356b14c32def",
+      "bytes": 42898,
+      "sourceFiles": {
+        "obj": "Models/bedSingle.obj",
+        "objSha256": "1befe39e92d994b75ebcf62a2500ddad54075358c1ff42fefd23750b29bb40e6",
+        "mtl": "Models/bedSingle.mtl",
+        "mtlSha256": "6e47e630e85d9419d6b44deaf8b0cced7278a70911c885623dbd3c31f7dd7672"
+      },
+      "bounds": {
+        "min": [
+          -9.560001373291016,
+          3.311768990554159e-13,
+          0
+        ],
+        "max": [
+          -3.8499999046325684,
+          3.75,
+          11.25
+        ]
+      },
+      "triangles": 214,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -6.705000638961792,
+          2.5,
+          4.725
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-bedDouble",
+      "label": "双人床",
+      "category": "bed",
+      "defaultSize": [
+        3,
+        4
+      ],
+      "sizes": [
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "catalog/kenney/bedDouble.json",
+      "sha256": "d355a00b71b50d939242896e841aa362ca49d1c176f438fedec20acadad508c5",
+      "bytes": 58873,
+      "sourceFiles": {
+        "obj": "Models/bedDouble.obj",
+        "objSha256": "150a643fd4b7dc60d49368069d7fe3b785f36d5b1ecbf1cd13db40eb0f12bb2e",
+        "mtl": "Models/bedDouble.mtl",
+        "mtlSha256": "6e47e630e85d9419d6b44deaf8b0cced7278a70911c885623dbd3c31f7dd7672"
+      },
+      "bounds": {
+        "min": [
+          -9.560001373291016,
+          0,
+          0
+        ],
+        "max": [
+          8.381903171539307e-8,
+          3.75,
+          11.25
+        ]
+      },
+      "triangles": 264,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -4.780000644735992,
+          2.5,
+          4.725
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-loungeSofa",
+      "label": "双人沙发",
+      "category": "sofa",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/loungeSofa.json",
+      "sha256": "d5ed061e723a8a1b6688af780397e886a594bc52929298fd9adfe4405f0b264d",
+      "bytes": 22193,
+      "sourceFiles": {
+        "obj": "Models/loungeSofa.obj",
+        "objSha256": "38dcb2da712205b8e5fed6a00051f5e737b14b2c77997fe51378b8e9ea67a538",
+        "mtl": "Models/loungeSofa.mtl",
+        "mtlSha256": "13ee99712e516ddd57354d149de4d85feb7ecb39b2532a4fbd77e83c6603ef52"
+      },
+      "bounds": {
+        "min": [
+          -9.799999237060547,
+          0,
+          0
+        ],
+        "max": [
+          0,
+          4.599999904632568,
+          4.099999904632568
+        ]
+      },
+      "triangles": 128,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -4.899999618530273,
+          2.2999999523162837,
+          1.7219999599456788
+        ],
+        "facing": 0
+      }
+    },
+    {
+      "id": "kenney-loungeSofaLong",
+      "label": "长沙发",
+      "category": "sofa",
+      "defaultSize": [
+        4,
+        2
+      ],
+      "sizes": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "catalog/kenney/loungeSofaLong.json",
+      "sha256": "f1412d02d0b12878e705f307f001fb5728a5230638f9dca9b971f1a58dbcd1bd",
+      "bytes": 31101,
+      "sourceFiles": {
+        "obj": "Models/loungeSofaLong.obj",
+        "objSha256": "bbc91d1b01537dbc847685560265b6fcd72a21333c8aab7f8906a5addf8dbd20",
+        "mtl": "Models/loungeSofaLong.mtl",
+        "mtlSha256": "13ee99712e516ddd57354d149de4d85feb7ecb39b2532a4fbd77e83c6603ef52"
+      },
+      "bounds": {
+        "min": [
+          -9.799999237060547,
+          0,
+          -4.099999904632568
+        ],
+        "max": [
+          0,
+          4.599999904632568,
+          4.099999904632568
+        ]
+      },
+      "triangles": 186,
+      "orientationY": 3.141592653589793,
+      "seat": {
+        "position": [
+          -4.899999618530273,
+          2.2999999523162837,
+          -0.6559999847412109
+        ],
+        "facing": 0
+      }
+    }
+  ]
+}
