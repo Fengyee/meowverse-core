@@ -29,17 +29,23 @@ The guide controls pose, camera and framing; individual appearance comes from th
 
 The prompt may be copied and used with the guide for this workflow. It is not a hosted service, a guarantee of successful output or an automatic app feature. Documentation and layout retain their applicable rights; existing third-party licenses and statutory rights are unaffected. The user kit excludes model/Blender sources and private production folders.
 
-## Bella 操作海报 / Bella workflow poster
+## Bella 中英文操作海报 / Bella workflow posters
 
-`cat-creation-flow-bella.png` 于 **2026-11-15** 使用内置 imagegen 生成并编辑。Bella 身份参考来自本项目已公开的品牌插画；本次操作没有向图像工具提交私人猫咪原照片。
+`cat-creation-flow-bella.png`、`cat-creation-flow-bella-en.png` 于 **2026-11-15** 使用内置 imagegen 生成并编辑。Bella 身份参考来自本项目已公开的品牌插画；本次操作没有向图像工具提交私人猫咪原照片。英文版是中文海报的文字本地化，功能二维码单独使用本机生成的标准码精确嵌入。
 
 海报中的照片卡、灰模小图、参考图和手机房间都是**流程示意插画**，不是实际下载的姿态模板、已提交的用户照片或真实 App 截图。请下载独立的 `POSE_GUIDE.png` 作为输入，不要使用流程海报代替它。
 
 The poster was generated and edited with the built-in imagegen tool on **November 15, 2026**, using existing public Bella brand illustrations as identity references. No private cat source photos were submitted for this edit. Photo cards, guide thumbnails, generated views and the phone room are **workflow illustrations**, not the actual guide, submitted user photos or app screenshots.
 
+The English edition, `cat-creation-flow-bella-en.png`, localizes the Chinese poster's wording. A locally encoded English-guide QR is inserted precisely as a functional graphic; it is not a generated approximation of a code.
+
 海报底部二维码指向本仓库的[完整中文教程](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.md)。二维码先在本机以标准编码生成，再作为图像输入合成到海报；已对海报原图、444 像素宽缩小版和 JPEG 压缩版实际解码，均得到同一地址。旁边的仓库地址与首页入口文字供无法扫码时使用。
 
 The footer QR code opens the [full Chinese guide](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.md), which links to the English guide, downloads and request form. It was locally encoded and supplied as an insert for the image edit. Decoding the finished poster, a 444-pixel-wide version and a JPEG version returned the exact intended URL. The printed repository address and home-page entry provide a text alternative.
+
+英文海报的二维码直接指向[完整英文教程](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.en.md)，页面中同样提供材料和投稿入口。它不依赖中文版跳转。
+
+The English poster links directly to the [full English guide](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.en.md), including downloads and submission links.
 
 成品海报仅供本项目展示与分享本流程；不随代码授权为可拆分使用的 Bella 美术素材，也不授予品牌独立使用权。第三方标识仍属于各自权利人。
 

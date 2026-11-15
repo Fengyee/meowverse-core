@@ -55,9 +55,9 @@ A contact sheet can be submitted for **preliminary review only**; separate full-
 
 **[Read the English guide and get the reference materials →](docs/cat-creation/README.en.md)** · [Collection thread / attach in a comment](https://github.com/Fengyee/meowverse-core/issues/1) · [Create a separate cat request](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)
 
-<a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="380" alt="Chinese illustrated cat-creation guide featuring Bella and the gray pose templates"></a>
+<a href="docs/cat-creation/cat-creation-flow-bella-en.png"><img src="docs/cat-creation/cat-creation-flow-bella-en.png" width="720" alt="English illustrated cat-creation guide featuring Bella, four steps and a QR code to the English instructions"></a>
 
-*The Bella poster explains the steps in Chinese; the linked guide provides the English instructions. Download the actual gray pose template rather than using the poster as a template.*
+*The English Bella poster includes a QR code to the English guide. Download the actual gray pose template rather than using the poster as a template.*
 
 Your real photographs are uploaded to the third-party ChatGPT service you choose, under its policies and your account settings. **Do not send source photographs, chat transcripts or conversation links in the Meowverse request.** The GitHub issue and attachments are public; attach only selected generated reference images you are comfortable making public.
 
@@ -74,9 +74,9 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
     <th align="center">Spend a moment with your cat</th>
   </tr>
   <tr>
-    <td align="center"><img src="docs/media/ios-room.png" width="250" alt="Room screen from a recent Meowverse development build"></td>
-    <td align="center"><img src="docs/media/ios-memories.png" width="250" alt="Photo memories screen from a recent Meowverse development build"></td>
-    <td align="center"><img src="docs/media/ios-play.png" width="250" alt="Cat interaction screen from a recent Meowverse development build"></td>
+    <td align="center"><img src="docs/media/ios-room-en.png" width="250" alt="English room screen from a recent Meowverse development build"></td>
+    <td align="center"><img src="docs/media/ios-memories-en.png" width="250" alt="English photo memories screen from a recent Meowverse development build"></td>
+    <td align="center"><img src="docs/media/ios-play-en.png" width="250" alt="English cat interaction screen from a recent Meowverse development build"></td>
   </tr>
 </table>
 

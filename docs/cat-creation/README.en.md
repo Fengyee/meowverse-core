@@ -14,11 +14,11 @@ Want your cat to live in Meowverse? Use the pose guide and prompt below to prepa
 
 - **[Download the pose guide (PNG)](POSE_GUIDE.png):** save `POSE_GUIDE.png` and add it alongside your own cat photographs in the ChatGPT message box, without sending yet. It controls pose, camera and framing, rather than the cat's identity.
 - **[Open the complete prompt (TXT)](GENERATE_ALL_VIEWS.txt):** copy the entire prompt into that same unsent message, then send the images and prompt together once. No per-view rewriting is needed.
-- **[Download the user kit (about 3 MB)](Meowverse-Cat-Reference-Kit.zip):** save the guide, prompt, bilingual instructions, attribution and Bella workflow poster together. It includes no private photographs, production app models or design sources.
+- **[Download the user kit (about 5 MB)](Meowverse-Cat-Reference-Kit.zip):** save the guide, prompt, bilingual instructions, attribution and both language versions of the Bella poster together. It includes no private photographs, production app models or design sources.
 
-The illustration below explains the steps in Chinese, using Bella as an example. Its QR code opens the Chinese guide, which links to this English version, the material downloads and the submission form. The poster also gives the repository address and its “Bring your own cat” entry for people who cannot scan it. **Upload the actual gray `POSE_GUIDE.png`, not this workflow poster.** Use photographs of your own cat as the identity reference.
+The English illustration below uses Bella as an example. Its QR code opens this English guide, with the material downloads and submission form. The poster also gives the repository address and its “Bring your own cat” entry for people who cannot scan it. **Upload the actual gray `POSE_GUIDE.png`, not this workflow poster.** Use photographs of your own cat as the identity reference.
 
-[![Chinese illustrated guide featuring Bella: prepare references, generate views, submit selected images and import a finished cat pack](cat-creation-flow-bella.png)](cat-creation-flow-bella.png)
+[![English illustrated guide featuring Bella: prepare references, generate views, submit selected images and import a finished cat pack](cat-creation-flow-bella-en.png)](cat-creation-flow-bella-en.png)
 
 ## 1. Attach the references without sending yet
 
