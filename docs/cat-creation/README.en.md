@@ -12,11 +12,9 @@ Want your cat to live in Meowverse? Use the pose guide and prompt below to prepa
 
 ## Download the reference materials
 
-| Material | What it is for |
-| --- | --- |
-| **[POSE_GUIDE.png](POSE_GUIDE.png)** | Upload this gray pose guide alongside your own cat photographs. It sets poses, camera directions and framing, rather than the cat's identity. |
-| **[GENERATE_ALL_VIEWS.txt](GENERATE_ALL_VIEWS.txt)** | Copy the entire prompt into the same ChatGPT conversation after adding the references. You do not need to rewrite the prompt for each view. |
-| **[Meowverse-Cat-Reference-Kit.zip](Meowverse-Cat-Reference-Kit.zip)** | A convenient bundle of the pose guide, prompt and instructions. |
+- **[Download the pose guide (PNG)](POSE_GUIDE.png):** save `POSE_GUIDE.png` and add it alongside your own cat photographs in the ChatGPT message box, without sending yet. It controls pose, camera and framing, rather than the cat's identity.
+- **[Open the complete prompt (TXT)](GENERATE_ALL_VIEWS.txt):** copy the entire prompt into that same unsent message, then send the images and prompt together once. No per-view rewriting is needed.
+- **[Download the user kit (about 3 MB)](Meowverse-Cat-Reference-Kit.zip):** save the guide, prompt, bilingual instructions, attribution and Bella workflow poster together. It includes no private photographs, production app models or design sources.
 
 The illustration below explains the steps in Chinese, using Bella as an example. Its QR code opens the Chinese guide, which links to this English version, the material downloads and the submission form. The poster also gives the repository address and its “Bring your own cat” entry for people who cannot scan it. **Upload the actual gray `POSE_GUIDE.png`, not this workflow poster.** Use photographs of your own cat as the identity reference.
 
