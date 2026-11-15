@@ -22,7 +22,7 @@ Turn a favorite sofa or a sunny windowsill into a little corner where you can re
 
 [Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
-[Get started](#try) · [Screenshots](#preview) · [Source and license](#source) · [Build and test](#build) · [Contributors](#contributors) · [Feedback](#feedback)
+[Get started](#try) · [Your own cat](#your-cat) · [Screenshots](#preview) · [Source and license](#source) · [Build and test](#build) · [Contributors](#contributors) · [Feedback](#feedback)
 
 </div>
 
@@ -39,6 +39,29 @@ As of November 14, 2026, the current TestFlight build is **0.1.0 (3)**. This rou
 Start with a cat photo you have permission to use. Check the furniture suggestion, choose a model and a position, and confirm it. Later, tap that piece of furniture to open its linked photos. Apple's Vision framework suggests furniture from a preset catalog on your device, and you make the final choice. This is not photo-to-3D reconstruction.
 
 > **Try the complete app in TestFlight.** This repository contains `MeowverseCore`, extracted from the November 14, 2026 main branch (`0084971`, schema 11), which builds and tests independently. The complete app's interface, 3D renderer and production artwork are not included. The code is **source-available** under a noncommercial license; see [Source and license](#source).
+
+<a name="your-cat"></a>
+
+## Bring your own cat
+
+Prepare references in your own ChatGPT account, then request a manually made cat pack:
+
+1. Attach photographs of your cat and the gray `POSE_GUIDE.png` to a message in your own ChatGPT conversation, **but do not send it yet**.
+2. Paste the complete `GENERATE_ALL_VIEWS.txt` prompt into **that same message**, then **send it once**, requesting eight views: five full-body and three head views.
+3. Check the poses and markings, fix missing or inconsistent views, and download the selected full-resolution generated images. Aim for eight separate square images.
+4. Send only those selected generated images for manual review. If a finished `.meowcat` pack is provided, import it through Settings → Cat models → Import Cat Model in a compatible app build.
+
+A contact sheet can be submitted for **preliminary review only**; separate full-resolution generated views may still be needed.
+
+**[Read the English guide and get the reference materials →](docs/cat-creation/README.en.md)** · [Submit generated references in a public issue](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)
+
+<a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="380" alt="Chinese illustrated cat-creation guide featuring Bella and the gray pose templates"></a>
+
+*The Bella poster explains the steps in Chinese; the linked guide provides the English instructions. Download the actual gray pose template rather than using the poster as a template.*
+
+Your real photographs are uploaded to the third-party ChatGPT service you choose, under its policies and your account settings. **Do not send source photographs, chat transcripts or conversation links in the Meowverse request.** The GitHub issue and attachments are public; attach only selected generated reference images you are comfortable making public.
+
+Participation is optional. Preparation is manual, with no guaranteed acceptance, completion or delivery date. The app imports finished `.meowcat` files; it does not automatically turn uploaded reference images into a cat. Submissions are for reference review and the requested cat pack; built-in, training or asset-release use needs separate confirmation. See the [guide](docs/cat-creation/README.en.md) for upload limits and use boundaries.
 
 <a name="preview"></a>
 

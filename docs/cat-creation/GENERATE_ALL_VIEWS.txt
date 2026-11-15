@@ -1,0 +1,94 @@
+Create a complete photorealistic 3D-modeling turnaround reference set of the individual cat
+shown in the attached real photographs. Generate ALL EIGHT views listed below
+in this request and return them as eight SEPARATE, high-resolution square
+images. Each image contains one cat in one view. Keep the same cat, neutral
+standing pose, anatomy, and markings across the complete set; only the camera
+direction and the head close-up framing change.
+
+REFERENCE ROLES
+- The real cat photographs define this cat's identity, face shape, body build,
+  age-related proportions, ear shape, eye color, coat length, tail length,
+  coat colors, and markings. Use the photographs together to preserve this
+  individual cat's appearance throughout the set.
+- The attached POSE_GUIDE.png is an untextured pose and camera guide. Use its
+  corresponding panel for each output's pose, camera direction, tail
+  orientation, and framing. Preserve the real cat's own proportions; do not
+  copy the guide's material, color, face shape, or body build.
+- All required real photographs and the guide are attached to this request.
+  Complete the full set without requiring a previously approved generated view.
+
+REQUIRED OUTPUTS — GENERATE ALL EIGHT
+1. 01_FRONT — camera exactly in front of the cat, looking horizontally along
+   the body axis at mid-body height. The cat faces directly toward the camera,
+   with no yaw or head turn. Show the whole cat.
+2. 02_LEFT — camera exactly on the cat's anatomical left side at mid-body
+   height, in a strict 90-degree profile. The cat faces the LEFT edge of the
+   image, with no head turn toward the camera. Show the whole cat.
+3. 03_RIGHT — camera exactly on the cat's anatomical right side at mid-body
+   height, in a strict 90-degree profile. The cat faces the RIGHT edge of the
+   image, with no head turn toward the camera. Show the whole cat.
+4. 04_BACK — camera exactly behind the cat, looking horizontally along the
+   body axis at mid-body height. The head faces away. The horizontal tail
+   points directly toward the camera and appears end-on as a short round form.
+   Show the whole cat.
+5. 05_TOP — camera directly above the cat, looking vertically downward. The
+   head points toward the TOP edge, the spine is vertical in the image, and
+   the straight horizontal tail extends toward the BOTTOM edge. Show the whole cat.
+6. 06_HEAD_FRONT — camera exactly in front of the head, looking horizontally
+   along the head's forward axis. Frame the head and upper neck only, facing
+   directly toward the camera, with the ears and muzzle fully visible.
+7. 07_HEAD_LEFT — camera exactly on the cat's anatomical left side, looking
+   horizontally in a strict 90-degree head profile. Frame the head and upper
+   neck only, with the nose pointing toward the LEFT edge and no head turn
+   toward the camera.
+8. 08_HEAD_RIGHT — camera exactly on the cat's anatomical right side, looking
+   horizontally in a strict 90-degree head profile. Frame the head and upper
+   neck only, with the nose pointing toward the RIGHT edge and no head turn
+   toward the camera.
+
+SHARED POSE
+- Natural neutral standing pose, all four paws planted on one ground plane.
+  Left and right front paws are aligned with each other; left and right hind
+  paws are aligned with each other. No walking, stepping, sitting, or crouching.
+- Preserve natural feline joint angles and match the guide's stance. Allow
+  far-side legs to be naturally occluded in an exact profile; do not move them
+  just to make all four legs visible.
+- Head faces straight ahead in line with the spine. Mouth closed. Preserve
+  the cat's natural ear shape and hold the ears in a neutral alert position.
+- Tail extends straight backward, horizontally along the spine direction.
+  Preserve its real length and thickness. Do not curl or lower the tail.
+
+IDENTITY AND CROSS-VIEW CONSISTENCY
+- Preserve the same relative head, torso, chest, belly, and leg proportions
+  in every view. Match the real cat's body build, coat length, and silhouette.
+- Keep coat-color boundaries and markings at corresponding anatomical
+  locations on the head, neck, back, chest, belly, each leg, and tail.
+- Preserve real left-right asymmetry. Keep each spot on the correct anatomical
+  side; do not mirror markings to create the opposite view.
+- Where photographs do not reveal a region clearly, use a restrained
+  continuation of the visible pattern and keep it consistent throughout the set.
+
+CAMERA AND FRAMING
+- Orthographic-style projection, with no perspective distortion or camera tilt.
+- Use one shared camera scale across the five full-body views. Keep the same
+  ground baseline in FRONT, LEFT, RIGHT, and BACK. Do not enlarge FRONT or BACK
+  to fill the square frame; retain the extra side margins.
+- Keep the entire cat, all visible paws, ears, and tail inside each full-body
+  image with a clear margin. Center the complete subject.
+- The three head close-ups use their own shared scale. Frame the head and
+  upper neck only, filling roughly 80% of the square frame, with ears and muzzle
+  fully visible. Preserve the same head pose and appearance as the body views.
+
+RENDERING AND DELIVERY
+- Render natural fur colors and fine coat detail. Preserve characteristic
+  coat length and volume, while removing whiskers and isolated flyaway strands.
+  Do not turn a long-haired cat into a short-haired cat.
+- Soft, even, diffuse studio lighting, with subtle shading that describes the
+  form. No cast shadows, dramatic lighting, or strong specular highlights.
+- Plain solid light-gray background, target color #BFBFBF. No floor line,
+  props, collar, text, labels, watermark, or additional objects inside the images.
+- Return all eight images separately, in the order listed above. Keep view
+  names outside the image content. Do not combine the views into a collage,
+  grid, or contact sheet, and do not reproduce the guide's layout or labels.
+- Complete the entire eight-image set in this request. Do not pause between
+  views to ask me to select a direction or approve an intermediate result.

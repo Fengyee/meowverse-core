@@ -1,0 +1,52 @@
+name: 领取自己的猫猫 / Request your cat
+description: 只提交生成的多视角图，尝试制作可导入的猫包。Submit generated views for a manually prepared cat pack.
+title: "[Cat / 猫猫] "
+labels: [cat-reference]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 把你家猫带进 Meowverse / Bring your cat into Meowverse
+
+        先看[四步指南、提示词和姿态模板](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.md) · [English guide and materials](https://github.com/Fengyee/meowverse-core/blob/main/docs/cat-creation/README.en.md)。
+
+        **这里只收你选好的生成参考图，不要上传实拍原照片、ChatGPT 对话记录或对话链接。**
+        **Submit only your selected generated reference images. Do not upload real source photos, ChatGPT transcripts or conversation links.**
+
+        仓库、Issue 和附件公开可见，任何人都能查看和下载。拖入文件前先检查图片、文件名和元数据；不要包含人脸、住址、证件、付款信息或密钥。生成图不保证匿名。
+        This is a public repository: issues and attachments can be viewed and downloaded by anyone. Check images, filenames and metadata before uploading. No human faces, addresses, identity documents, payment details or keys. Generated images are not guaranteed anonymous.
+
+        当前人工检查和制作，不能保证每份投稿都能完成或确定交付时间；无需打赏。App 接收的是制作完成的 .meowcat，不直接将参考 PNG 变成模型。
+        Review and preparation are manual, with no guaranteed completion or delivery date. Donations are not required. The app imports completed .meowcat packs, not raw reference PNGs.
+  - type: input
+    id: cat-name
+    attributes:
+      label: 猫咪的公开昵称 / Public cat nickname
+      description: 使用可公开的猫名即可，不要填写你的真实姓名。Use a public cat nickname, not your real name.
+      placeholder: "例如 / e.g. Mimi"
+    validations:
+      required: true
+  - type: checkboxes
+    id: submission-check
+    attributes:
+      label: 上传前确认 / Before uploading
+      options:
+        - label: 我只提交有权公开的生成参考图，理解 Issue 和附件公开；允许维护者为本次参考评估和猫包制作处理这些图，不自动授权其他发行用途。I am submitting only generated reference images I may publish, understand the issue and attachments are public, and allow processing for this reference review and cat-pack request, without automatically licensing other distribution.
+          required: true
+  - type: upload
+    id: generated-views
+    attributes:
+      label: 上传生成参考图或 ZIP / Upload generated views or ZIP
+      description: 拖入 PNG/JPG/JPEG（单张≤10 MB），或建议≤20 MB的ZIP（GitHub上限25 MB）。只放生成图，最好5个全身＋3个头部，等上传完成。Drag in generated PNG/JPG/JPEG files (≤10 MB each), or a ZIP preferably ≤20 MB (GitHub limit 25 MB). Aim for 5 body and 3 head views; wait for uploads to finish. No source photos.
+    validations:
+      required: true
+      accept: ".png,.jpg,.jpeg,.zip"
+  - type: textarea
+    id: notes
+    attributes:
+      label: 补充说明（选填） / Notes (optional)
+      description: 可写花纹差异、缺少的视图或希望个人使用/商量供更多用户使用。扩大采用范围会另行确认，无需私人联系方式。Mention markings, missing views, personal use or interest in wider availability. Wider use needs separate agreement; no private contact details.
+      placeholder: |
+        花纹或视图说明 / Markings or view notes:
+        已安装的 App 构建（如知道） / Installed app build, if known:
+        使用意愿（选填） / Intended use (optional):

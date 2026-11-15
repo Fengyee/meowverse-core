@@ -20,7 +20,7 @@
 
 **iPhone / iPad · 简体中文 / English · 免费测试**
 
-[先看网页版演示](https://fengyee.github.io/meowverse/) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
+[先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [协作致谢](#contributors) · [一起反馈](#feedback)
 
@@ -39,6 +39,23 @@
 从一张你有权使用的猫咪照片开始，检查家具建议，选好款式和位置；以后点家具，就能打开与它关联的照片。识别由系统 Vision 在本机提出预设家具建议，最终由你确认；不提供照片的 3D 重建。
 
 > **完整体验在 TestFlight，源码范围是核心库。** 本仓库提供 `MeowverseCore`，取自 2026-11-14 的 main（`0084971`，schema 11），可独立构建和测试。完整 App 的界面、3D 渲染器和正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
+
+<a name="your-cat"></a>
+
+## 领取自己的猫猫 · 正在征集多视角参考图
+
+想让你家猫也住进这个小世界？**用我们提供的姿态模板和完整提示词，在你自己的 ChatGPT 里生成参考图，再把选好的生成图交给我们。** 我们会人工检查，尝试制作能导入 App 的 `.meowcat` 猫咪包。这个征集流程独立于 App 内的本机家具识别，不是 App 内一键生成。
+
+1. **领取材料。** 下载 [姿态参考图](docs/cat-creation/POSE_GUIDE.png)，复制 [完整提示词](docs/cat-creation/GENERATE_ALL_VIEWS.txt)；也可 [一次打包下载](docs/cat-creation/Meowverse-Cat-Reference-Kit.zip)。
+2. **在自己的 ChatGPT 生成。** 把自家猫实拍、姿态图和完整提示词放进同一条消息，一次发送，请求五个全身和三个头部视图；先检查花纹、姿态与完整度。
+3. **只交生成图。** [创建猫猫投稿 Issue](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)，拖入生成图或建议 20 MB 以内的 ZIP；不要发送实拍原照、聊天记录或对话链接。
+4. **领取猫包并导入。** 制作完成后领取 `.meowcat`，在支持导入的 App 构建中打开「设置 → 猫咪模型 → 导入猫咪模型…」。
+
+**[完整操作与下载 →](docs/cat-creation/README.md)** · **[提交我的猫猫 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**
+
+<a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="720" alt="Bella 示范：领取材料，在自己的 ChatGPT 中生成，只提交生成参考图，收到猫咪包后导入 App"></a>
+
+**Issue 和附件公开可见，生成图也不保证匿名；不愿公开的图片不要上传。** 猫咪实拍由你自行上传到 ChatGPT，按其账号设置与服务政策处理。直接图片单张上限 10 MB；ZIP 上限 25 MB，我们建议整理在 20 MB 以内。当前人工制作，不承诺每份投稿都能完成或确定时效，不要求打赏；公开投稿不自动授权内置猫库或其他发行用途。[详细说明](docs/cat-creation/README.md)。
 
 <a name="preview"></a>
 
