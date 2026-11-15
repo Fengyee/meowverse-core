@@ -6,7 +6,7 @@ Want your cat to live in Meowverse? Use the pose guide and prompt below to prepa
 
 **Preparation and review are manual. Participation is optional, and submitting a request does not guarantee acceptance, completion or a delivery date.** The app currently imports finished `.meowcat` files; it does not automatically turn reference images into a cat.
 
-**[Submit your generated cat references →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**
+**[Submit your generated cat references →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)** · [Collection thread / upload in a comment](https://github.com/Fengyee/meowverse-core/issues/1)
 
 **Public submission:** this repository, its issues, comments and attachments can be viewed and downloaded by other people. Attaching a file uploads it to GitHub immediately, before you create the issue. Check the image, filename and metadata before attaching it. Do not use this route for anything you do not want to make public.
 
@@ -55,6 +55,8 @@ Check that the images depict the same cat: face shape, body proportions, eye col
 Download the full-resolution **generated images**. Do not submit screenshots of the ChatGPT page. The suggested filenames above help identify the views. If you still only have a contact sheet, you may include it **for preliminary manual review only**, clearly labelled in the notes. Separate full-resolution generated views may still be required before a cat pack can be prepared.
 
 Sign in to GitHub and open the **[cat-reference request form](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**. A GitHub account is required to submit an issue. Choose a public cat nickname and attach only the generated references you want reviewed. Use one issue per cat to track reference corrections, progress and delivery arrangements. Whether a finished pack is shared publicly requires separate agreement.
+
+Alternatively, attach your selected images or ZIP in a comment on the **[collection thread](https://github.com/Fengyee/meowverse-core/issues/1)** using its suggested format. The same public visibility and project-use boundaries apply.
 
 **Do not attach real source photographs, chat screenshots, transcripts, chat-sharing links or account credentials.** Do not include human faces, addresses, identity documents, payment details, real API keys or device identifiers. Generated images can still reproduce background details or text from a source photo; they are not an anonymity guarantee.
 

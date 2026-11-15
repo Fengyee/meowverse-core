@@ -51,7 +51,7 @@
 3. **只交生成图。** [创建猫猫投稿 Issue](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)，拖入生成图或建议 20 MB 以内的 ZIP；不要发送实拍原照、聊天记录或对话链接。
 4. **领取猫包并导入。** 制作完成后领取 `.meowcat`，在支持导入的 App 构建中打开「设置 → 猫咪模型 → 导入猫咪模型…」。
 
-**[完整操作与下载 →](docs/cat-creation/README.md)** · **[提交我的猫猫 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**
+**[完整操作与下载 →](docs/cat-creation/README.md)** · **[征集帖／留言上传 →](https://github.com/Fengyee/meowverse-core/issues/1)** · **[为我的猫单独投稿 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**
 
 <a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="720" alt="Bella 示范：领取材料，在自己的 ChatGPT 中生成，只提交生成参考图，收到猫咪包后导入 App"></a>
 

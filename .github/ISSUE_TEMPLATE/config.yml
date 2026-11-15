@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: 猫猫参考图征集 / Cat reference collection
+    url: https://github.com/Fengyee/meowverse-core/issues/1
+    about: 查看教程、下载材料，或在征集帖附上生成参考图。Read the guide, get materials or attach generated references in the collection thread.
   - name: 免费试用 iOS / Free TestFlight beta
     url: https://testflight.apple.com/join/WCuPQFsm
     about: 先安装 TestFlight，再打开邀请。Install TestFlight, then open the invitation.

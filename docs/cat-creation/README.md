@@ -6,7 +6,7 @@
 
 **这是人工征集与制作，提交后会先检查资料，暂不承诺完成时间或每份投稿都能制作成功。** 无需提交你的实拍照片、ChatGPT 对话记录或账号信息，也不要求打赏。
 
-**[提交我的猫猫 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**
+**[提交我的猫猫 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)** · **[查看征集帖／在评论里上传 →](https://github.com/Fengyee/meowverse-core/issues/1)**
 
 ## 先领取两份材料
 
@@ -53,6 +53,8 @@
 下载原尺寸的**生成图片**，不要截图 ChatGPT 页面。建议整理成上表中的文件名，只把选定的生成图放入 ZIP，先确认里面没有实拍原照、聊天记录或其他私人文件。若模型只输出一张总览，先尝试要求提供对应的独立高清视图；也可先附总览供初步评估并备注说明，制作时可能仍需补齐独立原尺寸图。
 
 打开 **[猫猫参考图投稿入口](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**，登录 GitHub，给猫咪起一个可公开的昵称，把生成图或 ZIP 拖入附件区，再点击创建 Issue。**建议一只猫一条 Issue**，补图、制作进度与交付安排都在同一条里跟进；是否公开成品猫包另行确认。不用填写真实姓名、邮箱、电话或账号凭据。
+
+也可以直接在 **[集中征集帖](https://github.com/Fengyee/meowverse-core/issues/1)** 的评论区按格式附图或 ZIP，不必另外开帖；公开与使用边界相同。
 
 附件规则：
 

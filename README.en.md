@@ -53,7 +53,7 @@ Prepare references in your own ChatGPT account, then request a manually made cat
 
 A contact sheet can be submitted for **preliminary review only**; separate full-resolution generated views may still be needed.
 
-**[Read the English guide and get the reference materials →](docs/cat-creation/README.en.md)** · [Submit generated references in a public issue](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)
+**[Read the English guide and get the reference materials →](docs/cat-creation/README.en.md)** · [Collection thread / attach in a comment](https://github.com/Fengyee/meowverse-core/issues/1) · [Create a separate cat request](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)
 
 <a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="380" alt="Chinese illustrated cat-creation guide featuring Bella and the gray pose templates"></a>
 
