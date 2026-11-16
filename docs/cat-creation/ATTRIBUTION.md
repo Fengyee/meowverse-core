@@ -55,4 +55,4 @@ The finished poster is provided to present and share this workflow. It does not 
 
 Issue 附件不成为本材料包的一部分，也不自动适用仓库的代码或模板许可。公开投稿和为本次请求处理的范围见[指南中的公开边界](README.md)；并入内置猫库、训练集、公开素材包或其他发行须另外确认。
 
-Issue attachments are not part of this kit and do not automatically inherit the code or template license. Reference review and work on the request are separate from permission for built-in app inclusion, training, asset-pack distribution or other releases, which require separate agreement.
+Issue attachments are not part of this kit and do not automatically inherit the code or template license. What a public submission covers and what is handled for your request are described in the guide's [public visibility section](README.en.md#public-visibility-and-how-the-project-may-use-your-references). Reference review and work on the request are separate from permission for built-in app inclusion, training, asset-pack distribution or other releases, which require separate agreement.
