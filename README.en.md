@@ -174,13 +174,11 @@ The library contains rules for cloud-backup state and retention. Their presence 
 
 Project maintainer: [**Fengyee**](https://github.com/Fengyee).
 
-Ideas: **Omucat**.
+Creative: **Omucat**.
+
+Beta testers: list coming soon. Thank you to everyone who tests the TestFlight builds and sends feedback.
 
 AI collaboration tools used during development: **Claude (Anthropic)** and **Codex (OpenAI)**.
-
-### Testers
-
-Coming soon.
 
 The maintainer is responsible for product decisions and releases. This section acknowledges the development tools; GitHub's automatic Contributors list continues to reflect actual commit records. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for more detail.
 

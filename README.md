@@ -170,11 +170,9 @@ support/                        遮名处理后的支持页图片
 
 创意：**Omucat**。
 
+测试鸣谢：名单整理中。感谢每一位参与 TestFlight 测试和反馈的朋友。
+
 开发过程中使用的 AI 协作工具：**Claude（Anthropic）**、**Codex（OpenAI）**。
-
-### 测试鸣谢
-
-名单整理中。
 
 产品决策与发布由维护者负责。这里明确披露开发协作工具；GitHub 自动 Contributors 列表仍按实际提交记录生成。详细说明见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
 
