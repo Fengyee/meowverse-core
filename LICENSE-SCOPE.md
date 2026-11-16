@@ -1,5 +1,7 @@
 # 源码与展示材料的许可范围
 
+简体中文 | [English](LICENSE-SCOPE.en.md)
+
 本发行包提供 **MeowverseCore 核心库的可见源码（source-available）**，采用 [PolyForm Noncommercial License 1.0.0](LICENSE)。许可含非商业用途限制，因此不把本发行称为标准开源发行。完整条款见 [LICENSE](LICENSE)，必要声明见 [NOTICE](NOTICE)。
 
 可以在许可证定义的许可用途内使用、修改和再分发覆盖的软件；再分发时应按原文提供条款或其网址，并保留适用的 `Required Notice:` 声明。商业用途需要另行取得授权，请联系 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。打赏不授予商业使用许可。此处是范围说明，不修改 [官方许可正文](https://polyformproject.org/licenses/noncommercial/1.0.0)。

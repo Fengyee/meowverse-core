@@ -1,5 +1,7 @@
 # 支持 Meowverse
 
+简体中文 | [English](SUPPORT.en.md)
+
 Meowverse 由个人持续开发，希望用一个小房间，让猫咪那些平常的瞬间有机会再被看见。
 
 **开发者会员已经开通，TestFlight 已开放。** 2026-11-14 的测试版为 0.1.0（3）：[免费加入测试](https://testflight.apple.com/join/WCuPQFsm)。本轮测试人数上限 200 人，能否加入以 TestFlight 页面显示为准。

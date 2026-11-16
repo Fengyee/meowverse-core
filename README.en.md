@@ -117,7 +117,7 @@ This is an independently buildable Swift library. It does not include the TestFl
 
 The code and the identified required program data use the **[PolyForm Noncommercial License 1.0.0](LICENSE)**. You may use, modify and redistribute them for purposes permitted by that license; commercial use requires separate authorization. Redistribution must retain the terms and required notices as specified in the license.
 
-This is **source-available** software. Because it restricts commercial use, it is not described as a standard open-source release. The full [LICENSE](LICENSE) governs; see [LICENSE-SCOPE.md](LICENSE-SCOPE.md) for the file and non-code material boundaries, and [SOURCE-RELEASE.md](SOURCE-RELEASE.md) for the extraction record.
+This is **source-available** software. Because it restricts commercial use, it is not described as a standard open-source release. The full [LICENSE](LICENSE) governs; see [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md) for the file and non-code material boundaries, and [SOURCE-RELEASE.en.md](SOURCE-RELEASE.en.md) for the extraction record.
 
 </details>
 
@@ -198,4 +198,4 @@ Join us to discuss the app, report problems or talk about cats. **Group number: 
 
 <a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="QQ group code for Meowverse/猫宇宙, group number 1132819295"></a>
 
-The official repository is **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)**. Project screenshots and the community code are provided for this project's presentation and community; their rights are separate from the code license. See [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
+The official repository is **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)**. Project screenshots and the community code are provided for this project's presentation and community; their rights are separate from the code license. See [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md).

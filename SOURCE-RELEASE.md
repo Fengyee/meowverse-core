@@ -1,5 +1,7 @@
 # 核心源码发行说明
 
+简体中文 | [English](SOURCE-RELEASE.en.md)
+
 本包按 2026-11-14 确认的方案整理：最新 MeowverseCore 核心源码公开，使用 PolyForm Noncommercial 1.0.0；正式 App 界面、渲染、美术与设计源文件继续私有。
 
 ## 版本与范围

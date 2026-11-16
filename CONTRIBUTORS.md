@@ -36,4 +36,4 @@ This section acknowledges the development tools. GitHub's automatic Contributors
 
 项目代码、必要程序数据、展示图片及第三方内容的权利范围继续依 [LICENSE-SCOPE.md](LICENSE-SCOPE.md) 和各自的署名说明执行。
 
-The rights that apply to the code, required program data, showcase images and third-party content continue to follow [LICENSE-SCOPE.md](LICENSE-SCOPE.md) and the respective attribution notices.
+The rights that apply to the code, required program data, showcase images and third-party content continue to follow [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md) and the respective attribution notices.

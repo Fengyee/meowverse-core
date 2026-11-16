@@ -85,4 +85,4 @@ Only submit generated images you have the right to make public and allow a maint
 
 User-submitted reference artwork is not automatically covered by the repository's noncommercial code license. GitHub's own hosting and service terms still apply to content uploaded there; these project-use boundaries do not change the platform's public visibility or its terms.
 
-The instructions, gray pose template and Bella illustration have their own scopes of use. See [Attribution and usage](ATTRIBUTION.md) and the [repository license scope](../../LICENSE-SCOPE.md).
+The instructions, gray pose template and Bella illustration have their own scopes of use. See [Attribution and usage](ATTRIBUTION.md) and the [repository license scope](../../LICENSE-SCOPE.en.md).
