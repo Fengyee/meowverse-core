@@ -74,13 +74,13 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
     <th align="center">Spend a moment with your cat</th>
   </tr>
   <tr>
-    <td align="center"><img src="docs/media/ios-room-en.png" width="250" alt="English room screen from a recent Meowverse development build"></td>
-    <td align="center"><img src="docs/media/ios-memories-en.png" width="250" alt="English photo memories screen from a recent Meowverse development build"></td>
-    <td align="center"><img src="docs/media/ios-play-en.png" width="250" alt="English cat interaction screen from a recent Meowverse development build"></td>
+    <td align="center"><img src="docs/media/ios-room-en.png" width="250" alt="Meowverse development build, room screen: the cat loafing on a sofa beside a cat tower, a bed and a fountain"></td>
+    <td align="center"><img src="docs/media/ios-memories-en.png" width="250" alt="Meowverse development build, furniture memories screen: a programmatically drawn sample photo of the sofa with its capture date"></td>
+    <td align="center"><img src="docs/media/ios-play-en.png" width="250" alt="Meowverse development build, play screen: the cat chasing the feather wand"></td>
   </tr>
 </table>
 
-*Real interfaces from recent development builds running in the simulator; the photos are programmatically drawn examples. These screenshots were captured on November 12–13, 2026, before 0.1.0 (3), and are not screenshots of that build. The current TestFlight app is the reference for the available experience. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
+*Real interfaces from a development build running in the simulator; the photos are programmatically drawn examples. These screenshots were captured from the development main line on November 15, 2026, after 0.1.0 (3), so some of what they show may not be in TestFlight yet. The current TestFlight app is the reference for the available experience. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
 
 <details>
 <summary>What you can try in the current TestFlight app</summary>
@@ -174,7 +174,13 @@ The library contains rules for cloud-backup state and retention. Their presence 
 
 Project maintainer: [**Fengyee**](https://github.com/Fengyee).
 
+Ideas: **Omucat**.
+
 AI collaboration tools used during development: **Claude (Anthropic)** and **Codex (OpenAI)**.
+
+### Testers
+
+Coming soon.
 
 The maintainer is responsible for product decisions and releases. This section acknowledges the development tools; GitHub's automatic Contributors list continues to reflect actual commit records. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for more detail.
 

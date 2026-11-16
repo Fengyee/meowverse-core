@@ -68,13 +68,13 @@
     <th align="center">陪猫玩一会儿</th>
   </tr>
   <tr>
-    <td align="center"><img src="docs/media/ios-room.png" width="250" alt="Meowverse 近期开发版房间界面"></td>
-    <td align="center"><img src="docs/media/ios-memories.png" width="250" alt="Meowverse 近期开发版照片回忆界面"></td>
-    <td align="center"><img src="docs/media/ios-play.png" width="250" alt="Meowverse 近期开发版猫咪互动界面"></td>
+    <td align="center"><img src="docs/media/ios-room.png" width="250" alt="Meowverse 开发版房间界面：猫咪窝在沙发上，旁边有猫爬架、猫窝和饮水器"></td>
+    <td align="center"><img src="docs/media/ios-memories.png" width="250" alt="Meowverse 开发版家具回忆界面：沙发里的一张程序绘制示意照片和拍摄日期"></td>
+    <td align="center"><img src="docs/media/ios-play.png" width="250" alt="Meowverse 开发版陪猫玩界面：猫咪追着羽毛逗猫棒"></td>
   </tr>
 </table>
 
-*近期开发版真实界面（模拟器）；照片为程序绘制示意；当前体验以 TestFlight 为准。截图采自 2026-11-12／13 的开发版，早于 0.1.0（3），不作为该构建的截图。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
+*开发版真实界面（模拟器）；照片为程序绘制示意。截图采自 2026-11-15 的开发主线，晚于 0.1.0（3），部分画面可能还没有进入 TestFlight；当前体验以 TestFlight 为准。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
 
 <details>
 <summary>当前 TestFlight：可以体验什么</summary>
@@ -168,7 +168,13 @@ support/                        遮名处理后的支持页图片
 
 项目维护：[**Fengyee**](https://github.com/Fengyee)。
 
+创意：**Omucat**。
+
 开发过程中使用的 AI 协作工具：**Claude（Anthropic）**、**Codex（OpenAI）**。
+
+### 测试鸣谢
+
+名单整理中。
 
 产品决策与发布由维护者负责。这里明确披露开发协作工具；GitHub 自动 Contributors 列表仍按实际提交记录生成。详细说明见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
 
