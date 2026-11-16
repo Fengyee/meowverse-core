@@ -4,9 +4,9 @@
 
 # Meowverse
 
-### 猫咪照片里的小世界
+### 让你的相册长成猫咪的小世界
 
-把常睡的沙发、晒太阳的窗边，变成可以回看照片的日常角落。
+为猫咪搭一个家：常睡的沙发、晒太阳的窗台，都能变成可以回看照片的角落。
 
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">

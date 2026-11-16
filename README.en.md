@@ -4,9 +4,9 @@
 
 # Meowverse
 
-### A little world for your cat's everyday moments
+### Let your photos grow into your cat’s little world
 
-Turn a favorite sofa or a sunny windowsill into a little corner where you can revisit your photos.
+Build your cat a home, and turn the sofa it naps on or the sunny windowsill into a corner for revisiting your photos.
 
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
