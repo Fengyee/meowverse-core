@@ -14,7 +14,7 @@
 | 测试用 `web-v6-synthetic.zip` 及其中的程序绘制图片 | 作为软件测试数据提供，适用同一 PolyForm Noncommercial 许可；不包含私人照片 |
 | `docs/media/` 中的成品截图 | 仅用于展示本项目，保留相应权利，不作为可复用美术素材提供；其中第三方元素仍依其原有权利与署名声明处理 |
 | `docs/cat-creation/` 中的用户操作说明、提示词与下载包 | 供用户按猫咪参考图征集指南下载、复制和使用；不是正式 App 美术或制作工程的发行，不自动适用代码许可。各项来源、允许用途和第三方权利见该目录的 [ATTRIBUTION.md](docs/cat-creation/ATTRIBUTION.md) |
-| `docs/cat-creation/POSE_GUIDE.png` 里的 Fripouille 衍生模板 | 保留 guillaume bolis 的原作署名与适用的 CC BY 4.0 权利，仓库非商业代码许可不替代或限制第三方许可；不包含源模型文件 |
+| `docs/cat-creation/POSE_GUIDE.png` 和 `docs/cat-creation/guides/` 里的 Fripouille 衍生模板 | 保留 guillaume bolis 的原作署名与适用的 CC BY 4.0 权利，仓库非商业代码许可不替代或限制第三方许可；不包含源模型文件 |
 | `docs/cat-creation/cat-creation-flow-bella.png`、`cat-creation-flow-bella-en.png` | 本流程的中英文 AI 生成成品操作海报，仅供本项目展示与分享该流程；不是 App 截图，不发行可复用的 Bella 正式美术源资产 |
 | 用户在 Issue 上传的生成参考图 | 不自动纳入代码或模板许可，不自动授权用于内置猫库、训练或素材发行；提交范围与后续采用分别确认 |
 | `support/` 中的收款图及 QQ 群二维码图片 | 仅用于本项目的自愿支持和免费交流入口，保留相应权利，不适用源码许可；其中第三方标识仍依其原有权利处理 |

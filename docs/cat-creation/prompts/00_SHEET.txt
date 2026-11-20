@@ -1,0 +1,50 @@
+We are making a reference set for 3D modelling: the SAME cat, standing in the SAME pose, seen from eight
+fixed cameras. We work one image per message. In each message I attach one grey clay guide image and ask
+for one image; you call the image generator once, show me the result, and stop. Do not run ahead to the
+next view, do not package anything until I ask, and do not ask me questions.
+
+The guide images show an untextured grey clay cat. They fix the pose, the camera, the tail direction, where
+the cat sits in the frame and how large it is. They do NOT define the cat: never copy the grey material,
+the clay face or the clay build.
+
+SUBJECT — THE CAT IN THE ATTACHED PHOTOGRAPHS
+The attached real photographs define this individual cat: face shape, body build, age, ear shape, eye
+colour, coat length, tail length, coat colours and every marking. Use all of them together.
+- Keep each marking at its real anatomical location and on its real side. The cat's left and right sides are
+  different; never mirror one side to make the other.
+- Where no photograph shows a region, continue the visible pattern with restraint, decide it once in
+  the first image, and keep it.
+
+POSE (identical in every image; it is the guide's pose)
+- Standing still on all four paws on one ground plane. Left and right front paws side by side; left and
+  right hind paws side by side. Not walking, stepping, sitting or crouching. In a strict profile the far
+  legs are hidden behind the near legs; leave them hidden.
+- Head straight ahead in line with the spine, at the SAME height and the SAME up/down tilt as the guide in
+  every view. The front view and the side views show one head pose.
+- Mouth closed, eyes open and looking straight ahead, ears upright and neutral.
+- Tail straight back and horizontal, in line with the spine, at its natural length and thickness.
+
+CAMERA
+- Orthographic, as in the guide: no perspective, no wide-angle look, no camera tilt.
+- "Left" and "right" always mean the cat's own anatomical sides.
+
+RENDERING
+- Photorealistic, natural colours and fine coat detail at the cat's true coat length and volume. No
+  whiskers and no stray flyaway hairs: the outline is clean.
+- Soft, even, diffuse studio light with gentle shading that describes the form. No cast shadow, no
+  dramatic light, no strong highlights.
+- Plain flat light-grey background, #BFBFBF, edge to edge. No floor line, props, collar, text, labels,
+  borders or watermark.
+
+FIRST IMAGE — THE SHEET
+The image attached to this message, POSE_GUIDE.png, shows the clay cat from all eight cameras as panels on
+one sheet. Generate ONE image that is this sheet with the clay cat replaced by the cat described above: the
+same eight panels in the same places and the same order, and in every panel the cat in the same position,
+at the same size, in the same pose and seen from the same camera as the clay cat in that panel. Panel
+titles and the text box are not needed; leave that area plain.
+This sheet decides the cat. All eight panels must show one and the same animal: the same build and
+proportions, the same colours, and every marking at the same place on the body in each panel that sees it.
+Then compare your sheet with POSE_GUIDE.png panel by panel: right view and nose direction in each panel;
+pose, legs and tail as in the guide; size and position as in the guide; the eight panels agree about the
+cat. If a check fails, generate the sheet once more. Show me the final sheet, say in one line which checks
+passed, and stop.

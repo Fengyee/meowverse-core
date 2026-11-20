@@ -46,18 +46,16 @@ Start with a cat photo you have permission to use. Check the furniture suggestio
 
 Prepare references in your own ChatGPT account, then request a manually made cat pack:
 
-1. Attach photographs of your cat and the gray `POSE_GUIDE.png` to a message in your own ChatGPT conversation, **but do not send it yet**.
-2. Paste the complete `GENERATE_ALL_VIEWS.txt` prompt into **that same message**, then **send it once**, requesting eight views: five full-body and three head views.
-3. Check the poses and markings, fix missing or inconsistent views, and download the selected full-resolution generated images. Aim for eight separate square images.
+1. Download the [user kit](docs/cat-creation/Meowverse-Cat-Reference-Kit.zip): the pose overview, eight single-view gray guides and ten prompts.
+2. In one new ChatGPT conversation, send ten messages with **one gray guide per message**: message 1 attaches the overview and your cat photographs and settles the cat on one sheet; messages 2–9 make five full-body and three head views one at a time; message 10 packages them. Resend any view that is wrong, with its guide.
+3. Compare each view with its guide, check the markings agree, and keep the packaged ZIP of full-resolution generated images.
 4. Send only those selected generated images for manual review. If a finished `.meowcat` pack is provided, import it through Settings → Cat models → Import Cat Model in a compatible app build.
-
-A contact sheet can be submitted for **preliminary review only**; separate full-resolution generated views may still be needed.
 
 **[Read the English guide and get the reference materials →](docs/cat-creation/README.en.md)** · [Collection thread / attach in a comment](https://github.com/Fengyee/meowverse-core/issues/1) · [Create a separate cat request](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)
 
 <a href="docs/cat-creation/cat-creation-flow-bella-en.png"><img src="docs/cat-creation/cat-creation-flow-bella-en.png" width="720" alt="English illustrated cat-creation guide featuring Bella, four steps and a QR code to the English instructions"></a>
 
-*The English Bella poster includes a QR code to the English guide. Download the actual gray pose template rather than using the poster as a template.*
+*The English Bella poster shows the earlier one-message version and includes a QR code to the English guide, which has the current steps. Upload the actual gray guides rather than the poster.*
 
 Your real photographs are uploaded to the third-party ChatGPT service you choose, under its policies and your account settings. **Do not send source photographs, chat transcripts or conversation links in the Meowverse request.** The GitHub issue and attachments are public; attach only selected generated reference images you are comfortable making public.
 

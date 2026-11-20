@@ -1,0 +1,13 @@
+All eight views are done. Now package them.
+
+Put these ten files into one ZIP named cat_views.zip and give me the download link:
+  00_SHEET.png, 01_FRONT.png, 02_LEFT.png, 03_RIGHT.png, 04_BACK.png, 05_TOP.png, 06_HEAD_FRONT.png,
+  07_HEAD_LEFT.png, 08_HEAD_RIGHT.png, README.txt
+- 00_SHEET.png is the final sheet; each view file is the LAST image you generated for that view in this
+  conversation.
+- Every PNG is the image exactly as generated: original pixels, no resizing, upscaling, sharpening,
+  cropping or re-compression. Do not generate any new image in this step.
+- README.txt lists each file's pixel size and how it was made, and states plainly anything that fell short:
+  a view that does not match its guide, a marking that differs between views, a file that is not an
+  independent generation.
+- Open the ZIP after writing it and confirm it holds all ten files before giving me the link.

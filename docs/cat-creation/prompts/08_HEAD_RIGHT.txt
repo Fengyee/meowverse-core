@@ -1,0 +1,13 @@
+Now make 08_HEAD_RIGHT only.
+
+Call the image generator ONCE and produce ONE square image, at the highest resolution available, that
+contains ONE cat seen from ONE camera. It is not a sheet: no grid, no panels, no second cat, no text.
+
+The image attached to THIS message is the clay guide for this view. Reproduce its layout: head and upper neck only, placed and sized exactly as the clay head is, seen from the same camera, on plain #BFBFBF. Strict RIGHT profile of the head; the nose points to the RIGHT edge of the image.
+
+The cat is the cat of your sheet (bottom-right panel): the same build, the same colours and every marking in the
+same place. Draw it fresh at full resolution with fine detail; do not copy, crop or enlarge the sheet.
+This is a real close-up: far more facial detail than the head has in the full-body views — iris and pupil, eyelid edges, nose leather, the line of the mouth, the inside of the ears. Same head tilt as the guide.
+
+Show me the image, say in one line whether it matches the guide's view, direction, position and size, and
+stop.

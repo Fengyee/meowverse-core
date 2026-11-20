@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | English · [Back to the project](../../README.en.md)
 
-Want your cat to live in Meowverse? Use the pose guide and prompt below to prepare multi-view reference images in your own ChatGPT account, then send us only the generated images you have selected. We can review them for a manually prepared cat pack.
+Want your cat to live in Meowverse? Use the gray guides and prompts below to prepare multi-view reference images in your own ChatGPT account, then send us only the generated images you have selected. We can review them for a manually prepared cat pack.
 
 **Preparation and review are manual. Participation is optional, and submitting a request does not guarantee acceptance, completion or a delivery date.** The app currently imports finished `.meowcat` files; it does not automatically turn reference images into a cat.
 
@@ -12,45 +12,49 @@ Want your cat to live in Meowverse? Use the pose guide and prompt below to prepa
 
 ## Download the reference materials
 
-- **[Download the pose guide (PNG)](POSE_GUIDE.png):** save `POSE_GUIDE.png` and add it alongside your own cat photographs in the ChatGPT message box, without sending yet. It controls pose, camera and framing, rather than the cat's identity.
-- **[Open the complete prompt (TXT)](GENERATE_ALL_VIEWS.txt):** copy the entire prompt into that same unsent message, then send the images and prompt together once. No per-view rewriting is needed.
-- **[Download the user kit (about 5 MB)](Meowverse-Cat-Reference-Kit.zip):** save the guide, prompt, bilingual instructions, attribution and both language versions of the Bella poster together. It includes no private photographs, production app models or design sources.
+- **[Pose overview (PNG)](POSE_GUIDE.png):** the unmarked gray model from all eight cameras on one sheet. Used in message 1.
+- **[Eight single-view guides (guides/)](guides/):** `01_FRONT.png` … `08_HEAD_RIGHT.png`, one for each of messages 2–9.
+- **[Ten prompts (prompts/)](prompts/):** `00_SHEET.txt` … `09_PACKAGE.txt`. Copy them in file-name order; no editing needed.
+- **[User kit (ZIP)](Meowverse-Cat-Reference-Kit.zip):** everything above, plus the bilingual instructions, attribution and Bella posters. It includes no private photographs, production app models or design sources.
 
-The English illustration below uses Bella as an example. Its QR code opens this English guide, with the material downloads and submission form. The poster also gives the repository address and its “Bring your own cat” entry for people who cannot scan it. **Upload the actual gray `POSE_GUIDE.png`, not this workflow poster.** Use photographs of your own cat as the identity reference.
+The gray guides control pose, camera and framing, not the cat's identity. The poster below shows the earlier one-message version of this workflow; follow the steps on this page. **Upload the gray guides, not the poster.** Its QR code opens this guide, and the poster also gives the repository address and its “Bring your own cat” entry for people who cannot scan it.
 
 [![English illustrated guide featuring Bella: prepare references, generate views, submit selected images and import a finished cat pack](cat-creation-flow-bella-en.png)](cat-creation-flow-bella-en.png)
 
-## 1. Attach the references without sending yet
+## 1. Choose your photographs
 
-Open your own ChatGPT conversation and add these two kinds of reference to the message composer. **Do not send the message yet.**
-
-- **Clear photographs of your own cat.** Where possible, show the face, both sides and back, with the markings, paws and tail visible. Use photos you have the right to provide, without human faces, addresses, identity documents or other private information.
-- **The supplied `POSE_GUIDE.png`.** This is a generic, unmarked gray model showing the intended standing poses, directions and framing. Your cat photographs should determine the face, body shape, markings and fur length.
+Pick a few clear photographs of your own cat. Where possible, show the face, both sides and back, with the markings, paws and tail visible. Use photos you have the right to provide, without human faces, addresses, identity documents or other private information.
 
 **You upload the real photographs to ChatGPT yourself, not to the Meowverse preparation request.** They are sent to the third-party service you choose and are handled under its policies and your account settings. This is not an on-device generation workflow. Decide whether you are comfortable using that service before uploading.
 
-## 2. Ask for all eight views in one request
+## 2. Send ten messages in one new conversation
 
-Copy all of `GENERATE_ALL_VIEWS.txt` and paste it into **the same unsent message as the attached photographs and pose guide**. Then **send that one complete message once**, requesting **five full-body views and three head views**:
+Attach **only one gray guide to each message**. Wait until the image is finished and the one-line self-check is written before sending the next message. Several guides in one message tend to come back as another contact sheet.
 
-| Suggested filename | View |
-| --- | --- |
-| `01_FRONT.png` | Full body, front |
-| `02_LEFT.png` | Full body, side view facing left in the image |
-| `03_RIGHT.png` | Full body, side view facing right in the image |
-| `04_BACK.png` | Full body, back |
-| `05_TOP.png` | Full body, top view with the head toward the top of the image |
-| `06_HEAD_FRONT.png` | Head, front |
-| `07_HEAD_LEFT.png` | Head, side view facing left in the image |
-| `08_HEAD_RIGHT.png` | Head, side view facing right in the image |
+| Message | Attach | Paste | Result |
+| --- | --- | --- | --- |
+| 1 | `POSE_GUIDE.png` and all your cat photographs | `00_SHEET.txt` | An eight-panel sheet that settles what the cat looks like |
+| 2 | `guides/01_FRONT.png` | `01_FRONT.txt` | Full body, front |
+| 3 | `guides/02_LEFT.png` | `02_LEFT.txt` | Full body, side view facing left in the image |
+| 4 | `guides/03_RIGHT.png` | `03_RIGHT.txt` | Full body, side view facing right in the image |
+| 5 | `guides/04_BACK.png` | `04_BACK.txt` | Full body, back |
+| 6 | `guides/05_TOP.png` | `05_TOP.txt` | Full body, top view with the head toward the top |
+| 7 | `guides/06_HEAD_FRONT.png` | `06_HEAD_FRONT.txt` | Head, front |
+| 8 | `guides/07_HEAD_LEFT.png` | `07_HEAD_LEFT.txt` | Head, side view facing left in the image |
+| 9 | `guides/08_HEAD_RIGHT.png` | `08_HEAD_RIGHT.txt` | Head, side view facing right in the image |
+| 10 | nothing | `09_PACKAGE.txt` | `cat_views.zip`: the sheet, eight views and a short report |
 
-The prompt asks for **eight separate, high-resolution square images**, rather than a collage. The result may still omit a view or combine several views into one image. **Requesting eight views at once does not guarantee eight separate files in one response.** Ask for missing, combined or incorrect views to be corrected in the same conversation before selecting the final references.
+- In message 1, include the photographs that show the markings best. If the sheet does not look like your cat, redo that step: the eight views are all drawn from it.
+- After each image ChatGPT writes a one-line self-check; read it. If a view is wrong (facing the wrong way, legs or tail out of place, cat too large, a signature marking missing), send **that message again with its guide**, preceded by one sentence saying what is wrong. Packaging uses the last image made for each view.
+- Head close-ups most often lose a signature marking or draw the head too large. When resending, say what was lost, for example “the black spot on the nose is missing”. For the side views, compare against the guide: ear tips about 10% from the top edge, nose tip about 11% from the side edge, eye at about 45% of the height, mouth line at about 63%.
+- Sometimes ChatGPT offers two images to choose from. Pick the one whose size and position match the guide.
+- After message 10, download the ZIP and read the report inside: it lists what it admits it did not get right.
 
 ## 3. Check and submit only the generated references
 
-Check that the images depict the same cat: face shape, body proportions, eye color and marking boundaries should agree. Left and right markings should not simply be mirrored. The cat should stand with all four paws planted on one ground plane, with every visible paw fully inside the frame. In an exact side profile, far-side legs may be naturally occluded; do not move them to make all four visible. The tail should extend straight backward, horizontally; do not use a sitting pose or an upright tail. The front and back views should not be enlarged just to fill the frame. The gray guide helps you check framing; you still decide whether the result resembles your cat.
+Put each view next to the guide with the same name: the camera, the direction of the nose, the legs and tail, and the cat's size and position should all match. Then check that the images depict the same cat: face shape, body proportions, eye color and marking boundaries should agree, and left and right markings should not simply be mirrored. The cat should stand with all four paws planted on one ground plane, with every visible paw inside the frame and the tail extending straight backward. In an exact side profile, far-side legs may be hidden behind the near legs. The gray guide helps you check framing; you still decide whether the result resembles your cat.
 
-Download the full-resolution **generated images**. Do not submit screenshots of the ChatGPT page. The suggested filenames above help identify the views. If you still only have a contact sheet, you may include it **for preliminary manual review only**, clearly labelled in the notes. Separate full-resolution generated views may still be required before a cat pack can be prepared.
+The ZIP from message 10 already names the views `01_FRONT.png` … `08_HEAD_RIGHT.png` and can be submitted as is. Open it first and confirm it holds only generated images and the report, with no source photographs. If packaging fails, download each full-resolution image instead, name it as in the table and make the ZIP yourself. Do not submit screenshots of the ChatGPT page.
 
 Sign in to GitHub and open the **[cat-reference request form](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)**. A GitHub account is required to submit an issue. Choose a public cat nickname and attach only the generated references you want reviewed. Use one issue per cat to track reference corrections, progress and delivery arrangements. Whether a finished pack is shared publicly requires separate agreement.
 

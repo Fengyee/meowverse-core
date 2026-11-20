@@ -44,10 +44,10 @@
 
 ## 领取自己的猫猫 · 正在征集多视角参考图
 
-想让你家猫也住进这个小世界？**用我们提供的姿态模板和完整提示词，在你自己的 ChatGPT 里生成参考图，再把选好的生成图交给我们。** 我们会人工检查，尝试制作能导入 App 的 `.meowcat` 猫咪包。这个征集流程独立于 App 内的本机家具识别，不是 App 内一键生成。
+想让你家猫也住进这个小世界？**用我们提供的灰模和提示词，在你自己的 ChatGPT 里一张一张生成参考图，再把选好的生成图交给我们。** 我们会人工检查，尝试制作能导入 App 的 `.meowcat` 猫咪包。这个征集流程独立于 App 内的本机家具识别，不是 App 内一键生成。
 
-1. **领取材料。** 下载 [姿态参考图](docs/cat-creation/POSE_GUIDE.png)，复制 [完整提示词](docs/cat-creation/GENERATE_ALL_VIEWS.txt)；也可 [一次打包下载](docs/cat-creation/Meowverse-Cat-Reference-Kit.zip)。
-2. **在自己的 ChatGPT 生成。** 把自家猫实拍、姿态图和完整提示词放进同一条消息，一次发送，请求五个全身和三个头部视图；先检查花纹、姿态与完整度。
+1. **领取材料。** [一次打包下载](docs/cat-creation/Meowverse-Cat-Reference-Kit.zip)：姿态总览图、八张单视角灰模和十条提示词。
+2. **在自己的 ChatGPT 生成。** 一个新对话发十条消息，每条只附一张灰模：第 1 条附总览图和自家猫实拍，先出一张总览把猫定下来；第 2–9 条逐个视角出五张全身、三张头部；第 10 条打包。哪张不对就带着它的灰模重发那一条。
 3. **只交生成图。** [创建猫猫投稿 Issue](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)，拖入生成图或建议 20 MB 以内的 ZIP；不要发送实拍原照、聊天记录或对话链接。
 4. **领取猫包并导入。** 制作完成后领取 `.meowcat`，在支持导入的 App 构建中打开「设置 → 猫咪模型 → 导入猫咪模型…」。
 

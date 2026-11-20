@@ -1,0 +1,12 @@
+Now make 04_BACK only.
+
+Call the image generator ONCE and produce ONE square image, at the highest resolution available, that
+contains ONE cat seen from ONE camera. It is not a sheet: no grid, no panels, no second cat, no text.
+
+The image attached to THIS message is the clay guide for this view. Reproduce its layout: put the cat exactly where the clay cat is, at the same size, in the same standing pose, seen from the same camera, on the same plain #BFBFBF background with the same wide empty margins. Camera exactly behind, level; the head faces away, and the horizontal tail points straight at the camera, seen end-on as a short round form in front of the rump. Orthographic: the front legs and shoulders are NOT visible beside the hind legs. Same height as 01_FRONT.
+
+The cat is the cat of your sheet (middle-left panel): the same build, the same colours and every marking in the
+same place. Draw it fresh at full resolution with fine detail; do not copy, crop or enlarge the sheet.
+
+Show me the image, say in one line whether it matches the guide's view, direction, position and size, and
+stop.
