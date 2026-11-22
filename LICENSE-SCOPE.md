@@ -4,7 +4,7 @@
 
 本发行包提供 **MeowverseCore 核心库的可见源码（source-available）**，采用 [PolyForm Noncommercial License 1.0.0](LICENSE)。许可含非商业用途限制，因此不把本发行称为标准开源发行。完整条款见 [LICENSE](LICENSE)，必要声明见 [NOTICE](NOTICE)。
 
-可以在许可证定义的许可用途内使用、修改和再分发覆盖的软件；再分发时应按原文提供条款或其网址，并保留适用的 `Required Notice:` 声明。商业用途需要另行取得授权，请联系 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。打赏不授予商业使用许可。此处是范围说明，不修改 [官方许可正文](https://polyformproject.org/licenses/noncommercial/1.0.0)。
+可以在许可证定义的许可用途内使用、修改和再分发覆盖的软件；再分发时应按原文提供条款或其网址，并保留适用的 `Required Notice:` 声明。商业用途需要另行取得授权，请联系 [bella.meowverse@gmail.com](mailto:bella.meowverse@gmail.com)。此处是范围说明，不修改 [官方许可正文](https://polyformproject.org/licenses/noncommercial/1.0.0)。
 
 | 范围 | 适用说明 |
 | --- | --- |
@@ -17,7 +17,7 @@
 | `docs/cat-creation/POSE_GUIDE.png` 和 `docs/cat-creation/guides/` 里的 Fripouille 衍生模板 | 保留 guillaume bolis 的原作署名与适用的 CC BY 4.0 权利，仓库非商业代码许可不替代或限制第三方许可；不包含源模型文件 |
 | `docs/cat-creation/cat-creation-flow-bella.png`、`cat-creation-flow-bella-en.png` | 本流程的中英文 AI 生成成品操作海报，仅供本项目展示与分享该流程；不是 App 截图，不发行可复用的 Bella 正式美术源资产 |
 | 用户在 Issue 上传的生成参考图 | 不自动纳入代码或模板许可，不自动授权用于内置猫库、训练或素材发行；提交范围与后续采用分别确认 |
-| `support/` 中的收款图及 QQ 群二维码图片 | 仅用于本项目的自愿支持和免费交流入口，保留相应权利，不适用源码许可；其中第三方标识仍依其原有权利处理 |
+| `support/` 中的 QQ 群二维码图片 | 仅用于本项目的免费交流入口，保留相应权利，不适用源码许可；其中第三方标识仍依其原有权利处理 |
 | `README.md`、`README.en.md`、`SUPPORT.md`、本文件、`.github/ISSUE_TEMPLATE/` 及其他项目说明文稿 | 项目说明材料，保留相应权利，不随程序源码许可一并授权为可复用素材 |
 | `LICENSE`、`NOTICE` 及适用的第三方许可、署名声明 | 可随对应作品复制，以履行许可条件；不因此改变许可条款 |
 
@@ -25,6 +25,6 @@
 
 源码中的目录条目可能引用正式资源的稳定 ID 或来源，这些标识属于程序与数据兼容接口；它们不是资源文件的副本，也不授予对应源模型、贴图或设计文件的使用许可。
 
-项目名称只用于说明来源。源码许可不授予商标或品牌图形的独立使用权。收款图的姓名遮盖不改变收款对象，也不授予将其作为其他项目收款入口的许可。
+项目名称只用于说明来源。源码许可不授予商标或品牌图形的独立使用权。
 
 第三方已有的许可与法律赋予的权利保持不变，本文件不把它们改成项目自有权利，也不撤回其他版本已经授出的权利。本次代码基线与提取范围见 [SOURCE-RELEASE.md](SOURCE-RELEASE.md)。

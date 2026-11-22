@@ -20,7 +20,7 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 **iPhone / iPad · Simplified Chinese / English · Free beta**
 
-[Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [Support development](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
+[Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [A labor of love](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [Get started](#try) · [Your own cat](#your-cat) · [Screenshots](#preview) · [Source and license](#source) · [Build and test](#build) · [Contributors](#contributors) · [Feedback](#feedback)
 
@@ -188,18 +188,18 @@ Use the [bug report or experience suggestion forms](https://github.com/Fengyee/m
 
 <a name="community"></a>
 
-### Optional QQ community · Meowverse/猫宇宙
+### Optional QQ community · Meowverse/喵空间
 
 Join us to discuss the app, report problems or talk about cats. **Group number: `1132819295`**. Search for this number in QQ or scan the group code below.
 
 **Joining the community, testing the app and sharing feedback are free.**
 
-<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="QQ group code for Meowverse/猫宇宙, group number 1132819295"></a>
+<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="QQ group code for Meowverse/喵空间, group number 1132819295"></a>
 
 <a name="support"></a>
 
-### Support Meowverse's development
+### A labor of love
 
-The developer membership is active and the TestFlight beta is open. If you enjoy this little world, optional tips help cover **the first-year Apple Developer membership fee already paid, plus ongoing development and maintenance**. Tips never affect testing, feedback or joining the group, and they do not buy features, a firm release date or a commercial license. The WeChat and Alipay codes and what support is for are on [SUPPORT.en.md](SUPPORT.en.md).
+Meowverse is a labor of love. If you like it, please follow and star **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)**.
 
-The official repository is **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)**. Project screenshots and the community code are provided for this project's presentation and community; their rights are separate from the code license. See [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md).
+Project screenshots and the community code are provided for this project's presentation and community; their rights are separate from the code license. See [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md).

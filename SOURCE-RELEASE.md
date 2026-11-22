@@ -21,8 +21,8 @@
 
 README 的中英文截图（各三张）是单独供项目展示的开发版真实界面，采自 2026-11-15，晚于构建 3；照片内容为合成示意。来源、时间和第三方署名见 [图片说明](docs/media/ATTRIBUTION.md)。它们不作为本 Swift 库的运行画面，也不提供正式美术源资产。
 
-代码、构建清单、必要程序数据和合成测试素材适用 [LICENSE](LICENSE)。成品宣传截图、README 等说明材料、群二维码和收款图不随代码授权为可复用素材，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。正式许可使用未经修改的官方英文正文，解释不能扩大或缩小该正文的权利范围。
+代码、构建清单、必要程序数据和合成测试素材适用 [LICENSE](LICENSE)。成品宣传截图、README 等说明材料、群二维码不随代码授权为可复用素材，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。正式许可使用未经修改的官方英文正文，解释不能扩大或缩小该正文的权利范围。
 
 本次发行使用本文件列明的核心库范围及 PolyForm Noncommercial 许可，不包含此前社区版草案的界面或替换美术，也不撤销任何既有版本已有效授出的权利。
 
-官方源码仓库为 [Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)。完整产品可从 [TestFlight](https://testflight.apple.com/join/WCuPQFsm) 体验；QQ 群为 **Meowverse/猫宇宙**，群号 **1132819295**，群二维码及打赏方式直接展示在 [README 下方](README.md#community)。测试、反馈和入群不要求打赏。
+官方源码仓库为 [Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)。完整产品可从 [TestFlight](https://testflight.apple.com/join/WCuPQFsm) 体验；QQ 群为 **Meowverse/喵空间**，群号 **1132819295**，群二维码直接展示在 [README 下方](README.md#community)。测试、反馈和入群都免费。

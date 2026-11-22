@@ -20,13 +20,13 @@
 
 **iPhone / iPad · 简体中文 / English · 免费测试**
 
-[先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [支持持续开发](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
+[先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [为爱发电](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [协作致谢](#contributors) · [一起反馈](#feedback)
 
 </div>
 
-2026-11-14：当前 TestFlight 为 **0.1.0（3）**，本轮测试人数上限 **200 人**；能否加入以 TestFlight 页面显示为准。参与测试和反馈不需要打赏。网页版保留为功能演示，开发主线是原生 iOS App。
+2026-11-14：当前 TestFlight 为 **0.1.0（3）**，本轮测试人数上限 **200 人**；能否加入以 TestFlight 页面显示为准。参与测试和反馈都免费。网页版保留为功能演示，开发主线是原生 iOS App。
 
 <a name="try"></a>
 
@@ -55,7 +55,7 @@
 
 <a href="docs/cat-creation/cat-creation-flow-bella.png"><img src="docs/cat-creation/cat-creation-flow-bella.png" width="720" alt="Bella 示范：领取材料，在自己的 ChatGPT 中生成，只提交生成参考图，收到猫咪包后导入 App"></a>
 
-**Issue 和附件公开可见，生成图也不保证匿名；不愿公开的图片不要上传。** 猫咪实拍由你自行上传到 ChatGPT，按其账号设置与服务政策处理。直接图片单张上限 10 MB；ZIP 上限 25 MB，我们建议整理在 20 MB 以内。当前人工制作，不承诺每份投稿都能完成或确定时效，不要求打赏；公开投稿不自动授权内置猫库或其他发行用途。[详细说明](docs/cat-creation/README.md)。
+**Issue 和附件公开可见，生成图也不保证匿名；不愿公开的图片不要上传。** 猫咪实拍由你自行上传到 ChatGPT，按其账号设置与服务政策处理。直接图片单张上限 10 MB；ZIP 上限 25 MB，我们建议整理在 20 MB 以内。当前人工制作，不承诺每份投稿都能完成或确定时效；公开投稿不自动授权内置猫库或其他发行用途。[详细说明](docs/cat-creation/README.md)。
 
 <a name="preview"></a>
 
@@ -140,7 +140,7 @@ ios/MeowverseCore/
   Sources/MeowverseCore/         核心代码与程序目录数据
   Tests/MeowverseCoreTests/      单元测试与合成测试资源
 docs/media/                     仅用于项目展示的成品截图
-support/                        遮名处理后的支持页图片
+support/                        群二维码
 ```
 
 </details>
@@ -184,31 +184,18 @@ support/                        遮名处理后的支持页图片
 
 <a name="community"></a>
 
-### 加入 QQ 群 · Meowverse/猫宇宙
+### 加入 QQ 群 · Meowverse/喵空间
 
 欢迎来群里交流使用体验、反馈问题和聊聊猫咪。**群号：`1132819295`**。可以在 QQ 搜索群号，也可以扫描下方二维码。
 
-**免费入群，打赏自愿。** 参与测试、反馈和交流都不需要打赏。
+**入群、测试、反馈和交流都免费。**
 
-<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="Meowverse/猫宇宙 QQ 群二维码，群号 1132819295"></a>
+<a href="support/qq-group.jpg"><img src="support/qq-group.jpg" width="260" alt="Meowverse/喵空间 QQ 群二维码，群号 1132819295"></a>
 
 <a name="support"></a>
 
-### 支持 Meowverse 继续开发
+### 为爱发电
 
-开发者会员已经开通，TestFlight 已可体验。如果你喜欢这个小世界，欢迎自愿打赏，支持已投入的**首年 Apple 开发者会员费用与后续开发维护**。
+喵空间是一个为爱发电的项目。喜欢的话，请给 **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)** 一个关注和 star。
 
-<table>
-  <tr>
-    <th align="center">微信</th>
-    <th align="center">支付宝</th>
-  </tr>
-  <tr>
-    <td align="center"><a href="support/wechat-name-hidden.png"><img src="support/wechat-name-hidden.png" width="240" alt="微信打赏收款码，图片上的姓名已遮盖"></a></td>
-    <td align="center"><a href="support/alipay-name-hidden.png"><img src="support/alipay-name-hidden.png" width="240" alt="支付宝打赏收款码，图片上的姓名已遮盖"></a></td>
-  </tr>
-</table>
-
-打赏完全自愿，不影响测试、反馈或入群，也不购买功能、确定的上架时间或商业使用许可。详细用途与支持说明见 [SUPPORT.md](SUPPORT.md)。
-
-请认准官方仓库 **[Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)** 内的收款图；图片上的姓名已遮盖，付款页面的收款信息由支付平台显示，付款前请核对。宣传截图、群二维码和支持图仅供本项目展示，其权利范围独立于代码许可，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。
+宣传截图和群二维码仅供本项目展示，其权利范围独立于代码许可，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。

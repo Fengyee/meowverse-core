@@ -4,7 +4,7 @@
 
 想让你家猫也住进 Meowverse？先用我们准备的姿态模板和提示词，在你自己的 ChatGPT 中制作一套多视角参考图，再把满意的**生成图**交给我们。你提供参考，我们尝试制作能导入 App 的猫咪包。
 
-**这是人工征集与制作，提交后会先检查资料，暂不承诺完成时间或每份投稿都能制作成功。** 无需提交你的实拍照片、ChatGPT 对话记录或账号信息，也不要求打赏。
+**这是人工征集与制作，提交后会先检查资料，暂不承诺完成时间或每份投稿都能制作成功。** 无需提交你的实拍照片、ChatGPT 对话记录或账号信息。
 
 **[提交我的猫猫 →](https://github.com/Fengyee/meowverse-core/issues/new?template=03-cat-reference.yml)** · **[查看征集帖／在评论里上传 →](https://github.com/Fengyee/meowverse-core/issues/1)**
 
