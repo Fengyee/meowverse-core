@@ -1,20 +1,35 @@
 import CryptoKit
 import Foundation
+import ImageIO
 import os
 import UniformTypeIdentifiers
 
-/// Steps of a mutation at which a test fault may be injected. The fault runs right AFTER the
-/// step's file has been written (for `.writeState`: after the temp state file is written and
-/// fsynced, before it replaces `state.json`), so rollback of that file is exercised.
+/// Fault boundaries for storage tests. A writeState fault follows the durable temporary
+/// write and precedes the rename that commits the snapshot or picker checkpoint.
 public enum StoreStep: Sendable, Equatable {
     case writeOriginal, writeThumbnail, writeState
-    /// Fired right before a fully staged library (restore, web import, clear all) is switched
-    /// in. A fault here must leave the current library exactly as it was.
+    case pickerSnapshotBackupInstalled, pickerSnapshotInstalled
+    /// A failure before switching to the staged library leaves the live library in place.
     case swapLibrary
+    case deletionBackupCopy, deletionBackupSync, deletionBackupRename, deletionFileRemoval
+    /// After a sync commits the library, before sync's own file is updated.
+    case syncStateAfterApply
+}
+
+public extension StoreError {
+    /// A write that found no space: `.io` keeps only the system's code (`ioError`).
+    var isOutOfSpace: Bool {
+        guard case .io(let code) = self else { return false }
+        return code.hasSuffix(":\(NSCocoaErrorDomain):\(CocoaError.Code.fileWriteOutOfSpace.rawValue)")
+            || code.hasSuffix(":\(NSPOSIXErrorDomain):\(ENOSPC)")
+    }
 }
 
 public enum StoreError: Error, Equatable, Sendable {
     case corruptState
+    /// The deletion is committed. The next load or write retries updating the local copies.
+    case deletionCleanupPending
+    case clearCleanupPending
     case unknownInstance
     case unknownPhoto
     case placement([PlacementIssue])
@@ -71,18 +86,81 @@ public struct IntegrityReport: Codable, Sendable, Equatable {
     }
 }
 
+/// What to show for one stored photo. The files and the metadata describe the same image.
+public struct PhotoDisplayFiles: Sendable, Equatable {
+    public var original: URL
+    public var thumbnail: URL
+    /// The stored record was corrected and saved: publish the store's state again.
+    public var metadataChanged = false
+    /// The pixels come from the designated primary, but saving its corrected record failed.
+    /// Show `unsavedRepair.applied(to:)` of the stored record until a later retry saves it.
+    public var unsavedRepair: PhotoMetadataRepair?
+}
+
+/// The size and EXIF day of a full original's designated primary image. Applying it keeps a
+/// user-chosen day and a web record's explicit unknown; any other day follows the file.
+public struct PhotoMetadataRepair: Sendable, Equatable {
+    public let photoId: String
+    public let sha256: String
+    public let width: Int
+    public let height: Int
+    public let exifCaptureDate: String?
+
+    init(photoId: String, draft: ImportDraft) {
+        self.photoId = photoId
+        sha256 = draft.sha256
+        width = draft.width
+        height = draft.height
+        exifCaptureDate = draft.captureDate
+    }
+
+    /// The record with the primary's size and EXIF day; unchanged if it holds other bytes.
+    /// The revision stays: this is what the record says, not a new save.
+    public func applied(to photo: PhotoRecord) -> PhotoRecord {
+        guard photo.photoId == photoId, photo.sha256 == sha256, photo.reducedFrom == nil else { return photo }
+        var repaired = photo
+        repaired.width = width
+        repaired.height = height
+        repaired.exifCaptureDate = exifCaptureDate
+        // A v6 web record can explicitly show unknown even when its file has a known EXIF day.
+        // Native imports show the file's date unless the user supplied one. On another device the
+        // web record's choice arrives through sync as unknown next to a known file day (the same
+        // reading as `SyncDateChoice`): a native import never stores that pair.
+        let explicitUnknown = photo.captureDateSource == .unknown
+            && (photo.thumbnailFile == WebBackup.thumbnailPath(forHash: photo.sha256) || photo.exifCaptureDate != nil)
+        if photo.captureDateSource != .user && !explicitUnknown {
+            repaired.captureDate = exifCaptureDate
+            repaired.captureDateSource = exifCaptureDate == nil ? .unknown : .exif
+        }
+        return repaired
+    }
+}
+
+extension AppState {
+    /// The library as it is shown while some repairs could not be saved yet: every list, month
+    /// group, filter and spoken date reads the same records the detail shows. Not for saving or
+    /// backing up — the store keeps what it could write. Without repairs it is `self`.
+    public func applying(_ repairs: [String: PhotoMetadataRepair]) -> AppState {
+        guard !repairs.isEmpty else { return self }
+        var shown = self
+        shown.photos = photos.map { photo in repairs[photo.photoId]?.applied(to: photo) ?? photo }
+        return shown
+    }
+}
+
 /// On-device photo library + room layout.
 ///
 /// Layout under `root`: `state.json`, `state.backup.json`, `originals/<sha256>.<ext>`,
-/// `thumbnails/<photoId>.jpg`. Every mutation is all-or-nothing: blobs first, then the new
-/// state is written to a temp file, fsynced and atomically renamed over `state.json`
-/// (the previous good primary becomes `state.backup.json`).
+/// `thumbnails/<photoId>.jpg`. Ordinary writes replace a synced state file. Picker groups
+/// commit a small delta in `import-checkpoints/` after the blobs are durable. Compaction
+/// updates both complete snapshots before the deltas can be retired.
 public actor LibraryStore {
     public static let stateFile = "state.json"
     public static let backupFile = "state.backup.json"
     public static let originalsDir = "originals"
     public static let thumbnailsDir = "thumbnails"
     static let tempStateFile = "state.json.tmp"
+    static let deletionFile = "state.deletion.json"
     static let tempBackupFile = "state.backup.json.tmp"
 
     public static let onDeviceAnalyzerOrigin: SourceOrigin = .model
@@ -96,9 +174,24 @@ public actor LibraryStore {
     private let fm = FileManager.default
 
     /// nil until a `load()` succeeds. No write happens while nil.
-    private var state: AppState?
+    public private(set) var generation = UUID()
+    private var state: AppState? {
+        didSet { cachedIndex = nil; pickerLookup = nil }
+    }
+    private var cachedIndex: LibraryIndex?
+    private var checkedHEIFOriginals = Set<String>()
+    private var pickerLookup: PickerPhotoLookup?
+    private var pickerCheckpointCount = 0
+    private var pickerQuarantinePending = false
+    private var pickerJournal: PickerImportJournal { PickerImportJournal(root: root) }
+
+    private func checkGeneration(_ expected: UUID?) throws {
+        if let expected, generation != expected { throw CancellationError() }
+    }
     /// Whether `state.json` on disk is the decoded, valid state (vs. loaded from the backup).
     private var primaryIsGood = false
+    public private(set) var deletionPending = false
+    private var retryDeletionIDs = Set<String>()
     /// True when the last `load()` found the primary unusable and returned the backup instead.
     public private(set) var recoveredFromBackup = false
     /// The staged library `replaceLibrary` is about to switch in; spared by stale-folder cleanup.
@@ -115,9 +208,11 @@ public actor LibraryStore {
     @discardableResult
     public func load() throws -> AppState {
         state = nil
+        checkedHEIFOriginals.removeAll()
+        pickerCheckpointCount = 0
         primaryIsGood = false
         recoveredFromBackup = false
-        recoverInterruptedSwap()
+        try recoverInterruptedSwap()
         let primaryURL = url(Self.stateFile), backupURL = url(Self.backupFile)
         let primaryExists = fm.fileExists(atPath: primaryURL.path)
         let backupExists = fm.fileExists(atPath: backupURL.path)
@@ -137,6 +232,21 @@ public actor LibraryStore {
             }
         }
 
+        if fm.fileExists(atPath: url(Self.deletionFile).path) {
+            if case .newer = decode(backupURL) { throw StoreError.newerSchema }
+            switch decode(url(Self.deletionFile)) {
+            case .newer: throw StoreError.newerSchema
+            case .invalid: throw StoreError.corruptState
+            case .valid(let committed):
+                state = committed
+                deletionPending = true
+                // A valid committed journal is readable even if cleanup still needs disk space.
+                do { try finishDeletion(committed) } catch StoreError.deletionCleanupPending {}
+                return committed
+            }
+        }
+        deletionPending = false
+
         do {
             for dir in [root, url(Self.originalsDir), url(Self.thumbnailsDir)] {
                 try fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: Self.protectionAttributes)
@@ -145,42 +255,136 @@ public actor LibraryStore {
             throw ioError(error, op: "mkdir")
         }
 
-        if !primaryExists && !backupExists {
-            state = .empty
-            log.info("load: empty store")
-            // Leftovers of an interrupted first-ever save: no state ever referenced them.
-            removeStaleTempFiles()
-            removeStaleStagingDirectories()
-            cleanOrphans(in: .empty)
-            return .empty
+        let journal = try pickerJournal.read()
+        let hasJournal = journal.fileCount > 0 || !journal.compactionProofs.isEmpty
+        let baseline: AppState?
+        if hasJournal, case .valid(let base) = decode(pickerJournal.base) {
+            baseline = base
+        } else if hasJournal, !fm.fileExists(atPath: pickerJournal.base.path),
+                  journal.prefix.first?.baseRevision == AppState.empty.revision {
+            baseline = .empty
+        } else {
+            baseline = nil
         }
-        if case .valid(let decoded) = primary {
-            state = decoded
+        var decoded: AppState
+        if case .valid(let primaryState) = primary {
+            decoded = primaryState
             primaryIsGood = true
-            log.info("load: primary rev=\(decoded.revision, privacy: .public) photos=\(decoded.photos.count, privacy: .public) items=\(decoded.items.count, privacy: .public)")
+        } else if let baseline {
+            decoded = baseline
+            recoveredFromBackup = true
+        } else if case .valid(let backupState) = backup {
+            decoded = backupState
+            recoveredFromBackup = true
+        } else if !primaryExists && !backupExists {
+            decoded = .empty
+        } else {
+            throw StoreError.corruptState
+        }
+
+        var damaged = false
+        if hasJournal {
+            (decoded, damaged) = try recoverPickerSnapshot(decoded, baseline: baseline, journal: journal)
+            pickerCheckpointCount = journal.fileCount
+        }
+        state = decoded
+        pickerQuarantinePending = damaged
+        if damaged {
+            // An unreadable tail cannot invalidate an earlier, independently valid state.
+            // If copying fails (e.g. disk full), keep it readable and retry before writing.
+            do { try quarantinePickerTail(decoded) } catch { log.error("picker: preserving damaged import in place") }
+            recoveredFromBackup = true
+            rebaseSyncState(onto: decoded)
+            return decoded
+        }
+        if recoveredFromBackup { rebaseSyncState(onto: decoded) }
+        if journal.fileCount == 0 { try? pickerJournal.retire() } else { finishPickerImport() }
+        if primaryIsGood || (!primaryExists && !backupExists) {
             removeStaleTempFiles()
             removeStaleStagingDirectories()
             cleanOrphans(in: decoded)
-            return decoded
         }
-        if case .valid(let decoded) = backup {
-            state = decoded
-            recoveredFromBackup = true
-            log.error("load: primary unusable (exists=\(primaryExists, privacy: .public)), using backup rev=\(decoded.revision, privacy: .public)")
-            return decoded
+        return decoded
+    }
+
+    private func recoverPickerSnapshot(_ snapshot: AppState, baseline: AppState?, journal: PickerImportJournal.Entries) throws
+        -> (AppState, Bool) {
+        let base = baseline ?? snapshot
+        let replay = Self.replayVerified(journal.prefix[...], from: base, checking: snapshot)
+        var damaged = journal.damaged || replay.count != journal.prefix.count || !replay.includesSnapshot
+        let fallback = replay.includesSnapshot ? replay.state : snapshot
+        // An installed snapshot is compared even when every delta decodes: a legacy writer left
+        // no proof, and a checkpoint can be well-formed JSON with wrong contents. Its backup and
+        // temp agreeing byte for byte outweighs one checkpoint file. It must preserve the
+        // independently verified snapshot, not the replay that may be the damaged part.
+        var installed = try pickerJournal.installedCompaction(extending: snapshot, baseRevision: baseline?.revision,
+                                                              entries: journal)
+        // A legacy backup whose temp is gone corroborates nothing by itself. But when the
+        // checkpoints it covers all decode and say something else at its revision, the two are
+        // contradicting evidence: take the complete snapshot and park the tree, rather than
+        // silently trusting the delta. With an unreadable checkpoint there is no contradiction,
+        // only a lone backup, and the verified baseline stays.
+        if installed == nil, journal.compactionProofs.isEmpty,
+           let lone = try pickerJournal.installedCompaction(extending: snapshot, baseRevision: baseline?.revision,
+                                                            entries: journal, withoutTemp: true) {
+            let covered = Self.replayVerified(journal.prefix.prefix(lone.checkpoint), from: base, checking: snapshot)
+            if covered.count == lone.checkpoint, covered.includesSnapshot, covered.state != lone.state { installed = lone }
         }
-        log.fault("load: primary and backup unusable; refusing to write")
-        throw StoreError.corruptState
+        guard let installed else { return (fallback, damaged) }
+
+        // Compare only the entries covered by the installed bytes. Even a well-formed delta
+        // can have different contents at the same revision. Later entries descend from the
+        // installed state and must be replayed from that state.
+        let coveredEntries = journal.prefix.prefix(installed.checkpoint)
+        let covered = coveredEntries.count == journal.prefix.count ? replay
+            : Self.replayVerified(coveredEntries, from: base, checking: snapshot)
+        damaged = damaged || covered.count != installed.checkpoint || covered.state != installed.state
+        let suffix: ArraySlice<PickerImportDelta>
+        if installed.checkpoint <= journal.prefix.count {
+            suffix = journal.prefix.dropFirst(installed.checkpoint)
+        } else {
+            let later = try pickerJournal.read(after: installed.checkpoint)
+            damaged = damaged || later.damaged
+            suffix = later.prefix[...]
+        }
+        let result = Self.replayVerified(suffix, from: installed.state)
+        return (result.state, damaged || result.count != suffix.count)
+    }
+
+    private static func replayVerified(_ deltas: ArraySlice<PickerImportDelta>, from base: AppState,
+                                       checking snapshot: AppState? = nil) -> (state: AppState, count: Int, includesSnapshot: Bool) {
+        var state = base, applied = 0
+        var includesSnapshot = snapshot == base
+        for delta in deltas {
+            var candidate = state
+            do { try delta.replay(into: &candidate) } catch { break }
+            guard isConsistent(candidate) else { break }
+            state = candidate
+            if !includesSnapshot, state.revision == snapshot?.revision { includesSnapshot = state == snapshot }
+            applied += 1
+        }
+        return (state, applied, includesSnapshot)
     }
 
     public func snapshot() -> AppState {
         state ?? .empty
     }
 
+    /// State and its reverse links are published together. Building the index belongs to the
+    /// store actor; UI consumers take a value snapshot without walking the photo library.
+    public func indexedSnapshot() -> (state: AppState, index: LibraryIndex) {
+        let current = snapshot()
+        let index = cachedIndex ?? LibraryIndex(state: current)
+        cachedIndex = index
+        return (current, index)
+    }
+
     // MARK: - Queries
 
     public func existingPhoto(matching draft: ImportDraft) -> PhotoRecord? {
-        state?.photos.first { $0.isSamePhoto(as: draft) }
+        guard let state else { return nil }
+        if pickerLookup == nil { pickerLookup = PickerPhotoLookup(state.photos) }
+        return pickerLookup?.match(draft).map { state.photos[$0] }
     }
 
     public func furniture(containingPhoto photoId: String) -> [PhotoFurniture] {
@@ -188,11 +392,65 @@ public actor LibraryStore {
     }
 
     public func originalURL(photoId: String) -> URL? {
-        state?.photo(id: photoId).map { url($0.originalFile) }
+        displayFiles(photoId: photoId)?.original
     }
 
     public func thumbnailURL(photoId: String) -> URL? {
-        state?.photo(id: photoId).map { url($0.thumbnailFile) }
+        displayFiles(photoId: photoId)?.thumbnail
+    }
+
+    /// Old imports derived their thumbnail and EXIF from item zero. Inspect only a requested
+    /// full HEIF, and decode it for repair only if ImageIO designates a different item.
+    public func displayFiles(photoId: String) -> PhotoDisplayFiles? {
+        guard let photo = state?.photo(id: photoId) else { return nil }
+        let original = url(photo.originalFile), thumbnail = url(photo.thumbnailFile)
+        var files = PhotoDisplayFiles(original: original, thumbnail: thumbnail)
+        guard photo.reducedFrom == nil,
+              ["image/heic", "image/heif", "image/heic-sequence", "image/heif-sequence", "image/avif"].contains(photo.mimeType),
+              !checkedHEIFOriginals.contains(photo.sha256),
+              let source = CGImageSourceCreateWithURL(original as CFURL, [kCGImageSourceShouldCache: false] as CFDictionary),
+              let index = PhotoIngest.primaryIndex(of: source) else { return files }
+        if index != 0 {
+            do {
+                guard try original.resourceValues(forKeys: [.fileSizeKey]).fileSize == photo.byteSize,
+                      photo.byteSize <= PhotoIngest.maxBytes else { return files }
+                let bytes = try Data(contentsOf: original, options: .mappedIfSafe)
+                let draft = try PhotoIngest.makeDraft(data: bytes, filename: nil, reduce: false)
+                guard draft.sha256 == photo.sha256 else { return files }
+                // If the cache cannot be written, the display decoder can still read this verified original.
+                // From here on the pixels are the primary's, so the shown metadata must be too.
+                let repair = PhotoMetadataRepair(photoId: photo.photoId, draft: draft)
+                files.thumbnail = original
+                files.unsavedRepair = repair
+                files.metadataChanged = try repairHEIFRecord(photo, repair: repair, thumbnail: thumbnail,
+                                                             thumbnailJPEG: draft.thumbnailJPEG)
+                files.thumbnail = thumbnail
+                files.unsavedRepair = nil
+            } catch {
+                log.error("display: failed to repair HEIF metadata or thumbnail, will retry")
+                return files
+            }
+        }
+        checkedHEIFOriginals.insert(photo.sha256)
+        return files
+    }
+
+    private func repairHEIFRecord(_ photo: PhotoRecord, repair: PhotoMetadataRepair, thumbnail: URL,
+                                  thumbnailJPEG: Data) throws -> Bool {
+        var current = try loadedState()
+        guard let index = current.photos.firstIndex(where: { $0.photoId == photo.photoId }) else { throw StoreError.unknownPhoto }
+        if !blobMatches(thumbnail, sha256: PhotoIngest.sha256Hex(thumbnailJPEG), byteSize: thumbnailJPEG.count) {
+            let temp = thumbnail.deletingLastPathComponent().appendingPathComponent(UUID().uuidString + ".heif-tmp")
+            defer { try? fm.removeItem(at: temp) }
+            try writeDurably(thumbnailJPEG, to: temp)
+            try Self.rename(temp, to: thumbnail)
+            Self.fsyncDirectory(thumbnail.deletingLastPathComponent())
+        }
+        current.photos[index] = repair.applied(to: current.photos[index])
+        guard current.photos[index] != photo else { return false }
+        Self.advanceRevision(&current.photos[index].revision)
+        try persist(current)
+        return true
     }
 
     /// Re-hashes the stored original. False if the file is missing or differs.
@@ -230,7 +488,9 @@ public actor LibraryStore {
     // MARK: - Mutations
 
     public func commitNewFurniture(draft: ImportDraft, placement: Placement, displayName: String,
-                                   decision: SourceDecision, roomId: String = AppState.primaryRoomId) throws -> PhotoFurniture {
+                                   decision: SourceDecision, roomId: String = AppState.primaryRoomId,
+                                   generation: UUID? = nil) throws -> PhotoFurniture {
+        try checkGeneration(generation)
         let current = try loadedState()
         let issues = GridRules.validate(placement, in: try Self.pieces(inRoom: roomId, of: current), catalog: catalog)
         guard issues.isEmpty, let model = catalog.model(id: placement.modelId) else {
@@ -265,7 +525,9 @@ public actor LibraryStore {
     }
 
     public func addSource(draft: ImportDraft, toInstance instanceId: String,
-                          decision: SourceDecision) throws -> PhotoFurniture {
+                          decision: SourceDecision, generation: UUID? = nil) throws -> PhotoFurniture {
+        try checkGeneration(generation)
+        try Task.checkCancellation()
         let current = try loadedState()
         guard let (shelf, index) = Self.locate(instanceId, in: current) else {
             throw StoreError.unknownInstance
@@ -275,12 +537,8 @@ public actor LibraryStore {
         }
         if let existing = current.photos.first(where: { $0.isSamePhoto(as: draft) }),
            current[keyPath: shelf][index].sources.contains(where: { $0.photoId == existing.photoId }) {
-            // Nothing to link, but intact bytes in hand still repair a damaged stored copy.
-            if (try? checkDraft(draft)) != nil {
-                do { try healBlobs(of: existing, from: draft) } catch {
-                    log.error("addSource: heal failed \(Self.code(self.publicError(error, op: "heal")), privacy: .public)")
-                }
-            }
+            // The link already exists, but reselecting a photo may repair its files or Photos binding.
+            if (try? checkDraft(draft)) != nil { _ = try importPhoto(draft: draft) }
             throw StoreError.duplicateSource
         }
         try checkDraft(draft)
@@ -292,7 +550,7 @@ public actor LibraryStore {
             let source = appendObservation(decision: decision, photoId: photo.photoId,
                                            category: model.category, in: &next)
             next[keyPath: shelf][index].sources.append(source)
-            next[keyPath: shelf][index].revision += 1
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
             next[keyPath: shelf][index].updatedAt = Self.now()
             let item = next[keyPath: shelf][index]
             try persist(next)
@@ -312,7 +570,7 @@ public actor LibraryStore {
     /// mirroring the web rule that a model source must match the furniture's category.
     ///
     /// `roomId` moves the piece to another room as part of the same change; nil keeps its room.
-    public func updatePlacement(instanceId: String, placement: Placement, roomId: String? = nil) throws -> PhotoFurniture {
+    public func updatePlacement(instanceId: String, placement: Placement, roomId: String? = nil, displayName: String? = nil) throws -> PhotoFurniture {
         let current = try loadedState()
         guard let index = current.items.firstIndex(where: { $0.instanceId == instanceId }) else {
             throw StoreError.unknownInstance
@@ -324,7 +582,7 @@ public actor LibraryStore {
             throw StoreError.placement(issues.isEmpty ? [.unknownModel] : issues)
         }
         var next = current
-        var item = placed(current.items[index], at: placement, model: model, in: current)
+        var item = placed(current.items[index], at: placement, model: model, displayName: displayName, in: current)
         item.roomId = Self.stored(room)
         next.items[index] = item
         do {
@@ -352,7 +610,7 @@ public actor LibraryStore {
         }
         var next = current
         next[keyPath: shelf][index].displayName = trimmed
-        next[keyPath: shelf][index].revision += 1
+        Self.advanceRevision(&next[keyPath: shelf][index].revision)
         next[keyPath: shelf][index].updatedAt = Self.now()
         let item = next[keyPath: shelf][index]
         do {
@@ -447,7 +705,7 @@ public actor LibraryStore {
         next.items.removeAll { ids.contains($0.instanceId) }
         let stowed = pieces.map { piece in
             var item = piece
-            item.revision += 1
+            Self.advanceRevision(&item.revision)
             item.updatedAt = now
             return item
         }
@@ -475,7 +733,7 @@ public actor LibraryStore {
             guard let (shelf, index) = Self.locate(id, in: next) else { throw StoreError.unknownInstance }
             guard next[keyPath: shelf][index].isLocked != locked else { continue }
             next[keyPath: shelf][index].locked = locked ? true : nil
-            next[keyPath: shelf][index].revision += 1
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
             next[keyPath: shelf][index].updatedAt = now
             changed += 1
         }
@@ -521,7 +779,7 @@ public actor LibraryStore {
         var item = current[keyPath: shelf][index]
         try change(&item)
         guard item != current[keyPath: shelf][index] else { return item }
-        item.revision += 1
+        Self.advanceRevision(&item.revision)
         item.updatedAt = Self.now()
         var next = current
         next[keyPath: shelf][index] = item
@@ -539,17 +797,19 @@ public actor LibraryStore {
     /// Brings a stored piece back into the room at `placement`, which is judged like a new
     /// placement (the room may have changed while the piece was away; the item limit applies).
     /// A different model follows the same source rule as `updatePlacement`.
-    public func restoreFurniture(instanceId: String, placement: Placement, roomId: String = AppState.primaryRoomId) throws -> PhotoFurniture {
+    public func restoreFurniture(instanceId: String, placement: Placement, roomId: String = AppState.primaryRoomId,
+                                 displayName: String? = nil) throws -> PhotoFurniture {
         let current = try loadedState()
         guard let index = current.storage.firstIndex(where: { $0.instanceId == instanceId }) else {
             throw StoreError.unknownInstance
         }
+        guard !current.storage[index].isLocked else { throw StoreError.locked }
         let issues = GridRules.validate(placement, in: try Self.pieces(inRoom: roomId, of: current), catalog: catalog)
         guard issues.isEmpty, let model = catalog.model(id: placement.modelId) else {
             throw StoreError.placement(issues.isEmpty ? [.unknownModel] : issues)
         }
         var next = current
-        var item = placed(next.storage.remove(at: index), at: placement, model: model, in: current)
+        var item = placed(next.storage.remove(at: index), at: placement, model: model, displayName: displayName, in: current)
         item.roomId = Self.stored(roomId)
         next.items.append(item)
         do {
@@ -565,8 +825,12 @@ public actor LibraryStore {
 
     /// `item` with the placement applied and its revision bumped. Model-origin sources whose
     /// observed object does not match the (possibly new) model's category become manual links.
-    private func placed(_ item: PhotoFurniture, at placement: Placement, model: CatalogModel, in current: AppState) -> PhotoFurniture {
+    private func placed(_ item: PhotoFurniture, at placement: Placement, model: CatalogModel, displayName: String?,
+                        in current: AppState) -> PhotoFurniture {
         var item = item
+        if let trimmed = displayName?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty {
+            item.displayName = trimmed
+        }
         item.modelId = placement.modelId
         item.x = placement.x
         item.z = placement.z
@@ -580,9 +844,9 @@ public actor LibraryStore {
             var probe = item
             probe.modelId = model.id
             return Self.sourceIsValid(source, item: probe, in: current, catalog: catalog)
-                ? source : .manual(photoId: source.photoId)
+                ? source : .manual(photoId: source.photoId, addedAt: source.addedAt)
         }
-        item.revision += 1
+        Self.advanceRevision(&item.revision)
         item.updatedAt = Self.now()
         return item
     }
@@ -591,47 +855,203 @@ public actor LibraryStore {
 
     /// Stores a photo without any furniture. Identical bytes are stored once: a second import
     /// reuses the existing record, repairing its files and filling in a missing picker identifier.
-    public func addPhoto(draft: ImportDraft) throws -> PhotoRecord {
-        try importPhoto(draft: draft).photo
+    public func addPhoto(draft: ImportDraft, generation: UUID? = nil) throws -> PhotoRecord {
+        try checkGeneration(generation)
+        return try importPhoto(draft: draft).photo
     }
 
     /// Whether these bytes created a new record is decided in the same actor turn as the write.
     public func importPhoto(draft: ImportDraft) throws -> (photo: PhotoRecord, inserted: Bool) {
+        try importPhotos([draft])[0]
+    }
+
+    /// A picker checkpoint commits its records together. Already committed checkpoints survive a
+    /// later cancellation or failure; no result is returned before the state file is durable.
+    public func importPhotos(_ drafts: [ImportDraft], generation: UUID? = nil) throws -> [(photo: PhotoRecord, inserted: Bool)] {
+        try checkGeneration(generation)
         let current = try loadedState()
-        try checkDraft(draft)
-        if let index = current.photos.firstIndex(where: { $0.isSamePhoto(as: draft) }) {
-            let existing = current.photos[index]
-            do { try healBlobs(of: existing, from: draft) } catch {
-                log.error("addPhoto: heal failed \(Self.code(self.publicError(error, op: "heal")), privacy: .public)")
-            }
-            var linked = existing
-            linked.learnLibraryIdentifiers(from: draft)
-            if linked != existing {
-                var next = current
-                next.photos[index] = linked
-                do { try persist(next) } catch { throw publicError(error, op: "addPhoto") }
-                return (linked, false)
-            }
-            return (existing, false)
-        }
         var next = current
         var created: [URL] = []
+        var changed = false
+        var results: [(photo: PhotoRecord, inserted: Bool)] = []
         do {
-            let photo = try ensurePhoto(draft: draft, in: &next, created: &created)
-            try persist(next)
-            log.info("addPhoto: photo=\(photo.photoId, privacy: .public) bytes=\(draft.byteSize, privacy: .public)")
-            return (photo, true)
+            for draft in drafts {
+                try Task.checkCancellation()
+                try checkDraft(draft)
+                if let index = next.photos.firstIndex(where: { $0.isSamePhoto(as: draft) }) {
+                    let existing = next.photos[index]
+                    do { try healBlobs(of: existing, from: draft) } catch {
+                        log.error("addPhoto: heal failed \(Self.code(self.publicError(error, op: "heal")), privacy: .public)")
+                    }
+                    next.photos[index].learnLibraryIdentifiers(from: draft)
+                    let photo = next.photos[index]
+                    changed = changed || photo != existing
+                    results.append((photo, false))
+                } else {
+                    let photo = try writeNewPhoto(draft: draft, in: &next, created: &created)
+                    changed = true
+                    results.append((photo, true))
+                }
+            }
+            try Task.checkCancellation()
+            if changed { try persist(next) }
+            return results
         } catch {
             rollback(created)
-            let surfaced = publicError(error, op: "addPhoto")
-            log.error("addPhoto failed: \(Self.code(surfaced), privacy: .public)")
-            throw surfaced
+            if error is CancellationError { throw error }
+            throw publicError(error, op: "addPhoto")
         }
+    }
+
+    /// Commit one picker group without serializing all the unrelated records. Both picker
+    /// entry points keep at most three decoded drafts; earlier groups survive a later failure.
+    public func importPickerPhotos(_ drafts: [ImportDraft], to target: String? = nil, generation: UUID? = nil) throws
+        -> [(photo: PhotoRecord, inserted: Bool, linked: Bool)] {
+        try checkGeneration(generation)
+        let current = try loadedState()
+        var next = current
+        let location = target.flatMap { Self.locate($0, in: current) }
+        if target != nil {
+            guard let location else { throw StoreError.unknownInstance }
+            guard catalog.model(id: current[keyPath: location.shelf][location.index].modelId) != nil else {
+                throw StoreError.placement([.unknownModel])
+            }
+        }
+        var held = Set(location.map { current[keyPath: $0.shelf][$0.index].sources.map(\.photoId) } ?? [])
+        var delta = PickerImportDelta(baseRevision: current.revision, revision: Self.nextRevision(current.revision))
+        var created: [URL] = [], results: [(PhotoRecord, Bool, Bool)] = []
+        if pickerLookup == nil { pickerLookup = PickerPhotoLookup(current.photos) }
+        do {
+            for draft in drafts {
+                try Task.checkCancellation()
+                try checkDraft(draft)
+                let photo: PhotoRecord
+                let offset = pickerLookup?.match(draft)
+                if let offset {
+                    let old = next.photos[offset]
+                    if location != nil {
+                        _ = try healBlobs(of: old, from: draft)
+                    } else if (try? healBlobs(of: old, from: draft)) == nil {
+                        log.error("picker: could not repair an existing photo")
+                    }
+                    next.photos[offset].learnLibraryIdentifiers(from: draft)
+                    photo = next.photos[offset]
+                    if photo != old { delta.photos.append(.init(offset: offset, record: photo)) }
+                } else {
+                    photo = try writeNewPhoto(draft: draft, in: &next, created: &created)
+                    let i = next.photos.count - 1
+                    pickerLookup?.add(photo, at: i)
+                    delta.photos.append(.init(offset: i, record: photo))
+                }
+
+                let link = location != nil && held.insert(photo.photoId).inserted
+                if let location, link {
+                    let source = PhotoCarrierSource.manual(photoId: photo.photoId, addedAt: Self.now())
+                    next[keyPath: location.shelf][location.index].sources.append(source)
+                    Self.advanceRevision(&next[keyPath: location.shelf][location.index].revision)
+                    next[keyPath: location.shelf][location.index].updatedAt = Self.now()
+                    let item = next[keyPath: location.shelf][location.index]
+                    if delta.links == nil {
+                        delta.links = .init(target: item.instanceId, sources: [], revision: item.revision, updatedAt: item.updatedAt)
+                    }
+                    delta.links?.sources.append(source)
+                    delta.links?.revision = item.revision
+                    delta.links?.updatedAt = item.updatedAt
+                }
+                results.append((photo, offset == nil, link))
+            }
+            try Task.checkCancellation()
+            if !delta.photos.isEmpty || delta.links != nil {
+                if pickerCheckpointCount == 0 {
+                    let base = primaryIsGood ? url(Self.stateFile) : (recoveredFromBackup ? url(Self.backupFile) : nil)
+                    try pickerJournal.prepare(baseline: base)
+                }
+                try pickerJournal.commit(delta, ordinal: pickerCheckpointCount + 1) {
+                    try fire(.writeState)
+                    try Task.checkCancellation()
+                }
+                pickerCheckpointCount += 1
+                next.revision = delta.revision
+                var index = cachedIndex
+                let lookup = pickerLookup
+                state = next
+                index?.applyPickerPhotos(delta.photos.map(\.record), to: location.map { next[keyPath: $0.shelf][$0.index] },
+                                       links: delta.links?.sources ?? [])
+                cachedIndex = index
+                pickerLookup = lookup
+            }
+            return results
+        } catch {
+            pickerLookup = nil
+            if pickerCheckpointCount == 0 { try? pickerJournal.retire() }
+            rollback(created)
+            if error is CancellationError { throw error }
+            throw publicError(error, op: "picker")
+        }
+    }
+
+    /// Compaction is housekeeping. A synced checkpoint remains authoritative even when the
+    /// snapshots cannot be refreshed (e.g. disk full); a later load or normal write retries.
+    public func finishPickerImport() {
+        do { try compactPickerImports() } catch { log.error("picker: snapshot compaction deferred") }
+    }
+
+    private func quarantinePickerTail(_ recovered: AppState) throws {
+        let staging = makeStagingURL()
+        defer { try? fm.removeItem(at: staging) }
+        for dir in [Self.originalsDir, Self.thumbnailsDir] {
+            try fm.createDirectory(at: staging.appending(path: dir), withIntermediateDirectories: true,
+                                   attributes: Self.protectionAttributes)
+        }
+        for photo in recovered.photos {
+            for path in [photo.originalFile, photo.thumbnailFile] where fm.fileExists(atPath: url(path).path) {
+                let copy = staging.appending(path: path)
+                try fm.copyItem(at: url(path), to: copy)
+                try Self.fsync(copy)
+            }
+        }
+        for dir in [Self.originalsDir, Self.thumbnailsDir] { Self.fsyncDirectory(staging.appending(path: dir)) }
+        let data = try Self.encodeState(recovered)
+        for name in [Self.stateFile, Self.backupFile] {
+            try writeDurably(data, to: staging.appending(path: name), fullSync: true)
+        }
+        // Sync's own files go along: without them the next sync would start over and lose what
+        // it had captured but not sent. `load` rebases them onto the recovered library.
+        for name in [Self.syncStateFile, Self.syncStateBackupFile] where fm.fileExists(atPath: url(name).path) {
+            let copy = staging.appending(path: name)
+            try fm.copyItem(at: url(name), to: copy)
+            try Self.fullFsync(copy)
+        }
+        // Existing disaster recovery parks the entire old tree and counts it until Clear All.
+        let currentGeneration = generation
+        try swapIn(staging: staging, state: recovered, preserveDamaged: true)
+        generation = currentGeneration
+    }
+
+    private func compactPickerImports() throws {
+        if pickerQuarantinePending, let state { try quarantinePickerTail(state); return }
+        guard pickerCheckpointCount > 0, let state else { return }
+        let temp = url(Self.tempStateFile), backupTemp = url(Self.tempBackupFile)
+        for file in [temp, backupTemp] where fm.fileExists(atPath: file.path) { try fm.removeItem(at: file) }
+        let data = try Self.encodeState(state)
+        try writeDurably(data, to: temp, fullSync: true)
+        try fm.copyItem(at: temp, to: backupTemp)
+        try Self.fullFsync(backupTemp)
+        try pickerJournal.recordCompaction(data, checkpoint: pickerCheckpointCount)
+        try Self.rename(backupTemp, to: url(Self.backupFile))
+        try fire(.pickerSnapshotBackupInstalled)
+        try Self.rename(temp, to: url(Self.stateFile))
+        try fire(.pickerSnapshotInstalled)
+        Self.fsyncDirectory(root)
+        try pickerJournal.retire()
+        pickerCheckpointCount = 0
+        primaryIsGood = true
     }
 
     /// A skipped batch entry may undo only its own import. An edit, observation or a furniture
     /// link made since then takes precedence. Retrying after a completed discard is harmless.
-    public func discardBatchPhoto(photoId: String, ifUnchangedSince revision: Int) throws {
+    public func discardBatchPhoto(photoId: String, ifUnchangedSince revision: Int, generation: UUID? = nil) throws {
+        try checkGeneration(generation)
         let current = try loadedState()
         guard current.photo(id: photoId)?.revision == revision,
               current.furniture(containing: photoId).isEmpty,
@@ -652,7 +1072,7 @@ public actor LibraryStore {
         }
         var next = current
         next[keyPath: shelf][index].sources.append(.manual(photoId: photoId, addedAt: Self.now()))
-        next[keyPath: shelf][index].revision += 1
+        Self.advanceRevision(&next[keyPath: shelf][index].revision)
         next[keyPath: shelf][index].updatedAt = Self.now()
         let item = next[keyPath: shelf][index]
         do {
@@ -679,7 +1099,7 @@ public actor LibraryStore {
         }
         var next = current
         next[keyPath: shelf][index].sources.removeAll { $0.photoId == photoId }
-        next[keyPath: shelf][index].revision += 1
+        Self.advanceRevision(&next[keyPath: shelf][index].revision)
         next[keyPath: shelf][index].updatedAt = Self.now()
         let item = next[keyPath: shelf][index]
         do {
@@ -719,7 +1139,7 @@ public actor LibraryStore {
             break
         }
         guard photo != current.photos[index] else { return photo }
-        photo.revision += 1
+        Self.advanceRevision(&photo.revision)
         var next = current
         next.photos[index] = photo
         do {
@@ -744,9 +1164,12 @@ public actor LibraryStore {
     /// Deletes several photos as one write, by the rules of `deletePhoto`. An id that is not in
     /// the library rejects the whole call (`unknownPhoto`) and nothing changes.
     public func deletePhotos(photoIds: [String]) throws {
-        let current = try loadedState()
         let ids = Set(photoIds)
+        let resuming = deletionPending && retryDeletionIDs == ids
+        let current = try loadedState()
+        try compactPickerImports()
         let doomed = current.photos.filter { ids.contains($0.photoId) }
+        if resuming && doomed.isEmpty { return }
         guard doomed.count == ids.count else { throw StoreError.unknownPhoto }
         guard !doomed.isEmpty else { return }
         var next = current
@@ -757,35 +1180,30 @@ public actor LibraryStore {
             for index in next[keyPath: shelf].indices
             where next[keyPath: shelf][index].sources.contains(where: { ids.contains($0.photoId) }) {
                 next[keyPath: shelf][index].sources.removeAll { ids.contains($0.photoId) }
-                next[keyPath: shelf][index].revision += 1
+                Self.advanceRevision(&next[keyPath: shelf][index].revision)
                 next[keyPath: shelf][index].updatedAt = Self.now()
                 updatedItems += 1
             }
         }
+        // This journal is the commit point. Until the two state files and the photo
+        // directory agree, every reader on restart uses it ahead of either state file.
+        Self.advanceRevision(&next.revision)
+        let temp = url(Self.tempStateFile)
         do {
-            try persist(next)
+            try? fm.removeItem(at: temp)
+            try writeDurably(try Self.encodeState(next), to: temp, fullSync: true)
+            try fire(.writeState)
+            try Self.rename(temp, to: url(Self.deletionFile))
+            Self.fsyncDirectory(root)
         } catch {
-            let surfaced = publicError(error, op: "deletePhoto")
-            log.error("deletePhoto failed: \(Self.code(surfaced), privacy: .public)")
-            throw surfaced
+            try? fm.removeItem(at: temp)
+            throw publicError(error, op: "deletePhoto")
         }
-        // A state restored from the backup must never reference blobs we delete: make the
-        // backup describe the post-deletion library first. If that fails, keep the files
-        // (load-time orphan cleanup spares blobs the backup still references).
-        do {
-            try replaceBackupWithPrimary()
-        } catch {
-            log.error("deletePhoto: backup replace failed \(Self.code(self.ioError(error, op: "backup")), privacy: .public); keeping files")
-            return
-        }
-        var paths = Set(doomed.map(\.thumbnailFile))
-        let kept = Set(next.photos.map(\.originalFile))
-        for photo in doomed where !kept.contains(photo.originalFile) { paths.insert(photo.originalFile) }
-        var leftovers = 0
-        for path in paths {
-            do { try fm.removeItem(at: url(path)) } catch { leftovers += 1 }
-        }
-        log.info("deletePhoto: photos=\(doomed.count, privacy: .public) furnitureUpdated=\(updatedItems, privacy: .public) leftoverFiles=\(leftovers, privacy: .public)")
+        state = next
+        deletionPending = true
+        retryDeletionIDs = ids
+        try finishDeletion(next)
+        log.info("deletePhoto: photos=\(doomed.count, privacy: .public) furnitureUpdated=\(updatedItems, privacy: .public)")
     }
 
     // MARK: - Several photos at once
@@ -810,6 +1228,95 @@ public actor LibraryStore {
     @discardableResult
     public func unlinkPhotos(photoIds: [String], fromInstance instanceId: String) throws -> BatchOutcome {
         try changeLinks(photoIds: photoIds, from: instanceId, to: nil, op: "unlinkPhotos")
+    }
+
+    /// What `unlinkPhotos(photoIds:fromInstances:)` took off, enough to put it back exactly.
+    public struct UnlinkReceipt: Sendable, Equatable {
+        public struct Removed: Sendable, Equatable {
+            public let instanceId: String
+            /// Where the link was in the piece's album.
+            public let position: Int
+            /// The link as it was: origin, observation, relation and when it was made.
+            public let link: PhotoCarrierSource
+        }
+
+        public let removed: [Removed]
+    }
+
+    /// Takes photos off several pieces as one write: off the pieces in `instanceIds`, or, with
+    /// nil, off every piece each photo is on. Only the links go: the photos, their observations
+    /// and the pieces stay. A photo not on a named piece is skipped. An unknown photo or piece
+    /// rejects the whole call and nothing changes.
+    @discardableResult
+    public func unlinkPhotos(photoIds: [String], fromInstances instanceIds: [String]?) throws -> UnlinkReceipt {
+        let current = try loadedState()
+        let ids = Set(photoIds)
+        guard ids.isSubset(of: Set(current.photos.map(\.photoId))) else { throw StoreError.unknownPhoto }
+        let pieces = try instanceIds.map { named in
+            try named.map { id in
+                guard Self.locate(id, in: current) != nil else { throw StoreError.unknownInstance }
+                return id
+            }
+        }
+        var next = current
+        let now = Self.now()
+        var removed: [UnlinkReceipt.Removed] = []
+        for piece in current.allFurniture where pieces?.contains(piece.instanceId) ?? true {
+            let leaving = piece.sources.enumerated().filter { ids.contains($0.element.photoId) }
+            guard !leaving.isEmpty, let (shelf, index) = Self.locate(piece.instanceId, in: next) else { continue }
+            removed += leaving.map { .init(instanceId: piece.instanceId, position: $0.offset, link: $0.element) }
+            next[keyPath: shelf][index].sources.removeAll { ids.contains($0.photoId) }
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
+            next[keyPath: shelf][index].updatedAt = now
+        }
+        let receipt = UnlinkReceipt(removed: removed)
+        guard !removed.isEmpty else { return receipt }
+        do {
+            try persist(next)
+        } catch {
+            let surfaced = publicError(error, op: "unlinkPhotosFromPieces")
+            log.error("unlinkPhotosFromPieces failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        log.info("unlinkPhotosFromPieces: links=\(removed.count, privacy: .public)")
+        return receipt
+    }
+
+    /// Puts back what `unlinkPhotos(photoIds:fromInstances:)` took off, as one write. Each link
+    /// goes back where it was, as it was, so a recognised link never comes back as one made by
+    /// hand. What changed meanwhile wins: a link is skipped when its piece or photo is gone or
+    /// the photo is on that piece again. Returns how many links went back.
+    @discardableResult
+    public func undoUnlink(_ receipt: UnlinkReceipt) throws -> Int {
+        let current = try loadedState()
+        let photos = Set(current.photos.map(\.photoId))
+        let observations = Set(current.observations.map(\.observationId))
+        var next = current
+        let now = Self.now()
+        var restored = 0
+        // In album order per piece, so each earlier position is already back when the next goes in.
+        for entry in receipt.removed.sorted(by: { ($0.instanceId, $0.position) < ($1.instanceId, $1.position) }) {
+            // A recognised link goes back only with its observation (another device may have
+            // taken the suggestion back meanwhile): half a link would be a made-up provenance.
+            guard photos.contains(entry.link.photoId), entry.link.observationId.map(observations.contains) ?? true,
+                  let (shelf, index) = Self.locate(entry.instanceId, in: next),
+                  !next[keyPath: shelf][index].sources.contains(where: { $0.photoId == entry.link.photoId }) else { continue }
+            let count = next[keyPath: shelf][index].sources.count
+            next[keyPath: shelf][index].sources.insert(entry.link, at: min(entry.position, count))
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
+            next[keyPath: shelf][index].updatedAt = now
+            restored += 1
+        }
+        guard restored > 0 else { return 0 }
+        do {
+            try persist(next)
+        } catch {
+            let surfaced = publicError(error, op: "undoUnlink")
+            log.error("undoUnlink failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        log.info("undoUnlink: restored=\(restored, privacy: .public)")
+        return restored
     }
 
     /// Moves photos from one piece to another as one write: off `source`, onto `target`. A
@@ -837,7 +1344,7 @@ public actor LibraryStore {
             if !eligible.isEmpty {
                 let leaving = Set(eligible)
                 next[keyPath: shelf][index].sources.removeAll { leaving.contains($0.photoId) }
-                next[keyPath: shelf][index].revision += 1
+                Self.advanceRevision(&next[keyPath: shelf][index].revision)
                 next[keyPath: shelf][index].updatedAt = now
                 changed = eligible.count
             }
@@ -848,7 +1355,7 @@ public actor LibraryStore {
             let arriving = eligible.filter { !held.contains($0) }
             if !arriving.isEmpty {
                 next[keyPath: shelf][index].sources += arriving.map { .manual(photoId: $0, addedAt: now) }
-                next[keyPath: shelf][index].revision += 1
+                Self.advanceRevision(&next[keyPath: shelf][index].revision)
                 next[keyPath: shelf][index].updatedAt = now
             }
             if source == nil { changed = arriving.count }
@@ -866,6 +1373,132 @@ public actor LibraryStore {
         return outcome
     }
 
+    // MARK: - Suggestions confirmed in a batch
+
+    /// What `fileSuggestions` did, enough to undo it exactly.
+    public struct SuggestionReceipt: Sendable, Equatable {
+        public struct Filed: Sendable, Equatable {
+            public let photoId: String
+            public let instanceId: String
+            /// The observation recording the suggestion; the new link points at it.
+            public let observationId: String
+            /// The board links the photo had before, exactly as they were and where they were.
+            public let boardLinks: [BoardLink]
+        }
+
+        public struct BoardLink: Sendable, Equatable {
+            public let instanceId: String
+            public let position: Int
+            public let link: PhotoCarrierSource
+        }
+
+        public let filed: [Filed]
+        /// Offers that no longer described the home (filed or moved by hand meanwhile, piece
+        /// gone, or a photo board as target) and were left alone.
+        public let skipped: [String]
+    }
+
+    /// Files confirmed suggestions as one write. Each photo gets a model-origin link backed by an
+    /// on-device observation whose analyzer is `BatchSuggestionSettings.analyzer` (the category
+    /// is the piece's, the label is the analyzer of the prints compared), so the record says
+    /// "suggested by the app, confirmed by the user" and never reads as a hand-picked filing.
+    /// A photo on a board leaves the boards it was offered from. An offer that is no longer
+    /// current (`BatchSuggestions.isCurrent`) is skipped: a move the user made by hand wins.
+    public func fileSuggestions(_ offers: [BatchSuggestion], printsBy embedderAnalyzer: String,
+                                generation: UUID? = nil) throws -> SuggestionReceipt {
+        try checkGeneration(generation)
+        let current = try loadedState()
+        var next = current
+        var filed: [SuggestionReceipt.Filed] = []
+        var skipped: [String] = []
+        var seen = Set<String>()
+        let now = Self.now()
+        for offer in offers {
+            guard seen.insert(offer.photoId).inserted else { skipped.append(offer.photoId); continue }
+            guard BatchSuggestions.isCurrent(offer, in: next, catalog: catalog),
+                  let (shelf, index) = Self.locate(offer.instanceId, in: next),
+                  let model = catalog.model(id: next[keyPath: shelf][index].modelId) else {
+                skipped.append(offer.photoId)
+                continue
+            }
+            var boardLinks: [SuggestionReceipt.BoardLink] = []
+            for board in offer.fromBoards.sorted() {
+                guard let (boardShelf, boardIndex) = Self.locate(board, in: next),
+                      let position = next[keyPath: boardShelf][boardIndex].sources.firstIndex(where: { $0.photoId == offer.photoId })
+                else { continue }
+                boardLinks.append(.init(instanceId: board, position: position,
+                                        link: next[keyPath: boardShelf][boardIndex].sources[position]))
+                next[keyPath: boardShelf][boardIndex].sources.removeAll { $0.photoId == offer.photoId }
+                Self.advanceRevision(&next[keyPath: boardShelf][boardIndex].revision)
+                next[keyPath: boardShelf][boardIndex].updatedAt = now
+            }
+            let observation = PhotoObservation(
+                observationId: UUID().uuidString, photoId: offer.photoId, origin: .model, mode: .onDevice,
+                analyzer: BatchSuggestionSettings.analyzer, analyzerRevision: BatchSuggestionSettings.analyzerRevision,
+                // The rule passes or not; it has no graded confidence.
+                objects: [ObservedObject(kind: model.category, label: embedderAnalyzer, confidence: 1)], createdAt: now)
+            next.observations.append(observation)
+            next[keyPath: shelf][index].sources.append(
+                PhotoCarrierSource(photoId: offer.photoId, observationId: observation.observationId, objectIndex: 0,
+                                   origin: .model, relationToCat: .unclear, addedAt: now))
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
+            next[keyPath: shelf][index].updatedAt = now
+            filed.append(.init(photoId: offer.photoId, instanceId: offer.instanceId, observationId: observation.observationId,
+                               boardLinks: boardLinks))
+        }
+        let receipt = SuggestionReceipt(filed: filed, skipped: skipped)
+        guard !filed.isEmpty else { return receipt }
+        do {
+            try persist(next)
+        } catch {
+            let surfaced = publicError(error, op: "fileSuggestions")
+            log.error("fileSuggestions failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        log.info("fileSuggestions: filed=\(filed.count, privacy: .public) skipped=\(skipped.count, privacy: .public)")
+        return receipt
+    }
+
+    /// Takes back what `fileSuggestions` did, as one write: each suggested link that is still
+    /// there goes, with its observation, and the photo goes back onto the boards it came from
+    /// (with the links it had). A photo the user has since moved or unlinked by hand is left as
+    /// it is. Returns how many photos were taken back.
+    @discardableResult
+    public func undoSuggestions(_ receipt: SuggestionReceipt) throws -> Int {
+        let current = try loadedState()
+        var next = current
+        let now = Self.now()
+        var undone = 0
+        for entry in receipt.filed {
+            guard let (shelf, index) = Self.locate(entry.instanceId, in: next),
+                  next[keyPath: shelf][index].sources.contains(where: { $0.photoId == entry.photoId && $0.observationId == entry.observationId })
+            else { continue }
+            next[keyPath: shelf][index].sources.removeAll { $0.photoId == entry.photoId && $0.observationId == entry.observationId }
+            Self.advanceRevision(&next[keyPath: shelf][index].revision)
+            next[keyPath: shelf][index].updatedAt = now
+            next.observations.removeAll { $0.observationId == entry.observationId }
+            for board in entry.boardLinks {
+                guard let (boardShelf, boardIndex) = Self.locate(board.instanceId, in: next),
+                      !next[keyPath: boardShelf][boardIndex].sources.contains(where: { $0.photoId == entry.photoId }) else { continue }
+                let sources = next[keyPath: boardShelf][boardIndex].sources
+                next[keyPath: boardShelf][boardIndex].sources.insert(board.link, at: min(board.position, sources.count))
+                Self.advanceRevision(&next[keyPath: boardShelf][boardIndex].revision)
+                next[keyPath: boardShelf][boardIndex].updatedAt = now
+            }
+            undone += 1
+        }
+        guard undone > 0 else { return 0 }
+        do {
+            try persist(next)
+        } catch {
+            let surfaced = publicError(error, op: "undoSuggestions")
+            log.error("undoSuggestions failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        log.info("undoSuggestions: undone=\(undone, privacy: .public)")
+        return undone
+    }
+
     /// Sets or clears the favourite mark on several photos as one write. Returns how many changed.
     @discardableResult
     public func setFavorite(photoIds: [String], _ favorite: Bool) throws -> Int {
@@ -876,7 +1509,7 @@ public actor LibraryStore {
         var changed = 0
         for index in next.photos.indices where ids.contains(next.photos[index].photoId) && next.photos[index].favorite != favorite {
             next.photos[index].favorite = favorite
-            next.photos[index].revision += 1
+            Self.advanceRevision(&next.photos[index].revision)
             changed += 1
         }
         guard changed > 0 else { return 0 }
@@ -964,7 +1597,7 @@ public actor LibraryStore {
             next.storage += leaving.map { piece in
                 var item = piece
                 item.roomId = nil
-                item.revision += 1
+                Self.advanceRevision(&item.revision)
                 item.updatedAt = now
                 return item
             }
@@ -1057,13 +1690,22 @@ public actor LibraryStore {
     public func storageUsage() -> StorageUsage {
         let current = state ?? .empty
         var bytes = 0
-        var paths = [Self.stateFile, Self.backupFile]
-        for dir in [Self.originalsDir, Self.thumbnailsDir] {
+        var paths = [Self.stateFile, Self.backupFile, Self.deletionFile]
+        for dir in [Self.originalsDir, Self.thumbnailsDir, PickerImportJournal.directory, PickerImportJournal.retiredDirectory] {
             let names = (try? fm.contentsOfDirectory(atPath: url(dir).path)) ?? []
             paths.append(contentsOf: names.map { "\(dir)/\($0)" })
         }
         for path in paths {
             if let size = (try? fm.attributesOfItem(atPath: url(path).path))?[.size] as? NSNumber { bytes += size.intValue }
+        }
+        let parent = root.deletingLastPathComponent()
+        for name in (try? fm.contentsOfDirectory(atPath: parent.path)) ?? [] where isQuarantinedDirectory(name) {
+            let contents = fm.enumerator(at: parent.appendingPathComponent(name), includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey])
+            while let file = contents?.nextObject() as? URL {
+                if let values = try? file.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey]), values.isRegularFile == true {
+                    bytes += values.fileSize ?? 0
+                }
+            }
         }
         return StorageUsage(photoCount: current.photos.count, furnitureCount: current.items.count + current.storage.count, bytes: bytes)
     }
@@ -1074,13 +1716,16 @@ public actor LibraryStore {
     /// cancellation; a failed or cancelled export leaves no file behind and changes nothing.
     public func exportBackup(to fileURL: URL, appVersion: String,
                              progress: @Sendable (BackupProgress) -> Void = { _ in }) throws -> BackupSummary {
-        let current = try loadedState()
+        let current = try state ?? load()
+        let output = fileURL.deletingLastPathComponent().appendingPathComponent(".export-" + UUID().uuidString)
+        defer { try? fm.removeItem(at: output) }
         do {
-            let summary = try BackupArchive.write(state: current, root: root, to: fileURL, appVersion: appVersion, progress: progress)
+            let summary = try BackupArchive.write(state: current, root: root, to: output, appVersion: appVersion, progress: progress)
+            try Task.checkCancellation()
+            try Self.rename(output, to: fileURL)
             log.info("export: photos=\(summary.photoCount, privacy: .public) bytes=\(summary.byteSize, privacy: .public)")
             return summary
         } catch {
-            try? fm.removeItem(at: fileURL)
             let surfaced = ioError(error, op: "export")
             log.error("export failed: \(Self.code(surfaced), privacy: .public)")
             throw surfaced
@@ -1094,22 +1739,26 @@ public actor LibraryStore {
             .appendingPathComponent(Self.stagingPrefix(for: root) + UUID().uuidString, isDirectory: true)
     }
 
-    /// Replaces the whole library with a staged, fully verified one. All-or-nothing: on any
-    /// failure the current library (files, memory, backup state) is exactly as before and
-    /// the staged copy is removed. The caller must have asked the user first.
+    /// Installs a verified library after user confirmation. Disaster recovery preserves the
+    /// displaced directory so its photos remain available until the user clears all data.
     @discardableResult
-    public func replaceLibrary(with prepared: PreparedLibrary) throws -> AppState {
+    public func replaceLibrary(with prepared: PreparedLibrary, recoveringCorruptLibrary: Bool = false) throws -> AppState {
         let staging = prepared.stagingURL
         // A first load cleans up abandoned staging folders; this one is not abandoned.
         keptStaging = staging
         defer { keptStaging = nil }
-        _ = try loadedState()
+        if recoveringCorruptLibrary {
+            // Check again at confirmation in case a newer-schema file became available.
+            do { _ = try load() } catch StoreError.corruptState {}
+        } else {
+            _ = try state ?? load()
+        }
         guard staging.deletingLastPathComponent().standardizedFileURL == root.deletingLastPathComponent().standardizedFileURL,
-              staging.lastPathComponent.hasPrefix(Self.stagingPrefix(for: root)),
+              Self.generatedDirectory(staging.lastPathComponent, prefix: Self.stagingPrefix(for: root)),
               fm.fileExists(atPath: staging.appendingPathComponent(Self.stateFile).path)
         else { throw BackupError.stale }
         do {
-            try swapIn(staging: staging, state: prepared.state)
+            try swapIn(staging: staging, state: prepared.state, preserveDamaged: recoveringCorruptLibrary || pickerQuarantinePending)
         } catch {
             let surfaced = publicError(error, op: "replace")
             log.error("replace failed: \(Self.code(surfaced), privacy: .public)")
@@ -1119,11 +1768,11 @@ public actor LibraryStore {
         return prepared.state
     }
 
-    /// Deletes every photo, piece of furniture (stored ones too) and the cat's name. All-or-nothing like a
-    /// restore: an empty library is staged beside this one and switched in.
+    /// Switches in an empty library, then erases previously quarantined libraries.
+    /// A cleanup error is reported separately so a retry can finish erasing old copies.
     @discardableResult
     public func clearAll() throws -> AppState {
-        _ = try loadedState()
+        _ = try state ?? load()
         let staging = makeStagingURL()
         let empty = AppState.empty
         do {
@@ -1138,83 +1787,417 @@ public actor LibraryStore {
             log.error("clearAll failed: \(Self.code(surfaced), privacy: .public)")
             throw surfaced
         }
+        // The user also asked to erase old copies retained during disaster recovery.
+        do {
+            let parent = root.deletingLastPathComponent()
+            for name in try fm.contentsOfDirectory(atPath: parent.path)
+            where isQuarantinedDirectory(name) || isSwapDirectory(name) {
+                try fm.removeItem(at: parent.appendingPathComponent(name))
+            }
+            Self.fsyncDirectory(parent)
+        } catch {
+            throw StoreError.clearCleanupPending
+        }
         log.info("clearAll: done")
         return empty
     }
 
     /// The commit point of restore / import / clear: the staged folder and the live folder
     /// trade places atomically, then the old one (now at the staging path) is deleted.
-    private func swapIn(staging: URL, state next: AppState) throws {
+    private func swapIn(staging: URL, state next: AppState, preserveDamaged: Bool = false) throws {
+        let displaced: URL
         do {
             try fire(.swapLibrary)
             Self.fsyncDirectory(staging)
-            try Self.exchange(staging, root)
+            displaced = try Self.install(staging, at: root, preserveDamaged: preserveDamaged)
         } catch {
+            if !fm.fileExists(atPath: root.path) { state = nil }
             try? fm.removeItem(at: staging)
             throw error
         }
         Self.fsyncDirectory(root.deletingLastPathComponent())
         state = next
+        pickerCheckpointCount = 0
+        pickerQuarantinePending = false
+        checkedHEIFOriginals.removeAll()
+        generation = UUID()
         primaryIsGood = true
         recoveredFromBackup = false
-        // The previous library now sits at the staging path. If this fails it is removed by
-        // the next load.
-        try? fm.removeItem(at: staging)
+        deletionPending = false
+        if preserveDamaged {
+            try? archiveDamagedDirectory(displaced)
+        } else {
+            try? fm.removeItem(at: displaced)
+        }
     }
 
     static func stagingPrefix(for root: URL) -> String { root.lastPathComponent + ".incoming-" }
     static func previousPrefix(for root: URL) -> String { root.lastPathComponent + ".previous-" }
-
-    /// Swaps two directories on one volume. APFS does it in one atomic step; elsewhere the
-    /// live folder is parked under a `.previous-` name first and moved back if step two fails.
-    static func exchange(_ staging: URL, _ live: URL) throws {
-        if renamex_np(staging.path, live.path, UInt32(RENAME_SWAP)) == 0 { return }
-        let code = errno
-        guard code == ENOTSUP || code == EINVAL else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(code)) }
-        let parked = live.deletingLastPathComponent()
-            .appendingPathComponent(previousPrefix(for: live) + UUID().uuidString, isDirectory: true)
-        try rename(live, to: parked)
-        do {
-            try rename(staging, to: live)
-        } catch {
-            try? rename(parked, to: live)
-            throw error
-        }
-        try rename(parked, to: staging)
+    private static func recoveryDirectory(_ root: URL) -> URL {
+        root.deletingLastPathComponent().appendingPathComponent(root.lastPathComponent + ".recovering", isDirectory: true)
     }
 
-    /// Only reachable after a crash between the two renames of the non-atomic fallback: the
-    /// live folder is gone and its parked copy is still there. Put it back.
-    private func recoverInterruptedSwap() {
+    /// Returns the displaced library's actual location. After staging becomes live there is
+    /// no fallible third rename in the transaction. Its caller owns cleanup or quarantine.
+    static func install(_ staging: URL, at live: URL, preserveDamaged: Bool = false,
+                        forceFallback: Bool = false,
+                        move: (URL, URL) throws -> Void = { try rename($0, to: $1) }) throws -> URL {
+        if !preserveDamaged && !forceFallback {
+            if renamex_np(staging.path, live.path, UInt32(RENAME_SWAP)) == 0 { return staging }
+            let code = errno
+            guard code == ENOTSUP || code == EINVAL else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(code)) }
+        }
+        let parent = live.deletingLastPathComponent()
+        let parked = preserveDamaged ? recoveryDirectory(live) : parent.appendingPathComponent(previousPrefix(for: live) + "active", isDirectory: true)
+        try move(live, parked)
+        fsyncDirectory(parent)
+        do {
+            try move(staging, live)
+        } catch {
+            try move(parked, live)
+            fsyncDirectory(parent)
+            throw error
+        }
+        return parked
+    }
+
+    private static func generatedDirectory(_ name: String, prefix: String) -> Bool {
+        name.hasPrefix(prefix) && UUID(uuidString: String(name.dropFirst(prefix.count))) != nil
+    }
+
+    private func isPreviousDirectory(_ name: String) -> Bool {
+        let prefix = Self.previousPrefix(for: root)
+        return name == prefix + "active" || Self.generatedDirectory(name, prefix: prefix)
+    }
+
+    private func isSwapDirectory(_ name: String) -> Bool {
+        isPreviousDirectory(name) || Self.generatedDirectory(name, prefix: Self.stagingPrefix(for: root))
+    }
+
+    private func isQuarantinedDirectory(_ name: String) -> Bool {
+        name == Self.recoveryDirectory(root).lastPathComponent || Self.generatedDirectory(name, prefix: root.lastPathComponent + ".damaged-")
+    }
+
+    private func archiveDamagedDirectory(_ displaced: URL) throws {
+        let parent = root.deletingLastPathComponent()
+        try Self.rename(displaced, to: parent.appendingPathComponent(root.lastPathComponent + ".damaged-" + UUID().uuidString))
+        Self.fsyncDirectory(parent)
+    }
+
+    private func recoverInterruptedSwap() throws {
+        let recovery = Self.recoveryDirectory(root)
+        if fm.fileExists(atPath: recovery.path) {
+            if fm.fileExists(atPath: root.path) {
+                // Already committed. Keep the previous files even if quarantine cleanup fails.
+                try? archiveDamagedDirectory(recovery)
+            } else {
+                try Self.rename(recovery, to: root)
+            }
+            Self.fsyncDirectory(root.deletingLastPathComponent())
+        }
         guard !fm.fileExists(atPath: root.path) else { return }
         let parent = root.deletingLastPathComponent()
         let prefix = Self.previousPrefix(for: root)
-        let parked = ((try? fm.contentsOfDirectory(atPath: parent.path)) ?? []).filter { $0.hasPrefix(prefix) }.sorted()
-        guard let name = parked.last else { return }
-        if (try? Self.rename(parent.appendingPathComponent(name), to: root)) != nil {
-            log.error("load: restored the library parked by an interrupted replace")
-        }
+        guard fm.fileExists(atPath: parent.path) else { return }
+        let parked = try fm.contentsOfDirectory(atPath: parent.path).filter(isPreviousDirectory).sorted()
+        let active = prefix + "active"
+        guard let name = parked.contains(active) ? active : parked.last else { return }
+        try Self.rename(parent.appendingPathComponent(name), to: root)
+        Self.fsyncDirectory(parent)
+        log.error("load: restored the library parked by an interrupted replace")
     }
 
     /// Staged or parked folders nobody will switch in any more (cancelled preview, crash).
     private func removeStaleStagingDirectories() {
         let parent = root.deletingLastPathComponent()
-        let prefixes = [Self.stagingPrefix(for: root), Self.previousPrefix(for: root)]
         for name in (try? fm.contentsOfDirectory(atPath: parent.path)) ?? []
-        where prefixes.contains(where: { name.hasPrefix($0) }) && name != keptStaging?.lastPathComponent {
+        where name != keptStaging?.lastPathComponent && isSwapDirectory(name) {
             try? fm.removeItem(at: parent.appendingPathComponent(name))
+        }
+    }
+
+    // MARK: - A capture waiting for confirmation (PendingCapture.swift)
+
+    /// Holds a capture until it is confirmed or discarded, replacing any earlier one. Never
+    /// changes the library: no record, no revision, nothing for backups or sync.
+    public func keepPendingCapture(_ capture: PendingCapture) throws {
+        _ = try state ?? load()
+        let temp = url(PendingCapture.tempFileName), final = url(PendingCapture.fileName)
+        do {
+            try? fm.removeItem(at: temp)
+            try writeDurably(try PendingCapture.encode(capture, library: root.lastPathComponent), to: temp)
+            try Self.excludeFromBackup(temp)
+            try Self.rename(temp, to: final)
+            try Self.excludeFromBackup(final)
+        } catch {
+            try? fm.removeItem(at: temp)
+            let surfaced = ioError(error, op: "pendingCapture")
+            log.error("pending capture not kept: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+    }
+
+    /// The capture to offer again, if there is one. A file that can't be read, belongs to
+    /// another library, or whose photo the library already has (confirmed, then the app
+    /// stopped before the file went) is deleted without a word.
+    public func pendingCapture() -> PendingCapture? {
+        let file = url(PendingCapture.fileName)
+        try? fm.removeItem(at: url(PendingCapture.tempFileName))
+        guard fm.fileExists(atPath: file.path) else { return nil }
+        guard let bytes = try? Data(contentsOf: file),
+              let capture = PendingCapture.decode(bytes, library: root.lastPathComponent),
+              let current = try? state ?? load()
+        else {
+            log.info("pending capture unreadable; removed")
+            try? fm.removeItem(at: file)
+            return nil
+        }
+        let sha = capture.sha256
+        if current.photos.contains(where: { $0.sha256 == sha || $0.reducedFrom?.sha256 == sha }) {
+            try? fm.removeItem(at: file)
+            return nil
+        }
+        return capture
+    }
+
+    /// Deletes the held capture, only if it is still this one (`sha256`): a newer capture
+    /// that replaced it stays.
+    public func removePendingCapture(sha256: String) {
+        let file = url(PendingCapture.fileName)
+        guard let bytes = try? Data(contentsOf: file) else { return }
+        if let held = PendingCapture.decode(bytes, library: root.lastPathComponent), held.sha256 != sha256 { return }
+        try? fm.removeItem(at: file)
+    }
+
+    static func excludeFromBackup(_ fileURL: URL) throws {
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        var target = fileURL
+        try target.setResourceValues(values)
+    }
+
+    // MARK: - Sync (SyncSession.swift)
+
+    /// Sync's own file. It lives in the library folder, so a restore or a clear, which switch
+    /// in a whole new folder, leave sync with nothing to diff against: it then merges as on
+    /// first sync and never reads the switch as "the user deleted everything".
+    static let syncStateFile = "sync-state.json"
+    /// The sync file before its last write. A damaged sync file falls back to it: one write
+    /// behind, but consistent with the library (the library is only written after sync's own
+    /// file), and it still has the edits captured but not sent.
+    static let syncStateBackupFile = "sync-state.backup.json"
+
+    /// The library, and the token that changes when the library is replaced as a whole.
+    public func syncSnapshot() throws -> (state: AppState, generation: UUID) {
+        (try loadedState(), generation)
+    }
+
+    public func readSyncState() throws -> Data? {
+        try readSyncFile(Self.syncStateFile)
+    }
+
+    func readSyncStateBackup() throws -> Data? {
+        try readSyncFile(Self.syncStateBackupFile)
+    }
+
+    private func readSyncFile(_ name: String) throws -> Data? {
+        _ = try state ?? load()
+        let file = url(name)
+        guard fm.fileExists(atPath: file.path) else { return nil }
+        do { return try Data(contentsOf: file) } catch { throw ioError(error, op: "readSyncState") }
+    }
+
+    /// Refused if the library was replaced since `generation` was read.
+    public func writeSyncState(_ data: Data, generation expected: UUID) throws {
+        guard generation == expected else { throw SyncApplyError.libraryReplaced }
+        try writeSyncStateFile(data)
+    }
+
+    /// Switches to a library sync built from `syncSnapshot()`, as one write: new photos' files
+    /// first, then the state (through the deletion journal when files go), then sync's own
+    /// file. Refused, with nothing changed, if the library changed since `revision` (an edit
+    /// came in: capture it and build again) or was replaced.
+    public func applySynced(_ next: AppState, ifRevision revision: Int, generation expected: UUID,
+                            writes: [SyncFileWrite], syncState: (AppState) throws -> Data) throws -> AppState {
+        guard generation == expected else { throw SyncApplyError.libraryReplaced }
+        let current = try loadedState()
+        guard current.revision == revision else { throw SyncApplyError.localChanged }
+        var candidate = next
+        candidate.revision = current.revision
+        let wanted = Set(candidate.photos.flatMap { [$0.originalFile, $0.thumbnailFile] })
+        let fault = Self.consistencyFault(candidate)
+            ?? (writes.allSatisfy({ wanted.contains($0.originalFile) && wanted.contains($0.thumbnailFile) }) ? nil : "syncWrites")
+        if let fault {
+            log.error("sync: built library refused: \(fault, privacy: .public)")
+            throw SyncApplyError.inconsistent
+        }
+        var created: [URL] = []
+        do {
+            for write in writes {
+                // Copied from where sync staged it (a clone on APFS): the staged copy stays
+                // until the library is committed, so a failed write downloads nothing again.
+                let original = url(write.originalFile), thumbnail = url(write.thumbnailFile)
+                if !blobMatches(original, sha256: write.file.info.sha256, byteSize: write.file.info.byteSize) {
+                    try? fm.removeItem(at: original)
+                    try fm.copyItem(at: url(write.file.stagedFile), to: original)
+                    created.append(original)
+                    try Self.fsync(original)
+                }
+                try fire(.writeOriginal)
+                if !fm.fileExists(atPath: thumbnail.path) {
+                    try fm.copyItem(at: url(write.file.stagedThumbnail), to: thumbnail)
+                    created.append(thumbnail)
+                    try Self.fsync(thumbnail)
+                }
+                try fire(.writeThumbnail)
+            }
+            if !writes.isEmpty {
+                Self.fsyncDirectory(url(Self.originalsDir))
+                Self.fsyncDirectory(url(Self.thumbnailsDir))
+            }
+            let gone = Set(current.photos.flatMap { [$0.originalFile, $0.thumbnailFile] }).subtracting(wanted)
+            if gone.isEmpty {
+                try persist(candidate)
+            } else {
+                // Photos deleted on another device: committed like `deletePhotos`.
+                try compactPickerImports()
+                Self.advanceRevision(&candidate.revision)
+                let temp = url(Self.tempStateFile)
+                do {
+                    try? fm.removeItem(at: temp)
+                    try writeDurably(try Self.encodeState(candidate), to: temp, fullSync: true)
+                    try fire(.writeState)
+                    try Self.rename(temp, to: url(Self.deletionFile))
+                    Self.fsyncDirectory(root)
+                } catch {
+                    try? fm.removeItem(at: temp)
+                    throw error
+                }
+                state = candidate
+                deletionPending = true
+                retryDeletionIDs = []
+                do { try finishDeletion(candidate) } catch StoreError.deletionCleanupPending {}
+            }
+        } catch {
+            rollback(created)
+            let surfaced = publicError(error, op: "applySynced")
+            log.error("applySynced failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        let committed = state ?? candidate
+        do { try fire(.syncStateAfterApply) } catch { throw publicError(error, op: "applySynced") }
+        try writeSyncStateFile(try syncState(committed))
+        for write in writes {
+            try? fm.removeItem(at: url(write.file.stagedFile))
+            try? fm.removeItem(at: url(write.file.stagedThumbnail))
+        }
+        log.info("applySynced: photos=\(committed.photos.count, privacy: .public) files=\(writes.count, privacy: .public)")
+        return committed
+    }
+
+    /// Copies sync downloaded and checked, waiting for `applySynced`: `<sha256>.copy` and its
+    /// thumbnail `<sha256>.thumb`. They outlast a cycle that has to start again (an edit came
+    /// in) or fails, so a long first sync never downloads the same file twice, and only one
+    /// file at a time is in memory. Not part of the library: backups, restores and the orphan
+    /// check never look here.
+    static let syncIncomingDir = "sync-incoming"
+
+    private func stagedPaths(_ sha256: String) -> (copy: String, thumbnail: String) {
+        ("\(Self.syncIncomingDir)/\(sha256).copy", "\(Self.syncIncomingDir)/\(sha256).thumb")
+    }
+
+    /// Stores a downloaded copy whose bytes match `info` (the caller checked them and made the
+    /// thumbnail), each file written in full before it takes its name.
+    func stageSyncedFile(_ data: Data, thumbnailJPEG: Data, info: SyncFileInfo) throws -> SyncIncomingFile {
+        guard BackupArchive.isHash(info.sha256), data.count == info.byteSize else { throw StoreError.io("stageSyncedFile:name") }
+        let (copy, thumbnail) = stagedPaths(info.sha256)
+        do {
+            try fm.createDirectory(at: url(Self.syncIncomingDir), withIntermediateDirectories: true, attributes: Self.protectionAttributes)
+            for (bytes, path) in [(thumbnailJPEG, thumbnail), (data, copy)] {
+                let temp = url(path + ".tmp")
+                try? fm.removeItem(at: temp)
+                try writeDurably(bytes, to: temp)
+                try Self.rename(temp, to: url(path))
+            }
+            Self.fsyncDirectory(url(Self.syncIncomingDir))
+        } catch {
+            throw ioError(error, op: "stageSyncedFile")
+        }
+        return SyncIncomingFile(info: info, stagedFile: copy, stagedThumbnail: thumbnail)
+    }
+
+    /// The staged copy of `info`, if one is here whole and still matches its hash.
+    func stagedSyncedFile(_ info: SyncFileInfo) -> SyncIncomingFile? {
+        guard BackupArchive.isHash(info.sha256) else { return nil }
+        let (copy, thumbnail) = stagedPaths(info.sha256)
+        guard fm.fileExists(atPath: url(thumbnail).path), blobMatches(url(copy), sha256: info.sha256, byteSize: info.byteSize) else {
+            return nil
+        }
+        return SyncIncomingFile(info: info, stagedFile: copy, stagedThumbnail: thumbnail)
+    }
+
+    /// Drops staged copies sync no longer waits for (nil: all of them).
+    func pruneSyncIncoming(keeping: Set<String>?) {
+        let dir = url(Self.syncIncomingDir)
+        guard let names = try? fm.contentsOfDirectory(atPath: dir.path) else { return }
+        for name in names {
+            let sha = String(name.prefix { $0 != "." })
+            if let keeping, keeping.contains(sha), !name.hasSuffix(".tmp") { continue }
+            try? fm.removeItem(at: dir.appendingPathComponent(name))
+        }
+    }
+
+    /// The library was opened from something older than the newest state (the backup, a picker
+    /// baseline, a quarantined import), while sync's file stayed. Sync's base becomes the library
+    /// as opened, before any new edit: what the opened copy lacks or has older is then not read
+    /// as the user deleting or changing it, and the merged records bring the newer state back.
+    /// A base older than the opened library is left alone: the difference is real edits.
+    /// The generation changes, so a cycle that read the old base is refused and starts again.
+    private func rebaseSyncState(onto opened: AppState) {
+        let names = [Self.syncStateFile, Self.syncStateBackupFile]
+        guard var device = names.lazy.compactMap({ (try? Data(contentsOf: self.url($0))).flatMap(SyncDeviceState.decode) }).first,
+              let base = device.base, base.revision >= opened.revision, base != opened else { return }
+        device.base = opened
+        do {
+            let data = try device.encoded()
+            // Twice, so the backup is rebased too.
+            try writeSyncStateFile(data)
+            try writeSyncStateFile(data)
+            generation = UUID()
+            log.notice("load: sync rebased onto the recovered library")
+        } catch {
+            // The session makes the same check on its next capture.
+            log.error("load: sync rebase not written")
+        }
+    }
+
+    private func writeSyncStateFile(_ data: Data) throws {
+        let temp = url(Self.syncStateFile + ".tmp"), primary = url(Self.syncStateFile)
+        do {
+            try? fm.removeItem(at: temp)
+            try writeDurably(data, to: temp, fullSync: true)
+            // The previous version becomes the backup. A crash between the two renames leaves
+            // only the backup, which is read as the previous write.
+            if fm.fileExists(atPath: primary.path) { try Self.rename(primary, to: url(Self.syncStateBackupFile)) }
+            try Self.rename(temp, to: primary)
+            Self.fsyncDirectory(root)
+        } catch {
+            try? fm.removeItem(at: temp)
+            throw ioError(error, op: "writeSyncState")
         }
     }
 
     // MARK: - Internals
 
     private func loadedState() throws -> AppState {
-        if let state { return state }
-        return try load()
+        let current = try state ?? load()
+        if pickerQuarantinePending { try quarantinePickerTail(current) }
+        if deletionPending { try finishDeletion(current) }
+        return current
     }
 
     /// Where an instance lives: in the room (`items`) or put away (`storage`).
-    private static func locate(_ instanceId: String, in state: AppState) -> (shelf: WritableKeyPath<AppState, [PhotoFurniture]>, index: Int)? {
+    static func locate(_ instanceId: String, in state: AppState) -> (shelf: WritableKeyPath<AppState, [PhotoFurniture]>, index: Int)? {
         for shelf in [\AppState.items, \AppState.storage] {
             if let index = state[keyPath: shelf].firstIndex(where: { $0.instanceId == instanceId }) { return (shelf, index) }
         }
@@ -1246,6 +2229,10 @@ public actor LibraryStore {
             next.photos[index].learnLibraryIdentifiers(from: draft)
             return next.photos[index]
         }
+        return try writeNewPhoto(draft: draft, in: &next, created: &created)
+    }
+
+    private func writeNewPhoto(draft: ImportDraft, in next: inout AppState, created: inout [URL]) throws -> PhotoRecord {
         let photoId = UUID().uuidString
         let ext = UTType(mimeType: draft.mimeType)?.preferredFilenameExtension ?? "bin"
         let originalFile = "\(Self.originalsDir)/\(draft.sha256).\(ext)"
@@ -1300,8 +2287,9 @@ public actor LibraryStore {
     /// Writes `candidate` as the new primary. On success updates memory; on failure leaves
     /// disk state files and memory untouched (callers remove their own new blobs).
     private func persist(_ candidate: AppState) throws {
+        try compactPickerImports()
         var next = candidate
-        next.revision += 1
+        Self.advanceRevision(&next.revision)
         let tempURL = url(Self.tempStateFile), tempBackupURL = url(Self.tempBackupFile)
         let primaryURL = url(Self.stateFile), backupURL = url(Self.backupFile)
         do {
@@ -1342,18 +2330,42 @@ public actor LibraryStore {
         recoveredFromBackup = false
     }
 
-    /// Makes `state.backup.json` a durable copy of the (already durable) primary.
-    private func replaceBackupWithPrimary() throws {
-        let tempBackupURL = url(Self.tempBackupFile)
+    private func finishDeletion(_ committed: AppState) throws {
+        let journal = url(Self.deletionFile)
         do {
-            try? fm.removeItem(at: tempBackupURL)
-            try fm.copyItem(at: url(Self.stateFile), to: tempBackupURL)
-            try Self.fullFsync(tempBackupURL)
-            try Self.rename(tempBackupURL, to: url(Self.backupFile))
+            for (tempName, name) in [(Self.tempStateFile, Self.stateFile), (Self.tempBackupFile, Self.backupFile)] {
+                let temp = url(tempName)
+                try? fm.removeItem(at: temp)
+                if name == Self.backupFile { try fire(.deletionBackupCopy) }
+                try fm.copyItem(at: journal, to: temp)
+                if name == Self.backupFile { try fire(.deletionBackupSync) }
+                try Self.fullFsync(temp)
+                if name == Self.backupFile { try fire(.deletionBackupRename) }
+                try Self.rename(temp, to: url(name))
+            }
             Self.fsyncDirectory(root)
+            let kept = Set(committed.photos.flatMap { [$0.originalFile, $0.thumbnailFile] })
+            for dir in [Self.originalsDir, Self.thumbnailsDir] {
+                try fm.createDirectory(at: url(dir), withIntermediateDirectories: true, attributes: Self.protectionAttributes)
+                for name in try fm.contentsOfDirectory(atPath: url(dir).path) {
+                    let path = "\(dir)/\(name)"
+                    if !kept.contains(path), !name.hasPrefix(".") || BackupArchive.isThumbnailPath(path) {
+                        try fire(.deletionFileRemoval)
+                        try fm.removeItem(at: url(path))
+                    }
+                }
+                Self.fsyncDirectory(url(dir))
+            }
+            try pickerJournal.retire()
+            try fm.removeItem(at: journal)
+            Self.fsyncDirectory(root)
+            retryDeletionIDs.removeAll()
+            deletionPending = false
+            primaryIsGood = true
+            recoveredFromBackup = false
         } catch {
-            try? fm.removeItem(at: tempBackupURL)
-            throw error
+            log.error("deletePhoto: committed cleanup pending")
+            throw StoreError.deletionCleanupPending
         }
     }
 
@@ -1397,6 +2409,7 @@ public actor LibraryStore {
                 throw error
             }
             Self.fsyncDirectory(url(Self.originalsDir))
+            checkedHEIFOriginals.remove(photo.sha256)
             healed.original = true
             log.notice("ingest: healed original photo=\(photo.photoId, privacy: .public)")
         }
@@ -1530,6 +2543,8 @@ public actor LibraryStore {
         case let e as StoreError:
             switch e {
             case .corruptState: return "corruptState"
+            case .deletionCleanupPending: return "deletionCleanupPending"
+            case .clearCleanupPending: return "clearCleanupPending"
             case .unknownInstance: return "unknownInstance"
             case .unknownPhoto: return "unknownPhoto"
             case .placement(let issues): return "placement(\(issues.count))"
@@ -1618,11 +2633,16 @@ public actor LibraryStore {
 
     /// Catalog-independent: the photo exists and any observation reference resolves.
     static func sourceIsStructurallyValid(_ source: PhotoCarrierSource, in state: AppState) -> Bool {
-        guard state.photo(id: source.photoId) != nil else { return false }
+        sourceIsStructurallyValid(source, photoExists: { state.photo(id: $0) != nil }, observation: { state.observation(id: $0) })
+    }
+
+    private static func sourceIsStructurallyValid(_ source: PhotoCarrierSource, photoExists: (String) -> Bool,
+                                                  observation: (String) -> PhotoObservation?) -> Bool {
+        guard photoExists(source.photoId) else { return false }
         guard let observationId = source.observationId else {
             return source.objectIndex == nil && source.origin == .user
         }
-        guard let observation = state.observation(id: observationId),
+        guard let observation = observation(observationId),
               observation.photoId == source.photoId,
               observation.origin == source.origin,
               let index = source.objectIndex,
@@ -1631,43 +2651,58 @@ public actor LibraryStore {
         return true
     }
 
+    // Revisions are equality tokens. Keep them exactly representable in web backups and
+    // leave room for arithmetic. Crossing the format boundary starts a new token sequence.
+    static let maxRevision = 9_007_199_254_740_991
+    static func validRevision(_ value: Int) -> Bool { (0...maxRevision).contains(value) }
+    static func nextRevision(_ revision: Int) -> Int { revision == maxRevision ? 1 : revision + 1 }
+    private static func advanceRevision(_ revision: inout Int) { revision = nextRevision(revision) }
+
     /// Structural consistency checked on load; a state failing this is treated as corrupt.
     /// Deliberately independent of the catalog and of the item limit (which applies to adding).
-    static func isConsistent(_ state: AppState) -> Bool {
-        guard state.revision >= 0,
-              Set(state.photos.map(\.photoId)).count == state.photos.count,
-              Set(state.photos.map(\.sha256)).count == state.photos.count,
-              Set(state.observations.map(\.observationId)).count == state.observations.count,
-              // One instance is in the room or put away, never both.
-              Set((state.items + state.storage).map(\.instanceId)).count == state.items.count + state.storage.count
-        else { return false }
+    static func isConsistent(_ state: AppState) -> Bool { consistencyFault(state) == nil }
+
+    /// The first check of `isConsistent` that `state` fails, as a short code for logs (never
+    /// contents), or nil when it passes them all. Sync builds a library from records and must
+    /// never hand the store one that fails here (`SyncProjection.project`).
+    static func consistencyFault(_ state: AppState) -> String? {
+        guard validRevision(state.revision), state.photos.allSatisfy({ validRevision($0.revision) }),
+              (state.items + state.storage).allSatisfy({ validRevision($0.revision) }) else { return "revision" }
+        guard Set(state.photos.map(\.photoId)).count == state.photos.count else { return "photoId" }
+        // One photo per stored file: equal bytes are the same photo (`PhotoRecord.isSamePhoto`).
+        guard Set(state.photos.map(\.sha256)).count == state.photos.count else { return "photoFile" }
+        guard Set(state.observations.map(\.observationId)).count == state.observations.count else { return "observationId" }
+        // One instance is in the room or put away, never both.
+        guard Set((state.items + state.storage).map(\.instanceId)).count == state.items.count + state.storage.count
+        else { return "instanceId" }
         let photoIds = Set(state.photos.map(\.photoId))
         for photo in state.photos {
             for path in [photo.originalFile, photo.thumbnailFile] {
                 guard !path.hasPrefix("/"), !path.contains(".."),
                       path.hasPrefix("\(originalsDir)/") || path.hasPrefix("\(thumbnailsDir)/")
-                else { return false }
+                else { return "photoPath" }
             }
         }
-        guard state.observations.allSatisfy({ photoIds.contains($0.photoId) }) else { return false }
+        guard state.observations.allSatisfy({ photoIds.contains($0.photoId) }) else { return "observationPhoto" }
         // Rooms and cats: unique ids, the first of each is the one that always exists, and
         // nothing points at a room that is not there.
         let rooms = state.allRooms, cats = state.allCats
-        guard rooms.count <= AppState.maxRooms, cats.count <= AppState.maxCats else { return false }
+        guard rooms.count <= AppState.maxRooms, cats.count <= AppState.maxCats else { return "roomOrCatCount" }
         let roomIds = Set(rooms.map(\.roomId))
         guard roomIds.count == rooms.count, rooms[0].roomId == AppState.primaryRoomId,
-              state.items.allSatisfy({ roomIds.contains(AppState.roomId(of: $0)) }),
-              Set(cats.map(\.catId)).count == cats.count,
+              state.items.allSatisfy({ roomIds.contains(AppState.roomId(of: $0)) }) else { return "room" }
+        guard Set(cats.map(\.catId)).count == cats.count,
               cats[0].catId == AppState.primaryCatId, cats[0].name == state.catName,
               cats.allSatisfy({ $0.roomId.map(roomIds.contains) ?? true })
-        else { return false }
+        else { return "cat" }
         // No sources is fine (a piece placed from the catalog, or one whose photos were deleted).
+        let observations = Dictionary(uniqueKeysWithValues: state.observations.map { ($0.observationId, $0) })
         for item in state.items + state.storage {
             guard Set(item.sources.map(\.photoId)).count == item.sources.count,
-                  item.sources.allSatisfy({ sourceIsStructurallyValid($0, in: state) })
-            else { return false }
+                  item.sources.allSatisfy({ sourceIsStructurallyValid($0, photoExists: photoIds.contains, observation: { observations[$0] }) })
+            else { return "source" }
         }
-        return true
+        return nil
     }
 }
 

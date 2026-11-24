@@ -1,4 +1,4 @@
-MeowverseCore
+Meowverse (meowverse-core)
 Required Notice: Copyright 2026 Meowverse contributors.
 
 The covered code and program data in this package are offered under
@@ -8,8 +8,9 @@ in LICENSE. See LICENSE-SCOPE.md for the precise covered file ranges.
 Commercial use requires a separate license from the rights holder.
 Contact: bella.meowverse@gmail.com
 
-The production iOS interface, renderer, models, textures, animations,
-brand assets and design source files are not included in this package.
+The source code of the iOS app, its extensions and tests is included.
+The production models, textures, animations, illustrations, icons,
+sounds, fonts, brand assets and design source files are not.
 Product preview images and support images are separately identified
 showcase/support materials; their inclusion does not license production art.
 Third-party rights in the depicted works remain under their applicable terms.

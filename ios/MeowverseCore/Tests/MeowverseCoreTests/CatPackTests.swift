@@ -214,6 +214,52 @@ struct CatPackGeometryTests {
         }
     }
 
+    @Test("unsafe action durations and gait strides are rejected before installation",
+          arguments: [-1.0, 0, 2.3e-308, Double.greatestFiniteMagnitude])
+    func extremeTimings(value: Double) throws {
+        let data = CatPackFixture.gaits(clips: CatGaitRig.requiredClips + CatGaitRig.actionClips,
+                                       skeleton: CatGaitRig.v2Skeleton)
+        var rig = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let clips = try #require(rig["clips"] as? [String: [String: Any]])
+        for (name, field) in [("sit", "duration"), ("ground_walk", "stride")] {
+            var changed = clips
+            changed[name]?[field] = value
+            rig["clips"] = changed
+            #expect(throws: CatPackError.badGaits) { try CatGaitRig.decode(CatPackFixture.json(rig)) }
+        }
+    }
+
+    @Test("the vertex and index budgets are cumulative across parts")
+    func meshBudget() {
+        #expect(CatPackValidator.fitsMeshBudget(vertices: [32_768, 32_768], indices: [196_608, 196_608]))
+        #expect(!CatPackValidator.fitsMeshBudget(vertices: [32_768, 32_769], indices: [3, 3]))
+        #expect(!CatPackValidator.fitsMeshBudget(vertices: [3, 3], indices: [196_608, 196_611]))
+    }
+
+    @Test("clamped and looping playback always supply a finite phase")
+    func safePlayback() {
+        #expect(CatGaitRig.Clip.phase(4.2, period: 2.3e-308, looping: true).isFinite)
+        #expect(CatGaitRig.Clip.phase(.infinity, period: 1, looping: true) == 0)
+        #expect(CatGaitRig.Clip.phase(.nan, period: 1, looping: false) == 0)
+        #expect(CatGaitRig.Clip.phase(4.25, period: 1, looping: true) == 0.25)
+        #expect(CatGaitRig.Clip.phase(4.25, period: 1, looping: false) == 1)
+    }
+
+    @Test("the bundled Bella pack follows the contract")
+    func bundledBella() throws {
+        let art = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .appending(path: "Meowverse/Resources/Art")
+        let manifestURL = art.appending(path: "bella-cat.json")
+        guard FileManager.default.fileExists(atPath: manifestURL.path) else { return }
+        let pack = try CatPack.builtIn(id: "bella", resourceDirectory: art)
+        // A built-in pack's 低/高 files are downloaded, not bundled (docs/CAT_PACK.md, "按需下载").
+        try CatPackValidator.validate(manifest: pack.manifest, tiers: []) { name in
+            FileManager.default.fileExists(atPath: pack.url(for: name).path) ? try pack.data(name) : nil
+        }
+        #expect(pack.origin == .builtIn)
+        #expect(pack.url(for: "coat.webp").lastPathComponent == "bella-coat.webp")
+    }
 }
 
 @Suite("Cat pack import")
@@ -354,6 +400,43 @@ struct CatPackImportTests {
         let dir = TestSupport.tempDir()
         let url = try CatPackFixture.write(Data("hello".utf8), in: dir)
         #expect(throws: CatPackError.notArchive) { try store(dir).stage(archiveAt: url) }
+    }
+
+    @Test("the pixel budget counts a shared awake and sleeping texture only once")
+    func textureBudget() throws {
+        let shared: [String: [String: Any]] = ["coat": ["baseColor": "coat.png", "sleepBaseColor": "coat.png", "roughness": 0.7]]
+        var files = CatPackFixture.files(manifest: CatPackFixture.manifest(extra: ["materials": shared]))
+        var limits = CatPackLimits.standard
+        limits.maxTotalTexturePixels = 64  // The fixture is 8 × 8.
+        #expect(try stageError(files, limits: limits) == nil)
+        var distinct = shared
+        distinct["coat"]?["sleepBaseColor"] = "sleep.png"
+        files["cat.json"] = CatPackFixture.json(CatPackFixture.manifest(extra: ["materials": distinct]))
+        files["sleep.png"] = files["coat.png"]
+        #expect(try stageError(files, limits: limits) == .renderBudgetExceeded)
+    }
+
+    @Test("startup restores the parked version if the replacement did not commit", arguments: [false, true])
+    func interruptedReplacement(committed: Bool) throws {
+        let dir = TestSupport.tempDir()
+        let packs = store(dir)
+        func stage(_ name: String) throws -> StagedCatPack {
+            let files = CatPackFixture.files(manifest: CatPackFixture.manifest(name: name))
+            let url = try CatPackFixture.write(CatPackFixture.archive(files), in: dir)
+            return try packs.stage(archiveAt: url)
+        }
+        try packs.commit(stage("First"))
+        let next = try stage("Second")
+        let live = packs.directory(for: "test-cat")
+        let fm = FileManager.default
+        try fm.moveItem(at: live, to: packs.root.appending(path: ".old-legacy"))
+        if committed { try fm.moveItem(at: next.stagingURL, to: live) }
+        packs.removeLeftovers()
+        packs.removeLeftovers()
+        let pack = CatPack(installed: try #require(packs.installed().first))
+        #expect(pack.manifest.name == (committed ? "Second" : "First"))
+        try CatPackValidator.validate(manifest: pack.manifest) { try pack.data($0) }
+        #expect(try fm.contentsOfDirectory(atPath: packs.root.path) == ["test-cat"])
     }
 
     @Test("unlisted extra files are not installed")

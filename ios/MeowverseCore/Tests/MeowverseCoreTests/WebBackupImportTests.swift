@@ -21,6 +21,7 @@ struct WebFixture {
     }
 
     var version = 6
+    var revision = 42
     var photos: [Photo] = []
     var observations: [[String: Any]] = []
     var gridItems: [[String: Any]] = []
@@ -111,7 +112,7 @@ struct WebFixture {
             "schemaVersion": version, "catAppearance": catAppearance,
             "gridRoom": ["revision": 3, "items": gridItems], "photoAnnotations": photoAnnotations,
             "assetLibrary": ["objects": [Any](), "assets": assetFiles.keys.sorted().map { ["assetId": $0] }, "bindings": [Any]()],
-            "revision": 42,
+            "revision": revision,
             "photos": photos.map { photo -> [String: Any] in
                 ["photoId": photo.id, "filename": photo.filename, "sha256": PhotoIngest.sha256Hex(photo.bytes), "mimeType": photo.mimeType,
                  "byteSize": photo.bytes.count, "width": 64, "height": 32,
@@ -186,6 +187,32 @@ struct WebBackupImportTests {
 
     private func siblings(_ parent: URL) -> [String] {
         ((try? fm.contentsOfDirectory(atPath: parent.path)) ?? []).filter { $0.hasPrefix("Library.") }.sorted()
+    }
+
+    @Test func restoredHEIFReadsPrimaryEXIFAndRebuildsItsThumbnail() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let bytes = try TestSupport.designatedPrimaryHEIF()
+        var fixture = WebFixture()
+        fixture.photos = [.init(id: "pair", bytes: bytes, filename: "two-images.heic", mimeType: "image/heic",
+                                captureDate: "2018-01-02", captureDateSource: "exif")]
+        fixture.gridItems = [["instanceId": "primary-sofa", "modelId": "kenney-loungeSofa",
+                              "x": 1, "z": 1, "width": 3, "depth": 2, "turn": 0, "finish": "sage",
+                              "displayName": "HEIF 主图沙发", "sources": [["photoId": "pair", "origin": "user", "relationToCat": "near"]],
+                              "tags": [], "revision": 1]]
+        let url = parent.appendingPathComponent("web.zip")
+        try fixture.write(to: url)
+        let store = LibraryStore(root: root, catalog: catalog)
+        let prepared = try BackupArchive.prepare(file: url, stagingURL: store.makeStagingURL(), catalog: catalog)
+        #expect(prepared.preview.notes.contains(.datesFromFile(1)))
+        let state = try await store.replaceLibrary(with: prepared)
+        let photo = try #require(state.photos.first)
+        #expect(state.items.first?.cover == photo.photoId)
+        #expect(photo.width == 640 && photo.height == 320)
+        #expect(photo.captureDate == "2024-03-15" && photo.exifCaptureDate == photo.captureDate && photo.captureDateSource == .exif)
+        #expect(try Data(contentsOf: root.appending(path: photo.originalFile)) == bytes)
+        try TestSupport.expectUprightHEIFPrimary(PhotoIngest.downsampledImage(at: root.appending(path: photo.thumbnailFile), maxPixel: 512),
+                                                width: 512, height: 256)
     }
 
     @Test func richBackupCarriesOverPhotosFurnitureSourcesAndUserEdits() async throws {
@@ -396,6 +423,11 @@ struct WebBackupImportTests {
 
         #expect(attempt("older version") { $0.version = 5 } == .unsupportedVersion)
         #expect(attempt("newer version") { $0.version = 7 } == .newerVersion)
+        for value in [-1, Int.max - 1, Int.max] {
+            #expect(attempt("library revision") { $0.revision = value } == .damaged("state"))
+            #expect(attempt("photo revision") { $0.photos[0].revision = value } == .damaged("photoRecord"))
+            #expect(attempt("item revision") { $0.gridItems[0]["revision"] = value } == .damaged("item"))
+        }
         // An original replaced by other valid image bytes (ZIP checksums are all correct).
         #expect(attempt("swapped original") { $0.tamper = { $0["media/000000/original.bin"] = TestSupport.imageData(seed: 500) } } == .damaged("photoRecord"))
         #expect(attempt("altered original") {

@@ -1,0 +1,18 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "吃喝、玩耍、呼噜的小声音，和几下很轻的按键声。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Small sounds when the cat eats, drinks, plays or purrs, and a few soft taps." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "吃喝、玩耍、呼噜的小声音，和几下很轻的按键声。" } }
+      }
+    },
+    "轻柔的钢琴曲。光线跟随当地时间时，夜里换一首更轻的。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Soft piano. When the light follows local time, a quieter tune plays at night." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "轻柔的钢琴曲。光线跟随当地时间时，夜里换一首更轻的。" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

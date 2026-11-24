@@ -89,6 +89,85 @@ import Testing
         #expect(report.logLines.allSatisfy { !$0.contains("\n") })
     }
 
+    /// Which model is really in use, how many filed photos can be compared now, how far the
+    /// backfill is, and what the last batch came to: counts and distances only, no photo id.
+    @Test func recognitionLinesAreCountsAndDistancesOnly() throws {
+        let nearest = RecognitionDiagnostics.BatchSummary(compared: 12, offers: 3, nearest: [0.9, 0.2, 0.5, 0.31])
+        let first = RecognitionDiagnostics.Load(units: "all", loadMilliseconds: 4210, selfCheckMilliseconds: 7376,
+                                                firstLoadOfBuild: true, selfCheck: "matches cpuOnly (d 0.0012)")
+        let diagnostics = RecognitionDiagnostics(engine: .dino(first), filedReady: 140, filedTotal: 168,
+                                                 backfill: (done: 150, total: 180), lastBatch: nearest, printsMade: 28, printsChecked: 140)
+        let state = Self.privateState()
+        let report = FeedbackReport(environment: Self.environment(), library: .init(state: state), rawLogLines: [],
+                                    privateTerms: FeedbackReport.privateTerms(in: state), recognition: diagnostics)
+        let text = report.summaryText
+        #expect(text.contains("Recognition: DINOv2 loaded (units all, load 4210 ms, self-check 7376 ms, first load of this build, matches cpuOnly (d 0.0012))"))
+        #expect(text.contains("Prints: 140 of 168 filed photos ready; backfill 150 / 180"))
+        #expect(text.contains("Since launch: 28 prints made, 140 only checked"))
+        #expect(text.contains("Last batch: 12 photos compared, 3 offers, nearest distance min 0.200, median 0.405"))
+
+        let remembered = RecognitionDiagnostics.Load(units: "all", loadMilliseconds: 900, selfCheckMilliseconds: nil,
+                                                     firstLoadOfBuild: false, selfCheck: "self-check remembered")
+        #expect(RecognitionDiagnostics(engine: .dino(remembered), filedReady: 0, filedTotal: 0, backfill: nil, lastBatch: nil)
+            .lines.first == "Recognition: DINOv2 loaded (units all, load 900 ms, self-check remembered)")
+        let vision = RecognitionDiagnostics(engine: .visionAfterDinoFailed, filedReady: 0, filedTotal: 2, backfill: nil, lastBatch: nil)
+        #expect(vision.lines == ["Recognition: Apple Vision (DINOv2 failed to load)",
+                                 "Prints: 0 of 2 filed photos ready; backfill done",
+                                 "Since launch: 0 prints made, 0 only checked",
+                                 "Last batch: none this launch"])
+        #expect(RecognitionDiagnostics(engine: .dinoLoading, filedReady: 0, filedTotal: 0, backfill: nil, lastBatch: nil)
+            .lines.first == "Recognition: DINOv2 not loaded yet (loads with the first print)")
+        let empty = RecognitionDiagnostics.BatchSummary(compared: 0, offers: 0, nearest: [])
+        #expect(empty.line == "Last batch: 0 photos compared, 0 offers, nearest distance none")
+        // The nearest filed photo of each candidate, from the prints themselves.
+        let a = FeaturePrint(analyzer: "x", revision: 1, vector: [1, 0]), b = FeaturePrint(analyzer: "x", revision: 1, vector: [0, 1])
+        let refs = [FurniturePhotoPrint(instanceId: "i", photoId: "r", print: a)]
+        #expect(RecognitionDiagnostics.nearestDistances(of: ["q1": a, "q2": b], to: refs).sorted() == [0, 2])
+    }
+
+    /// One line with the device's print speed: a median, a count and which kind of print, all
+    /// from a fixed alphabet, so nothing about a photo can ride along.
+    @Test func printTimingIsOneLineOfNumbers() throws {
+        var timings = FeaturePrintTimings()
+        for ms in [151.4, 139.6, 2_000] { timings.record(milliseconds: ms, analyzer: "vision.featurePrint.catCovered") }
+        let state = Self.privateState()
+        let report = FeedbackReport(environment: Self.environment(), library: .init(state: state), rawLogLines: [],
+                                    privateTerms: FeedbackReport.privateTerms(in: state), featurePrint: timings)
+        let lines = report.summaryText.split(separator: "\n").filter { $0.hasPrefix("Feature print:") }
+        #expect(lines == ["Feature print: median 151 ms over the last 3 (vision.featurePrint.catCovered)"])
+        #expect(report.diagnosticsText.contains(lines[0]))
+
+        let none = FeedbackReport(environment: Self.environment(), library: .init(state: .empty), rawLogLines: [], privateTerms: [])
+        #expect(none.summaryText.contains("Feature print: not timed yet"))
+
+        // Only the app's own analyzer names reach the text; anything else reads "other".
+        var odd = FeaturePrintTimings()
+        odd.record(milliseconds: 12, analyzer: "\(Self.userFolder)/\(Self.filename) \(Self.catName)\nnext")
+        let line = FeedbackReport.featurePrintLine(odd)
+        #expect(line == "Feature print: median 12 ms over the last 1 (other)")
+        for analyzer in [VisionPhotoEmbedder(masking: .none).analyzer, VisionPhotoEmbedder(masking: .coverCat).analyzer,
+                         ColorGridEmbedder().analyzer, KnownAnalyzer.dinoV2] {
+            var known = FeaturePrintTimings()
+            known.record(milliseconds: 1, analyzer: analyzer)
+            #expect(FeedbackReport.featurePrintLine(known).hasSuffix("(\(analyzer))"))
+        }
+    }
+
+    /// How photos were fetched: one line of counts from a fixed alphabet.
+    @Test func photoRequestCountsAreOneLineOfNumbers() {
+        var stats = PhotoLoadStats()
+        stats.requested = 12
+        stats.timedOut = 3
+        stats.gaveUp = 1
+        stats.failed = 2
+        let report = FeedbackReport(environment: Self.environment(), library: .init(state: .empty), rawLogLines: [],
+                                    privateTerms: [], photoLoads: stats)
+        let lines = report.summaryText.split(separator: "\n").filter { $0.hasPrefix("Photo requests") }
+        #expect(lines == ["Photo requests since launch: 12, timed out 3, given up 1, failed 2"])
+        let none = FeedbackReport(environment: Self.environment(), library: .init(state: .empty), rawLogLines: [], privateTerms: [])
+        #expect(none.summaryText.contains("Photo requests since launch: 0, timed out 0, given up 0, failed 0"))
+    }
+
     @Test func pathsAreRemovedAndLongLinesCut() {
         let scrubbed = FeedbackReport.scrub("open /private/var/x y ~/Desktop/z", privateTerms: [])
         #expect(scrubbed == "open <path> y <path>")

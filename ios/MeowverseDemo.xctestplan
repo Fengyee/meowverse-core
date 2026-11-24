@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "5E0D0000-0000-4000-8000-000000000001",
+      "name" : "Demo recording",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "preferredScreenCaptureFormat" : "screenRecording",
+    "uiTestingScreenshotsLifetime" : "keepAlways"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Meowverse.xcodeproj",
+        "identifier" : "4D0000000000000000000030",
+        "name" : "MeowverseUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

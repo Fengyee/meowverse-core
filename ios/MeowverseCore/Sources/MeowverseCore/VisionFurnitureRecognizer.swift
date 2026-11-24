@@ -66,14 +66,13 @@ public struct VisionFurnitureRecognizer: FurnitureRecognizing {
     }
 
     public func recognize(imageData: Data) async throws -> RecognitionResult {
-        let pairs = try await Task.detached(priority: .userInitiated) { () async throws -> [(identifier: String, confidence: Double)] in
-            guard let image = PhotoIngest.downsampledImage(data: imageData, maxPixel: Self.maxPixel) else {
-                throw RecognitionError.undecodableImage
-            }
-            let request = ClassifyImageRequest()
-            let observations = try await request.perform(on: image)
-            return observations.map { (identifier: $0.identifier, confidence: Double($0.confidence)) }
-        }.value
+        try Task.checkCancellation()
+        guard let image = PhotoIngest.downsampledImage(data: imageData, maxPixel: Self.maxPixel) else {
+            throw RecognitionError.undecodableImage
+        }
+        try Task.checkCancellation()
+        let observations = try await ClassifyImageRequest().perform(on: image)
+        let pairs = observations.map { (identifier: $0.identifier, confidence: Double($0.confidence)) }
         let result = Self.result(from: pairs)
         Self.log.info("recognize: labels=\(pairs.count, privacy: .public) objects=\(result.objects.count, privacy: .public)")
         return result

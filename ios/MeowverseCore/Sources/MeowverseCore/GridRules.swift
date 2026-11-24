@@ -15,6 +15,9 @@ public enum PlacementIssue: Error, Equatable, Sendable {
     case unreachable
     /// A wall-mounted model placed on the floor, or a floor model placed on a wall.
     case wrongMount
+    /// A round 7 floor piece would hide more than a third of a photo board from the room camera,
+    /// or a board would hang where such a piece hides it. `instanceId` is the other piece.
+    case hidesPhotoBoard(instanceId: String)
 }
 
 /// Layout rules mirrored from `src/domain/grid/world.ts`.
@@ -32,7 +35,9 @@ public enum PlacementIssue: Error, Equatable, Sendable {
 /// pieces that were already cut off do not block later edits.
 ///
 /// Wall-mounted pieces (`wall != nil`) are outside all of this: they cover no cell, block
-/// nothing and need no access. They only have to fit their wall and not overlap each other.
+/// nothing and need no access. They have to fit their wall, not overlap each other, and stay
+/// in view: a tall round 7 floor piece may not stand where it hides most of a board
+/// (`boardShareHidden`, `keepsClearOfBoards`), whichever of the two is placed second.
 public enum GridRules {
     public static let size = 15
     public static let maxItems = 20
@@ -125,7 +130,7 @@ public enum GridRules {
         // One limit for the whole room, wall pieces included.
         if everyOther.count >= maxItems { issues.append(.tooManyItems) }
         if let wall = p.wall {
-            return issues + wallIssues(p, on: wall, others: everyOther)
+            return issues + wallIssues(p, on: wall, others: everyOther, catalog: catalog)
         }
         // Wall pieces take no floor: they neither overlap a floor piece nor stand in Bella's way.
         let others = everyOther.filter { $0.wall == nil }
@@ -149,17 +154,79 @@ public enum GridRules {
             }
         }
         if fits, cutsOffBella(p, cells: mine, others: others) { issues.append(.unreachable) }
+        if let model = catalog.model(id: p.modelId), model.mount == .floor, keepsClearOfBoards(model) {
+            for board in everyOther where board.wall != nil && boardShareHidden(board.placement, by: p, model: model) > maxBoardShareHidden {
+                issues.append(.hidesPhotoBoard(instanceId: board.instanceId))
+            }
+        }
         return issues
+    }
+
+    // MARK: Photo boards stay in view
+
+    /// The pieces judged against boards: round 7's household categories and soft furnishings, and
+    /// every piece from round 10 on (lead, 2026-11-19; the cat wheel is the tall one). The pieces
+    /// from before round 7 keep the behaviour they always had (owner: keep the existing product
+    /// logic), so a cat tree may still stand flush under a board, whichever comes second. Add each
+    /// new round's ids to `newPieces`.
+    public static let round7SoftFurnishings: Set<String> = ["mv-toy-e", "mv-toy-f", "mv-bed-d", "mv-bed-e"]
+    public static let newPieces: Set<String> = ["mv-sofa-d", "mv-hideout-d", "mv-chair-d", "mv-chair-e", "mv-toy-g", "mv-bed-f"]
+    public static func keepsClearOfBoards(_ model: CatalogModel) -> Bool {
+        !model.category.isRecognisedFromPhotos || round7SoftFurnishings.contains(model.id) || newPieces.contains(model.id)
+    }
+
+    /// More of a board than this hidden behind one floor piece refuses the placement.
+    public static let maxBoardShareHidden = 1.0 / 3.0
+    /// A board's face on its wall, in cells above the floor and inset from its span's ends:
+    /// the same numbers as `WallGeometry` in the app (centre 2.0, height 1.15, inset 0.12).
+    static let boardBottom = 2.0 - 1.15 / 2, boardTop = 2.0 + 1.15 / 2, boardInset = 0.12
+    /// The room camera looks along −(14, 12.8, 17) (`RoomProjection.position − target` in the
+    /// app). Per cell a ray travels towards a wall it moves this far along the wall (towards
+    /// smaller offsets) and this far down.
+    static func shadowSlope(_ wall: WallSide) -> (along: Double, down: Double) {
+        wall == .back ? (14 / 17, 12.8 / 17) : (17 / 14, 12.8 / 14)
+    }
+
+    /// Share (0...1) of the board at `board` that the floor piece `piece` (of `model`) hides from
+    /// the room camera. The piece counts as a solid box as tall as its fitted model.
+    public static func boardShareHidden(_ board: Placement, by piece: Placement, model: CatalogModel) -> Double {
+        guard let wall = board.wall, piece.wall == nil, let fit = fit(model, width: piece.width, depth: piece.depth),
+              model.bounds.min.count == 3, model.bounds.max.count == 3 else { return 0 }
+        let height = fit.scale * (model.bounds.max[1] - model.bounds.min[1])
+        guard height > boardBottom else { return 0 }
+        let (w, d) = rotatedSize(width: piece.width, depth: piece.depth, turn: piece.turn)
+        // Along the wall (u) and out from it (depth), in cells.
+        let (u0, u1, near, far) = wall == .back
+            ? (Double(piece.x), Double(piece.x + w), Double(piece.z), Double(piece.z + d))
+            : (Double(piece.z), Double(piece.z + d), Double(piece.x), Double(piece.x + w))
+        let slope = shadowSlope(wall)
+        let left = Double(board.x) + boardInset, right = Double(board.x + board.width) - boardInset
+        let samples = 48
+        var hidden = 0.0
+        for i in 0..<samples {
+            let u = left + (right - left) * (Double(i) + 0.5) / Double(samples)
+            // The nearest slice of the piece whose shadow reaches this column is the tallest.
+            let nearest = max(near, (u0 - u) / slope.along)
+            guard nearest <= min(far, (u1 - u) / slope.along) else { continue }
+            let top = min(height - slope.down * nearest, boardTop)
+            hidden += max(0, top - boardBottom) / (boardTop - boardBottom)
+        }
+        return hidden / Double(samples)
     }
 
     /// A wall placement only has to lie on its wall and keep clear of the other pieces there.
     /// The two walls meet in the corner without overlapping.
-    private static func wallIssues(_ p: Placement, on wall: WallSide, others: [PhotoFurniture]) -> [PlacementIssue] {
+    private static func wallIssues(_ p: Placement, on wall: WallSide, others: [PhotoFurniture],
+                                   catalog: FurnitureCatalog) -> [PlacementIssue] {
         guard p.turn == 0, p.z == 0, p.depth == 1, p.width >= 1, p.x >= 0, p.x + p.width <= size else {
             return [.outOfBounds]
         }
         return others.filter { $0.wall == wall && $0.x < p.x + p.width && p.x < $0.x + $0.width }
             .map { .overlaps(instanceId: $0.instanceId) }
+            + others.filter { piece in
+                guard piece.wall == nil, let model = catalog.model(id: piece.modelId), keepsClearOfBoards(model) else { return false }
+                return boardShareHidden(p, by: piece.placement, model: model) > maxBoardShareHidden
+            }.map { .hidesPhotoBoard(instanceId: $0.instanceId) }
     }
 
     /// True when Bella cannot get to `p` from the entrance, or `p` takes away the last access

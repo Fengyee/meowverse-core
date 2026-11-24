@@ -1,0 +1,108 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "喵空间, the name under the icon and in Settings on a Chinese system (launch design). English has no entry: it shows MEOWVERSE_DISPLAY_NAME (Meowverse, or a worktree’s Local.xcconfig name).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喵空间"
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription" : {
+      "comment" : "Shown by iOS the first time the user chooses “拍照” or opens “放到桌上看看” (AR).",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lets you take a photo of your cat or its furniture to add to Meowverse, and find a table to put your room on when you open See it on a table. The live camera view is shown only on this device and is never recorded or saved; only photos you take are kept."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你选择拍照时，用来拍一张猫咪或家具的照片，加入喵空间；打开「放到桌上看看」时，用来找到桌面、把房间放上去。相机画面只在这台设备上显示，不录制，也不保存。"
+          }
+        }
+      }
+    },
+    "NSMicrophoneUsageDescription" : {
+      "comment" : "Shown by iOS the first time the user taps the cat's head (Talk to Bella) in the room.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lets you tap the cat's head in the corner of your room and say one sentence to your cat. The sound is processed on this device and is never recorded or saved."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你点按房间角落的猫咪头像说话时，用来听你对猫咪说的一句话。声音只在这台设备上处理，不录制，也不保存。"
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryAddUsageDescription" : {
+      "comment" : "Shown when the app first saves a photo taken in the app, or selected photos or postcards, to Photos.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saves photos you take in Meowverse, and the memory photos or room postcards you choose, to your photo library."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用来把你在喵空间里拍的照片、你选择的回忆照片或房间明信片保存到系统相册。"
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryUsageDescription" : {
+      "comment" : "Shown by iOS when the user turns on “从相册读取大图” in Settings.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With the Photos link turned on, read the originals you imported and, if you choose, add them to the Meowverse album."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开“从相册读取大图”后，用来读取已导入照片的原件，也可按你的选择把它们加入 Meowverse 相簿。"
+          }
+        }
+      }
+    },
+    "NSSpeechRecognitionUsageDescription" : {
+      "comment" : "Shown by iOS the first time the user taps the cat's head (Talk to Bella) in the room.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turns what you say to your cat into words so your cat can do it. Recognition happens on this device; the words are not saved or sent anywhere."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把你对猫咪说的话转成文字，让猫咪去做对应的动作。识别只在这台设备上进行，文字不保存，也不发送到任何地方。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

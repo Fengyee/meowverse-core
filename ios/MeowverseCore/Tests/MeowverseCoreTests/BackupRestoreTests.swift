@@ -433,22 +433,26 @@ struct BackupRestoreTests {
         defer { try? fm.removeItem(at: parent) }
         let store = LibraryStore(root: root, catalog: catalog)
         let state = try await seed(store)
+        let unrelated = ["Library.damaged-family", "Library.incoming-other", "Library.previous-zzz"]
+        for name in unrelated { try fm.createDirectory(at: parent.appendingPathComponent(name), withIntermediateDirectories: false) }
         // A cancelled preview left behind by a killed app.
         let stale = store.makeStagingURL()
         try fm.createDirectory(at: stale, withIntermediateDirectories: true)
         try Data("x".utf8).write(to: stale.appendingPathComponent("state.json"))
         #expect(try await LibraryStore(root: root, catalog: catalog).load() == state)
-        #expect(siblings(parent).isEmpty)
+        #expect(siblings(parent) == unrelated)
 
         // The non-atomic fallback was interrupted after parking the live folder.
-        try fm.moveItem(at: root, to: parent.appendingPathComponent("Library.previous-TEST"))
+        try fm.moveItem(at: root, to: parent.appendingPathComponent("Library.previous-" + UUID().uuidString))
         let recovered = LibraryStore(root: root, catalog: catalog)
         #expect(try await recovered.load() == state)
-        #expect(siblings(parent).isEmpty)
+        #expect(siblings(parent) == unrelated)
         #expect(await recovered.integrityReport().isClean)
+        _ = try await recovered.clearAll()
+        #expect(siblings(parent) == unrelated)
     }
 
-    @Test func directoryExchangeSwapsBothFolders() throws {
+    @Test(arguments: [false, true]) func directoryInstallReturnsDisplacedLibrary(forceFallback: Bool) throws {
         let parent = TestSupport.tempDir()
         defer { try? fm.removeItem(at: parent) }
         let a = parent.appendingPathComponent("a"), b = parent.appendingPathComponent("b")
@@ -456,8 +460,8 @@ struct BackupRestoreTests {
             try fm.createDirectory(at: dir, withIntermediateDirectories: true)
             try Data(text.utf8).write(to: dir.appendingPathComponent("f"))
         }
-        try LibraryStore.exchange(a, b)
-        #expect(try String(contentsOf: a.appendingPathComponent("f"), encoding: .utf8) == "B")
+        let displaced = try LibraryStore.install(a, at: b, forceFallback: forceFallback)
+        #expect(try String(contentsOf: displaced.appendingPathComponent("f"), encoding: .utf8) == "B")
         #expect(try String(contentsOf: b.appendingPathComponent("f"), encoding: .utf8) == "A")
     }
 }
@@ -548,5 +552,214 @@ extension BackupRestoreTests {
             object["storage"] = [stored]
         }
         #expect(await store.snapshot() == before && siblings(parent).isEmpty)
+    }
+}
+
+extension BackupRestoreTests {
+    @Test(arguments: [200, 201]) func historicalLongFurnitureNamesRoundTrip(count: Int) async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        let name = String(repeating: "椅", count: count)
+        let item = try await store.addFurniture(placement: chairAt44, displayName: name)
+        let url = try await export(store, in: parent)
+        let prepared = try BackupArchive.prepare(file: url, stagingURL: store.makeStagingURL(), catalog: catalog)
+        try await store.replaceLibrary(with: prepared)
+        #expect(try await LibraryStore(root: root, catalog: catalog).load().item(id: item.instanceId)?.displayName == name)
+    }
+
+    @Test func exportHonorsStateAndManifestBudgetsAndPreservesPreviousFile() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        let file = parent.appendingPathComponent("backup.zip")
+        _ = try await store.exportBackup(to: file, appVersion: "")
+        let reader = try ZipReader(fileURL: file, limits: .backup)
+        let overhead = try #require(reader.entry(BackupArchive.manifestPath)).uncompressedSize
+        let version = String(repeating: "x", count: BackupArchive.maxJSONBytes - overhead)
+        _ = try await store.exportBackup(to: file, appVersion: version)
+        try BackupArchive.prepare(file: file, stagingURL: store.makeStagingURL(), catalog: catalog).discard()
+        let previous = try Data(contentsOf: file)
+        await #expect(throws: BackupError.tooLarge) { try await store.exportBackup(to: file, appVersion: version + "x") }
+        #expect(try Data(contentsOf: file) == previous)
+
+        let item = try await store.addFurniture(placement: chairAt44, displayName: "x")
+        _ = try await store.rename(instanceId: item.instanceId, displayName: "y")
+        let bytes = try LibraryStore.encodeState(await store.snapshot()).count
+        let name = String(repeating: "x", count: BackupArchive.maxJSONBytes - bytes + 1)
+        _ = try await store.rename(instanceId: item.instanceId, displayName: name)
+        _ = try await store.exportBackup(to: file, appVersion: "1")
+        let good = try BackupArchive.prepare(file: file, stagingURL: store.makeStagingURL(), catalog: catalog)
+        try await store.replaceLibrary(with: good)
+        #expect(try await store.load().items[0].displayName == name)
+        let previousState = try Data(contentsOf: file)
+        _ = try await store.rename(instanceId: item.instanceId, displayName: name + "x")
+        await #expect(throws: BackupError.tooLarge) { try await store.exportBackup(to: file, appVersion: "1") }
+        #expect(try Data(contentsOf: file) == previousState)
+    }
+
+    @Test func writerHonorsReadersEntryBudget() throws {
+        let temp = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: temp) }
+        let url = temp.appendingPathComponent("entries.zip")
+        let writer = try ZipWriter(url: url, limits: .backup)
+        let byte = Data([42])
+        for n in 0..<ZipLimits.backup.maxEntries { try writer.add(path: "p\(n)", data: byte) }
+        #expect(throws: ZipError.tooLarge) { try writer.add(path: "one-too-many", data: byte) }
+        try writer.finish()
+        #expect(try ZipReader(fileURL: url, limits: .backup).entries.count == ZipLimits.backup.maxEntries)
+    }
+
+    @Test(arguments: [-1, Int.max - 1, Int.max]) func extremeRevisionIsRejectedForEachRecord(value: Int) async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        let before = try await seed(store)
+        let file = try await export(store, in: parent)
+        for field in ["revision", "photos", "items"] {
+            let bad = try rewrite(file) { files in
+                files["state.json"] = try editJSON(files["state.json"]!) { obj in
+                    if field == "revision" { obj[field] = value; return }
+                    var records = obj[field] as! [[String: Any]]
+                    records[0]["revision"] = value
+                    obj[field] = records
+                }
+            }
+            #expect(throws: BackupError.damaged("state")) {
+                try BackupArchive.prepare(file: bad, stagingURL: store.makeStagingURL(), catalog: catalog)
+            }
+        }
+        #expect(await store.snapshot() == before)
+    }
+
+    @Test func legalRevisionBoundaryRemainsEditable() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        let seeded = try await seed(store)
+        var state = seeded
+        state.revision = LibraryStore.maxRevision
+        state.photos[0].revision = LibraryStore.maxRevision
+        state.items[0].revision = LibraryStore.maxRevision
+        try LibraryStore.encodeState(state).write(to: root.appendingPathComponent(LibraryStore.stateFile))
+        _ = try await store.load()
+        #expect(try await store.rename(instanceId: state.items[0].instanceId, displayName: "椅").revision == 1)
+        #expect(try await store.editPhoto(photoId: state.photos[0].photoId, PhotoEdit(note: "改")).revision == 1)
+        #expect(try await store.load().revision == 2)
+    }
+
+    @Test func corruptLibraryCanBeRecoveredWithoutDiscardingItsFiles() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let fault = FaultSwitch(nil)
+        let store = LibraryStore(root: root, catalog: catalog, fault: fault.handler)
+        let seeded = try await seed(store)
+        let backup = try await export(store, in: parent)
+        for path in [LibraryStore.stateFile, LibraryStore.backupFile] {
+            try Data("bad".utf8).write(to: root.appendingPathComponent(path))
+        }
+        let damaged = contents(root)
+        await #expect(throws: StoreError.corruptState) { try await store.load() }
+        func prepare() throws -> PreparedLibrary {
+            try BackupArchive.prepare(file: backup, stagingURL: store.makeStagingURL(), catalog: catalog)
+        }
+        try prepare().discard()
+        #expect(contents(root) == damaged)
+        fault.arm(.swapLibrary)
+        let staged = try prepare()
+        await #expect(throws: InjectedFault.failed(.swapLibrary)) {
+            try await store.replaceLibrary(with: staged, recoveringCorruptLibrary: true)
+        }
+        #expect(contents(root) == damaged)
+        let good = try prepare()
+        #expect(try await store.replaceLibrary(with: good, recoveringCorruptLibrary: true) == seeded)
+        #expect(try await LibraryStore(root: root, catalog: catalog).load() == seeded)
+        #expect(siblings(parent).count == 1)
+        let quarantined = try #require(siblings(parent).first)
+        #expect(quarantined.hasPrefix("Library.damaged-"))
+        #expect(contents(parent.appendingPathComponent(quarantined)) == damaged)
+        _ = try await store.clearAll()
+        #expect(siblings(parent).isEmpty)
+    }
+
+    @Test func recoveryDoesNotOverwriteNewerBackupSchema() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        _ = try await seed(store)
+        let backup = try await export(store, in: parent)
+        try Data("bad".utf8).write(to: root.appendingPathComponent(LibraryStore.stateFile))
+        try Data("{\"schemaVersion\":9999}".utf8).write(to: root.appendingPathComponent(LibraryStore.backupFile))
+        let before = contents(root)
+        let reopened = LibraryStore(root: root, catalog: catalog)
+        let prepared = try BackupArchive.prepare(file: backup, stagingURL: reopened.makeStagingURL(), catalog: catalog)
+        defer { prepared.discard() }
+        await #expect(throws: StoreError.newerSchema) {
+            try await reopened.replaceLibrary(with: prepared, recoveringCorruptLibrary: true)
+        }
+        #expect(contents(root) == before)
+    }
+
+    @Test(arguments: [StoreStep.deletionBackupCopy, .deletionBackupSync, .deletionBackupRename, .deletionFileRemoval])
+    func committedDeletionSurvivesCleanupFaultAndPrimaryDamage(step: StoreStep) async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let fault = FaultSwitch(nil)
+        let store = LibraryStore(root: root, catalog: catalog, fault: fault.handler)
+        let seeded = try await seed(store)
+        let photo = seeded.photos[0]
+        fault.arm(step)
+        await #expect(throws: StoreError.deletionCleanupPending) { try await store.deletePhoto(photoId: photo.photoId) }
+        let after = await store.snapshot()
+        #expect(after.photo(id: photo.photoId) == nil)
+        try Data("bad".utf8).write(to: root.appendingPathComponent(LibraryStore.stateFile))
+        let reopened = LibraryStore(root: root, catalog: catalog)
+        #expect(try await reopened.load() == after)
+        #expect(await reopened.integrityReport().isClean)
+        #expect(!fm.fileExists(atPath: root.appendingPathComponent(photo.originalFile).path))
+        #expect(!fm.fileExists(atPath: root.appendingPathComponent(photo.thumbnailFile).path))
+        try Data("bad again".utf8).write(to: root.appendingPathComponent(LibraryStore.stateFile))
+        #expect(try await reopened.load() == after)
+    }
+
+    @Test func pendingCleanupStillAllowsReadingAndExportButBlocksFurtherWrites() async throws {
+        let (parent, root) = sandbox()
+        defer { try? fm.removeItem(at: parent) }
+        let block: @Sendable (StoreStep) throws -> Void = { step in
+            if step == .deletionBackupCopy { throw InjectedFault.failed(step) }
+        }
+        let store = LibraryStore(root: root, catalog: catalog, fault: block)
+        let seeded = try await seed(store)
+        await #expect(throws: StoreError.deletionCleanupPending) { try await store.deletePhoto(photoId: seeded.photos[0].photoId) }
+        try Data("bad".utf8).write(to: root.appendingPathComponent(LibraryStore.stateFile))
+        let reopened = LibraryStore(root: root, catalog: catalog, fault: block)
+        let current = try await reopened.load()
+        #expect(current.photos.count == seeded.photos.count - 1)
+        #expect(await reopened.deletionPending)
+        let file = try await export(reopened, in: parent)
+        let prepared = try BackupArchive.prepare(file: file, stagingURL: reopened.makeStagingURL(), catalog: catalog)
+        defer { prepared.discard() }
+        #expect(prepared.state == current)
+        await #expect(throws: StoreError.deletionCleanupPending) { try await reopened.setCatName("猫") }
+    }
+
+    @Test(arguments: [1, 2]) func fallbackInstallFailureRestoresOldDirectory(failingMove: Int) throws {
+        let parent = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: parent) }
+        let staged = parent.appendingPathComponent("staged"), live = parent.appendingPathComponent("live")
+        for dir in [staged, live] {
+            try fm.createDirectory(at: dir, withIntermediateDirectories: true)
+            try Data(dir.lastPathComponent.utf8).write(to: dir.appendingPathComponent("id"))
+        }
+        var count = 0
+        #expect(throws: InjectedFault.failed(.swapLibrary)) {
+            try LibraryStore.install(staged, at: live, forceFallback: true) { src, dst in
+                count += 1
+                if count == failingMove { throw InjectedFault.failed(.swapLibrary) }
+                try LibraryStore.rename(src, to: dst)
+            }
+        }
+        #expect(try String(contentsOf: live.appendingPathComponent("id"), encoding: .utf8) == "live")
+        #expect(try String(contentsOf: staged.appendingPathComponent("id"), encoding: .utf8) == "staged")
     }
 }

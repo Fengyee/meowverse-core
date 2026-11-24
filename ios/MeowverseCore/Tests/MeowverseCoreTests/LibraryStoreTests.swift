@@ -225,6 +225,34 @@ import Testing
         #expect(await store.integrityReport().isClean)
     }
 
+    @Test(arguments: [false, true])
+    func placementAndNameCommitTogether(fromStorage: Bool) async throws {
+        let root = TestSupport.tempDir()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let fault = FaultSwitch(nil)
+        let store = LibraryStore(root: root, catalog: catalog, fault: fault.handler)
+        let chair = try await store.commitNewFurniture(draft: try TestSupport.draft(seed: 45), placement: chairAt44,
+                                                      displayName: "before", decision: .manual)
+        if fromStorage { _ = try await store.stowFurniture(instanceId: chair.instanceId) }
+        let before = await store.snapshot()
+        var placement = chairAt44
+        placement.x = 0
+        func save() async throws -> PhotoFurniture {
+            if fromStorage {
+                return try await store.restoreFurniture(instanceId: chair.instanceId, placement: placement, displayName: " after ")
+            }
+            return try await store.updatePlacement(instanceId: chair.instanceId, placement: placement, displayName: " after ")
+        }
+        fault.arm(.writeState)
+        await #expect(throws: InjectedFault.failed(.writeState)) { try await save() }
+        #expect(await store.snapshot() == before)
+        #expect(try await LibraryStore(root: root, catalog: catalog).load() == before)
+        let edited = try await save()
+        #expect(edited.displayName == "after" && edited.x == 0 && edited.sources == chair.sources)
+        #expect(await store.snapshot().revision == before.revision + 1)
+        #expect(try await LibraryStore(root: root, catalog: catalog).load().item(id: chair.instanceId) == edited)
+    }
+
     @Test func placementValidatedBeforeAnyWrite() async throws {
         let root = TestSupport.tempDir()
         defer { try? FileManager.default.removeItem(at: root) }
@@ -253,7 +281,7 @@ import Testing
         let same = try await store.updatePlacement(instanceId: a.instanceId, placement: Placement(modelId: "kenney-chairRounded", x: 4, z: 4, width: 2, depth: 2))
         #expect(same.sources[0].origin == .model)
         let sofa = try await store.updatePlacement(instanceId: a.instanceId, placement: Placement(modelId: "kenney-loungeSofa", x: 4, z: 4, width: 3, depth: 2))
-        #expect(sofa.sources[0] == .manual(photoId: a.sources[0].photoId))
+        #expect(sofa.sources[0] == .manual(photoId: a.sources[0].photoId, addedAt: a.sources[0].addedAt))
         #expect(await store.integrityReport().isClean)
     }
 

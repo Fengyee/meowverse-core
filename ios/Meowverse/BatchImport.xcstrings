@@ -1,0 +1,36 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "重新关联相册原图" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reconnect original in Photos" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重新关联相册原图" } }
+      }
+    },
+    "跳过" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Skip" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跳过" } }
+      }
+    },
+    "跳过后，这张照片不会留在 App 里。系统相册中的原图会保留。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Skipping removes this photo from the app. The original stays in Photos." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跳过后，这张照片不会留在 App 里。系统相册中的原图会保留。" } }
+      }
+    },
+    "跳过这张照片" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Skip this photo" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跳过这张照片" } }
+      }
+    },
+    "这张照片已在照片库中，跳过会保留原有记录。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This photo is already in your library. Skipping keeps its existing record." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这张照片已在照片库中，跳过会保留原有记录。" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,0 +1,3228 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "tour.allDone.card.line" : {
+      "comment" : "The “that's everything” card. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This home is yours and %@’s now."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个家，交给你和%@了。"
+          }
+        }
+      }
+    },
+    "tour.allDone.card.line.long" : {
+      "comment" : "The “that's everything” card, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This home is yours and your cat’s now."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个家，交给你和猫咪了。"
+          }
+        }
+      }
+    },
+    "tour.allDone.card.title" : {
+      "comment" : "The card shown once, after every chapter was read and none skipped.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That’s everything"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都讲完啦"
+          }
+        }
+      }
+    },
+    "tour.back" : {
+      "comment" : "Tour page mode button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一步"
+          }
+        }
+      }
+    },
+    "tour.backup.1" : {
+      "comment" : "Chapter 15, the only step. The window is on the gear (Settings). Backup & restore is a group title in Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Settings, Backup & restore exports a copy you can take to a new device."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置里的“备份与恢复”能导出一份，换设备也带得走。"
+          }
+        }
+      }
+    },
+    "tour.backup.card.line" : {
+      "comment" : "Chapter 15 card, one sentence. Speaks only of peace of mind, not of keeping anything safe.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This home is filling up. A backup gives you peace of mind."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个家越来越满了，留一份备份更安心。"
+          }
+        }
+      }
+    },
+    "tour.backup.card.title" : {
+      "comment" : "Chapter 15 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back up this home"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "给这个家留个备份"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.1" : {
+      "comment" : "Chapter 2, step 1. The window is on Add photos. Owner-approved privacy line, one wording for every device and backup setting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos come home through here. Only you can see them."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片从这里带回家，只有你自己看得到。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.2" : {
+      "comment" : "Chapter 2, step 2. The window is on Add photos. The device, not Bella, guesses the furniture.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This iPhone guesses the furniture in your photo. Fix the guess, or choose it all yourself."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台 iPhone 会猜照片里是什么家具，猜错了你可以改，也能自己选。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.2.pad" : {
+      "comment" : "Chapter 2, step 2, on iPad. The window is on Add photos. The device, not Bella, guesses the furniture.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This iPad guesses the furniture in your photo. Fix the guess, or choose it all yourself."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台 iPad 会猜照片里是什么家具，猜错了你可以改，也能自己选。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.3" : {
+      "comment" : "Chapter 2, step 3. The window is on Add photos; tapping it hands over to the photo picker. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here and pick a photo that has %@ and some furniture in it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点这里，挑一张有%@也有家具的照片吧。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.3.long" : {
+      "comment" : "Chapter 2, step 3, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here and pick a photo that has your cat and some furniture in it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点这里，挑一张有猫咪也有家具的照片吧。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.card.line" : {
+      "comment" : "Chapter 2 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start from a photo and add a piece to this room."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从一张照片开始，给这间房间添一件家具。"
+          }
+        }
+      }
+    },
+    "tour.bringPhoto.card.title" : {
+      "comment" : "Chapter 2 card title; only shown when replayed from Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bring a photo home"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "带一张照片回家"
+          }
+        }
+      }
+    },
+    "tour.company.1" : {
+      "comment" : "Chapter 12, step 1. The window is on the Play button (互动). “Keep me company” (陪我一会儿) is the row in the Play panel, sentence case as it shows there.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Play, then Keep me company."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先点“互动”，再点里面的“陪我一会儿”。"
+          }
+        }
+      }
+    },
+    "tour.company.2" : {
+      "comment" : "Chapter 12, step 2. The window is on the “Keep me company” row in the Play panel. “it” is the row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This row. Tap it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就是这一行，点进去。"
+          }
+        }
+      }
+    },
+    "tour.company.3" : {
+      "comment" : "Chapter 12, step 3. The window is on “Start company” (开始陪伴) on the company page. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Start company and %@ turns into a pixel cat on your Lock Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点“开始陪伴”，%@会变成像素猫，待在锁屏上。"
+          }
+        }
+      }
+    },
+    "tour.company.3.long" : {
+      "comment" : "Chapter 12, step 3, when the cat's name is too long to repeat or empty.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Start company and your cat turns into a pixel cat on your Lock Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点“开始陪伴”，猫咪会变成像素猫，待在锁屏上。"
+          }
+        }
+      }
+    },
+    "tour.company.3.off" : {
+      "comment" : "Chapter 12, on the company page, when Live Activities are switched off for the app in Settings. The page says how to switch them on.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Activities are off right now. This page explains how to turn them on."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "实时活动现在关着。这一页下面写了怎么打开。"
+          }
+        }
+      }
+    },
+    "tour.company.4" : {
+      "comment" : "Chapter 12, after company started, on an iPhone with the Dynamic Island. No window. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now lock the screen and take a look. You’ll find %@ in the Dynamic Island too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在锁上屏幕看看。灵动岛上也有%@。"
+          }
+        }
+      }
+    },
+    "tour.company.4.long" : {
+      "comment" : "Chapter 12, after company started, on an iPhone with the Dynamic Island, when the cat's name is too long to repeat or empty.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now lock the screen and take a look. You’ll find your cat in the Dynamic Island too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在锁上屏幕看看。灵动岛上也有它。"
+          }
+        }
+      }
+    },
+    "tour.company.4.noIsland" : {
+      "comment" : "Chapter 12, after company started, on an iPhone without the Dynamic Island. No window. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now lock the screen and take a look. You’ll find %@ right there."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在锁上屏幕看看，%@就在那儿。"
+          }
+        }
+      }
+    },
+    "tour.company.4.noIsland.long" : {
+      "comment" : "Chapter 12, after company started, on an iPhone without the Dynamic Island, when the cat's name is too long to repeat or empty.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now lock the screen and take a look. You’ll find your cat right there."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在锁上屏幕看看，它就在那儿。"
+          }
+        }
+      }
+    },
+    "tour.company.card.line" : {
+      "comment" : "Chapter 12 card, one sentence. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even with the app closed, %@ can keep you company on the Lock Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不开 App 的时候，%@也能去锁屏上陪你。"
+          }
+        }
+      }
+    },
+    "tour.company.card.line.long" : {
+      "comment" : "Chapter 12 card, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even with the app closed, your cat can keep you company on the Lock Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不开 App 的时候，猫咪也能去锁屏上陪你。"
+          }
+        }
+      }
+    },
+    "tour.company.card.line.pad" : {
+      "comment" : "Chapter 12 card on iPad, one sentence. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even with the app closed, you can see %@ on your Home Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不开 App 的时候，也能在主屏幕上看到%@。"
+          }
+        }
+      }
+    },
+    "tour.company.card.line.pad.long" : {
+      "comment" : "Chapter 12 card on iPad, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even with the app closed, you can see your cat on your Home Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不开 App 的时候，也能在主屏幕上看到猫咪。"
+          }
+        }
+      }
+    },
+    "tour.company.card.title" : {
+      "comment" : "Chapter 12 card title. The argument is the cat's name, or “it” when the name is too long.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep %@ with you"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让%@陪着你"
+          }
+        }
+      }
+    },
+    "tour.company.controls.actionButton" : {
+      "comment" : "Chapter 12, page 2, only on an iPhone with the Action button, under the heading Action button. Each sentence is a numbered step.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings and tap Action Button. Swipe to Controls and tap the button below it (on iOS 18, Choose a Control). Choose Keep Me Company."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开“设置”，点“操作按钮”。轻扫到“控制”，点下方的按钮（iOS 18 上是“选取控制”）。选“陪我一会儿”。"
+          }
+        }
+      }
+    },
+    "tour.company.controls.actionButton.title" : {
+      "comment" : "Chapter 12, page 2: heading of the Action button steps.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Action button"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作按钮"
+          }
+        }
+      }
+    },
+    "tour.company.controls.group" : {
+      "comment" : "Chapter 12, page 2: heading of the Control Center steps, shown only when the Action button's group follows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control Center"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "控制中心"
+          }
+        }
+      }
+    },
+    "tour.company.controls.how" : {
+      "comment" : "Chapter 12, page 2, how to add the controls. Each sentence is shown as a numbered step. The three names are the controls' names in the controls gallery: Keep Me Company, Take Photo, Add from Photos.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Control Center: on an iPhone with Face ID, swipe down from the top-right corner; on an iPhone with a Home button, swipe up from the bottom. Tap the Add button (+) at the top left, then Add a Control at the bottom of the screen. Find Meowverse in the controls gallery: Keep Me Company, Take Photo and Add from Photos."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开控制中心：配备面容 ID 的 iPhone 从屏幕右上角向下轻扫，配备主屏幕按钮的 iPhone 从屏幕底部向上轻扫。点左上方的“添加”按钮（＋），再点屏幕底部的“添加控制”。在控制资源库里找到喵空间，有三个：陪我一会儿、拍照添加、从相册添加。"
+          }
+        }
+      }
+    },
+    "tour.company.controls.line" : {
+      "comment" : "Chapter 12, page 2, Bella's line. “它” is the cat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can call your cat over without opening the app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用打开 App，也能把它叫出来。"
+          }
+        }
+      }
+    },
+    "tour.company.controls.needsLive" : {
+      "comment" : "Chapter 12, page 2, only while Live Activities are off for the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep Me Company needs Live Activities. While they’re off, turn them on in Settings › Apps › Meowverse › Live Activities."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“陪我一会儿”要用到实时活动。实时活动关着时，先到“设置”›“App”›“喵空间”里打开“实时活动”。"
+          }
+        }
+      }
+    },
+    "tour.company.controls.title" : {
+      "comment" : "Chapter 12, page 2 title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Control Center"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放进控制中心"
+          }
+        }
+      }
+    },
+    "tour.company.home.how" : {
+      "comment" : "Chapter 12, page 1, how to add the Pixel Cat widget to the Home Screen. Each sentence is shown as a numbered step. Wording follows Apple's iPhone User Guide.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the Home Screen, touch and hold the background until the apps jiggle. Tap Edit at the top of the screen, then Add Widget. Search for Meowverse, tap Pixel Cat, choose a size, tap Add Widget, then tap Done."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在主屏幕上按住背景，直到 App 开始抖动。点屏幕顶部的“编辑”，再点“添加小组件”。搜索“喵空间”，点“像素猫”，选好大小，点“添加小组件”，最后点“完成”。"
+          }
+        }
+      }
+    },
+    "tour.company.home.line" : {
+      "comment" : "Chapter 12, page 1, Bella's line. “Pixel Cat” is the widget's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Want to see your cat every time you unlock? Put Pixel Cat on your Home Screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想每次解锁都看到它？把“像素猫”放到主屏幕。"
+          }
+        }
+      }
+    },
+    "tour.company.home.lock" : {
+      "comment" : "Chapter 12, page 1, how to add the widget to the Lock Screen, under the heading Lock Screen. Each sentence is a numbered step. Add Widgets is plural on the Lock Screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold the Lock Screen, then tap Customize (on iOS 18, then tap Lock Screen). Tap Add Widgets and choose Pixel Cat. Then tap Done."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住锁屏，点“自定义”（iOS 18 上接着点“锁定屏幕”）。点“添加小组件”，选“像素猫”。最后点“完成”。"
+          }
+        }
+      }
+    },
+    "tour.company.home.title" : {
+      "comment" : "Chapter 12, page 1 title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On your Home Screen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放到主屏幕"
+          }
+        }
+      }
+    },
+    "tour.company.homeScreen" : {
+      "comment" : "Chapter 12, page 1: caption under the Home Screen part of the picture, and the subheading of the Home Screen steps.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home Screen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主屏幕"
+          }
+        }
+      }
+    },
+    "tour.company.icon.how" : {
+      "comment" : "Chapter 12, page 3; the list of the Home Screen quick actions follows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the Home Screen, touch and hold the Meowverse icon. Its Quick Actions menu has:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在主屏幕上按住喵空间的图标，弹出的“快速操作”菜单里有："
+          }
+        }
+      }
+    },
+    "tour.company.icon.line" : {
+      "comment" : "Chapter 12, page 3, Bella's line. English says touch and hold, as Apple does.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold the Meowverse icon for a few shortcuts."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住主屏幕上的喵空间图标，有几条近路。"
+          }
+        }
+      }
+    },
+    "tour.company.icon.title" : {
+      "comment" : "Chapter 12, page 3 title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold the icon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住图标"
+          }
+        }
+      }
+    },
+    "tour.company.lockScreen" : {
+      "comment" : "Chapter 12, page 1: caption under the Lock Screen part of the picture, and the subheading of the Lock Screen steps.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock Screen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "锁屏"
+          }
+        }
+      }
+    },
+    "tour.done" : {
+      "comment" : "Closing word on a chapter's last step.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
+        }
+      }
+    },
+    "tour.furnishFirst.1" : {
+      "comment" : "Chapter 3. The window is on Place furniture first on the empty-room card. “No photos yet” is the app's label for furniture without photos.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No good photo handy? Place a piece first. It’ll be marked “No photos yet.”"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有合适的照片？先摆一件家具也行，会标着“还没有照片”。"
+          }
+        }
+      }
+    },
+    "tour.furnishFirst.card.line" : {
+      "comment" : "Chapter 3 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place a piece now. Its photos can come later."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先摆一件家具，照片以后再补。"
+          }
+        }
+      }
+    },
+    "tour.furnishFirst.card.title" : {
+      "comment" : "Chapter 3 card title; only shown when replayed from Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photo yet? Furnish first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有照片，也能先布置"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.1" : {
+      "comment" : "Chapter 10, step 1. The window is on Add furniture at the top of the furniture library.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a piece from here. No photo needed."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用照片，也能从这儿再添一件家具。"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.2" : {
+      "comment" : "Chapter 10, step 2. The window is on the ⋯ (More actions) of the first piece in the room. Use the menu's own item names.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap ⋯ for Show in Room, Lock and Put in storage."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点“⋯”，能在房间里定位这件家具、锁定，或收进收纳箱。"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.2.stored" : {
+      "comment" : "Chapter 10, step 2, when only pieces in the storage box are listed. The window is on a piece's ⋯ (More actions).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap ⋯ for Lock and Put back in room."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点“⋯”，能锁定这件家具，或放回房间。"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.card.line" : {
+      "comment" : "Chapter 10 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every piece is listed here, placed or put away."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "摆着的、收起来的家具，都列在这里。"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.card.title" : {
+      "comment" : "Chapter 10 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Furniture and storage"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具库和收纳箱"
+          }
+        }
+      }
+    },
+    "tour.furnitureLibrary.open" : {
+      "comment" : "Chapter 10 opened from Settings: the step in the room before the furniture library is open. The window is on the Furniture bookplate.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your furniture is right here. Tap to take a look."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具库在这里，点开看看。"
+          }
+        }
+      }
+    },
+    "tour.gotIt" : {
+      "comment" : "Closing word on the last step of chapters 6 and 7, and on the placeholder card.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "知道了"
+          }
+        }
+      }
+    },
+    "tour.it" : {
+      "comment" : "Stands for the cat in a title when the name is too long.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "your cat"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它"
+          }
+        }
+      }
+    },
+    "tour.memories.1" : {
+      "comment" : "Chapter 6, step 1. The window is on a piece in the room that holds at least one photo. Tapping it opens the piece.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap this piece to look through its photos."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一下，就能翻看这件家具的照片。"
+          }
+        }
+      }
+    },
+    "tour.memories.2" : {
+      "comment" : "Chapter 6, step 2, on the piece's page. The window is on “Add another photo” (an icon at the top left).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One piece can hold many photos. Add more from here."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一件家具可以放很多张照片，从这儿再添。"
+          }
+        }
+      }
+    },
+    "tour.memories.3" : {
+      "comment" : "Chapter 6, last step, on the piece's page. The window is on the More menu (an ⋯ icon at the top left). English names its items: Show in Room, Lock, Put in storage.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This menu has Show in Room, Lock and Put in storage."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个按钮里，还能在房间里定位、锁定，或收进收纳箱。"
+          }
+        }
+      }
+    },
+    "tour.memories.card.line" : {
+      "comment" : "Chapter 6 card, one sentence. Comes up once a piece in the room holds photos. Does not say a photo brought the piece.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A piece in your room has photos now. Want to see what it remembers?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间里有了带照片的家具。看看它记着什么？"
+          }
+        }
+      }
+    },
+    "tour.memories.card.title" : {
+      "comment" : "Chapter 6 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap a piece, see the memory"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点家具，看回忆"
+          }
+        }
+      }
+    },
+    "tour.moveAndLook.1" : {
+      "comment" : "Chapter 7, step 1. The window is on a piece that is not locked. English says touch and hold, as Apple does.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To move this piece, touch and hold it, then drag."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想挪这件家具？按住它一会儿，再拖着走。"
+          }
+        }
+      }
+    },
+    "tour.moveAndLook.2" : {
+      "comment" : "Chapter 7, step 2. The window is round the whole room; pinch to zoom, then drag with one finger.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinch to zoom in. Once you’re zoomed in, drag with one finger to look around."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两根手指捏一捏能放大，放大后一根手指拖着看。"
+          }
+        }
+      }
+    },
+    "tour.moveAndLook.3" : {
+      "comment" : "Chapter 7, last step. The window is on the storage chest drawn at the right of the room.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This chest is the storage box. Pieces you put away wait in it, photos and all."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间右边这个箱子是收纳箱，收起来的家具和照片都在里面。"
+          }
+        }
+      }
+    },
+    "tour.moveAndLook.card.line" : {
+      "comment" : "Chapter 7 card, one sentence: press and hold to move a piece, pinch to zoom.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Furniture moves and the room zooms. Two gestures cover it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具能挪，房间能放大。两个手势就够了。"
+          }
+        }
+      }
+    },
+    "tour.moveAndLook.card.title" : {
+      "comment" : "Chapter 7 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move things, look around"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搬家具，看房间"
+          }
+        }
+      }
+    },
+    "tour.naming.field" : {
+      "comment" : "VoiceOver label of the naming page's text field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cat’s name"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫咪的名字"
+          }
+        }
+      }
+    },
+    "tour.naming.later" : {
+      "comment" : "Naming page: leave the name as it is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先不起名"
+          }
+        }
+      }
+    },
+    "tour.naming.line" : {
+      "comment" : "Naming page, under the title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a name. You can change it any time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "给它起个名字吧，以后随时能改。"
+          }
+        }
+      }
+    },
+    "tour.naming.title" : {
+      "comment" : "Naming page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s your cat’s name?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它叫什么名字？"
+          }
+        }
+      }
+    },
+    "tour.naming.use" : {
+      "comment" : "Naming page: save the typed name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use this name"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就叫这个"
+          }
+        }
+      }
+    },
+    "tour.needsCamera.line" : {
+      "comment" : "Chapter 13 opened from Settings while camera access is off. Gives the reason; does not ask the user to turn it on.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part uses the camera. While camera access is off, I’ll leave it for now."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要用相机。相机权限关着的时候，我就先不演示了。"
+          }
+        }
+      }
+    },
+    "tour.needsFurniture.line" : {
+      "comment" : "Card for chapter 7 opened from Settings while there is no furniture.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs a piece of furniture. When the first one moves in, I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有家具才能演示。等第一件搬进来，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.needsPerch.line" : {
+      "comment" : "Chapter 11 opened from Settings with no piece the cat can get onto (or no cat in the room).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs a piece your cat can get onto. Once there is one, I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有一件猫咪能上去的家具。等摆好一件，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.needsPhoto.line" : {
+      "comment" : "Chapter 9 opened from Settings with no photo in the library.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs a photo. When the first one comes home, I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有照片才能演示。等第一张带回家，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.needsPhotos.line" : {
+      "comment" : "Card for chapter 6 opened from Settings while no piece holds a photo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs a piece with photos. When one has some, I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有带照片的家具才能演示。等哪件有了照片，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.needsUnlocked.line" : {
+      "comment" : "Card for chapter 7 opened from Settings while every piece in the room is locked.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs a piece that isn’t locked. When one is, I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有一件没锁定的家具。等哪件解锁了，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.needsUnsorted.line" : {
+      "comment" : "Chapter 8 opened from Settings with no photos waiting to be sorted.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This part needs photos waiting to be sorted. Bring a batch home and I’ll show you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一段要有待整理的照片才能演示。等下次带回一批，我再带你看。"
+          }
+        }
+      }
+    },
+    "tour.next" : {
+      "comment" : "Tour bubble button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一步"
+          }
+        }
+      }
+    },
+    "tour.openPlay" : {
+      "comment" : "Chapters 11 and 13 opened from Settings: the step in the room before the Play panel is open. The window is on Play (互动).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Play first. I’ll show you in there."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先点“互动”，在里面讲。"
+          }
+        }
+      }
+    },
+    "tour.photoBatch.1" : {
+      "comment" : "Chapter 8, the only step. The window is on Sort (整理) on the bar that counts photos to sort.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Sort to place them one at a time. No rush. They’ll wait."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点“整理”，一张张给它们找位置。不想现在弄，它们会等着。"
+          }
+        }
+      }
+    },
+    "tour.photoBatch.card.line" : {
+      "comment" : "Chapter 8 card, one sentence: the photos on the “to sort” bar are saved but in no piece yet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These photos are saved. They just aren’t in furniture yet."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些照片都存好了，只是还没放进家具。"
+          }
+        }
+      }
+    },
+    "tour.photoBatch.card.title" : {
+      "comment" : "Chapter 8 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A whole batch of photos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一次带回很多照片"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.1" : {
+      "comment" : "Chapter 9, step 1. The window is on the row of filters at the top of the photo library.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Not in furniture” shows the photos still waiting for a place."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“未放进家具”里，是还没找到位置的照片。"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.2" : {
+      "comment" : "Chapter 9, step 2. The window is on the first photo. The four are items of the photo's long-press menu.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold a photo to favorite it, make it a cover, add it to furniture or share it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住一张照片，能设封面、收藏、放进家具或分享。"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.3" : {
+      "comment" : "Chapter 9, step 3. The window is on File as suggested. Never “automatic”: the iPhone guesses, the user decides.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This iPhone spots photos like ones you’ve placed and guesses where they go. You decide."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台 iPhone 会找和放好的照片相像的，猜个去处，放不放由你定。"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.3.pad" : {
+      "comment" : "Chapter 9, step 3 on iPad. The window is on File as suggested. Never “automatic”: the iPad guesses, the user decides.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This iPad spots photos like ones you’ve placed and guesses where they go. You decide."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台 iPad 会找和放好的照片相像的，猜个去处，放不放由你定。"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.card.line" : {
+      "comment" : "Chapter 9 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every photo you bring home is kept here."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "带回来的每一张照片，都收在这里。"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.card.title" : {
+      "comment" : "Chapter 9 card title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo library"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片库"
+          }
+        }
+      }
+    },
+    "tour.photoLibrary.open" : {
+      "comment" : "Chapter 9 opened from Settings: the step in the room before the photo library is open. The window is on the Photo library bookplate.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your photo library is right here. Tap to take a look."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片库在这里，点开看看。"
+          }
+        }
+      }
+    },
+    "tour.place.addAnother" : {
+      "comment" : "Tour page mode, where the step points. “Add another photo” is the button at the top of a piece's page.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add another photo is at the top of this piece’s page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“再添一张照片”在这件家具那一页的顶上。"
+          }
+        }
+      }
+    },
+    "tour.place.addFurniture" : {
+      "comment" : "Page mode, chapter 10: where Add furniture is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add furniture is at the very top of the Furniture page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“添加家具”在家具库这一页的最上面。"
+          }
+        }
+      }
+    },
+    "tour.place.addPhoto" : {
+      "comment" : "Tour page mode, where the step points. “Add photos” is the button's label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Add photos button is near the bottom of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“添加照片”按钮在屏幕下方。"
+          }
+        }
+      }
+    },
+    "tour.place.cat" : {
+      "comment" : "Tour page mode, where the step points: the cat in the room. The line at the bottom of the room says what the cat is doing.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your cat is in the room. The line at the bottom says what your cat is doing."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它在房间里。屏幕底下那行字，写着它正在做什么。"
+          }
+        }
+      }
+    },
+    "tour.place.cats" : {
+      "comment" : "Tour page mode, where the step points. “Cats” is the label of the top-bar button 猫咪.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Cats button is in the row near the top of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“猫咪”按钮在屏幕上方那一排里。"
+          }
+        }
+      }
+    },
+    "tour.place.company" : {
+      "comment" : "Tour page mode, where the step points. “Keep me company” is the row's label, “Play” the button's.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep me company is in the Play panel. Tap Play first and you’ll see it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“陪我一会儿”在互动面板里，先点“互动”就能看到。"
+          }
+        }
+      }
+    },
+    "tour.place.filters" : {
+      "comment" : "Page mode, chapter 9: where the Not in furniture filter is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not in furniture is in the row of filters at the top of the photo library."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“未放进家具”在照片库顶上的那排筛选里。"
+          }
+        }
+      }
+    },
+    "tour.place.furnitureList" : {
+      "comment" : "Tour page mode, where the step points. “Furniture” is the label of the 家具库 bookplate.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Furniture button is near the bottom of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“家具库”在屏幕下方。"
+          }
+        }
+      }
+    },
+    "tour.place.gait" : {
+      "comment" : "Page mode, chapter 11: where Walking style is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walking style is at the bottom of the Play panel. Tap Play, then scroll down."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“走路方式”在互动面板的最下面，先点“互动”，再往下滑。"
+          }
+        }
+      }
+    },
+    "tour.place.gait.onPanel" : {
+      "comment" : "Page mode, chapter 11, read over the Play panel: where Walking style is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walking style is at the bottom of the Play panel, right behind this page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“走路方式”在这一页后面那个互动面板的最下面。"
+          }
+        }
+      }
+    },
+    "tour.place.libraryPhoto" : {
+      "comment" : "Page mode, chapter 9: every photo has the menu; with VoiceOver, swipe up or down for the actions.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every photo here can be touched and held. With VoiceOver, select one and swipe up or down."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片库里的每张照片都能按住。用旁白时，选中一张，上下轻扫就能找到。"
+          }
+        }
+      }
+    },
+    "tour.place.lift" : {
+      "comment" : "Tour page mode, chapter 7 step 1. “Edit placement” is the VoiceOver action on a piece.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold any piece in the room to move it. With VoiceOver, use Edit placement."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间里的家具都能按住挪动。用旁白时，选中一件，用“编辑摆放”。"
+          }
+        }
+      }
+    },
+    "tour.place.more" : {
+      "comment" : "Tour page mode, where the step points. “More” is the menu button at the top of a piece's page; VoiceOver reads its name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The More button is at the top of this piece’s page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“更多”按钮在这件家具那一页的顶上。"
+          }
+        }
+      }
+    },
+    "tour.place.photoLibrary" : {
+      "comment" : "Page mode: where the Photo library bookplate is. Used when chapter 9 is opened from Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Photos button is near the bottom of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“照片库”在屏幕下方。"
+          }
+        }
+      }
+    },
+    "tour.place.piece" : {
+      "comment" : "Tour page mode, where the step points: any piece of furniture in the room. VoiceOver opens it with its default action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap any piece in the room to open it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间里的家具，点一下就能打开。"
+          }
+        }
+      }
+    },
+    "tour.place.pieceMenu" : {
+      "comment" : "Page mode, chapter 10: where a piece's More actions button is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each piece’s row has a More actions button, the ⋯, on its right."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每件家具那一行的右边，有一个“更多操作”按钮，就是“⋯”。"
+          }
+        }
+      }
+    },
+    "tour.place.placeFirst" : {
+      "comment" : "Tour page mode, where the step points. “Place furniture first” is the button on the card titled “The room is still empty”.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place furniture first is on the card that says the room is still empty."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“先摆家具”在写着“房间还是空的”的那张卡片上。"
+          }
+        }
+      }
+    },
+    "tour.place.plate" : {
+      "comment" : "Tour page mode, where the step points: the room's nameplate.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The nameplate is at the top of the screen and shows the room’s name."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "门牌在屏幕顶上，写着房间的名字。"
+          }
+        }
+      }
+    },
+    "tour.place.play" : {
+      "comment" : "Tour page mode, where the step points. “Play” is the label of the 互动 button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Play button is near the bottom of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“互动”按钮在屏幕下方。"
+          }
+        }
+      }
+    },
+    "tour.place.reminders" : {
+      "comment" : "Page mode, chapter 14: where Reminders is in Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’ll find Reminders near the bottom of Settings."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“提醒”在设置里靠下的那一组。"
+          }
+        }
+      }
+    },
+    "tour.place.room" : {
+      "comment" : "Tour page mode, chapter 7 step 2: the room itself, for pinching and dragging.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The room fills the middle of the screen. Pinch and drag there."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间占着屏幕中间的一大块，在那里捏合和拖动。"
+          }
+        }
+      }
+    },
+    "tour.place.sendCat" : {
+      "comment" : "Page mode, chapter 11: where Furniture in the room is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Furniture in the room is in the Play panel. Tap Play first and you’ll see it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“房间里的家具”在互动面板里，先点“互动”就能看到。"
+          }
+        }
+      }
+    },
+    "tour.place.sendCat.onPanel" : {
+      "comment" : "Page mode, chapter 11, read over the Play panel: where Furniture in the room is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Play panel is right behind this page. Furniture in the room is in it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一页后面就是互动面板，“房间里的家具”就在里面。"
+          }
+        }
+      }
+    },
+    "tour.place.sendCat.single" : {
+      "comment" : "Page mode, chapter 11 with one piece: where its actions are.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What this piece offers is in the Play panel. Tap Play first and you’ll see it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这件家具能做的事在互动面板里，先点“互动”就能看到。"
+          }
+        }
+      }
+    },
+    "tour.place.sendCat.single.onPanel" : {
+      "comment" : "Page mode, chapter 11 with one piece, read over the Play panel: where its actions are.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Play panel is right behind this page. This piece’s actions are in it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一页后面就是互动面板，这件家具能做的事就在里面。"
+          }
+        }
+      }
+    },
+    "tour.place.settings" : {
+      "comment" : "Tour page mode, where the step points: Settings, the gear at the top of the screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings is the gear button at the top of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置是屏幕顶上那个齿轮按钮。"
+          }
+        }
+      }
+    },
+    "tour.place.sort" : {
+      "comment" : "Page mode, chapter 8: where Sort is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort is near the bottom of the screen, on the bar that counts photos to sort."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“整理”在屏幕下方，写着几张照片待整理的那一条上。"
+          }
+        }
+      }
+    },
+    "tour.place.sound" : {
+      "comment" : "Tour page mode, where the step points. “Sound” is the button's label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Sound button is in the row near the top of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“音乐音效”按钮在屏幕上方那一排里。"
+          }
+        }
+      }
+    },
+    "tour.place.startCompany" : {
+      "comment" : "Tour page mode, where the step points. “Start company” is the button on the company page, below the Expression picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start company is on this page, below the expression picker."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“开始陪伴”在这一页上，表情选择的下面。"
+          }
+        }
+      }
+    },
+    "tour.place.storage" : {
+      "comment" : "Tour page mode, where the step points: the storage chest drawn in the room.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The storage box is the little chest drawn on the right of the room."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收纳箱是画在房间右边的那只小箱子。"
+          }
+        }
+      }
+    },
+    "tour.place.suggest" : {
+      "comment" : "Page mode, chapter 9: where File as suggested is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File as suggested is above the photos under Not in furniture."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“按建议放进家具”在“未放进家具”这一页的照片上方。"
+          }
+        }
+      }
+    },
+    "tour.place.tabletop" : {
+      "comment" : "Page mode, chapter 13: where See it on a table is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See it on a table is in the Play panel. Tap Play first and you’ll see it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“放到桌上看看”在互动面板里，先点“互动”就能看到。"
+          }
+        }
+      }
+    },
+    "tour.place.tabletop.onPanel" : {
+      "comment" : "Page mode, chapter 13, read over the Play panel: where See it on a table is.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Play panel is right behind this page. See it on a table is in it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一页后面就是互动面板，“放到桌上看看”就在里面。"
+          }
+        }
+      }
+    },
+    "tour.place.topRow" : {
+      "comment" : "Tour page mode, where the step points: the row of buttons along the top of the room.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These buttons sit in the row along the top of the screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一排按钮在屏幕顶上。"
+          }
+        }
+      }
+    },
+    "tour.place.toy" : {
+      "comment" : "Tour page mode, where the step points. “Choose a toy” is the row's label, “Play” the button's.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a toy is in the Play panel. Tap Play first and you’ll see it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“选玩具”在互动面板里，先点“互动”就能看到。"
+          }
+        }
+      }
+    },
+    "tour.play.1" : {
+      "comment" : "Chapter 4, step 1. The window is on the Play button (互动). The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feel like playing with %@? Tap here for toys and treats."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想逗逗%@吗？点这里，有玩具，也有小零食。"
+          }
+        }
+      }
+    },
+    "tour.play.1.long" : {
+      "comment" : "Chapter 4, step 1, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feel like playing with your cat? Tap here for toys and treats."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想逗逗它吗？点这里，有玩具，也有小零食。"
+          }
+        }
+      }
+    },
+    "tour.play.2" : {
+      "comment" : "Chapter 4, step 2. The window is on “Choose a toy” in the Play panel. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a toy, then tap or drag on the open floor and watch %@ chase it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "挑一个玩具，再到地板空地上点一下、拖一拖，%@会追过去。"
+          }
+        }
+      }
+    },
+    "tour.play.2.long" : {
+      "comment" : "Chapter 4, step 2, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a toy, then tap or drag on the open floor and watch your cat chase it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "挑一个玩具，再到地板空地上点一下、拖一拖，猫咪会追过去。"
+          }
+        }
+      }
+    },
+    "tour.play.card.line" : {
+      "comment" : "Chapter 4 card. “Play” is the label of the 互动 button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toys and treats are under Play."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "玩具和小零食，都在“互动”里。"
+          }
+        }
+      }
+    },
+    "tour.play.card.title" : {
+      "comment" : "Chapter 4 card title; only shown when replayed. The argument is the cat's name, or “it”.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play with %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "陪%@玩一会儿"
+          }
+        }
+      }
+    },
+    "tour.reminders.1" : {
+      "comment" : "Chapter 14, step 1. The window is on the gear (Settings). Next here ends the chapter.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders live in Settings, all off for now. Tap the gear to take a look."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提醒在设置里，现在都关着。点这个齿轮看看。"
+          }
+        }
+      }
+    },
+    "tour.reminders.1.someOn" : {
+      "comment" : "Chapter 14, step 1, opened from Settings while a reminder is on. The window is on the gear (Settings).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders live in Settings. Tap the gear to take a look."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提醒在设置里。点这个齿轮看看。"
+          }
+        }
+      }
+    },
+    "tour.reminders.2" : {
+      "comment" : "Chapter 14, step 2. The window is on Reminders in Settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This row. Which ones, and what time, are up to you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就是这一行。开哪几样、几点叫，都由你定。"
+          }
+        }
+      }
+    },
+    "tour.reminders.card.line" : {
+      "comment" : "Chapter 14 card, one sentence. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A daily hello from %@, or a nudge when a photo turns a year older."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@可以每天叫你一声，也能提醒你回来看老照片。"
+          }
+        }
+      }
+    },
+    "tour.reminders.card.line.fallback" : {
+      "comment" : "Chapter 14 card for a home with no furniture yet. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fancy a hello from %@ at the same time each day?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@可以每天到点叫你一声。要不要看看？"
+          }
+        }
+      }
+    },
+    "tour.reminders.card.line.fallback.long" : {
+      "comment" : "Chapter 14 card for a home with no furniture yet, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fancy a hello from your cat at the same time each day?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫咪可以每天到点叫你一声。要不要看看？"
+          }
+        }
+      }
+    },
+    "tour.reminders.card.line.long" : {
+      "comment" : "Chapter 14 card, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A daily hello from your cat, or a nudge when a photo turns a year older."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫咪可以每天叫你一声，也能提醒你回来看老照片。"
+          }
+        }
+      }
+    },
+    "tour.reminders.card.title" : {
+      "comment" : "Chapter 14 card title. The argument is the cat's name, or “it” when the name is too long.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A daily hello from %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让%@每天叫你一声"
+          }
+        }
+      }
+    },
+    "tour.sendCat.1" : {
+      "comment" : "Chapter 11, step 1. The window is on Furniture in the room in the Play panel. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a piece, then something to do there, and %@ heads over."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一件家具，再选一个动作，%@就会过去。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.1.long" : {
+      "comment" : "Chapter 11, step 1, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a piece, then something to do there, and your cat heads over."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一件家具，再选一个动作，猫咪就会过去。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.1.single" : {
+      "comment" : "Chapter 11, step 1, with one piece the cat can get onto: the window is on its actions. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here’s what this piece offers. Pick one and %@ heads over."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这件家具上能做的事都在这儿，选一个，%@就会过去。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.1.single.long" : {
+      "comment" : "Chapter 11, step 1, one piece, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here’s what this piece offers. Pick one and your cat heads over."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这件家具上能做的事都在这儿，选一个，猫咪就会过去。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.2" : {
+      "comment" : "Chapter 11, step 2. The window is on Walking style at the foot of the Play panel. The four are the menu's names.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The way your cat walks can change too: Walk, Slow walk, Run or Hop."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它走路的样子也能换：散步、慢步、奔跑、蹦跳。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.card.line" : {
+      "comment" : "Chapter 11 card, one sentence. The argument is the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The furniture isn’t just for show. You can send %@ over to it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具不只是摆着看，%@可以上去待一会儿。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.card.line.long" : {
+      "comment" : "Chapter 11 card, when the cat's name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The furniture isn’t just for show. You can send your cat over to it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具不只是摆着看，猫咪可以上去待一会儿。"
+          }
+        }
+      }
+    },
+    "tour.sendCat.card.title" : {
+      "comment" : "Chapter 11 card title. The argument is the cat's name, or “it” when the name is too long.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send %@ to the furniture"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请%@去家具上"
+          }
+        }
+      }
+    },
+    "tour.skip" : {
+      "comment" : "Tour button: leaves this chapter.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip this part"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过这一段"
+          }
+        }
+      }
+    },
+    "tour.skipAll" : {
+      "comment" : "Tour button: leaves every chapter.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip all"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部跳过"
+          }
+        }
+      }
+    },
+    "tour.skippedAll" : {
+      "comment" : "One line at the top of the screen after Skip all. “使用导览” (Tour) is the Settings row that replays the tour.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK, I’ll leave you to it. The tour is in Settings whenever you want it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好，不打扰你了。想看的时候，在设置里的“使用导览”。"
+          }
+        }
+      }
+    },
+    "tour.start" : {
+      "comment" : "Tour chapter card button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始"
+          }
+        }
+      }
+    },
+    "tour.status.cameraOff" : {
+      "comment" : "Settings, Tour list: chapter 13's state while camera access is off. The same words as the AR row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera access is off"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相机权限已关闭"
+          }
+        }
+      }
+    },
+    "tour.status.needsFurniture" : {
+      "comment" : "Settings, Tour list: chapter 7's state while there is no furniture.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After your first piece"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等有了家具再看"
+          }
+        }
+      }
+    },
+    "tour.status.needsPerch" : {
+      "comment" : "Settings, Tour list: chapter 11's state while there is no piece the cat can get onto.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When there’s a piece your cat can get onto"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等有猫能上去的家具再看"
+          }
+        }
+      }
+    },
+    "tour.status.needsPhoto" : {
+      "comment" : "Settings, Tour list: chapter 9's state while the library has no photo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After your first photo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等有了照片再看"
+          }
+        }
+      }
+    },
+    "tour.status.needsPhotos" : {
+      "comment" : "Settings, Tour list: chapter 6's state while no piece holds a photo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When a piece has photos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等家具有了照片再看"
+          }
+        }
+      }
+    },
+    "tour.status.needsUnlocked" : {
+      "comment" : "Settings, Tour list: chapter 7's state while every piece in the room is locked.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When a piece is unlocked"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等有家具解锁再看"
+          }
+        }
+      }
+    },
+    "tour.status.needsUnsorted" : {
+      "comment" : "Settings, Tour list: chapter 8's state while no photo waits to be sorted.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When photos are waiting to be sorted"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等有了待整理的照片再看"
+          }
+        }
+      }
+    },
+    "tour.tabletop.1" : {
+      "comment" : "Chapter 13, the only step. The window is on See it on a table. Says no more than the row's own footer about the camera.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap this row to try it. The camera view stays on this device, never recorded or saved."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点这一行试试。要用相机，画面只在这台设备上，不录也不存。"
+          }
+        }
+      }
+    },
+    "tour.tabletop.card.line" : {
+      "comment" : "Chapter 13 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This room can sit on your real table too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这间房间，还能摆到你真的桌子上。"
+          }
+        }
+      }
+    },
+    "tour.tabletop.card.title" : {
+      "comment" : "Chapter 13 card title; the same words as the row in the Play panel.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See it on a table"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放到桌上看看"
+          }
+        }
+      }
+    },
+    "tour.testBuild.close" : {
+      "comment" : "Test build page: closes Report a Problem opened from the page, and the page with it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
+    },
+    "tour.testBuild.gotIt" : {
+      "comment" : "Test build page: closes the page.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got It"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "知道了"
+          }
+        }
+      }
+    },
+    "tour.testBuild.line" : {
+      "comment" : "Test build page at the end of the opening tour, TestFlight builds only. Bella speaks. Settings › Report a Problem is the Settings row of that name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is a test build. If anything feels off or breaks, please tell us in Settings › Report a Problem, or contact the developer directly. While we test, how the app works may change at any time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在是测试版。用着哪里别扭、哪里坏了，都请告诉我们：在“设置 › 反馈问题”里写，或者直接联系开发者。测试期间，App 的玩法和操作随时可能会变。"
+          }
+        }
+      }
+    },
+    "tour.testBuild.report" : {
+      "comment" : "Test build page: main button, opens Report a Problem.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report a Problem"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "去反馈"
+          }
+        }
+      }
+    },
+    "tour.testBuild.title" : {
+      "comment" : "Test build page title, above Bella's words (docs/onboarding/LINES.md beta.notice.title).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About This Test Build"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于测试版"
+          }
+        }
+      }
+    },
+    "tour.topRow.1" : {
+      "comment" : "Chapter 5, step 1. The window is on the whole row of buttons along the top of the room. Only the free parts are named.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up here: themes, music, your cat’s name, and a postcard of the room at top right."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一排能换主题、开音乐、给猫咪改名，右上角还能做明信片。"
+          }
+        }
+      }
+    },
+    "tour.topRow.2" : {
+      "comment" : "Chapter 5, step 2. The window is on the Sound button. Left out when the music is already on.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Music starts switched off. Turn it on here whenever you like."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音乐默认是关着的。想听的时候，来这儿打开。"
+          }
+        }
+      }
+    },
+    "tour.topRow.3" : {
+      "comment" : "Chapter 5, last step of the opening. The window is on the Settings gear. “使用导览” (Tour) is the Settings row that replays the tour.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That’s all for now. The rest comes when you get to it. Find me under Tour in Settings."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先说到这儿，别的等你用到再讲。想重听，来设置里的“使用导览”。"
+          }
+        }
+      }
+    },
+    "tour.topRow.card.line" : {
+      "comment" : "Chapter 5 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The room’s look, its sound and your cat are all set from this row."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间的样子、声音和猫咪，都从这一排改。"
+          }
+        }
+      }
+    },
+    "tour.topRow.card.title" : {
+      "comment" : "Chapter 5 card title; only shown when replayed from Settings. The row of buttons along the top of the room.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The row along the top"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间上面这一排"
+          }
+        }
+      }
+    },
+    "tour.welcome.1" : {
+      "comment" : "Chapter 1, step 1. The window is on the user's cat in the room.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This room belongs to your cat. This is home now."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这间房间是你家猫咪的，它就住在这儿。"
+          }
+        }
+      }
+    },
+    "tour.welcome.3a" : {
+      "comment" : "Chapter 1, after the user named the cat. The window is on the room's nameplate at the top, which now shows the name. Never shortened, however long the name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. Lovely. The nameplate up top says so too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@，好名字。上面的门牌也换好了。"
+          }
+        }
+      }
+    },
+    "tour.welcome.3a.noPlate" : {
+      "comment" : "Chapter 1, after the user named the cat, when the room's nameplate does not show the cat's name (the room has a name of its own). Reminder titles and the Lock Screen companion do show the cat's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. Lovely. Reminders and the Lock Screen will use that name too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@，好名字。以后提醒和锁屏上，都用这个名字。"
+          }
+        }
+      }
+    },
+    "tour.welcome.3b" : {
+      "comment" : "Chapter 1, when the user did not name the cat. The argument is the cat's current name. English says “here”: the window is on the top-bar button 猫咪, which shows no label at large text sizes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We’ll go with %@ for now. Change it any time here."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "那就先叫%@。想好了，随时在“猫咪”里改。"
+          }
+        }
+      }
+    },
+    "tour.welcome.3b.long" : {
+      "comment" : "Chapter 1, when the user did not name the cat and its name is too long to repeat.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We’ll keep the current name for now. Change it any time here."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "那就先用现在的名字。想好了，随时在“猫咪”里改。"
+          }
+        }
+      }
+    },
+    "tour.welcome.4" : {
+      "comment" : "Chapter 1, last step: the user's cat uses the built-in model, which was made after Bella.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right now your cat looks a lot like me. I posed for that look."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它现在的样子是照着我做的，所以我们有点像。"
+          }
+        }
+      }
+    },
+    "tour.welcome.card.line" : {
+      "comment" : "Chapter 1 card, one sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I’m the guide around here. Let me show you around this little room."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是这里的向导，带你认识一下这间小房间。"
+          }
+        }
+      }
+    },
+    "tour.welcome.card.title" : {
+      "comment" : "Chapter 1 card title. Bella is the guide's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hi, I’m Bella"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你好，我是 Bella"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

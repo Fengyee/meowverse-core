@@ -1,0 +1,49 @@
+// Shared build settings. Signing team stays out of git: put
+//   DEVELOPMENT_TEAM = <your team id>
+// in ios/Local.xcconfig (ignored). Xcode's "Automatically manage signing" does the rest.
+MEOWVERSE_BUNDLE_ID = io.github.fengyee.meowverse
+MEOWVERSE_DISPLAY_NAME = Meowverse
+// The App Group the app shares with its extensions. The app's two entitlements files and the
+// widget's spell it out; the cats' downloader extension (MeowverseAssets.entitlements) and the
+// app's BAAppGroupID (Meowverse-Info.plist) read it from here. Same group for both iCloud builds.
+MEOWVERSE_APP_GROUP = group.$(MEOWVERSE_BUNDLE_ID)
+
+// iCloud sync builds (docs/ICLOUD_SYNC.md, "iCloud 同步" in ios/README.md):
+//   ./build.sh device MEOWVERSE_ICLOUD_SYNC=YES
+// turns on the compilation condition, signs the app with Meowverse-ICloudSync.entitlements
+// (adds aps-environment) and puts the remote-notification background mode in its Info.plist
+// (Meowverse-Info.plist is preprocessed). The default build has neither, so a store build
+// declares no push it does not use. Only the app target reads the entitlements and Info.plist
+// settings; the extensions (widget, cat downloader) sign with their own App Group entitlements
+// in both builds.
+MEOWVERSE_ICLOUD_SYNC = NO
+MEOWVERSE_SYNC_CONDITIONS_NO =
+MEOWVERSE_SYNC_CONDITIONS_YES = MEOWVERSE_ICLOUD_SYNC MEOWVERSE_ICLOUD_SYNC_SIGNED
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) $(MEOWVERSE_SYNC_CONDITIONS_$(MEOWVERSE_ICLOUD_SYNC)) $(MEOWVERSE_TALK_CONDITIONS_$(MEOWVERSE_TALK_TO_BELLA))
+MEOWVERSE_ENTITLEMENTS_NO = Meowverse.entitlements
+MEOWVERSE_ENTITLEMENTS_YES = Meowverse-ICloudSync.entitlements
+MEOWVERSE_INFOPLIST_DEFINITIONS_NO =
+MEOWVERSE_INFOPLIST_DEFINITIONS_YES = MEOWVERSE_ICLOUD_SYNC=1
+
+// Talk to Bella (docs/TALK_TO_BELLA.md) is not in 1.0 (launch design §2): the default build compiles
+// none of ios/Meowverse/TalkToBella, so it links neither Speech nor Foundation Models, and its
+// Info.plist has no microphone or speech recognition usage description. A local build brings it back:
+//   ./build.sh device MEOWVERSE_TALK_TO_BELLA=YES
+// `ios/check-voice-build.py <app> absent|present` reads either product.
+MEOWVERSE_TALK_TO_BELLA = NO
+MEOWVERSE_TALK_CONDITIONS_NO =
+MEOWVERSE_TALK_CONDITIONS_YES = MEOWVERSE_TALK_TO_BELLA
+// The two usage descriptions are in Meowverse-Info.plist under #ifdef MEOWVERSE_TALK_TO_BELLA: an
+// INFOPLIST_KEY_ setting left empty would still write the key, with an empty string.
+MEOWVERSE_TALK_INFOPLIST_NO =
+MEOWVERSE_TALK_INFOPLIST_YES = MEOWVERSE_TALK_TO_BELLA=1
+
+// The 「关于测试版」 page at the end of the opening (TourTestBuild, MeowverseCore's TestBuildNotice):
+// off unless a build is archived for TestFlight with `xcodebuild archive … MEOWVERSE_TEST_BUILD_NOTICE=YES`
+// (docs/TESTFLIGHT.md, the upload checklist). App Review installs carry a sandbox receipt like
+// TestFlight's, so the receipt alone would show the page to the reviewer. Off by default: a
+// TestFlight build that forgot it misses one page; a store build that forgot to turn it off
+// shows App Review a "test build" page (lead, 2026-11-21).
+MEOWVERSE_TEST_BUILD_NOTICE = NO
+
+#include? "Local.xcconfig"

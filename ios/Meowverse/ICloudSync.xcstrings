@@ -1,0 +1,38 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "iCloud 里有 %lld 项内容读不出，或和这台设备上的内容对不上，没有合并进来。这台设备上已有的保持原样，还没有的先不显示；其中读不出的，在这台设备上对它们的修改也先不上传。每次同步都会再试。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "%#@n1@" },
+          "substitutions" : {
+            "n1" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : { "stringUnit" : { "state" : "translated", "value" : "%arg item in iCloud couldn’t be read or doesn’t match what’s on this device, so it wasn’t merged. If this device has it, it stays as it is; if not, it isn’t shown yet. If it couldn’t be read, changes made to it here aren’t uploaded yet. Every sync tries again." } },
+                  "other" : { "stringUnit" : { "state" : "translated", "value" : "%arg items in iCloud couldn’t be read or don’t match what’s on this device, so they weren’t merged. What this device already has stays as it is, and the rest isn’t shown yet. For items that couldn’t be read, changes made here aren’t uploaded yet. Every sync tries again." } }
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 里有 %lld 项内容读不出，或和这台设备上的内容对不上，没有合并进来。这台设备上已有的保持原样，还没有的先不显示；其中读不出的，在这台设备上对它们的修改也先不上传。每次同步都会再试。" } }
+      }
+    },
+    "和“备份到 iCloud 云盘”是两件事：备份是某一刻的完整副本，同步是让几台设备保持一样。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This is not the same as “Back Up to iCloud Drive”: a backup is a full copy at one moment, while sync keeps several devices the same." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "和“备份到 iCloud 云盘”是两件事：备份是某一刻的完整副本，同步是让几台设备保持一样。" } }
+      }
+    },
+    "这台设备上的资料库在没有同步的时候被清除或恢复过，为了不把它和 iCloud 里的家合并，iCloud 同步已关闭。iCloud 里的家和其他设备都没有动。要接着同步，可以再打开。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The library on this device was cleared or restored while it wasn’t syncing, so iCloud sync was turned off instead of merging it with the home in iCloud. The home in iCloud and your other devices are untouched. To keep syncing, turn it on again." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这台设备上的资料库在没有同步的时候被清除或恢复过，为了不把它和 iCloud 里的家合并，iCloud 同步已关闭。iCloud 里的家和其他设备都没有动。要接着同步，可以再打开。" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

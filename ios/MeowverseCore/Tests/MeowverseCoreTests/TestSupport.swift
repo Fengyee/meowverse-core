@@ -16,9 +16,14 @@ enum TestSupport {
         try FurnitureCatalog(data: catalogData())
     }
 
+    /// A new empty folder, alone in a new parent. `LibraryStore.load()` lists the root's parent for
+    /// leftover swap folders; with roots straight in the temporary directory every load listed every
+    /// test folder ever left there (57,538 on the dev Mac, 2026-11-22), and the full suite sat for
+    /// minutes before any test finished, then failed the timing tests.
     static func tempDir() -> URL {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("MeowverseCoreTests-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("folder", isDirectory: true)
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         return url
     }
@@ -57,6 +62,46 @@ enum TestSupport {
         try PhotoIngest.makeDraft(data: imageData(seed: seed), filename: "synthetic-\(seed).jpg")
     }
 
+    /// Two distinct HEIF items. The green gradient in the second item rotates to landscape.
+    static func designatedPrimaryHEIF(firstDate: String? = "2018:01:02 09:00:00") throws -> Data {
+        let buffer = NSMutableData()
+        let writer = try #require(CGImageDestinationCreateWithData(buffer, UTType.heic.identifier as CFString, 2, nil))
+        for (width, height, seed, orientation, date) in [
+            (320, 256, 0, 1, firstDate), (320, 640, 6, 6, "2024:03:15 12:00:00")
+        ] {
+            var properties: [CFString: Any] = [kCGImagePropertyOrientation: orientation]
+            if let date { properties[kCGImagePropertyExifDictionary] = [kCGImagePropertyExifDateTimeOriginal: date] }
+            CGImageDestinationAddImage(writer, cgImage(width: width, height: height, seed: seed), properties as CFDictionary)
+        }
+        try #require(CGImageDestinationFinalize(writer))
+
+        // ImageIO makes the first item primary. Select the second image in the HEIF primary-item box.
+        var bytes = buffer as Data
+        let box = try #require(bytes.range(of: Data(Array("pitm".utf8) + [0, 0, 0, 0, 0, 1])))
+        let visibleItem = Data(Array("infe".utf8) + [2, 0, 0, 0])
+        let first = try #require(bytes.range(of: visibleItem))
+        let second = try #require(bytes.range(of: visibleItem, in: first.upperBound..<bytes.endIndex))
+        bytes.replaceSubrange(box.suffix(2), with: bytes[second.upperBound..<second.upperBound + 2])
+        let source = try #require(CGImageSourceCreateWithData(bytes as CFData, nil))
+        try #require(CGImageSourceGetCount(source) == 2)
+        try #require(CGImageSourceGetPrimaryImageIndex(source) == 1)
+        return bytes
+    }
+
+    static func expectUprightHEIFPrimary(_ image: CGImage?, width: Int, height: Int,
+                                        sourceLocation: SourceLocation = #_sourceLocation) throws {
+        let image = try #require(image, sourceLocation: sourceLocation)
+        #expect(image.width == width, sourceLocation: sourceLocation)
+        #expect(image.height == height, sourceLocation: sourceLocation)
+        let context = try #require(CGContext(data: nil, width: 2, height: 1, bitsPerComponent: 8, bytesPerRow: 8,
+                                             space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.draw(image, in: CGRect(x: 0, y: 0, width: 2, height: 1))
+        let rgba = try #require(context.data).assumingMemoryBound(to: UInt8.self)
+        #expect(rgba[1] > 160 && rgba[5] > 160, "the green second item", sourceLocation: sourceLocation)
+        #expect(rgba[2] > rgba[0] && rgba[4] > rgba[6], "blue at left and red at right after rotating", sourceLocation: sourceLocation)
+    }
+
     /// Directory listing (relative paths) of everything under `root`.
     static func listing(_ root: URL) -> [String] {
         let base = root.standardizedFileURL.path
@@ -85,6 +130,21 @@ final class FaultSwitch: Sendable {
                 return true
             }
             if fire { throw InjectedFault.failed(step) }
+        }
+    }
+}
+
+/// A fault injector that fails at a chosen step every time until it is cleared.
+final class PersistentFault: Sendable {
+    private let failing: Mutex<StoreStep?>
+
+    init(_ step: StoreStep?) { failing = Mutex(step) }
+
+    func clear() { failing.withLock { $0 = nil } }
+
+    var handler: @Sendable (StoreStep) throws -> Void {
+        { [self] step in
+            if failing.withLock({ $0 == step }) { throw InjectedFault.failed(step) }
         }
     }
 }

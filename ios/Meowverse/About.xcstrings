@@ -1,0 +1,670 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "%@的铲屎官" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@’s human"
+          }
+        }
+      }
+    },
+    "Bella 早期版本的模型改编自 guillaume bolis 的“3d modelling my cat: Fripouille”（2020），原模型和贴图按 CC BY 4.0 授权。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The model of Bella’s earlier version was adapted from “3d modelling my cat: Fripouille” (2020) by guillaume bolis; the original model and textures are licensed under CC BY 4.0."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bella 早期版本的模型改编自 guillaume bolis 的“3d modelling my cat: Fripouille”（2020），原模型和贴图按 CC BY 4.0 授权。"
+          }
+        }
+      }
+    },
+    "Bella 早期版本的模型模板" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The model template of Bella’s earlier version"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bella 早期版本的模型模板"
+          }
+        }
+      }
+    },
+    "喵空间没有自己的服务器。画质用到“低”档时，会请系统从 App Store 下载简化的猫咪模型，下载时不会传出你的照片和房间。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meowverse has no server of its own. When graphics quality is Low, it asks the system to download a simpler cat model from the App Store. None of your photos or your home is sent."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喵空间没有自己的服务器。画质用到“低”档时，会请系统从 App Store 下载简化的猫咪模型，下载时不会传出你的照片和房间。"
+          }
+        }
+      }
+    },
+    "一位铲屎官" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A cat’s human"
+          }
+        }
+      }
+    },
+    "一部分家具来自 Kenney 的 Furniture Kit，按 CC0 1.0 放入公有领域。喵空间把原来的 OBJ 模型转换成 App 用的格式，没有改动几何形状。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some of the furniture comes from Kenney’s Furniture Kit, dedicated to the public domain under CC0 1.0. Meowverse converted the original OBJ models to the app’s format without changing their geometry."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部分家具来自 Kenney 的 Furniture Kit，按 CC0 1.0 放入公有领域。喵空间把原来的 OBJ 模型转换成 App 用的格式，没有改动几何形状。"
+          }
+        }
+      }
+    },
+    "一部分家具模型" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some of the furniture models"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部分家具模型"
+          }
+        }
+      }
+    },
+    "一部分猫咪家具来自 3D Assets 的宠物素材，按 CC0 1.0 放入公有领域。发布方说明这些原始模型是用 AI 工具制作的。喵空间为 Bella 调整了它们。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some of the cat furniture comes from 3D Assets’ pet collection, dedicated to the public domain under CC0 1.0. The publisher says these original models were made with AI tools. Meowverse adapted them for Bella."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部分猫咪家具来自 3D Assets 的宠物素材，按 CC0 1.0 放入公有领域。发布方说明这些原始模型是用 AI 工具制作的。喵空间为 Bella 调整了它们。"
+          }
+        }
+      }
+    },
+    "一部分猫咪家具模型" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some of the cat furniture models"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部分猫咪家具模型"
+          }
+        }
+      }
+    },
+    "从参考图生成内置猫的模型" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generated the built-in cats’ models from reference photos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从参考图生成内置猫的模型"
+          }
+        }
+      }
+    },
+    "作者" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作者"
+          }
+        }
+      }
+    },
+    "你打开了 iCloud 同步，喵空间会通过 Apple 的 iCloud 和你自己的设备同步，开发者拿不到这些数据。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You turned on iCloud Sync: Meowverse syncs with your own devices through Apple’s iCloud, and the developer has no access to this data."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你打开了 iCloud 同步，喵空间会通过 Apple 的 iCloud 和你自己的设备同步，开发者拿不到这些数据。"
+          }
+        }
+      }
+    },
+    "你的照片与隐私" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your photos & privacy"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的照片与隐私"
+          }
+        }
+      }
+    },
+    "内置猫的模型用腾讯混元 3D 从参考图生成，再由喵空间修整、绑定骨骼并制作动作。混元 3D 按 Tencent Hunyuan 3D Community License 授权。喵空间与腾讯没有关联，也不受腾讯赞助或认可。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The built-in cats’ models were generated with Tencent Hunyuan 3D from reference images, then reworked, rigged and animated by Meowverse. Hunyuan 3D is licensed under the Tencent Hunyuan 3D Community License. Meowverse is not affiliated with Tencent, and Tencent does not sponsor or endorse it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内置猫的模型用腾讯混元 3D 从参考图生成，再由喵空间修整、绑定骨骼并制作动作。混元 3D 按 Tencent Hunyuan 3D Community License 授权。喵空间与腾讯没有关联，也不受腾讯赞助或认可。"
+          }
+        }
+      }
+    },
+    "全部素材署名" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All art credits"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部素材署名"
+          }
+        }
+      }
+    },
+    "其余的家具和声音由喵空间制作或由开发者提供，逐项写在“全部素材署名”里。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The other furniture and sounds were made for Meowverse or provided by the developer. Each is listed in All art credits."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其余的家具和声音由喵空间制作或由开发者提供，逐项写在“全部素材署名”里。"
+          }
+        }
+      }
+    },
+    "创意" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idea"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创意"
+          }
+        }
+      }
+    },
+    "只读取你在相册里选中的照片。第一次添加照片时会问一次相册权限：允许后每张照片只存小预览，看大图时从相册读取，而且只读你导入过的那些照片；不允许也能照常使用，之后可以在设置里更改。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meowverse reads only the photos you pick. The first time you add a photo, it asks once for access to your photos: with access it keeps only a small preview and reads the full-size photo from your library, and only for photos you have imported. Everything works without it, and you can change this in Settings."
+          }
+        }
+      }
+    },
+    "喜欢的话，请去 GitHub 给我们一个关注和 star" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you like it, please follow and star us on GitHub"
+          }
+        }
+      }
+    },
+    "喵空间是一个为爱发电的项目。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meowverse is a labor of love."
+          }
+        }
+      }
+    },
+    "在浏览器里打开完整的隐私政策。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the full privacy policy in your browser."
+          }
+        }
+      }
+    },
+    "备份与同步" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup & sync"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份与同步"
+          }
+        }
+      }
+    },
+    "备份文件存到哪里由你决定。打开“备份到 iCloud 云盘”后，备份存在你自己的 iCloud 云盘，由系统上传。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You decide where backup files are kept. With Back Up to iCloud Drive on, backups go to your own iCloud Drive and the system uploads them."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份文件存到哪里由你决定。打开“备份到 iCloud 云盘”后，备份存在你自己的 iCloud 云盘，由系统上传。"
+          }
+        }
+      }
+    },
+    "多个房间" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "several rooms"
+          }
+        }
+      }
+    },
+    "多只猫咪" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "several cats"
+          }
+        }
+      }
+    },
+    "开源与素材" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open source & art"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开源与素材"
+          }
+        }
+      }
+    },
+    "房间和面板标题里的中文字体" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Chinese typeface of room and panel titles"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间和面板标题里的中文字体"
+          }
+        }
+      }
+    },
+    "房间和面板标题里的中文用的是站酷快乐体（ZCOOL KuaiLe），未经修改随 App 发布，按 SIL Open Font License 1.1 授权。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Chinese characters of room and panel titles are set in ZCOOL KuaiLe, bundled unmodified under the SIL Open Font License 1.1."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "房间和面板标题里的中文用的是站酷快乐体（ZCOOL KuaiLe），未经修改随 App 发布，按 SIL Open Font License 1.1 授权。"
+          }
+        }
+      }
+    },
+    "找出照片像房间里的哪件家具，用的是 Meta AI 的 DINOv2 模型（ViT-B/14，带 register），在这台设备上运行。它按 Apache License 2.0 授权，版权归 Meta Platforms, Inc. 及其关联公司。喵空间把它转换成了 Core ML 格式（8 位权重）。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finding which piece in the room a photo looks like uses Meta AI’s DINOv2 model (ViT-B/14 with registers), running on this device. It is licensed under the Apache License 2.0, copyright Meta Platforms, Inc. and affiliates. Meowverse converted it to Core ML (8-bit weights)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找出照片像房间里的哪件家具，用的是 Meta AI 的 DINOv2 模型（ViT-B/14，带 register），在这台设备上运行。它按 Apache License 2.0 授权，版权归 Meta Platforms, Inc. 及其关联公司。喵空间把它转换成了 Core ML 格式（8 位权重）。"
+          }
+        }
+      }
+    },
+    "支持了：%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supported: %@"
+          }
+        }
+      }
+    },
+    "来源" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来源"
+          }
+        }
+      }
+    },
+    "测试" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testing"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "测试"
+          }
+        }
+      }
+    },
+    "照片存在哪里" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where your photos are kept"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片存在哪里"
+          }
+        }
+      }
+    },
+    "照片存在哪里、怎么读取，识别、备份与同步" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where photos are kept, how they are read, recognition, backup and sync"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片存在哪里、怎么读取，识别、备份与同步"
+          }
+        }
+      }
+    },
+    "许可" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "License"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "许可"
+          }
+        }
+      }
+    },
+    "许可证" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "License text"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "许可证"
+          }
+        }
+      }
+    },
+    "识别" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recognition"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "识别"
+          }
+        }
+      }
+    },
+    "识别照片像哪件家具，在这台设备上运行" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds which piece a photo looks like, on this device"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "识别照片像哪件家具，在这台设备上运行"
+          }
+        }
+      }
+    },
+    "读取照片" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading photos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读取照片"
+          }
+        }
+      }
+    },
+    "赞助人" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sponsors"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助人"
+          }
+        }
+      }
+    },
+    "赞助人支持喵空间上架 App Store，也让它一直留在那里（例如 Apple 开发者计划的年费）。谢谢你们！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sponsors made it possible for Meowverse to be on the App Store, and they keep it there (for example, the Apple Developer Program fee). Thank you!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助人支持喵空间上架 App Store，也让它一直留在那里（例如 Apple 开发者计划的年费）。谢谢你们！"
+          }
+        }
+      }
+    },
+    "这个功能由%@支持实现" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This feature was made possible by %@"
+          }
+        }
+      }
+    },
+    "这只猫咪由%@支持" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This cat is supported by %@"
+          }
+        }
+      }
+    },
+    "隐私" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐私"
+          }
+        }
+      }
+    },
+    "隐私政策" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        }
+      }
+    },
+    "鸣谢" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鸣谢"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

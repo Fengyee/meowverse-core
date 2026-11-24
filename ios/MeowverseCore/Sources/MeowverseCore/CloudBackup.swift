@@ -183,6 +183,10 @@ public struct CloudBackupFile: Sendable, Equatable {
 /// Where backups are kept: one flat folder. All calls may block; call them off the main actor.
 public protocol BackupDestination: Sendable {
     func availability() -> CloudAvailability
+    /// Which account the folder belongs to, as an opaque fingerprint (`CloudBackupAccount`);
+    /// nil when there is none or it cannot be told. Fast: no file access. Backups are written
+    /// only while this is the account the user agreed for.
+    func accountFingerprint() -> String?
     func list() throws -> [CloudBackupFile]
     /// A small file that is already local. Throws when it is missing or not downloaded.
     func readSmallFile(_ name: String) throws -> Data
@@ -200,15 +204,21 @@ public protocol BackupDestination: Sendable {
 /// A plain folder. Used by tests and by the app's test switch; also the reference behaviour
 /// for the iCloud Drive destination.
 public struct FolderBackupDestination: BackupDestination {
+    /// The account a plain folder reports unless it is told another one.
+    public static let defaultAccount = "folder"
+
     public let folder: URL
     private let fixedAvailability: CloudAvailability
+    private let account: String?
 
-    public init(folder: URL, availability: CloudAvailability = .available) {
+    public init(folder: URL, availability: CloudAvailability = .available, account: String? = Self.defaultAccount) {
         self.folder = folder
         fixedAvailability = availability
+        self.account = account
     }
 
     public func availability() -> CloudAvailability { fixedAvailability }
+    public func accountFingerprint() -> String? { account }
 
     private func url(_ name: String) throws -> URL {
         guard Self.isPlainName(name) else { throw CloudBackupError.io("name") }
@@ -432,6 +442,10 @@ public struct CloudBackupSettings: Codable, Sendable, Equatable {
     public var damagedNames: [String] = []
     /// The user closed the "restore from iCloud" offer on the empty room.
     public var restoreOfferDismissed = false
+    /// The account backups go to (`CloudBackupAccount.fingerprint`): the one signed in when the
+    /// user turned backup on, or later chose to keep backing up to. nil from builds before it
+    /// was remembered. Never an account name or the token itself.
+    public var account: String?
 
     public init() {}
 
@@ -442,12 +456,28 @@ public struct CloudBackupSettings: Codable, Sendable, Equatable {
         lastFailure = try values.decodeIfPresent(Failure.self, forKey: .lastFailure)
         damagedNames = try values.decodeIfPresent([String].self, forKey: .damagedNames) ?? []
         restoreOfferDismissed = try values.decodeIfPresent(Bool.self, forKey: .restoreOfferDismissed) ?? false
+        account = try values.decodeIfPresent(String.self, forKey: .account)
     }
 
     public mutating func rememberDamaged(_ archiveName: String) {
         damagedNames.removeAll { $0 == archiveName }
         damagedNames.append(archiveName)
         if damagedNames.count > Self.maxDamagedNames { damagedNames.removeFirst(damagedNames.count - Self.maxDamagedNames) }
+    }
+}
+
+// MARK: - Account
+
+/// Which Apple Account an iCloud Drive folder belongs to, without naming it: the system's
+/// identity token is hashed with a tag of this app, and only a short prefix is kept. Enough to
+/// tell two accounts apart on one device; nothing that identifies the person or matches the
+/// token elsewhere.
+public enum CloudBackupAccount {
+    static let tag = Data("meowverse.icloud-drive-backup.account.v1:".utf8)
+
+    /// `ud-` and 20 hex digits.
+    public static func fingerprint(token: Data) -> String {
+        "ud-" + PhotoIngest.sha256Hex(tag + token).prefix(20)
     }
 }
 
@@ -473,6 +503,14 @@ public enum CloudBackupPolicy {
 
     public enum Skip: Sendable, Equatable {
         case disabled
+        /// Signed in to another account than the one backups belong to, or the account changed
+        /// while this backup ran. Waits for the user's answer.
+        case otherAccount
+        /// No account was ever remembered (turned on while signed out, or by an older build) and
+        /// nothing shows this one is it. Not called another account; waits for the user to confirm.
+        case accountUnconfirmed
+        /// iCloud Drive is there but which account it belongs to cannot be told.
+        case accountUnknown
         /// An empty room is never backed up: it would only rotate real backups out.
         case emptyLibrary
         case unchanged
@@ -482,6 +520,36 @@ public enum CloudBackupPolicy {
     public enum Decision: Sendable, Equatable {
         case backUp
         case skip(Skip)
+    }
+
+    public enum AccountCheck: Sendable, Equatable {
+        /// Signed in to the account backups belong to.
+        case matches
+        /// Settings from before the account was remembered, and this device's last backup is in
+        /// this account's folder: the account is this one, and is remembered from now on.
+        case adopt(String)
+        /// Another account than the remembered one.
+        case differs
+        /// No account remembered, and nothing shows this is the one the user agreed for. Nothing
+        /// shows it is another either: the user is asked to confirm, in neutral words.
+        case unconfirmed
+        /// No account to compare, or the folder could not be read to find out.
+        case unknown
+    }
+
+    /// Whose iCloud Drive this is, compared with the account backups belong to. A remembered
+    /// account is never replaced here: only the user's answer does that. `listing` counts as
+    /// proof only if it was read while signed in to `current` (callers read the account before
+    /// and after listing, and pass nil when the two differ).
+    public static func checkAccount(remembered: String?, current: String?, lastSuccess: CloudBackupRecord?,
+                                    listing: CloudBackupListing?) -> AccountCheck {
+        guard let current else { return .unknown }
+        if let remembered { return remembered == current ? .matches : .differs }
+        guard let listing else { return .unknown }
+        guard let lastSuccess,
+              listing.entries.contains(where: { $0.name.archiveName == lastSuccess.archiveName && $0.condition != .damaged })
+        else { return .unconfirmed }
+        return .adopt(current)
     }
 
     public static func decide(enabled: Bool, trigger: Trigger, libraryIsEmpty: Bool, fingerprint: String,
@@ -508,6 +576,24 @@ public enum CloudBackupPolicy {
         let sorted = entries.sorted { CloudBackupName.newestFirst($0.name, $1.name) }
         return sorted.first { $0.condition == .verified } ?? sorted.first { $0.condition == .pending }
             ?? sorted.first { $0.condition == .unverified }
+    }
+
+    /// The backup an empty room offers: of those it may offer (`offersRestore`), the one
+    /// `recommended` would pick. Filtered first (QA_T2 R3-1): a newer empty backup from a third
+    /// device must not hide an older one with photos in it.
+    public static func restoreOffer(_ entries: [CloudBackupEntry]) -> CloudBackupEntry? {
+        recommended(entries.filter(offersRestore(of:)))
+    }
+
+    /// Whether an empty room offers this backup (QA_T2 R2-1). Not this device's own: it holds what
+    /// this library had, and a library whose only change was a name was offered its own backup
+    /// back. Not one whose info says it holds no photos and no furniture: there is nothing to bring
+    /// back. One whose info is not here yet is offered; unknown is not empty. Settings › iCloud
+    /// backup still lists them all.
+    public static func offersRestore(of entry: CloudBackupEntry) -> Bool {
+        guard !entry.isFromThisDevice else { return false }
+        if let info = entry.info, info.photoCount == 0, info.furnitureCount == 0 { return false }
+        return true
     }
 
     /// Whether the backup is known to be stored safely: uploaded to iCloud, or in a plain folder.
@@ -614,7 +700,21 @@ public enum CloudBackupEngine {
         guard availability == .available else { throw CloudBackupError.unavailable(availability) }
 
         let fingerprint = try await store.backupFingerprint()
+        // Only into the account the user agreed for: never into another person's iCloud Drive.
+        // Asked before and after the listing, so the listing is known to be of that account.
+        let listedUnder = destination.accountFingerprint()
         let before = try CloudBackupCatalog.load(from: destination, deviceID: context.deviceID, knownDamaged: Set(settings.damagedNames))
+        let account = destination.accountFingerprint()
+        guard listedUnder == account else {
+            log.notice("cloud backup stopped: the iCloud account changed")
+            return .skipped(.otherAccount)
+        }
+        switch CloudBackupPolicy.checkAccount(remembered: settings.account, current: account, lastSuccess: settings.lastSuccess, listing: before) {
+        case .matches, .adopt: break
+        case .differs: return .skipped(.otherAccount)
+        case .unconfirmed: return .skipped(.accountUnconfirmed)
+        case .unknown: return .skipped(.accountUnknown)
+        }
         // Still there and not found broken. Its info merely not being local (evicted) does not
         // make the library "changed": that would write a duplicate every day.
         let lastPresent = settings.lastSuccess.map { last in
@@ -633,14 +733,29 @@ public enum CloudBackupEngine {
             throw CloudBackupError.io("space")
         }
 
-        let record = try await write(store: store, destination: destination, context: context, now: now, progress: progress)
-        prune(destination: destination, context: context, knownDamaged: Set(settings.damagedNames))
+        let record: CloudBackupRecord
+        do {
+            record = try await write(store: store, destination: destination, account: account, context: context, now: now, progress: progress)
+        } catch AccountSwitched.during {
+            log.notice("cloud backup stopped: the iCloud account changed")
+            return .skipped(.otherAccount)
+        }
+        // Pruning lists and deletes in whatever account is signed in now: only in the one written to.
+        if destination.accountFingerprint() == account {
+            prune(destination: destination, context: context, knownDamaged: Set(settings.damagedNames))
+        } else {
+            log.notice("cloud backup not pruned: the iCloud account changed")
+        }
         return .completed(record)
     }
 
+    private enum AccountSwitched: Error { case during }
+
     /// Build locally → verify → move in → read back → info file. The info file is the last
     /// step: until it exists the new archive does not count, and nothing else was touched.
-    private static func write(store: LibraryStore, destination: any BackupDestination, context: Context, now: Date,
+    /// The account is asked again before each step that writes, since every call reaches the
+    /// iCloud Drive of whoever is signed in at that moment.
+    private static func write(store: LibraryStore, destination: any BackupDestination, account: String?, context: Context, now: Date,
                               progress: @escaping @Sendable (Double) -> Void) async throws -> CloudBackupRecord {
         let fm = FileManager.default
         let work = context.workDirectory
@@ -673,7 +788,9 @@ public enum CloudBackupEngine {
         progress(0.88)
         try Task.checkCancellation()
 
-        // 3. Move it in under a new name. An existing file is never replaced.
+        // 3. Move it in under a new name. An existing file is never replaced. Not at all if
+        // another account was signed in while it was built.
+        guard destination.accountFingerprint() == account else { throw AccountSwitched.during }
         try destination.place(local, as: name.archiveName)
 
         // 4. Read it back where it now is. If that fails the new file is taken out again.
@@ -683,7 +800,9 @@ public enum CloudBackupEngine {
         }
         progress(0.97)
 
-        // 5. The info file makes it count.
+        // 5. The info file makes it count; not in an account switched to since the move. The
+        // archive without it is an unverified leftover in the first account, pruned later there.
+        guard destination.accountFingerprint() == account else { throw AccountSwitched.during }
         let info = CloudBackupInfo(
             format: CloudBackupInfo.format, version: CloudBackupInfo.version, archiveName: name.archiveName, deviceID: context.deviceID,
             deviceKind: String(context.deviceKind.prefix(40)), createdAt: name.createdAt, revision: state.revision,

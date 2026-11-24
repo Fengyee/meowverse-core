@@ -1,0 +1,613 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D0000000000000000000001 /* MeowverseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4D0000000000000000000002 /* MeowverseCore */; };
+		4D0000000000000000000071 /* PocketCatWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4D0000000000000000000070 /* PocketCatWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4D00000000000000000000A1 /* MeowverseAssets.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 4D00000000000000000000A0 /* MeowverseAssets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4D0000000000000000000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4D0000000000000000000010 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D0000000000000000000020;
+			remoteInfo = Meowverse;
+		};
+		4D0000000000000000000072 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 4D0000000000000000000010 /* Project object */; proxyType = 1; remoteGlobalIDString = 4D0000000000000000000080; remoteInfo = PocketCatWidget; };
+		4D00000000000000000000A2 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 4D0000000000000000000010 /* Project object */; proxyType = 1; remoteGlobalIDString = 4D00000000000000000000B0; remoteInfo = MeowverseAssets; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D0000000000000000000073 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (4D0000000000000000000071 /* PocketCatWidget.appex in Embed App Extensions */, );
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D00000000000000000000A3 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (4D00000000000000000000A1 /* MeowverseAssets.appex in Embed ExtensionKit Extensions */, );
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4D0000000000000000000004 /* Meowverse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Meowverse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D0000000000000000000005 /* MeowverseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeowverseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D0000000000000000000006 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		4D0000000000000000000070 /* PocketCatWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PocketCatWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D00000000000000000000A0 /* MeowverseAssets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = MeowverseAssets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4D00000000000000000000C3 /* Exceptions for "Meowverse" folder in "MeowverseUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+				Tour.xcstrings,
+			);
+			target = 4D0000000000000000000030 /* MeowverseUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4D0000000000000000000007 /* Meowverse */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4D00000000000000000000C3 /* Exceptions for "Meowverse" folder in "MeowverseUITests" target */,
+			);
+			path = Meowverse;
+			sourceTree = "<group>";
+		};
+		4D0000000000000000000008 /* MeowverseUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MeowverseUITests;
+			sourceTree = "<group>";
+		};
+		4D0000000000000000000074 /* PocketCatShared */ = {isa = PBXFileSystemSynchronizedRootGroup; path = PocketCatShared; sourceTree = "<group>"; };
+		4D0000000000000000000075 /* PocketCatWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; path = PocketCatWidget; sourceTree = "<group>"; };
+		4D00000000000000000000A5 /* MeowverseAssets */ = {isa = PBXFileSystemSynchronizedRootGroup; path = MeowverseAssets; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D0000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D0000000000000000000001 /* MeowverseCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000031 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000081 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		4D00000000000000000000B1 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D0000000000000000000011 = {
+			isa = PBXGroup;
+			children = (
+				4D0000000000000000000006 /* Config.xcconfig */,
+				4D0000000000000000000007 /* Meowverse */,
+				4D0000000000000000000008 /* MeowverseUITests */,
+				4D0000000000000000000074 /* PocketCatShared */,
+				4D0000000000000000000075 /* PocketCatWidget */,
+				4D00000000000000000000A5 /* MeowverseAssets */,
+				4D0000000000000000000012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4D0000000000000000000012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D0000000000000000000004 /* Meowverse.app */,
+				4D0000000000000000000070 /* PocketCatWidget.appex */,
+				4D00000000000000000000A0 /* MeowverseAssets.appex */,
+				4D0000000000000000000005 /* MeowverseUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D0000000000000000000020 /* Meowverse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D0000000000000000000040 /* Build configuration list for PBXNativeTarget "Meowverse" */;
+			buildPhases = (
+				4D0000000000000000000022 /* Sources */,
+				4D0000000000000000000021 /* Frameworks */,
+				4D0000000000000000000023 /* Resources */,
+				4D0000000000000000000073 /* Embed App Extensions */,
+				4D00000000000000000000A3 /* Embed ExtensionKit Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4D0000000000000000000076 /* PBXTargetDependency */,
+				4D00000000000000000000A6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4D0000000000000000000074 /* PocketCatShared */,
+				4D0000000000000000000007 /* Meowverse */,
+			);
+			name = Meowverse;
+			packageProductDependencies = (
+				4D0000000000000000000002 /* MeowverseCore */,
+			);
+			productName = Meowverse;
+			productReference = 4D0000000000000000000004 /* Meowverse.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4D0000000000000000000030 /* MeowverseUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D0000000000000000000050 /* Build configuration list for PBXNativeTarget "MeowverseUITests" */;
+			buildPhases = (
+				4D0000000000000000000032 /* Sources */,
+				4D0000000000000000000031 /* Frameworks */,
+				4D0000000000000000000033 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4D0000000000000000000034 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4D0000000000000000000008 /* MeowverseUITests */,
+			);
+			name = MeowverseUITests;
+			productName = MeowverseUITests;
+			productReference = 4D0000000000000000000005 /* MeowverseUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		4D0000000000000000000080 /* PocketCatWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D0000000000000000000090 /* Build configuration list for PocketCatWidget */;
+			buildPhases = (4D0000000000000000000082 /* Sources */, 4D0000000000000000000081 /* Frameworks */, 4D0000000000000000000083 /* Resources */, );
+			buildRules = ();
+			dependencies = ();
+			fileSystemSynchronizedGroups = (4D0000000000000000000074 /* PocketCatShared */, 4D0000000000000000000075 /* PocketCatWidget */, );
+			name = PocketCatWidget;
+			productName = PocketCatWidget;
+			productReference = 4D0000000000000000000070 /* PocketCatWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		4D00000000000000000000B0 /* MeowverseAssets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D00000000000000000000C0 /* Build configuration list for MeowverseAssets */;
+			buildPhases = (4D00000000000000000000B2 /* Sources */, 4D00000000000000000000B1 /* Frameworks */, 4D00000000000000000000B3 /* Resources */, );
+			buildRules = ();
+			dependencies = ();
+			fileSystemSynchronizedGroups = (4D00000000000000000000A5 /* MeowverseAssets */, );
+			name = MeowverseAssets;
+			productName = MeowverseAssets;
+			productReference = 4D00000000000000000000A0 /* MeowverseAssets.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4D0000000000000000000010 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					4D0000000000000000000020 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					4D0000000000000000000030 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 4D0000000000000000000020;
+					};
+				};
+			};
+			buildConfigurationList = 4D0000000000000000000060 /* Build configuration list for PBXProject "Meowverse" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				"zh-Hans",
+				en,
+				Base,
+			);
+			mainGroup = 4D0000000000000000000011;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4D0000000000000000000009 /* XCLocalSwiftPackageReference "MeowverseCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4D0000000000000000000012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4D0000000000000000000020 /* Meowverse */,
+				4D0000000000000000000080 /* PocketCatWidget */,
+				4D00000000000000000000B0 /* MeowverseAssets */,
+				4D0000000000000000000030 /* MeowverseUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4D0000000000000000000023 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000033 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000083 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		4D00000000000000000000B3 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D0000000000000000000022 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000032 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D0000000000000000000082 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		4D00000000000000000000B2 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4D0000000000000000000034 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D0000000000000000000020 /* Meowverse */;
+			targetProxy = 4D0000000000000000000003 /* PBXContainerItemProxy */;
+		};
+		4D0000000000000000000076 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 4D0000000000000000000080 /* PocketCatWidget */; targetProxy = 4D0000000000000000000072 /* PBXContainerItemProxy */; };
+		4D00000000000000000000A6 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 4D00000000000000000000B0 /* MeowverseAssets */; targetProxy = 4D00000000000000000000A2 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4D0000000000000000000041 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-spring-sakura AppIcon-summer-sea AppIcon-autumn-maple AppIcon-winter-knit AppIcon-thanksgiving-harvest AppIcon-christmas-holly AppIcon-newyear-starlight AppIcon-lunar-newyear AppIcon-valentine-rose AppIcon-lantern-glow AppIcon-cream-classic AppIcon-midnight-sage";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "$(MEOWVERSE_ENTITLEMENTS_$(MEOWVERSE_ICLOUD_SYNC))";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = "Meowverse-Info.plist";
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "$(MEOWVERSE_INFOPLIST_DEFINITIONS_$(MEOWVERSE_ICLOUD_SYNC)) $(MEOWVERSE_TALK_INFOPLIST_$(MEOWVERSE_TALK_TO_BELLA))";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "你选择拍照时，用来拍一张猫咪或家具的照片，加入喵空间；打开「放到桌上看看」时，用来找到桌面、把房间放上去。相机画面只在这台设备上显示，不录制，也不保存。";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "用来把你在喵空间里拍的照片、你选择的回忆照片或房间明信片保存到系统相册。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "打开“从相册读取大图”后，用来读取已导入照片的原件，也可按你的选择把它们加入 Meowverse 相簿。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4D0000000000000000000042 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-spring-sakura AppIcon-summer-sea AppIcon-autumn-maple AppIcon-winter-knit AppIcon-thanksgiving-harvest AppIcon-christmas-holly AppIcon-newyear-starlight AppIcon-lunar-newyear AppIcon-valentine-rose AppIcon-lantern-glow AppIcon-cream-classic AppIcon-midnight-sage";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "$(MEOWVERSE_ENTITLEMENTS_$(MEOWVERSE_ICLOUD_SYNC))";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = "Meowverse-Info.plist";
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "$(MEOWVERSE_INFOPLIST_DEFINITIONS_$(MEOWVERSE_ICLOUD_SYNC)) $(MEOWVERSE_TALK_INFOPLIST_$(MEOWVERSE_TALK_TO_BELLA))";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "你选择拍照时，用来拍一张猫咪或家具的照片，加入喵空间；打开「放到桌上看看」时，用来找到桌面、把房间放上去。相机画面只在这台设备上显示，不录制，也不保存。";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "用来把你在喵空间里拍的照片、你选择的回忆照片或房间明信片保存到系统相册。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "打开“从相册读取大图”后，用来读取已导入照片的原件，也可按你的选择把它们加入 Meowverse 相簿。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4D0000000000000000000051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Meowverse;
+			};
+			name = Debug;
+		};
+		4D0000000000000000000052 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Meowverse;
+			};
+			name = Release;
+		};
+		4D0000000000000000000061 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4D0000000000000000000006 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		4D0000000000000000000062 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4D0000000000000000000006 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4D0000000000000000000091 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = PocketCatWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PocketCatWidget-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", );
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).pocketcat";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4D0000000000000000000092 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = PocketCatWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PocketCatWidget-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", );
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).pocketcat";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4D00000000000000000000C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MeowverseAssets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MeowverseAssets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", );
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).assets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4D00000000000000000000C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MeowverseAssets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MeowverseAssets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(MEOWVERSE_DISPLAY_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", );
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MEOWVERSE_BUNDLE_ID).assets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4D0000000000000000000040 /* Build configuration list for PBXNativeTarget "Meowverse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D0000000000000000000041 /* Debug */,
+				4D0000000000000000000042 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D0000000000000000000050 /* Build configuration list for PBXNativeTarget "MeowverseUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D0000000000000000000051 /* Debug */,
+				4D0000000000000000000052 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D0000000000000000000060 /* Build configuration list for PBXProject "Meowverse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D0000000000000000000061 /* Debug */,
+				4D0000000000000000000062 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D0000000000000000000090 /* Build configuration list for PocketCatWidget */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (4D0000000000000000000091 /* Debug */, 4D0000000000000000000092 /* Release */, );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D00000000000000000000C0 /* Build configuration list for MeowverseAssets */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (4D00000000000000000000C1 /* Debug */, 4D00000000000000000000C2 /* Release */, );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4D0000000000000000000009 /* XCLocalSwiftPackageReference "MeowverseCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MeowverseCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D0000000000000000000002 /* MeowverseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeowverseCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4D0000000000000000000010 /* Project object */;
+}

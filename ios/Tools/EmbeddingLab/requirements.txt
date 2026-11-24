@@ -1,0 +1,9 @@
+# EmbeddingLab, measured 2026-11-17 on macOS 26.7 (Apple silicon) with Python 3.12.
+# coremltools 9.0 warns that torch 2.15 is untested; the converted models were checked
+# photo by photo against PyTorch (compare.py), see README.
+torch==2.15.0
+transformers==5.23.0
+coremltools==9.0
+numpy==2.5.5
+pillow==13.0.0
+pillow-heif==1.8.1

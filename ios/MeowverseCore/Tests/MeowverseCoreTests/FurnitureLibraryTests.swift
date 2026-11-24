@@ -60,6 +60,9 @@ import Testing
         try await store.setLocked(instanceIds: [stool.instanceId], true)
         let reopened = LibraryStore(root: root, catalog: try TestSupport.catalog())
         #expect(try await reopened.load().storedFurniture[0].isLocked)
+        await #expect(throws: StoreError.locked) {
+            try await reopened.restoreFurniture(instanceId: stool.instanceId, placement: stool.placement)
+        }
         await #expect(throws: StoreError.locked) { try await reopened.removeFurniture(instanceId: stool.instanceId) }
         await #expect(throws: StoreError.unknownInstance) { try await reopened.setLocked(instanceIds: [stool.instanceId, "nope"], false) }
         #expect(await reopened.snapshot().storedFurniture[0].isLocked)
@@ -120,6 +123,108 @@ import Testing
         #expect(try await store.setCover(instanceId: chair.instanceId, photoId: first).coverPhotoId == nil)
         _ = try await store.setCover(instanceId: chair.instanceId, photoId: ids[0])
         #expect(try await store.setCover(instanceId: chair.instanceId, photoId: nil).coverPhotoId == nil)
+    }
+
+    // MARK: Taking photos off from the photo library, and taking that back
+
+    private func modelOriginChair(_ store: LibraryStore) async throws -> PhotoFurniture {
+        let recognition = RecognitionResult(analyzer: "test", analyzerRevision: 1,
+                                            objects: [ObservedObject(kind: .chair, label: "chair", confidence: 0.9)], catLikely: true)
+        return try await store.commitNewFurniture(draft: try TestSupport.draft(seed: 65),
+                                                  placement: Placement(modelId: "kenney-chair", x: 8, z: 8, width: 2, depth: 2),
+                                                  displayName: "认出来的椅", decision: SourceDecision(recognition: recognition, acceptedObjectIndex: 0))
+    }
+
+    /// One write takes a photo off every piece it is on (or only the pieces named), the photo
+    /// and the pieces stay, and undoing puts each link back where it was with its own origin,
+    /// observation and relation: undo never turns a recognised link into a hand-made one.
+    @Test func takingPhotosOffSeveralPiecesIsOneWriteAndUndoRestoresEachLinkExactly() async throws {
+        let (root, store, chair, stool, loose) = try await library()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let seen = try await modelOriginChair(store)
+        let shared = try #require(seen.sources.first)
+        #expect(shared.origin == .model && shared.observationId != nil)
+        let ids = loose.map(\.photoId)
+        try await store.linkPhotos(photoIds: [ids[0], shared.photoId, ids[1]], toInstance: chair.instanceId)
+        try await store.linkPhotos(photoIds: [shared.photoId], toInstance: stool.instanceId)
+        _ = try await store.linkPhotos(photoIds: [ids[2]], toInstance: seen.instanceId)
+        _ = try await store.setCover(instanceId: chair.instanceId, photoId: shared.photoId)
+        let before = await store.snapshot()
+
+        // Only the stool: the photo stays on the other two.
+        let one = try await store.unlinkPhotos(photoIds: [shared.photoId], fromInstances: [stool.instanceId])
+        #expect(one.removed.map(\.instanceId) == [stool.instanceId])
+        #expect(await store.snapshot().revision == before.revision + 1)
+        #expect(try await store.undoUnlink(one) == 1)
+        let undone = await store.snapshot()
+        for piece in before.allFurniture {
+            // Only the bookkeeping moves on; links, order and cover are as they were.
+            #expect(undone.anyFurniture(piece.instanceId)?.sources == piece.sources)
+            #expect(undone.anyFurniture(piece.instanceId)?.coverPhotoId == piece.coverPhotoId)
+        }
+
+        // Every piece at once, in one write: the photo is back in "not in any furniture".
+        let revision = await store.snapshot().revision
+        let all = try await store.unlinkPhotos(photoIds: [shared.photoId], fromInstances: nil)
+        var state = await store.snapshot()
+        #expect(state.revision == revision + 1)
+        #expect(Set(all.removed.map(\.instanceId)) == [chair.instanceId, stool.instanceId, seen.instanceId])
+        #expect(state.allFurniture.allSatisfy { !$0.sources.contains { $0.photoId == shared.photoId } })
+        #expect(state.photos.contains { $0.photoId == shared.photoId }, "the photo stays in the library")
+        #expect(state.observations.contains { $0.observationId == shared.observationId }, "and so does what was recognised")
+        #expect(state.anyFurniture(seen.instanceId)?.sources.map(\.photoId) == [ids[2]], "the piece stays, with its other photo")
+
+        #expect(try await store.undoUnlink(all) == 3)
+        state = await store.snapshot()
+        for piece in before.allFurniture {
+            let now = try #require(state.anyFurniture(piece.instanceId))
+            #expect(now.sources == piece.sources, "\(piece.displayName): same links, same order, same provenance")
+            #expect(now.cover == piece.cover)
+        }
+        let back = try #require(state.anyFurniture(seen.instanceId)?.sources.first)
+        #expect(back.origin == .model && back.observationId == shared.observationId && back.relationToCat == shared.relationToCat)
+    }
+
+    /// Undo comes late: what the user did meanwhile wins. A photo put back by hand, a piece
+    /// deleted, a photo deleted are each left as they are, and nothing else is written.
+    @Test func undoingATakeOffLeavesWhatChangedMeanwhileAlone() async throws {
+        let (root, store, chair, stool, loose) = try await library()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let ids = loose.map(\.photoId)
+        try await store.linkPhotos(photoIds: ids, toInstance: chair.instanceId)
+        try await store.linkPhotos(photoIds: [ids[0], ids[1]], toInstance: stool.instanceId)
+        let receipt = try await store.unlinkPhotos(photoIds: ids, fromInstances: nil)
+        #expect(receipt.removed.count == 5)
+
+        // Meanwhile: ids[0] goes back on the chair by hand, the stool is deleted, ids[2] is deleted.
+        try await store.linkPhotos(photoIds: [ids[0]], toInstance: chair.instanceId)
+        let byHand = try #require(await store.snapshot().anyFurniture(chair.instanceId)?.sources.last)
+        try await store.removeFurniture(instanceId: stool.instanceId)
+        try await store.deletePhoto(photoId: ids[2])
+
+        #expect(try await store.undoUnlink(receipt) == 1, "only ids[1] on the chair comes back")
+        let sources = try #require(await store.snapshot().anyFurniture(chair.instanceId)?.sources)
+        // ids[1] goes back to its old place, after the link made by hand.
+        #expect(sources.map(\.photoId) == [chair.sources[0].photoId, ids[0], ids[1]])
+        #expect(sources[1] == byHand, "the link made by hand is the user's, not replaced by the old one")
+
+        let revision = await store.snapshot().revision
+        #expect(try await store.undoUnlink(receipt) == 0)
+        #expect(await store.snapshot().revision == revision, "nothing left to undo writes nothing")
+    }
+
+    /// Unknown photos or pieces reject the whole call; a photo not on a named piece is skipped.
+    @Test func takingOffRejectsUnknownsAndSkipsPhotosThatAreNotThere() async throws {
+        let (root, store, chair, stool, loose) = try await library()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let before = await store.snapshot()
+        await #expect(throws: StoreError.unknownPhoto) { try await store.unlinkPhotos(photoIds: ["nope"], fromInstances: nil) }
+        await #expect(throws: StoreError.unknownInstance) {
+            try await store.unlinkPhotos(photoIds: [chair.sources[0].photoId], fromInstances: [chair.instanceId, "nope"])
+        }
+        let nothing = try await store.unlinkPhotos(photoIds: [loose[0].photoId], fromInstances: [stool.instanceId])
+        #expect(nothing.removed.isEmpty)
+        #expect(await store.snapshot() == before, "nothing to take off writes nothing")
     }
 
     @Test func reorderingKeepsEveryLinkAndRejectsAnythingElse() async throws {
@@ -235,5 +340,12 @@ import Testing
         #expect(try names(FurnitureQuery(sort: .created)) == ["Sofa", "café", "Bed 10", "bed 2"])
         #expect(try names(FurnitureQuery(sort: .added, ascending: false)) == ["café", "Bed 10", "bed 2", "Sofa"])
         #expect(FurnitureQuery.defaultAscending(for: .name) && !FurnitureQuery.defaultAscending(for: .photoCount))
+    }
+}
+
+private extension AppState {
+    /// A piece in a room or in the storage box.
+    func anyFurniture(_ instanceId: String) -> PhotoFurniture? {
+        allFurniture.first { $0.instanceId == instanceId }
     }
 }

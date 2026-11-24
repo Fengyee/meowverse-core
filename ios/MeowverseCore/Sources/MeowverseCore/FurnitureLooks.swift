@@ -35,6 +35,8 @@ public struct FurnitureLooks: Sendable, Equatable {
     private struct ModelLooks: Codable, Sendable, Equatable {
         let defaultPreset: String
         let presets: [String: [String: MaterialLook]]
+        /// A theme set: one look, no recolouring. Absent for ordinary furniture.
+        let fixedColours: Bool?
     }
 
     private struct File: Codable {
@@ -71,6 +73,8 @@ public struct FurnitureLooks: Sendable, Equatable {
     /// does not define falls back to the model's default.
     public func presetId(for finish: Finish, modelId: String) -> String? {
         guard let model = models[modelId] else { return nil }
+        // The stored finish is left as the user saved it; a set just never draws it.
+        if model.fixedColours == true { return model.defaultPreset }
         return mappedPreset(finish) ?? model.defaultPreset
     }
 
@@ -88,9 +92,11 @@ public struct FurnitureLooks: Sendable, Equatable {
     }
 
     /// The swatches a v2 model offers: one per preset in presets order, no "original" (it is the
-    /// default preset). nil for a model without looks (v1 art), which keeps every `Finish`.
+    /// default preset). nil for a model without looks (v1 art), which keeps every `Finish`; empty for
+    /// a theme set, which cannot be recoloured.
     public func pickerFinishes(modelId: String) -> [PickerChoice]? {
-        guard hasModel(modelId) else { return nil }
+        guard let model = models[modelId] else { return nil }
+        if model.fixedColours == true { return [] }
         return presets.compactMap { preset in
             finish(forPreset: preset.id).map { PickerChoice(finish: $0, preset: preset) }
         }

@@ -21,6 +21,17 @@ extension AppState {
             && allRooms == Self.empty.allRooms && allCats == Self.empty.allCats
     }
 
+    /// Nothing a backup could bring back would be lost: no photos, no furniture, the rooms and cats
+    /// of a new library, only perhaps with other names. A name given at the first launch (the
+    /// tour's naming page, or the user's own) must not hide the iCloud restore offer: a backup
+    /// listed a little late is still offered, and restoring replaces the names with the backup's.
+    public var isEmptyForRestoreOffer: Bool {
+        func unnamed(_ rooms: [Room]) -> [Room] { rooms.map { Room(roomId: $0.roomId, createdAt: $0.createdAt) } }
+        func unnamed(_ cats: [Cat]) -> [Cat] { cats.map { Cat(catId: $0.catId, name: "", roomId: $0.roomId) } }
+        return photos.isEmpty && items.isEmpty && storage.isEmpty
+            && unnamed(allRooms) == unnamed(Self.empty.allRooms) && unnamed(allCats) == unnamed(Self.empty.allCats)
+    }
+
     /// The cats to show in a room: those that live there, and those that keep the user company.
     public func cats(inRoom roomId: String) -> [Cat] {
         allCats.filter { $0.roomId == nil || $0.roomId == roomId }
@@ -55,28 +66,47 @@ extension AppState {
 /// question (which pieces hold this photo) and the counts without scanning every piece per
 /// photo. It is a snapshot: build a new one when the state changes.
 public struct LibraryIndex: Sendable {
-    private let furnitureById: [String: PhotoFurniture]
-    private let photosById: [String: PhotoRecord]
+    private var furnitureById: [String: PhotoFurniture]
+    private var photosById: [String: PhotoRecord]
     /// Furniture ids per photo, in `allFurniture` order.
-    private let furnitureIdsByPhoto: [String: [String]]
+    private var furnitureIdsByPhoto: [String: [String]]
+    private let furnitureOrder: [String: Int]
     private let roomByFurniture: [String: String]
 
     public init(state: AppState) {
         var furniture: [String: PhotoFurniture] = [:]
         var byPhoto: [String: [String]] = [:]
-        var rooms: [String: String] = [:]
         for piece in state.allFurniture {
             furniture[piece.instanceId] = piece
-            if let room = state.roomId(ofFurniture: piece.instanceId) { rooms[piece.instanceId] = room }
             for source in piece.sources {
                 byPhoto[source.photoId, default: []].append(piece.instanceId)
             }
         }
+        furnitureOrder = Dictionary(state.allFurniture.enumerated().map { ($1.instanceId, $0) }, uniquingKeysWith: { first, _ in first })
         furnitureById = furniture
         furnitureIdsByPhoto = byPhoto
-        roomByFurniture = rooms
+        roomByFurniture = Dictionary(state.placedFurniture.map { ($0.instanceId, AppState.roomId(of: $0)) },
+                                     uniquingKeysWith: { first, _ in first })
         photosById = Dictionary(state.photos.map { ($0.photoId, $0) }, uniquingKeysWith: { first, _ in first })
     }
+
+    mutating func applyPickerPhotos(_ records: [PhotoRecord], to item: PhotoFurniture?, links: [PhotoCarrierSource]) {
+        for record in records { photosById[record.photoId] = record }
+        guard let item else { return }
+        furnitureById[item.instanceId] = item
+        for source in links {
+            // Preserve allFurniture order even for a photo already linked to other pieces.
+            if furnitureIdsByPhoto[source.photoId] == nil {
+                furnitureIdsByPhoto[source.photoId] = [item.instanceId]
+            } else {
+                let order = furnitureOrder
+                furnitureIdsByPhoto[source.photoId, default: []].append(item.instanceId)
+                furnitureIdsByPhoto[source.photoId]?.sort { order[$0, default: 0] < order[$1, default: 0] }
+            }
+        }
+    }
+
+    public func photo(id: String) -> PhotoRecord? { photosById[id] }
 
     /// Every piece that holds the photo: those in rooms first, then those put away.
     public func furniture(ofPhoto photoId: String) -> [PhotoFurniture] {

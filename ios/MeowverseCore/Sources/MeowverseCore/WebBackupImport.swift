@@ -18,6 +18,11 @@ enum WebBackup {
     static let format = "meowverse-backup"
     static let supportedVersion = 6
 
+    // Web photo ids are opaque. This importer has always keyed its cached thumbnails by hash.
+    static func thumbnailPath(forHash hash: String) -> String {
+        "\(LibraryStore.thumbnailsDir)/\(hash).jpg"
+    }
+
     // MARK: Wire types (only the fields iOS reads; unknown keys are ignored)
 
     struct Skipped: Decodable {
@@ -153,7 +158,7 @@ enum WebBackup {
             throw BackupError.damaged("stateHash")
         }
         guard let web = try? JSONDecoder().decode(State.self, from: stateData), web.schemaVersion == supportedVersion,
-              web.revision >= 0 else { throw BackupError.damaged("state") }
+              LibraryStore.validRevision(web.revision) else { throw BackupError.damaged("state") }
 
         // Photos: unique ids and hashes, each with exactly one original in the manifest.
         guard web.photos.count <= reader.entries.count,
@@ -174,7 +179,7 @@ enum WebBackup {
         for photo in web.photos {
             try Task.checkCancellation()
             guard !photo.photoId.isEmpty, photo.photoId.utf8.count <= 200, BackupArchive.isHash(photo.sha256),
-                  photo.byteSize > 0, photo.byteSize <= PhotoIngest.maxBytes, photo.revision >= 0,
+                  photo.byteSize > 0, photo.byteSize <= PhotoIngest.maxBytes, LibraryStore.validRevision(photo.revision),
                   let media = originals[photo.originalBlobKey], media.photoId == photo.photoId,
                   media.sha256 == photo.sha256, media.byteSize == photo.byteSize,
                   let entry = reader.entry(media.path), entry.uncompressedSize == photo.byteSize,
@@ -213,8 +218,7 @@ enum WebBackup {
 
             let ext = UTType(mimeType: draft.mimeType)?.preferredFilenameExtension ?? "bin"
             let originalFile = "\(LibraryStore.originalsDir)/\(photo.sha256).\(ext)"
-            // Web photo ids are opaque strings; the hash is always a safe file name.
-            let thumbnailFile = "\(LibraryStore.thumbnailsDir)/\(photo.sha256).jpg"
+            let thumbnailFile = thumbnailPath(forHash: photo.sha256)
             try staging.write(original, to: originalFile)
             try staging.write(draft.thumbnailJPEG, to: thumbnailFile)
             let filename = String(photo.filename.prefix(255))
@@ -302,7 +306,7 @@ enum WebBackup {
 
         for item in web.gridRoom.items {
             // The web contract has only the four legacy finishes; anything else is not a web backup.
-            guard let finish = Finish(rawValue: item.finish), Finish.legacy.contains(finish), !item.sources.isEmpty, item.sources.count <= 1000,
+            guard LibraryStore.validRevision(item.revision), let finish = Finish(rawValue: item.finish), Finish.legacy.contains(finish), !item.sources.isEmpty, item.sources.count <= 1000,
                   Set(item.sources.map(\.photoId)).count == item.sources.count,
                   !item.displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             else { throw BackupError.damaged("item") }

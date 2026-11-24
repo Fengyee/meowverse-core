@@ -7,6 +7,21 @@ public enum FurnitureCategory: String, Codable, CaseIterable, Sendable {
     case litterBox, windowPerch, water
     /// Hangs on a wall and holds photos in which no furniture can be made out.
     case photoBoard
+    /// Household furniture (schema 12). Picked from the catalogue only: photo recognition never
+    /// names them (`isRecognisedFromPhotos`). Several are decorative (`CatalogModel.isDecorative`).
+    case bookcase, sideboard, mediaConsole, writingDesk, vanity
+    case coatRack, floorLamp, roomDivider, plantStand, fireplace
+
+    /// Whether the photo review offers this category: recognition can name it, and the manual
+    /// list shows it. The household categories are catalogue-only for now.
+    public var isRecognisedFromPhotos: Bool {
+        switch self {
+        case .chair, .stool, .bench, .table, .bed, .sofa, .scratcher, .catTree, .platform, .hideout, .toy,
+             .litterBox, .windowPerch, .water, .photoBoard: true
+        case .bookcase, .sideboard, .mediaConsole, .writingDesk, .vanity,
+             .coatRack, .floorLamp, .roomDivider, .plantStand, .fireplace: false
+        }
+    }
 }
 
 /// The colour a placed piece is drawn in. The first four mirror `Finish` in
@@ -47,6 +62,9 @@ public struct CatalogModel: Identifiable, Codable, Sendable, Equatable {
 
         /// A scratch on a low horizontal board: the flat forepaw strokes, not the raised ones.
         public var scratchesFlat: Bool { poseHint == "paw-flat" }
+        /// A toy lying on the floor (round 7 soft furnishings): she bats it with the ground paw
+        /// (`bat_ground`, as the play props), not the raised one that reaches 0.70 up.
+        public var batsAtGround: Bool { poseHint == "bat-ground" }
     }
 
     /// Where a piece of this model goes: on floor cells, or on a wall where it uses none.
@@ -79,9 +97,13 @@ public struct CatalogModel: Identifiable, Codable, Sendable, Equatable {
         case storedMount = "mount"
     }
 
-    /// Nothing for a wall piece: Bella cannot get onto it.
+    /// A floor piece with an explicitly empty site list (TECH_SPEC §4): the cat has nothing to do
+    /// there and walks round it like any obstacle. A missing list is a legacy model, not this.
+    public var isDecorative: Bool { mount == .floor && sites?.isEmpty == true }
+
+    /// Nothing for a wall piece or a decorative one: Bella cannot get onto it.
     public var interactionSites: [Site] {
-        if mount == .wall { return [] }
+        if mount == .wall || isDecorative { return [] }
         return sites ?? [Site(id: "seat", label: "座面", position: seat.position, facing: seat.facing,
                        actions: [CatRoutine.action(on: category)], via: [])]
     }
@@ -160,7 +182,7 @@ public struct FurnitureCatalog: Sendable, Equatable {
     }
 
     private static func validateSites(_ model: CatalogModel) throws {
-        guard let sites = model.sites else { return }
+        guard let sites = model.sites, !model.isDecorative else { return }
         guard !sites.isEmpty, Set(sites.map(\.id)).count == sites.count,
               let fit = GridRules.fit(model, width: model.defaultWidth, depth: model.defaultDepth) else {
             throw CatalogError.invalid("badSites")

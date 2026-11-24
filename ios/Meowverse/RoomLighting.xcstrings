@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "光线" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lighting" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "光线" } }
+      }
+    },
+    "恒定柔光" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Steady soft light" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "恒定柔光" } }
+      }
+    },
+    "跟随当地时间" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Follow local time" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跟随当地时间" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

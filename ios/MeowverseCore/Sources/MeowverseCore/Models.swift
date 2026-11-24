@@ -8,7 +8,7 @@ public enum CaptureDateSource: String, Codable, Sendable, Equatable {
 /// One imported original. `id == photoId`.
 ///
 /// `captureDate` / `captureDateSource` are the day the app shows. `exifCaptureDate` is the day
-/// read from the file at import and never changes, so a user edit can always be undone.
+/// read from the file, so a user edit can always be undone.
 public struct PhotoRecord: Identifiable, Codable, Sendable, Equatable {
     public var id: String { photoId }
 
@@ -17,8 +17,8 @@ public struct PhotoRecord: Identifiable, Codable, Sendable, Equatable {
     public let sha256: String
     public let mimeType: String
     public let byteSize: Int
-    public let width: Int
-    public let height: Int
+    public internal(set) var width: Int
+    public internal(set) var height: Int
     /// Path relative to the store root, e.g. `originals/<sha256>.jpeg`.
     public let originalFile: String
     /// Path relative to the store root, e.g. `thumbnails/<photoId>.jpg`.
@@ -27,7 +27,7 @@ public struct PhotoRecord: Identifiable, Codable, Sendable, Equatable {
     public var captureDate: String?
     public var captureDateSource: CaptureDateSource
     /// `yyyy-MM-dd` from the file's EXIF DateTimeOriginal, or nil if the file has none.
-    public let exifCaptureDate: String?
+    public internal(set) var exifCaptureDate: String?
     public let importedAt: Date
     public var favorite: Bool
     /// Plain text, at most 2000 UTF-16 code units; empty allowed.
@@ -79,13 +79,18 @@ public struct PhotoRecord: Identifiable, Codable, Sendable, Equatable {
     /// A photo an older build stored whole matches the reduced draft of the same picked file.
     public func isSamePhoto(as draft: ImportDraft) -> Bool {
         if sha256 == draft.sha256 { return true }
-        guard let source = draft.reducedFrom?.sha256 else { return false }
-        return sha256 == source || reducedFrom?.sha256 == source
+        return (reducedFrom?.sha256 ?? sha256) == (draft.reducedFrom?.sha256 ?? draft.sha256)
     }
 
     /// Identical bytes may belong to two distinct Photos assets. Keep identifiers paired.
     mutating func learnLibraryIdentifiers(from draft: ImportDraft) {
-        guard let local = draft.assetIdentifier, assetIdentifier == nil || assetIdentifier == local,
+        guard let local = draft.assetIdentifier else { return }
+        if draft.missingLibraryBinding?.matches(self) == true {
+            assetIdentifier = local
+            cloudIdentifier = draft.cloudIdentifier
+            return
+        }
+        guard assetIdentifier == nil || assetIdentifier == local,
               cloudIdentifier == nil || draft.cloudIdentifier == cloudIdentifier else { return }
         assetIdentifier = local
         if cloudIdentifier == nil { cloudIdentifier = draft.cloudIdentifier }
@@ -407,7 +412,10 @@ public struct AppState: Codable, Sendable, Equatable {
     ///     The installed v9 room build would discard cloud identifiers, locks, covers and dates.
     /// 11: room and cat lists, plus each piece's room assignment. Development v8 homes may
     ///     already contain these fields. V9 and v10 readers would drop them on their next save.
-    public static let currentSchemaVersion = 11
+    /// 12: ten household categories (bookcase … fireplace) in observations and through their
+    ///     model ids. A v11 reader cannot decode them, so it must report the file as newer.
+    ///     Nothing else changed: v11 files load as they are.
+    public static let currentSchemaVersion = 12
     /// Oldest layout this build still reads (and rewrites as the current one on the next save).
     public static let oldestReadableSchemaVersion = 1
     public static let defaultCatName = "Kitty"
@@ -504,10 +512,32 @@ public struct AppState: Codable, Sendable, Equatable {
     }
 
     private static func normalizedName(_ raw: String, max: Int) -> String? {
-        let cleaned = String(raw.unicodeScalars.filter { !CharacterSet.controlCharacters.contains($0) && !CharacterSet.newlines.contains($0) })
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !cleaned.isEmpty, cleaned.count <= max else { return nil }
+        // Whitespace and joiners at either end join nothing (QA_T2 R2-2).
+        let atTheEnds = CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: "\u{200C}\u{200D}"))
+        let cleaned = String(raw.unicodeScalars.filter { !isDroppedFromName($0) })
+            .trimmingCharacters(in: atTheEnds)
+        // At least one scalar that is seen: joiners and tag characters alone are no name.
+        let seen = cleaned.unicodeScalars.contains { scalar in
+            switch scalar.properties.generalCategory {
+            case .format, .control, .spaceSeparator, .lineSeparator, .paragraphSeparator: false
+            default: !scalar.properties.isWhitespace
+            }
+        }
+        guard seen, cleaned.count <= max else { return nil }
         return cleaned
+    }
+
+    /// Control characters, line breaks and invisible format characters. Not the format characters
+    /// that hold an emoji together: the zero-width joiner and non-joiner (🐈‍⬛, 👩‍👩‍👧) and the tag
+    /// characters of a subdivision flag. `CharacterSet.controlCharacters` takes in all format
+    /// characters and split those emoji. Variation selectors are marks, never dropped.
+    private static func isDroppedFromName(_ scalar: Unicode.Scalar) -> Bool {
+        if CharacterSet.newlines.contains(scalar) { return true }
+        switch scalar.properties.generalCategory {
+        case .control: return true
+        case .format: return !(scalar.value == 0x200C || scalar.value == 0x200D || (0xE0020...0xE007F).contains(scalar.value))
+        default: return false
+        }
     }
 }
 

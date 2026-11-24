@@ -4,11 +4,13 @@ public struct CatPackLimits: Sendable, Equatable {
     public var maxFileBytes: Int
     public var maxTotalBytes: Int
     public var maxEntries: Int
+    public var maxTotalTexturePixels: Int
 
-    public init(maxFileBytes: Int, maxTotalBytes: Int, maxEntries: Int) {
+    public init(maxFileBytes: Int, maxTotalBytes: Int, maxEntries: Int, maxTotalTexturePixels: Int = 16 * 1_048_576) {
         self.maxFileBytes = maxFileBytes
         self.maxTotalBytes = maxTotalBytes
         self.maxEntries = maxEntries
+        self.maxTotalTexturePixels = maxTotalTexturePixels
     }
 
     /// A high-resolution USDZ is the largest file; three meshes and the rig are a few MB each.
@@ -91,14 +93,15 @@ public final class CatPackStore: Sendable {
         guard !reservedIDs.contains(manifest.id) else { throw CatPackError.reservedID }
 
         // Pass one: everything decodes. Nothing is written yet.
-        try CatPackValidator.validate(manifest: manifest, file: read)
+        try CatPackValidator.validate(manifest: manifest, limits: limits, file: read)
 
         // Pass two: write the files the manifest names, and only those.
         let staging = root.appending(path: ".staging-\(UUID().uuidString)", directoryHint: .isDirectory)
         do {
             try fm.createDirectory(at: staging, withIntermediateDirectories: true)
             try manifestData.write(to: staging.appending(path: "cat.json"))
-            for name in manifest.requiredFiles + manifest.optionalFiles {
+            // An imported pack keeps every tier it carries in its own folder (nothing to download).
+            for name in manifest.requiredFiles + manifest.optionalFiles + manifest.tierFiles {
                 guard let data = try read(name) else { throw CatPackError.missingFile(name) }
                 try data.write(to: staging.appending(path: name))
             }
@@ -118,6 +121,12 @@ public final class CatPackStore: Sendable {
               fm.fileExists(atPath: staged.stagingURL.path) else { throw CatPackError.notFound }
         do {
             if fm.fileExists(atPath: destination.path) {
+                if renamex_np(staged.stagingURL.path, destination.path, UInt32(RENAME_SWAP)) == 0 {
+                    try? fm.removeItem(at: staged.stagingURL)
+                    return
+                }
+                let code = errno
+                guard code == ENOTSUP || code == EINVAL else { throw CatPackError.writeFailed }
                 let old = root.appending(path: ".old-\(UUID().uuidString)", directoryHint: .isDirectory)
                 try fm.moveItem(at: destination, to: old)
                 do {
@@ -148,10 +157,22 @@ public final class CatPackStore: Sendable {
         do { try fm.removeItem(at: folder) } catch { throw CatPackError.writeFailed }
     }
 
-    /// Staging and replaced folders left by an interrupted import.
+    /// Recover the version parked by an interrupted two-rename replacement before removing its staging folder.
     public func removeLeftovers() {
         guard let names = try? fm.contentsOfDirectory(atPath: root.path) else { return }
-        for name in names where name.hasPrefix(".staging-") || name.hasPrefix(".old-") {
+        for name in names.sorted() where name.hasPrefix(".old-") {
+            let old = root.appending(path: name, directoryHint: .isDirectory)
+            guard let data = try? Data(contentsOf: old.appending(path: "cat.json")),
+                  let manifest = try? CatPackManifest.decode(data), !reservedIDs.contains(manifest.id) else { continue }
+            let live = directory(for: manifest.id)
+            if !fm.fileExists(atPath: live.path) {
+                try? fm.moveItem(at: old, to: live)
+            } else if let data = try? Data(contentsOf: live.appending(path: "cat.json")),
+                      (try? CatPackManifest.decode(data))?.id == manifest.id {
+                try? fm.removeItem(at: old)
+            }
+        }
+        for name in names where name.hasPrefix(".staging-") {
             try? fm.removeItem(at: root.appending(path: name))
         }
     }

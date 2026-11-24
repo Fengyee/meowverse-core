@@ -286,6 +286,403 @@
       ]
     },
     {
+      "id": "mv-bed-d",
+      "label": "圆形拉扣坐垫",
+      "category": "bed",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-bed-d.json",
+      "sha256": "8fe6a19e5950d89929e9fd90c6503965aed5e2decc1a836794b03b5ae029b2c3",
+      "bytes": 107141,
+      "bounds": {
+        "min": [
+          -2.62579,
+          0,
+          -2.62579
+        ],
+        "max": [
+          2.62579,
+          1.34998,
+          2.62579
+        ]
+      },
+      "triangles": 2062,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.20413,
+          -0.75
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "cushion",
+          "label": "坐垫上",
+          "position": [
+            0,
+            1.20413,
+            -0.75
+          ],
+          "facing": 0,
+          "actions": [
+            "sleep",
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            1,
+            1.45,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bed-e",
+      "label": "椭圆编织地毯",
+      "category": "bed",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bed-e.json",
+      "sha256": "d13ae1be266fb8d90b3cbdb80f963644cb54f87207b24691576e2e013d204fc9",
+      "bytes": 253778,
+      "bounds": {
+        "min": [
+          -4.0095,
+          0,
+          -2.673
+        ],
+        "max": [
+          4.0095,
+          0.3825,
+          2.673
+        ]
+      },
+      "triangles": 4724,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.243,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "rug",
+          "label": "地毯上",
+          "position": [
+            0,
+            0.243,
+            0
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            1,
+            1.45,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bed-f",
+      "label": "浴缸猫窝",
+      "category": "bed",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bed-f.json",
+      "sha256": "cf88332a5c95dae053b0a5a7c78d23904bcf1236060d3c604efaf2783f954507",
+      "bytes": 392605,
+      "bounds": {
+        "min": [
+          -3.77683,
+          0,
+          -2.73815
+        ],
+        "max": [
+          3.77619,
+          2.88878,
+          2.74061
+        ]
+      },
+      "triangles": 6788,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -0.0781,
+          1.59,
+          -0.61939
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "nest",
+          "label": "浴缸窝里",
+          "position": [
+            -0.0781,
+            1.59,
+            -0.61939
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "sit",
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              -0.0781,
+              0.96151,
+              2.44061
+            ]
+          ],
+          "clearance": [
+            1,
+            1.45,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bed-g",
+      "label": "珠冠软包寝榻",
+      "category": "bed",
+      "defaultSize": [
+        4,
+        4
+      ],
+      "sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "mv/mv-bed-g.json",
+      "sha256": "fab9d52e3a743ff5a6c2cfe5839208d57b39c0975b3376dbdc5ba4f3600e2206",
+      "bytes": 494873,
+      "bounds": {
+        "min": [
+          -4.545,
+          0,
+          -4.6968
+        ],
+        "max": [
+          4.545,
+          6.855,
+          4.69702
+        ]
+      },
+      "triangles": 7858,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.4,
+          0.45
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "bed-rest",
+          "label": "丝绒床面",
+          "position": [
+            0,
+            2.4,
+            0.45
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              1.2,
+              2.208,
+              4.101
+            ]
+          ],
+          "clearance": [
+            0.99,
+            1.45,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bed-h",
+      "label": "月影架子床",
+      "category": "bed",
+      "defaultSize": [
+        4,
+        4
+      ],
+      "sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "mv/mv-bed-h.json",
+      "sha256": "a571ddc2070eac39682b996e2d810d78deaba35b42d1bab5c9d5ee7d813691f8",
+      "bytes": 551134,
+      "bounds": {
+        "min": [
+          -4.245,
+          0.00009,
+          -3.66
+        ],
+        "max": [
+          4.245,
+          9.303,
+          3.66
+        ]
+      },
+      "triangles": 7856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.91,
+          1.11
+        ],
+        "facing": -1.5708
+      },
+      "sites": [
+        {
+          "id": "bed-rest",
+          "label": "架子床",
+          "position": [
+            0,
+            2.91,
+            1.11
+          ],
+          "facing": -1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              1.5,
+              1.863,
+              3.501
+            ]
+          ],
+          "clearance": [
+            1,
+            1.45,
+            0.95
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bed-i",
+      "label": "春眠和式床",
+      "category": "bed",
+      "defaultSize": [
+        4,
+        4
+      ],
+      "sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "path": "mv/mv-bed-i.json",
+      "sha256": "205401cd7452520224dec4c3103fcdb1d0f550435f3a1d8a245e2befa43d29d0",
+      "bytes": 483689,
+      "bounds": {
+        "min": [
+          -4.185,
+          0,
+          -4.59
+        ],
+        "max": [
+          4.185,
+          2.54752,
+          4.59
+        ]
+      },
+      "triangles": 7780,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.2515,
+          0.9
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "futon-nap",
+          "label": "春眠铺盖",
+          "position": [
+            0,
+            2.2515,
+            0.9
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              -3.525,
+              1.512,
+              3.78
+            ]
+          ],
+          "clearance": [
+            0.99,
+            1.46,
+            0.93
+          ]
+        }
+      ]
+    },
+    {
       "id": "mv-bench-a",
       "label": "储物箱长凳",
       "category": "bench",
@@ -607,6 +1004,312 @@
           ]
         }
       ]
+    },
+    {
+      "id": "mv-bookcase-a",
+      "label": "拱门故事书架",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-a.json",
+      "sha256": "ecf69822831d819a6caa8ee75a6b2e50b3de8c65b216fd0c71cefe5bf7f8d402",
+      "bytes": 245723,
+      "bounds": {
+        "min": [
+          -3.96,
+          0,
+          -2.55
+        ],
+        "max": [
+          3.96,
+          7.869,
+          2.55
+        ]
+      },
+      "triangles": 3572,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.945,
+          0.045
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "reading-nook",
+          "label": "阅读窝",
+          "position": [
+            0,
+            0.945,
+            0.045
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            1.34,
+            0.88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bookcase-b",
+      "label": "枝芽书树",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-b.json",
+      "sha256": "3b48c995417fbca1b50aad346b48a79fd5b6e4a88833924bcd346c216a7e598f",
+      "bytes": 300669,
+      "bounds": {
+        "min": [
+          -3.96,
+          0,
+          -2.58
+        ],
+        "max": [
+          3.96,
+          8.34,
+          2.58
+        ]
+      },
+      "triangles": 4390,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.92,
+          0.81,
+          0.06
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "root-reading",
+          "label": "树根小憩",
+          "position": [
+            1.92,
+            0.81,
+            0.06
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            1.42,
+            0.88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bookcase-c",
+      "label": "阶梯方格书塔",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-c.json",
+      "sha256": "4c970da005e87af7926091fe47b4c9e69d7a411eab0a86b60d556e330271a0bb",
+      "bytes": 264534,
+      "bounds": {
+        "min": [
+          -4.05,
+          0,
+          -2.58
+        ],
+        "max": [
+          4.05,
+          6.54,
+          2.58
+        ]
+      },
+      "triangles": 3652,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -2.61,
+          2.16,
+          0.03
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "low-step",
+          "label": "阶梯停留",
+          "position": [
+            -2.61,
+            2.16,
+            0.03
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.68,
+            1.4,
+            0.88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-bookcase-d",
+      "label": "拱廊宫廷藏书架",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-d.json",
+      "sha256": "ef5e49a5c8fb9e5d4c61b9a705a67122e00a475a53991a1fa2c193a368c358c2",
+      "bytes": 406542,
+      "bounds": {
+        "min": [
+          -3.54184,
+          0,
+          -1.45412
+        ],
+        "max": [
+          3.54184,
+          9.03,
+          1.45193
+        ]
+      },
+      "triangles": 5876,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-bookcase-e",
+      "label": "玲珑博古架",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-e.json",
+      "sha256": "57840fed3e3dc6a5015903ff9a3d660bf26533766175a8192d452d9c9d7adf21",
+      "bytes": 398380,
+      "bounds": {
+        "min": [
+          -3.909,
+          -0.00015,
+          -1.485
+        ],
+        "max": [
+          3.909,
+          8.34,
+          1.485
+        ]
+      },
+      "triangles": 5856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-bookcase-f",
+      "label": "障子书架",
+      "category": "bookcase",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-bookcase-f.json",
+      "sha256": "0c4ec72076fa34c870f70135ecad482fa3cff49924f3a1d4a08a3aeb98c415ec",
+      "bytes": 412384,
+      "bounds": {
+        "min": [
+          -4.05,
+          -0.00014,
+          -1.82175
+        ],
+        "max": [
+          4.05,
+          7.584,
+          1.82175
+        ]
+      },
+      "triangles": 5856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
     },
     {
       "id": "mv-cat-tree-a",
@@ -1350,6 +2053,283 @@
       ]
     },
     {
+      "id": "mv-cat-tree-d",
+      "label": "月桂皇家观景塔",
+      "category": "catTree",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-cat-tree-d.json",
+      "sha256": "8ba87b5a5416e1f554b39044ffa2289ba982acb2fb86af9bc224b0afa6eeaaac",
+      "bytes": 473937,
+      "bounds": {
+        "min": [
+          -4.87684,
+          0,
+          -3.53129
+        ],
+        "max": [
+          4.87684,
+          9.1606,
+          3.47291
+        ]
+      },
+      "triangles": 7876,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.08,
+          6.96,
+          1.05
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "crown-perch",
+          "label": "皇冠观景台",
+          "position": [
+            1.08,
+            6.96,
+            1.05
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sit"
+          ],
+          "via": [
+            [
+              -0.3,
+              0.54,
+              2.55
+            ],
+            [
+              -1.86,
+              2.79,
+              -1.8
+            ],
+            [
+              -3.399,
+              5.04,
+              1.5
+            ]
+          ],
+          "clearance": [
+            0.78,
+            1.3,
+            1.1
+          ]
+        },
+        {
+          "id": "low-perch",
+          "label": "丝绒侧台",
+          "position": [
+            -3.48,
+            5.04,
+            1.395
+          ],
+          "facing": 0.654,
+          "actions": [
+            "sit"
+          ],
+          "via": [
+            [
+              -0.3,
+              0.54,
+              2.55
+            ],
+            [
+              -1.86,
+              2.79,
+              -1.8
+            ]
+          ],
+          "clearance": [
+            0.75,
+            0.8,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-cat-tree-e",
+      "label": "云山观景阁",
+      "category": "catTree",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-cat-tree-e.json",
+      "sha256": "3cb134f6d08d7320429001b07467268b7a4e4d6a09757b372220773d9bf45acf",
+      "bytes": 430571,
+      "bounds": {
+        "min": [
+          -5.07,
+          0,
+          -3.1725
+        ],
+        "max": [
+          5.07,
+          9.58886,
+          3.1725
+        ]
+      },
+      "triangles": 6750,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.56,
+          4.689,
+          0.3
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "pavilion-perch",
+          "label": "观景阁软垫",
+          "position": [
+            -1.56,
+            4.689,
+            0.3
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [
+            [
+              3.96,
+              1.899,
+              1.7625
+            ],
+            [
+              2.94,
+              3.609,
+              -0.6075
+            ],
+            [
+              1.17,
+              4.5,
+              -0.69
+            ]
+          ],
+          "clearance": [
+            0.76,
+            1.35,
+            0.95
+          ]
+        },
+        {
+          "id": "ground-step",
+          "label": "低踏台",
+          "position": [
+            3.45,
+            1.899,
+            1.941
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.76,
+            0.78,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-cat-tree-f",
+      "label": "樱庭猫爬架",
+      "category": "catTree",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-cat-tree-f.json",
+      "sha256": "1d8d6ae984db62160cdba9c9fb57e26dd53636ec33b3615184e345be03be8d3b",
+      "bytes": 480234,
+      "bounds": {
+        "min": [
+          -5.50808,
+          0,
+          -3
+        ],
+        "max": [
+          5.50808,
+          8.81194,
+          3
+        ]
+      },
+      "triangles": 7276,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.35,
+          4.656,
+          0.06
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "lookout",
+          "label": "草席观景台",
+          "position": [
+            -1.35,
+            4.656,
+            0.06
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sit"
+          ],
+          "via": [
+            [
+              3.618,
+              1.635,
+              1.68
+            ],
+            [
+              3.438,
+              3.141,
+              -0.96
+            ]
+          ],
+          "clearance": [
+            0.78,
+            1.37,
+            1.25
+          ]
+        }
+      ]
+    },
+    {
       "id": "mv-chair-a",
       "label": "温莎椅",
       "category": "chair",
@@ -1500,8 +2480,8 @@
         ]
       ],
       "path": "mv/mv-chair-c.json",
-      "sha256": "6e0c741049bc495ab7296c64b6a0d6f201d25770bd9b178c9fb2751a2d08128c",
-      "bytes": 323194,
+      "sha256": "a0feb8239b48ba89f4d81dfb7b59c3252016f066864f908bd63e3e2028038ad6",
+      "bytes": 323166,
       "bounds": {
         "min": [
           -2.46,
@@ -1518,22 +2498,22 @@
       "orientationY": 0,
       "seat": {
         "position": [
-          -0.1728,
-          1.76609,
-          0.84
+          0.03,
+          1.77099,
+          0.81
         ],
-        "facing": 0.2618
+        "facing": 0.17453
       },
       "sites": [
         {
           "id": "seat",
           "label": "座位",
           "position": [
-            -0.1728,
-            1.76609,
-            0.84
+            0.03,
+            1.77099,
+            0.81
           ],
-          "facing": 0.2618,
+          "facing": 0.17453,
           "actions": [
             "sit",
             "loaf"
@@ -1546,6 +2526,858 @@
           ]
         }
       ]
+    },
+    {
+      "id": "mv-chair-d",
+      "label": "人体工学椅",
+      "category": "chair",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-chair-d.json",
+      "sha256": "a7bbda3fab46593c7108f4c273c5b84a44a3536ec061c7161ebc83ace5f6750d",
+      "bytes": 349926,
+      "bounds": {
+        "min": [
+          -2.35428,
+          0,
+          -2.25374
+        ],
+        "max": [
+          2.35428,
+          4.98,
+          2.25374
+        ]
+      },
+      "triangles": 5882,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.11061,
+          0.83626
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "seat",
+          "label": "座位",
+          "position": [
+            0,
+            2.11061,
+            0.83626
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-chair-e",
+      "label": "折叠懒人椅",
+      "category": "chair",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-chair-e.json",
+      "sha256": "381c21c28a6793053b01c55ad4b0913b66ac53d54b801141d9d1e0597914b201",
+      "bytes": 208229,
+      "bounds": {
+        "min": [
+          -2.661,
+          0,
+          -2.74628
+        ],
+        "max": [
+          2.661,
+          3.00751,
+          2.74628
+        ]
+      },
+      "triangles": 3734,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.91053,
+          1.29472
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "seat",
+          "label": "座位",
+          "position": [
+            0,
+            0.91053,
+            1.29472
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        },
+        {
+          "id": "nap",
+          "label": "坐垫上打盹",
+          "position": [
+            0,
+            0.91053,
+            1.29472
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            1,
+            1.45,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-chair-f",
+      "label": "月桂迷你王座",
+      "category": "chair",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-chair-f.json",
+      "sha256": "c1500202148111558a4d4bfff9f780f072acec7b42ecdcadca1dd611ea2d481f",
+      "bytes": 370076,
+      "bounds": {
+        "min": [
+          -2.88064,
+          0,
+          -2.55021
+        ],
+        "max": [
+          2.88095,
+          7.47222,
+          2.55017
+        ]
+      },
+      "triangles": 5870,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.52,
+          0.3
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "throne-seat",
+          "label": "王座软垫",
+          "position": [
+            0,
+            2.52,
+            0.3
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [
+            [
+              0,
+              1.68,
+              2.19
+            ]
+          ],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-chair-g",
+      "label": "团圆圈椅",
+      "category": "chair",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-chair-g.json",
+      "sha256": "07f1ab8bb11e96e2d40f14a91b6d81aaf0a55d52db28fb9ffa92db2972493d6b",
+      "bytes": 321780,
+      "bounds": {
+        "min": [
+          -2.66993,
+          0,
+          -2.32925
+        ],
+        "max": [
+          2.66993,
+          6.0985,
+          2.32925
+        ]
+      },
+      "triangles": 5642,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.5818,
+          0.4242
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "chair-seat",
+          "label": "圈椅软垫",
+          "position": [
+            0,
+            2.5818,
+            0.4242
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [
+            [
+              0,
+              2.1,
+              2.199
+            ]
+          ],
+          "clearance": [
+            0.77,
+            0.96,
+            1.22
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-chair-h",
+      "label": "和风座椅",
+      "category": "chair",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-chair-h.json",
+      "sha256": "14df83db4b316743a0663b76966aa1ece8effafaeb9600c198adabbc946be0bb",
+      "bytes": 221823,
+      "bounds": {
+        "min": [
+          -2.3828,
+          0,
+          -2.5292
+        ],
+        "max": [
+          2.3828,
+          4.557,
+          2.5292
+        ]
+      },
+      "triangles": 3836,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.2168,
+          0.8331
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "zaisu-seat",
+          "label": "低座座布团",
+          "position": [
+            0,
+            1.2168,
+            0.8331
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.78,
+            0.97,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-coat-rack-a",
+      "label": "橡果衣帽树",
+      "category": "coatRack",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-coat-rack-a.json",
+      "sha256": "98d5941fa770cd0c8094f7ddcd482f0823db70a37b131f90e59c1fba83b8e5d3",
+      "bytes": 189125,
+      "bounds": {
+        "min": [
+          -2.2725,
+          0,
+          -2.16
+        ],
+        "max": [
+          2.2725,
+          8.16,
+          2.16
+        ]
+      },
+      "triangles": 3268,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-coat-rack-b",
+      "label": "拱廊玄关挂架",
+      "category": "coatRack",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-coat-rack-b.json",
+      "sha256": "1b7a6cac1906ab69942e97823ef632c0f70990361fd121edd9655673ae2a4c4c",
+      "bytes": 188469,
+      "bounds": {
+        "min": [
+          -3.945,
+          0,
+          -2.235
+        ],
+        "max": [
+          3.945,
+          8.1,
+          2.235
+        ]
+      },
+      "triangles": 3248,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.35,
+          1.935,
+          0.3
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "entry-bench",
+          "label": "安静歇脚",
+          "position": [
+            -1.35,
+            1.935,
+            0.3
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.78,
+            0.95,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-coat-rack-c",
+      "label": "蒲公英放射衣帽架",
+      "category": "coatRack",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-coat-rack-c.json",
+      "sha256": "4bd62ffff34fb6c72351a4bd08df493dcbe5ee98ea6ecb14dc300edf716ea1b3",
+      "bytes": 249464,
+      "bounds": {
+        "min": [
+          -2.43,
+          0,
+          -2.31
+        ],
+        "max": [
+          2.43,
+          8.04,
+          2.31
+        ]
+      },
+      "triangles": 4458,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-fireplace-a",
+      "label": "石拱暖炉",
+      "category": "fireplace",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-fireplace-a.json",
+      "sha256": "384bd3c05b37804364e6fb4cb885993ea5200996f6686430a400d2a2f17d7d2a",
+      "bytes": 320423,
+      "bounds": {
+        "min": [
+          -3.495,
+          0,
+          -2.04
+        ],
+        "max": [
+          3.495,
+          7.83,
+          2.04
+        ]
+      },
+      "triangles": 5340,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-fireplace-b",
+      "label": "圆肚小火炉",
+      "category": "fireplace",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-fireplace-b.json",
+      "sha256": "09b95980cafcc6070314f45be5decab99fc29b3028674f5612e809b30c98ab84",
+      "bytes": 274817,
+      "bounds": {
+        "min": [
+          -1.86,
+          0,
+          -1.953
+        ],
+        "max": [
+          1.86,
+          7.66497,
+          1.953
+        ]
+      },
+      "triangles": 4888,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-fireplace-c",
+      "label": "乡居木壁炉",
+      "category": "fireplace",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-fireplace-c.json",
+      "sha256": "03c528de954c44854a774d6a31c3d163909b1080e985cf6676f1685c57989ba0",
+      "bytes": 353321,
+      "bounds": {
+        "min": [
+          -3.915,
+          0,
+          -1.98
+        ],
+        "max": [
+          3.915,
+          6.12,
+          1.98
+        ]
+      },
+      "triangles": 5724,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-a",
+      "label": "蘑菇软光灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-a.json",
+      "sha256": "55485798acd941333cf7f022218d792f253d0eb2751203bf47673eb553f58b87",
+      "bytes": 244755,
+      "bounds": {
+        "min": [
+          -2.34,
+          0,
+          -2.34
+        ],
+        "max": [
+          2.34,
+          7.2,
+          2.34
+        ]
+      },
+      "triangles": 4780,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-b",
+      "label": "弯月纸灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-b.json",
+      "sha256": "9314e7ad118018a3b40c4d4e8ba297363f58a96fe1467890b82de8095a4df0ea",
+      "bytes": 293006,
+      "bounds": {
+        "min": [
+          -2.05839,
+          0,
+          -1.224
+        ],
+        "max": [
+          2.05839,
+          7.455,
+          1.224
+        ]
+      },
+      "triangles": 5536,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-c",
+      "label": "三脚小伞灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-c.json",
+      "sha256": "e42e0485044a1155b6195056851d4d43e6f495e56651f264cf36a1c50586ab16",
+      "bytes": 295064,
+      "bounds": {
+        "min": [
+          -2.24277,
+          0,
+          -2.24277
+        ],
+        "max": [
+          2.24277,
+          6.99,
+          2.24277
+        ]
+      },
+      "triangles": 5516,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-d",
+      "label": "花瓣珍珠落地灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-d.json",
+      "sha256": "fe5e55a32907c0842c54bc8b81e2ad24c9b3528b05ccc7a2bc086c68dac18fdc",
+      "bytes": 249234,
+      "bounds": {
+        "min": [
+          -1.76985,
+          0,
+          -1.76985
+        ],
+        "max": [
+          1.76985,
+          7.5255,
+          1.76985
+        ]
+      },
+      "triangles": 4148,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-e",
+      "label": "竹影纸灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-e.json",
+      "sha256": "9a60da1b0c3f0464f54482ae14b456fc21a02ede5368a2ab050542fa89e33a42",
+      "bytes": 360509,
+      "bounds": {
+        "min": [
+          -1.56,
+          -0.00073,
+          -1.44
+        ],
+        "max": [
+          1.56,
+          8.538,
+          1.44
+        ]
+      },
+      "triangles": 5858,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-floor-lamp-f",
+      "label": "和纸落地灯",
+      "category": "floorLamp",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-floor-lamp-f.json",
+      "sha256": "ce2933e1aadc7ff0efee041d5d5d67954c002d028bbfc6e42a44122c6ed9f775",
+      "bytes": 319265,
+      "bounds": {
+        "min": [
+          -1.92505,
+          -0.00015,
+          -1.6892
+        ],
+        "max": [
+          1.92505,
+          6.91643,
+          1.6892
+        ]
+      },
+      "triangles": 5858,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
     },
     {
       "id": "mv-hideout-a",
@@ -1880,6 +3712,358 @@
       ]
     },
     {
+      "id": "mv-hideout-d",
+      "label": "纸箱",
+      "category": "hideout",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-hideout-d.json",
+      "sha256": "f5a7ba19b861b3d6aacdcb2b6994182b48899ac45bea8619caeac341e6a5f36a",
+      "bytes": 230675,
+      "bounds": {
+        "min": [
+          -2.68112,
+          0,
+          -2.37551
+        ],
+        "max": [
+          2.68112,
+          2.92981,
+          2.37551
+        ]
+      },
+      "triangles": 3584,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0.0518,
+          0.41795,
+          0.24551
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "in-box",
+          "label": "纸箱里",
+          "position": [
+            0.0518,
+            0.41795,
+            0.24551
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              0.0518,
+              0,
+              3.27551
+            ]
+          ],
+          "clearance": [
+            0.85,
+            1.2,
+            1.1
+          ]
+        },
+        {
+          "id": "peek",
+          "label": "箱门口探头",
+          "position": [
+            0.0518,
+            0.41144,
+            0.87551
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0.0518,
+              0,
+              3.27551
+            ]
+          ],
+          "clearance": [
+            0.6,
+            1.2,
+            0.6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-hideout-e",
+      "label": "丝绒帷幔小寝宫",
+      "category": "hideout",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-hideout-e.json",
+      "sha256": "8c40f7bc52c2b9f368c497543000af299fd8bcdd492874a9e65887e982637a5c",
+      "bytes": 386026,
+      "bounds": {
+        "min": [
+          -3.555,
+          0,
+          -3.31945
+        ],
+        "max": [
+          3.555,
+          6.93,
+          3.31945
+        ]
+      },
+      "triangles": 5868,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.8,
+          0.06
+        ],
+        "facing": -1.5708
+      },
+      "sites": [
+        {
+          "id": "velvet-nap",
+          "label": "帷幔内软垫",
+          "position": [
+            0,
+            1.8,
+            0.06
+          ],
+          "facing": -1.5708,
+          "actions": [
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            0.95,
+            1.4,
+            0.8
+          ]
+        },
+        {
+          "id": "curtain-peek",
+          "label": "帷幔门口",
+          "position": [
+            0,
+            1.8,
+            0.501
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0,
+              1.716,
+              2.7
+            ]
+          ],
+          "clearance": [
+            0.95,
+            1.4,
+            0.8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-hideout-f",
+      "label": "月洞小寝居",
+      "category": "hideout",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-hideout-f.json",
+      "sha256": "e1c1ef5a6b98e74dfd2014b9ce0c5d299617236eeaf7b256a6b3e447b2d37961",
+      "bytes": 368877,
+      "bounds": {
+        "min": [
+          -3.81,
+          -0.00125,
+          -3.33
+        ],
+        "max": [
+          3.81,
+          7.27523,
+          3.33
+        ]
+      },
+      "triangles": 5856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.122,
+          -0.036
+        ],
+        "facing": -1.5708
+      },
+      "sites": [
+        {
+          "id": "moon-nap",
+          "label": "月洞内软垫",
+          "position": [
+            0,
+            1.122,
+            -0.036
+          ],
+          "facing": -1.5708,
+          "actions": [
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            0.98,
+            1.44,
+            0.8
+          ]
+        },
+        {
+          "id": "moon-gate-peek",
+          "label": "月洞门口",
+          "position": [
+            0,
+            1.122,
+            0.399
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0,
+              0.879,
+              2.901
+            ]
+          ],
+          "clearance": [
+            0.78,
+            0.91,
+            0.79
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-hideout-g",
+      "label": "茶室猫窝",
+      "category": "hideout",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-hideout-g.json",
+      "sha256": "5398410995110e0c36e9a2f668754436bebc89a07f1deead51bb1f94d51dc06f",
+      "bytes": 409750,
+      "bounds": {
+        "min": [
+          -3.89781,
+          -0.00015,
+          -3.4343
+        ],
+        "max": [
+          3.89781,
+          5.5755,
+          3.43425
+        ]
+      },
+      "triangles": 5858,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0.486,
+          1.266,
+          0.3
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "zabuton-nap",
+          "label": "茶室蒲团",
+          "position": [
+            0.486,
+            1.266,
+            0.3
+          ],
+          "facing": 0,
+          "actions": [
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            0.98,
+            1.46,
+            0.8
+          ]
+        },
+        {
+          "id": "noren-peek",
+          "label": "暖帘下",
+          "position": [
+            0.486,
+            1.266,
+            0.699
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0.486,
+              1.203,
+              1.899
+            ]
+          ],
+          "clearance": [
+            0.98,
+            1.46,
+            0.8
+          ]
+        }
+      ]
+    },
+    {
       "id": "mv-litter-box-a",
       "label": "开放式猫砂盘",
       "category": "litterBox",
@@ -2106,6 +4290,461 @@
           "poseHint": "dig"
         }
       ]
+    },
+    {
+      "id": "mv-litter-box-d",
+      "label": "宫廷拱门猫砂箱",
+      "category": "litterBox",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-litter-box-d.json",
+      "sha256": "84ca7040819db80fbacc662c4febf59d6b456cac1745112ab3a7a70763b31e70",
+      "bytes": 350899,
+      "bounds": {
+        "min": [
+          -3.78,
+          0,
+          -3.8325
+        ],
+        "max": [
+          3.78,
+          4.7805,
+          3.8325
+        ]
+      },
+      "triangles": 5516,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.84,
+          -0.15
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "digging",
+          "label": "宫廷砂盆",
+          "position": [
+            0,
+            0.84,
+            -0.15
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "dig"
+          ],
+          "via": [
+            [
+              0,
+              0.48,
+              3.3
+            ]
+          ],
+          "clearance": [
+            0.75,
+            0.85,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-litter-box-e",
+      "label": "竹屏净砂盆",
+      "category": "litterBox",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-litter-box-e.json",
+      "sha256": "e892addf5b027003af1850e3b2c584799d4b4c0d6b0f0764e508249a647ff016",
+      "bytes": 268951,
+      "bounds": {
+        "min": [
+          -3.519,
+          0,
+          -3.12
+        ],
+        "max": [
+          3.519,
+          4.68778,
+          3.12
+        ]
+      },
+      "triangles": 4148,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.215,
+          -0.084
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "digging",
+          "label": "砂面",
+          "position": [
+            0,
+            1.215,
+            -0.084
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "dig"
+          ],
+          "via": [],
+          "clearance": [
+            0.76,
+            0.89,
+            0.94
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-litter-box-f",
+      "label": "町屋猫砂屋",
+      "category": "litterBox",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-litter-box-f.json",
+      "sha256": "1ab47a6422d93bb6cc83ac3b1db6dcb4d39d732bce4e59eee5174cd6cb9891c1",
+      "bytes": 419218,
+      "bounds": {
+        "min": [
+          -4.13869,
+          -0.00011,
+          -3.79005
+        ],
+        "max": [
+          4.13869,
+          7.011,
+          3.78965
+        ]
+      },
+      "triangles": 5856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.969,
+          1.101
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "sand-digging",
+          "label": "町屋砂盘",
+          "position": [
+            0,
+            0.969,
+            1.101
+          ],
+          "facing": 0,
+          "actions": [
+            "dig"
+          ],
+          "via": [],
+          "clearance": [
+            0.73,
+            0.85,
+            0.91
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-media-console-a",
+      "label": "唱片小客厅",
+      "category": "mediaConsole",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-media-console-a.json",
+      "sha256": "43772a1034827f222fdb560541849492db9e3aa7a386a3510c9a830d45fdc817",
+      "bytes": 212591,
+      "bounds": {
+        "min": [
+          -4.05,
+          0,
+          -2.49
+        ],
+        "max": [
+          4.05,
+          4.38515,
+          2.49
+        ]
+      },
+      "triangles": 3260,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.98,
+          2.1,
+          0.045
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "listening-perch",
+          "label": "听歌位",
+          "position": [
+            1.98,
+            2.1,
+            0.045
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            1.4,
+            1.12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-media-console-b",
+      "label": "奶糖复古电视柜",
+      "category": "mediaConsole",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-media-console-b.json",
+      "sha256": "28238c526026a9368c89eb9a5935ffeadf20cc73cbdeedb2084db4835f255030",
+      "bytes": 313319,
+      "bounds": {
+        "min": [
+          -4.02,
+          0,
+          -2.49
+        ],
+        "max": [
+          4.02,
+          8.115,
+          2.49
+        ]
+      },
+      "triangles": 5140,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-media-console-c",
+      "label": "花喇叭留声柜",
+      "category": "mediaConsole",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-media-console-c.json",
+      "sha256": "436eebdd7994dafe8708fd463d7e32d277dbb78cb6cba4d21c1a416a6d264156",
+      "bytes": 214902,
+      "bounds": {
+        "min": [
+          -3.4469,
+          0,
+          -2.68998
+        ],
+        "max": [
+          3.4998,
+          8.13787,
+          2.7654
+        ]
+      },
+      "triangles": 3348,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-plant-stand-a",
+      "label": "阶梯小花园",
+      "category": "plantStand",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-plant-stand-a.json",
+      "sha256": "192db48a3a11014e71a46025c4de6436641725d1fdbaf476a703b35f7bc54aea",
+      "bytes": 313901,
+      "bounds": {
+        "min": [
+          -3.975,
+          0,
+          -1.8
+        ],
+        "max": [
+          3.975,
+          6.95629,
+          1.8
+        ]
+      },
+      "triangles": 5072,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-plant-stand-b",
+      "label": "推车花铺",
+      "category": "plantStand",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-plant-stand-b.json",
+      "sha256": "53bf4f0d8c7d46bc9698422344be2349c176a75033f3c0418faae5e81708fb72",
+      "bytes": 363029,
+      "bounds": {
+        "min": [
+          -3.47234,
+          0,
+          -1.848
+        ],
+        "max": [
+          3.47234,
+          5.43577,
+          1.848
+        ]
+      },
+      "triangles": 5860,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-plant-stand-c",
+      "label": "月牙花架",
+      "category": "plantStand",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-plant-stand-c.json",
+      "sha256": "74b6a3cc7b22c9d2bcc3f9c53f573bd24fb5329771bb25fb2ec349c273a08184",
+      "bytes": 326176,
+      "bounds": {
+        "min": [
+          -3.216,
+          0,
+          -1.6848
+        ],
+        "max": [
+          3.216,
+          7.6493,
+          1.6848
+        ]
+      },
+      "triangles": 5488,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
     },
     {
       "id": "mv-platform-a",
@@ -2464,6 +5103,129 @@
       ]
     },
     {
+      "id": "mv-room-divider-a",
+      "label": "拱门三折屏",
+      "category": "roomDivider",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-room-divider-a.json",
+      "sha256": "fa2a68bc9ecc11fc0a791a27b1651c53c988d529036a2d0e0341f33dcdf10d7a",
+      "bytes": 239454,
+      "bounds": {
+        "min": [
+          -3.89133,
+          0,
+          -0.96
+        ],
+        "max": [
+          3.89133,
+          6.21,
+          0.96
+        ]
+      },
+      "triangles": 3944,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-room-divider-b",
+      "label": "圆窗花格屏",
+      "category": "roomDivider",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-room-divider-b.json",
+      "sha256": "6b4f9af6960f1150215ef744a56ab4edc01c053f4725ec2eb8529cbcee5a4e7c",
+      "bytes": 172500,
+      "bounds": {
+        "min": [
+          -3.45,
+          0,
+          -0.96
+        ],
+        "max": [
+          3.45,
+          7.245,
+          0.96
+        ]
+      },
+      "triangles": 3144,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-room-divider-c",
+      "label": "错层琴键屏",
+      "category": "roomDivider",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-room-divider-c.json",
+      "sha256": "175f937e925d13789a066a6e58d787579e9baaaa3d72876a8750d80d36e5b18c",
+      "bytes": 220111,
+      "bounds": {
+        "min": [
+          -3.825,
+          0,
+          -0.99
+        ],
+        "max": [
+          3.825,
+          7.125,
+          0.99
+        ]
+      },
+      "triangles": 3724,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
       "id": "mv-scratcher-a",
       "label": "剑麻猫抓柱",
       "category": "scratcher",
@@ -2729,6 +5491,358 @@
             1.2
           ],
           "poseHint": "paw-flat"
+        }
+      ]
+    },
+    {
+      "id": "mv-scratcher-d",
+      "label": "鎏金编绳抓柱",
+      "category": "scratcher",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-scratcher-d.json",
+      "sha256": "1f45dbaf2b1f9f6cd75453ff16d72da65444c09d518238cf7c18117bc9674830",
+      "bytes": 289522,
+      "bounds": {
+        "min": [
+          -2.28093,
+          0,
+          -2.28093
+        ],
+        "max": [
+          2.28093,
+          5.013,
+          2.28093
+        ]
+      },
+      "triangles": 5352,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.173,
+          0,
+          2.826
+        ],
+        "facing": 2.74889
+      },
+      "sites": [
+        {
+          "id": "rope-post",
+          "label": "鎏金绳柱",
+          "position": [
+            -1.173,
+            0,
+            2.826
+          ],
+          "facing": 2.74889,
+          "actions": [
+            "scratch"
+          ],
+          "via": [],
+          "clearance": [
+            0.7,
+            0.65,
+            1.1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-scratcher-e",
+      "label": "节节高抓柱",
+      "category": "scratcher",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-scratcher-e.json",
+      "sha256": "b6b62c8068aea1ba479e543a1c6334a628d579822613dcd00d579ca60e112566",
+      "bytes": 260754,
+      "bounds": {
+        "min": [
+          -2.13,
+          0,
+          -1.77
+        ],
+        "max": [
+          2.13,
+          6.7901,
+          1.77
+        ]
+      },
+      "triangles": 4886,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          2.985
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "sisal",
+          "label": "剑麻抓柱",
+          "position": [
+            0,
+            0,
+            2.985
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "scratch"
+          ],
+          "via": [],
+          "clearance": [
+            0.78,
+            0.65,
+            1.1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-scratcher-f",
+      "label": "竹编猫抓板",
+      "category": "scratcher",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-scratcher-f.json",
+      "sha256": "0a3d52fbb07028a7989673f3a2efb65096815b4668127b9ee2bfd95e3b8e20a3",
+      "bytes": 338436,
+      "bounds": {
+        "min": [
+          -2.14738,
+          -0.00156,
+          -1.92238
+        ],
+        "max": [
+          2.14738,
+          5.29511,
+          1.92238
+        ]
+      },
+      "triangles": 5856,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          3
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "scratch-front",
+          "label": "竹编抓面",
+          "position": [
+            0,
+            0,
+            3
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "scratch"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.68,
+            1.15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sideboard-a",
+      "label": "乡间双门餐边柜",
+      "category": "sideboard",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-sideboard-a.json",
+      "sha256": "66a369698974aca5110126b824180f9d457800286ca03348eb1b45251af807ae",
+      "bytes": 245920,
+      "bounds": {
+        "min": [
+          -4.05,
+          0,
+          -2.6325
+        ],
+        "max": [
+          4.05,
+          4.68,
+          2.6325
+        ]
+      },
+      "triangles": 3882,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-sideboard-b",
+      "label": "卷木圆鼓边柜",
+      "category": "sideboard",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-sideboard-b.json",
+      "sha256": "e4806c68551ce7d20c78251b3d67f9cb33fe1069e081d7a010a1c1fe39d3e887",
+      "bytes": 309333,
+      "bounds": {
+        "min": [
+          -2.52,
+          0,
+          -2.52
+        ],
+        "max": [
+          2.52,
+          2.247,
+          2.52
+        ]
+      },
+      "triangles": 5268,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.247,
+          0.045
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "round-top",
+          "label": "圆顶停留",
+          "position": [
+            0,
+            2.247,
+            0.045
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.7,
+            1.28,
+            1.12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sideboard-c",
+      "label": "悬框格栅餐边柜",
+      "category": "sideboard",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-sideboard-c.json",
+      "sha256": "850318d2556d3d76f8592f51b1f69ae94677629dce172dc2df0ead5f9a087636",
+      "bytes": 265459,
+      "bounds": {
+        "min": [
+          -3.99,
+          0,
+          -2.55
+        ],
+        "max": [
+          3.99,
+          5.205,
+          2.55
+        ]
+      },
+      "triangles": 3996,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.54,
+          0.045
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "lower-lounge",
+          "label": "柜下小憩",
+          "position": [
+            0,
+            0.54,
+            0.045
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [
+            [
+              0,
+              0.36,
+              2.37
+            ]
+          ],
+          "clearance": [
+            0.73,
+            1.43,
+            0.88
+          ]
         }
       ]
     },
@@ -3052,6 +6166,322 @@
             1,
             1.45,
             0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sofa-d",
+      "label": "懒人豆袋沙发",
+      "category": "sofa",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "path": "mv/mv-sofa-d.json",
+      "sha256": "39c385340da0cb82bcf65af1be4c41ace35bdde7223963736367d06068a3eb62",
+      "bytes": 383830,
+      "bounds": {
+        "min": [
+          -4.19647,
+          0,
+          -2.63385
+        ],
+        "max": [
+          4.2123,
+          3.99805,
+          2.64188
+        ]
+      },
+      "triangles": 7110,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.14,
+          1.53246,
+          0.9
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "seat-left",
+          "label": "左座垫",
+          "position": [
+            -1.14,
+            1.53246,
+            0.9
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        },
+        {
+          "id": "seat-right",
+          "label": "右座垫",
+          "position": [
+            1.14,
+            1.53246,
+            0.9
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        },
+        {
+          "id": "seat-middle",
+          "label": "座垫中间",
+          "position": [
+            0,
+            1.51707,
+            0.66
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            1,
+            1.45,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sofa-e",
+      "label": "皇冠丝绒沙发",
+      "category": "sofa",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-sofa-e.json",
+      "sha256": "39f88b86345e1eb5a5965a867065f56fe45dd431400e4bd7855a18aee064ea09",
+      "bytes": 526715,
+      "bounds": {
+        "min": [
+          -5.22217,
+          0,
+          -2.75695
+        ],
+        "max": [
+          5.22217,
+          5.7786,
+          2.75695
+        ]
+      },
+      "triangles": 7876,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.95,
+          2.16,
+          0.15
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "seat-left",
+          "label": "丝绒左座",
+          "position": [
+            -1.95,
+            2.16,
+            0.15
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        },
+        {
+          "id": "seat-right",
+          "label": "丝绒右座",
+          "position": [
+            1.95,
+            2.16,
+            0.15
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            0.95,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sofa-f",
+      "label": "如意罗汉榻",
+      "category": "sofa",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-sofa-f.json",
+      "sha256": "0f2cc9c1e42ae2a63d4f1f373e044fa321a15c22d119758b1e1eb97d9e94d266",
+      "bytes": 459090,
+      "bounds": {
+        "min": [
+          -4.98,
+          0,
+          -2.82
+        ],
+        "max": [
+          4.98,
+          5.085,
+          2.82
+        ]
+      },
+      "triangles": 7460,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          2.6121,
+          0.21
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "daybed",
+          "label": "罗汉榻坐垫",
+          "position": [
+            0,
+            2.6121,
+            0.21
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [
+            [
+              -3,
+              1.791,
+              2.7
+            ]
+          ],
+          "clearance": [
+            1,
+            1.45,
+            0.95
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-sofa-g",
+      "label": "樱木榻榻米沙发",
+      "category": "sofa",
+      "defaultSize": [
+        4,
+        3
+      ],
+      "sizes": [
+        [
+          4,
+          3
+        ]
+      ],
+      "path": "mv/mv-sofa-g.json",
+      "sha256": "17033314fd15ba69db2e9948dd49b1011c629e2559c068b6d67df28197616c12",
+      "bytes": 232981,
+      "bounds": {
+        "min": [
+          -5.145,
+          0,
+          -3.045
+        ],
+        "max": [
+          5.145,
+          3.61844,
+          3.045
+        ]
+      },
+      "triangles": 3524,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          1.9542,
+          0.45
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "daybed",
+          "label": "抹茶坐榻",
+          "position": [
+            0,
+            1.9542,
+            0.45
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "loaf",
+            "sleep"
+          ],
+          "via": [],
+          "clearance": [
+            0.99,
+            1.46,
+            0.95
           ]
         }
       ]
@@ -3491,6 +6921,155 @@
       ]
     },
     {
+      "id": "mv-table-d",
+      "label": "象牙大理石茶桌",
+      "category": "table",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-table-d.json",
+      "sha256": "d2cf03bf853dfad46ca03856d44439beb6bd1cd1473c76b114c8693668811cad",
+      "bytes": 263024,
+      "bounds": {
+        "min": [
+          -3.525,
+          0,
+          -2.655
+        ],
+        "max": [
+          3.525,
+          2.64,
+          2.655
+        ]
+      },
+      "triangles": 4340,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-table-e",
+      "label": "云纹茶案",
+      "category": "table",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-table-e.json",
+      "sha256": "95e8514a386ac3ea894a9766484c5fbcc2d58d8d0b440021972efb1f60f394bb",
+      "bytes": 225831,
+      "bounds": {
+        "min": [
+          -3.96,
+          0,
+          -1.95
+        ],
+        "max": [
+          3.96,
+          4.056,
+          1.95
+        ]
+      },
+      "triangles": 3724,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
+    },
+    {
+      "id": "mv-table-f",
+      "label": "围炉茶几",
+      "category": "table",
+      "defaultSize": [
+        3,
+        3
+      ],
+      "sizes": [
+        [
+          3,
+          3
+        ]
+      ],
+      "path": "mv/mv-table-f.json",
+      "sha256": "18d3d723dd09d19d2eb2eb0ccb953437b753ce01c9ef3b4bca231ff311a3fbf6",
+      "bytes": 364097,
+      "bounds": {
+        "min": [
+          -3.88554,
+          -0.00018,
+          -3.09448
+        ],
+        "max": [
+          3.88554,
+          4.22272,
+          3.09463
+        ]
+      },
+      "triangles": 5852,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          1.401
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "kotatsu-hide",
+          "label": "围炉垂被内",
+          "position": [
+            0,
+            0,
+            1.401
+          ],
+          "facing": 0,
+          "actions": [
+            "hide"
+          ],
+          "via": [
+            [
+              0,
+              0,
+              3.7548
+            ]
+          ],
+          "clearance": [
+            0.78,
+            0.91,
+            0.79
+          ]
+        }
+      ]
+    },
+    {
       "id": "mv-toy-a",
       "label": "弹簧摇摇鼠",
       "category": "toy",
@@ -3509,8 +7088,8 @@
         ]
       ],
       "path": "mv/mv-toy-a.json",
-      "sha256": "37cdb4bf8da34d8bde9d5afd9dbcc621601474f6448c323ea2d2510bd4b09aec",
-      "bytes": 237908,
+      "sha256": "25e4e6759ac40eddd1ebbaa379052475858c837e9adc007176d32fa972dac199",
+      "bytes": 345586,
       "bounds": {
         "min": [
           -1.302,
@@ -3519,11 +7098,11 @@
         ],
         "max": [
           1.302,
-          4.32623,
+          4.40471,
           1.302
         ]
       },
-      "triangles": 3612,
+      "triangles": 4796,
       "orientationY": 0,
       "seat": {
         "position": [
@@ -3571,27 +7150,27 @@
         ]
       ],
       "path": "mv/mv-toy-b.json",
-      "sha256": "128ed4677aac55e3ab585ab0157778f05767316583cf7a31f6152b50878598e2",
-      "bytes": 291700,
+      "sha256": "2049c05f435d4cc66da8c54f8e4d4c620f080ada5f3ca4b2248f59b0a8de94dd",
+      "bytes": 379521,
       "bounds": {
         "min": [
           -3.659,
           0,
-          -3.129
+          -3.1575
         ],
         "max": [
           3.659,
           4.875,
-          3.129
+          3.1575
         ]
       },
-      "triangles": 4588,
+      "triangles": 5708,
       "orientationY": 0,
       "seat": {
         "position": [
           -0.825,
           0.29609,
-          -0.489
+          -0.5175
         ],
         "facing": 0
       },
@@ -3602,7 +7181,7 @@
           "position": [
             -0.825,
             0.29609,
-            -0.489
+            -0.5175
           ],
           "facing": 0,
           "actions": [
@@ -3622,7 +7201,7 @@
           "position": [
             1.455,
             0.28787,
-            -0.294
+            -0.3225
           ],
           "facing": 0,
           "actions": [
@@ -3653,8 +7232,8 @@
         ]
       ],
       "path": "mv/mv-toy-c.json",
-      "sha256": "78400fd9c803953fbd63fb50aa84d7a30a67d3f4edea84c46dfc8761b6bff9cd",
-      "bytes": 298834,
+      "sha256": "f545c451493e6f5548639072b0e4bd987539e2e416e04cf2bded8995f1e222c2",
+      "bytes": 389565,
       "bounds": {
         "min": [
           -2.49,
@@ -3663,11 +7242,11 @@
         ],
         "max": [
           2.49,
-          2.6775,
+          2.232,
           2.49
         ]
       },
-      "triangles": 4512,
+      "triangles": 5436,
       "orientationY": 0,
       "seat": {
         "position": [
@@ -3699,6 +7278,600 @@
           "poseHint": "bat"
         }
       ]
+    },
+    {
+      "id": "mv-toy-d",
+      "label": "发条小鼠",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-d.json",
+      "sha256": "4c516001c72413377cafc5f3f0b2161622da2f32e60acd67112184ddf6e65b6b",
+      "bytes": 249918,
+      "bounds": {
+        "min": [
+          -0.82257,
+          0,
+          -1.49499
+        ],
+        "max": [
+          0.82257,
+          2.24569,
+          1.49499
+        ]
+      },
+      "triangles": 3720,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -2.94084,
+          0,
+          -0.75852
+        ],
+        "facing": 1.8326
+      },
+      "sites": [
+        {
+          "id": "tail",
+          "label": "小鼠尾穗",
+          "position": [
+            -2.94084,
+            0,
+            -0.75852
+          ],
+          "facing": 1.8326,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "poseHint": "bat"
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-e",
+      "label": "小鱼布玩具",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-e.json",
+      "sha256": "f6d3856425c14e7a29a5c4c3cd6b41d8eae9d91bd40b050b71c98041b441402d",
+      "bytes": 144829,
+      "bounds": {
+        "min": [
+          -1.23586,
+          0,
+          -0.42464
+        ],
+        "max": [
+          1.22687,
+          1.14126,
+          0.42464
+        ]
+      },
+      "triangles": 2544,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          2.76586,
+          0,
+          -0.0411
+        ],
+        "facing": -1.5708
+      },
+      "sites": [
+        {
+          "id": "fish",
+          "label": "小鱼背上",
+          "position": [
+            2.76586,
+            0,
+            -0.0411
+          ],
+          "facing": -1.5708,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            1,
+            1
+          ],
+          "poseHint": "bat-ground"
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-f",
+      "label": "毛线球小篮",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-f.json",
+      "sha256": "902cba06ae8ec2c6046325133b7250122a9860435704d03a3f1a73446e7beef5",
+      "bytes": 329653,
+      "bounds": {
+        "min": [
+          -1.2628,
+          0,
+          -1.1718
+        ],
+        "max": [
+          1.2628,
+          1.455,
+          1.1718
+        ]
+      },
+      "triangles": 5900,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0.0411,
+          0,
+          2.6118
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "yarn",
+          "label": "毛线球",
+          "position": [
+            0.0411,
+            0,
+            2.6118
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            1,
+            1
+          ],
+          "poseHint": "bat-ground"
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-g",
+      "label": "猫咪跑轮",
+      "category": "toy",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-g.json",
+      "sha256": "bd3e8c2ae2439cc09d4f9f153d065b26776912b55bb4d89e9c0f0e3b38bc483d",
+      "bytes": 287495,
+      "bounds": {
+        "min": [
+          -2.85,
+          0,
+          -2.097
+        ],
+        "max": [
+          2.85,
+          6.13752,
+          2.097
+        ]
+      },
+      "triangles": 4600,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.9225,
+          0.747
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "wheel",
+          "label": "跑轮里",
+          "position": [
+            0,
+            0.9225,
+            0.747
+          ],
+          "facing": 0,
+          "actions": [
+            "sit",
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.68,
+            0.8,
+            1.1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-h",
+      "label": "珠冠悬铃逗猫玩具",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-h.json",
+      "sha256": "44065b6f535a738275acdfc60a232407644da9fb333ff886015717ccfc1a549c",
+      "bytes": 216624,
+      "bounds": {
+        "min": [
+          -1.98,
+          0,
+          -1.98
+        ],
+        "max": [
+          1.98,
+          4.43357,
+          1.98
+        ]
+      },
+      "triangles": 3726,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          1.26,
+          0,
+          2.55
+        ],
+        "facing": 2.99159
+      },
+      "sites": [
+        {
+          "id": "bell-play",
+          "label": "皇冠铃前",
+          "position": [
+            1.26,
+            0,
+            2.55
+          ],
+          "facing": 2.99159,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.7,
+            0.65,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-i",
+      "label": "纸鸢燕铃",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-i.json",
+      "sha256": "a784c42e434095f7c5f7a53dabccbe514ab30b6a029b9cd13db3dc31a6b7217d",
+      "bytes": 205722,
+      "bounds": {
+        "min": [
+          -2.64167,
+          0,
+          -1.575
+        ],
+        "max": [
+          2.63267,
+          5.95204,
+          1.575
+        ]
+      },
+      "triangles": 3510,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.08,
+          0.858,
+          0.885
+        ],
+        "facing": 1.5708
+      },
+      "sites": [
+        {
+          "id": "kite-play",
+          "label": "纸鸢前",
+          "position": [
+            -1.08,
+            0.858,
+            0.885
+          ],
+          "facing": 1.5708,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-toy-j",
+      "label": "樱铃逗猫玩具",
+      "category": "toy",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-toy-j.json",
+      "sha256": "d9903db264d85ea19a9a27807dc8175e526427de2c79501c7da6672749932c10",
+      "bytes": 233416,
+      "bounds": {
+        "min": [
+          -2.22,
+          0,
+          -1.6215
+        ],
+        "max": [
+          2.22,
+          4.34567,
+          1.5015
+        ]
+      },
+      "triangles": 4046,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -0.9,
+          0,
+          3
+        ],
+        "facing": 2.84
+      },
+      "sites": [
+        {
+          "id": "sakura-play",
+          "label": "垂樱铃前",
+          "position": [
+            -0.9,
+            0,
+            3
+          ],
+          "facing": 2.84,
+          "actions": [
+            "play"
+          ],
+          "via": [],
+          "clearance": [
+            0.71,
+            0.66,
+            1.13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-vanity-a",
+      "label": "花瓣椭圆梳妆台",
+      "category": "vanity",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-vanity-a.json",
+      "sha256": "ff32e968d757d605880fde1b3561ea3cc876a79f1c1da92c1254756dfc0c7532",
+      "bytes": 251401,
+      "bounds": {
+        "min": [
+          -3.87,
+          0,
+          -2.31
+        ],
+        "max": [
+          3.87,
+          8.79,
+          2.31
+        ]
+      },
+      "triangles": 4304,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.18,
+          0.12
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "under-desk",
+          "label": "安静歇脚",
+          "position": [
+            0,
+            0.18,
+            0.12
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.76,
+            1.25,
+            0.95
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-vanity-b",
+      "label": "三折晨光矮妆台",
+      "category": "vanity",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-vanity-b.json",
+      "sha256": "74d0d6c1b5c702af7e9f2d59028efd3d8cff71b1a69bd77c0075716a895b8714",
+      "bytes": 349187,
+      "bounds": {
+        "min": [
+          -3.96,
+          0,
+          -2.67493
+        ],
+        "max": [
+          3.96,
+          6.159,
+          2.67493
+        ]
+      },
+      "triangles": 5860,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.83,
+          2.145,
+          0.53507
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "vanity-deck",
+          "label": "安静歇脚",
+          "position": [
+            -1.83,
+            2.145,
+            0.53507
+          ],
+          "facing": 0,
+          "actions": [
+            "sit"
+          ],
+          "via": [],
+          "clearance": [
+            0.74,
+            0.92,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-vanity-c",
+      "label": "圆月单柱梳妆台",
+      "category": "vanity",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-vanity-c.json",
+      "sha256": "cbe94a0d29f32fef48dbac545b32ceeddca5fafaaf08b50d9791345ee7f0590f",
+      "bytes": 258847,
+      "bounds": {
+        "min": [
+          -3.24,
+          0,
+          -2.25984
+        ],
+        "max": [
+          3.24,
+          8.214,
+          2.25984
+        ]
+      },
+      "triangles": 4632,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "facing": 0
+      },
+      "sites": []
     },
     {
       "id": "mv-water-a",
@@ -3931,6 +8104,308 @@
             0.9
           ],
           "poseHint": "head-down"
+        }
+      ]
+    },
+    {
+      "id": "mv-water-d",
+      "label": "陶盆猫草",
+      "category": "water",
+      "defaultSize": [
+        2,
+        2
+      ],
+      "sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "path": "mv/mv-water-d.json",
+      "sha256": "f5cd6f1ae17ea5d6e835beda13a431831ae92088a5a3a322c628c17512b59dc2",
+      "bytes": 355998,
+      "bounds": {
+        "min": [
+          -1.3466,
+          0,
+          -1.20575
+        ],
+        "max": [
+          1.3466,
+          1.63329,
+          1.20575
+        ]
+      },
+      "triangles": 4534,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -0.16657,
+          0,
+          2.57075
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "shoots",
+          "label": "鲜嫩草尖",
+          "position": [
+            -0.16657,
+            0,
+            2.57075
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "eat"
+          ],
+          "via": [],
+          "clearance": [
+            0.6,
+            0.6,
+            0.9
+          ],
+          "poseHint": "head-down"
+        }
+      ]
+    },
+    {
+      "id": "mv-water-e",
+      "label": "双碗御膳餐台",
+      "category": "water",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-water-e.json",
+      "sha256": "d0d1a1483f91021c36759ecbfe1bf142e225009cb545792cbead621290ab94bf",
+      "bytes": 367496,
+      "bounds": {
+        "min": [
+          -3.546,
+          0,
+          -1.69945
+        ],
+        "max": [
+          3.546,
+          2.3145,
+          1.69945
+        ]
+      },
+      "triangles": 5964,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.47,
+          0,
+          2.52
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "feeding",
+          "label": "御膳粮碗前",
+          "position": [
+            -1.47,
+            0,
+            2.52
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "eat"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.67,
+            0.9
+          ]
+        },
+        {
+          "id": "drinking",
+          "label": "御膳水碗前",
+          "position": [
+            1.47,
+            0,
+            2.22
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "drink"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.67,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-water-f",
+      "label": "青瓷双碗膳台",
+      "category": "water",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-water-f.json",
+      "sha256": "d8875731d73d8dd1554524710c4c5b19bab2ce8a19326d2bbc822ac2d60223ca",
+      "bytes": 326320,
+      "bounds": {
+        "min": [
+          -3.24,
+          0,
+          -1.56
+        ],
+        "max": [
+          3.24,
+          0.74494,
+          1.56
+        ]
+      },
+      "triangles": 5376,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.53,
+          0,
+          2.13
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "feeding",
+          "label": "青瓷粮碗前",
+          "position": [
+            -1.53,
+            0,
+            2.13
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "eat"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.75,
+            0.88
+          ]
+        },
+        {
+          "id": "drinking",
+          "label": "青瓷水碗前",
+          "position": [
+            1.53,
+            0,
+            2.34
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "drink"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.75,
+            0.88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-water-g",
+      "label": "茶陶双碗餐台",
+      "category": "water",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-water-g.json",
+      "sha256": "0cec4cb179c2d070c37c197f261829413d41a26bad0ec24217c66657e31df780",
+      "bytes": 325929,
+      "bounds": {
+        "min": [
+          -3.393,
+          0,
+          -1.61925
+        ],
+        "max": [
+          3.393,
+          0.7296,
+          1.61925
+        ]
+      },
+      "triangles": 5288,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -1.572,
+          0,
+          2.199
+        ],
+        "facing": -3.14159
+      },
+      "sites": [
+        {
+          "id": "tea-dry",
+          "label": "茶陶粮碗前",
+          "position": [
+            -1.572,
+            0,
+            2.199
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "eat"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.67,
+            0.92
+          ]
+        },
+        {
+          "id": "tea-water",
+          "label": "茶陶水碗前",
+          "position": [
+            1.587,
+            0,
+            2.4264
+          ],
+          "facing": -3.14159,
+          "actions": [
+            "drink"
+          ],
+          "via": [],
+          "clearance": [
+            0.72,
+            0.67,
+            0.92
+          ]
         }
       ]
     },
@@ -4214,6 +8689,189 @@
             0.68,
             0.95,
             1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-writing-desk-a",
+      "label": "拱窗秘书桌",
+      "category": "writingDesk",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-writing-desk-a.json",
+      "sha256": "18278ec9578403ef81632a01f4b9ecd524ab2faaee7275dc69297f59e65e9b10",
+      "bytes": 177192,
+      "bounds": {
+        "min": [
+          -3.825,
+          0,
+          -2.4675
+        ],
+        "max": [
+          3.825,
+          8.385,
+          2.4675
+        ]
+      },
+      "triangles": 2952,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.18,
+          0.1575
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "under-desk",
+          "label": "安静歇脚",
+          "position": [
+            0,
+            0.18,
+            0.1575
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.76,
+            1.3,
+            0.95
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-writing-desk-b",
+      "label": "林间绘图桌",
+      "category": "writingDesk",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-writing-desk-b.json",
+      "sha256": "484f062638c941ac9f1ce46bbc3c2c6081452e065fee8c1915a9568d8718aa73",
+      "bytes": 154248,
+      "bounds": {
+        "min": [
+          -3.825,
+          0,
+          -2.52
+        ],
+        "max": [
+          3.825,
+          4.86154,
+          2.52
+        ]
+      },
+      "triangles": 2396,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          0,
+          0.19097,
+          0.39
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "under-desk",
+          "label": "安静歇脚",
+          "position": [
+            0,
+            0.19097,
+            0.39
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.75,
+            1.16,
+            0.95
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mv-writing-desk-c",
+      "label": "半月浮岛书桌",
+      "category": "writingDesk",
+      "defaultSize": [
+        3,
+        2
+      ],
+      "sizes": [
+        [
+          3,
+          2
+        ]
+      ],
+      "path": "mv/mv-writing-desk-c.json",
+      "sha256": "2636018adf0f3c478cedf1677aea6a386017e8a8adc4cc6f503c57a5215a722c",
+      "bytes": 151915,
+      "bounds": {
+        "min": [
+          -3.96,
+          0,
+          -2.2575
+        ],
+        "max": [
+          3.96,
+          4.3635,
+          2.2575
+        ]
+      },
+      "triangles": 2620,
+      "orientationY": 0,
+      "seat": {
+        "position": [
+          -2.13,
+          0.18,
+          0.2625
+        ],
+        "facing": 0
+      },
+      "sites": [
+        {
+          "id": "under-desk",
+          "label": "安静歇脚",
+          "position": [
+            -2.13,
+            0.18,
+            0.2625
+          ],
+          "facing": 0,
+          "actions": [
+            "loaf"
+          ],
+          "via": [],
+          "clearance": [
+            0.7,
+            1.24,
+            0.95
           ]
         }
       ]

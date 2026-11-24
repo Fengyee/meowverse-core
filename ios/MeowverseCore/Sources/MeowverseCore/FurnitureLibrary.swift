@@ -77,7 +77,9 @@ public enum FurnitureLibrary {
     /// has no category and passes only when no category is asked for. In the two date orders a
     /// piece without a recorded time comes last whichever way the order runs: unknown is not
     /// "oldest". Ties keep the order the pieces were added.
-    public static func pieces(in state: AppState, catalog: FurnitureCatalog?, query: FurnitureQuery) -> [PhotoFurniture] {
+    /// `syncing`: pieces with photos still on their way here. They are never "without photos".
+    public static func pieces(in state: AppState, catalog: FurnitureCatalog?, query: FurnitureQuery,
+                              syncing: Set<String> = []) -> [PhotoFurniture] {
         let pool: [PhotoFurniture] = switch query.place {
         case .all: state.allFurniture
         case .room: state.placedFurniture
@@ -92,8 +94,8 @@ public enum FurnitureLibrary {
             }
             switch query.photos {
             case .any: break
-            case .with: if piece.sources.isEmpty { return false }
-            case .without: if !piece.sources.isEmpty { return false }
+            case .with: if piece.sources.isEmpty, !syncing.contains(piece.instanceId) { return false }
+            case .without: if !piece.sources.isEmpty || syncing.contains(piece.instanceId) { return false }
             }
             if query.lockedOnly, !piece.isLocked { return false }
             if !needle.isEmpty, !fold(piece.displayName).contains(needle) { return false }

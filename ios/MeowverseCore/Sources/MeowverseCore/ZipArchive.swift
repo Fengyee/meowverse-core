@@ -290,11 +290,16 @@ public final class ZipWriter {
 
     private let handle: FileHandle
     private var records: [Record] = []
+    private var names: Set<String> = []
+    private let limits: ZipLimits
+    private var totalBytes = 0
     private var offset = 0
     private var finished = false
 
     /// Creates (or truncates) the file at `url`.
-    public init(url: URL) throws {
+    public init(url: URL, limits: ZipLimits = ZipLimits(maxArchiveBytes: Int(UInt32.max) - 1, maxEntries: 65_534,
+                                                        maxEntryBytes: Int(UInt32.max) - 1, maxTotalBytes: Int(UInt32.max) - 1)) throws {
+        self.limits = limits
         guard FileManager.default.createFile(atPath: url.path, contents: nil) else {
             throw CocoaError(.fileWriteUnknown)
         }
@@ -305,10 +310,12 @@ public final class ZipWriter {
 
     public func add(path: String, data: Data) throws {
         guard !finished, ZipReader.isSafePath(path), !data.isEmpty else { throw ZipError.unsafePath }
-        guard !records.contains(where: { $0.name == Array(path.utf8) }) else { throw ZipError.duplicateEntry }
+        guard !names.contains(path) else { throw ZipError.duplicateEntry }
         let name = Array(path.utf8)
-        let limit = Int(UInt32.max) - 1
-        guard records.count < 65_534, data.count <= limit, offset + 30 + name.count + data.count <= limit else {
+        let limit = min(limits.maxArchiveBytes, Int(UInt32.max) - 1)
+        guard records.count < min(limits.maxEntries, 65_534), data.count <= limits.maxEntryBytes,
+              data.count <= limit, totalBytes + data.count <= limits.maxTotalBytes,
+              offset + 30 + name.count + data.count <= limit else {
             throw ZipError.tooLarge
         }
         let crc = ZipReader.crc32(data)
@@ -318,6 +325,8 @@ public final class ZipWriter {
         header.append(contentsOf: name)
         try handle.write(contentsOf: header)
         try handle.write(contentsOf: data)
+        names.insert(path)
+        totalBytes += data.count
         records.append(Record(name: name, crc: crc, size: data.count, offset: offset))
         offset += header.count + data.count
     }
@@ -338,7 +347,7 @@ public final class ZipWriter {
             directory.appendLE32(UInt32(record.offset))
             directory.append(contentsOf: record.name)
         }
-        guard offset + directory.count + 22 <= Int(UInt32.max) - 1 else { throw ZipError.tooLarge }
+        guard offset + directory.count + 22 <= min(limits.maxArchiveBytes, Int(UInt32.max) - 1) else { throw ZipError.tooLarge }
         var tail = Data()
         tail.appendLE32(0x0605_4b50)
         tail.appendLE16(0)

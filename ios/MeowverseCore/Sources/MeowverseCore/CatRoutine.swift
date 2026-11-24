@@ -223,6 +223,10 @@ public enum CatRoutine {
         case .water: .drink
         // Never used: a wall piece has no interaction sites. Only keeps the switch total.
         case .photoBoard: .sit
+        // Household pieces always list their sites (or none, when decorative); this is only the
+        // fallback a legacy model without a site list would use.
+        case .bookcase, .sideboard, .mediaConsole, .writingDesk, .vanity, .coatRack: .loaf
+        case .floorLamp, .roomDivider, .plantStand, .fireplace: .sit
         }
     }
 

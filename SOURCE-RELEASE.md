@@ -1,28 +1,94 @@
-# 核心源码发行说明
+# 源码发行说明
 
 简体中文 | [English](SOURCE-RELEASE.en.md)
 
-本包按 2026-11-14 确认的方案整理：最新 MeowverseCore 核心源码公开，使用 PolyForm Noncommercial 1.0.0；正式 App 界面、渲染、美术与设计源文件继续私有。
+2026-11-24 起，本仓库公开准备上架 App Store 的喵空间 1.0 的**全部代码**：App 本体、小组件与实时活动、控制中心、猫咪分档下载扩展、MeowverseCore 核心库、单元测试与界面测试、Xcode 工程和构建脚本。许可不变，仍是 PolyForm Noncommercial 1.0.0。**美术资源不公开。** 这一版取代 2026-11-14 只公开核心库的方案。
 
 ## 版本与范围
 
-- 来源 main：`0084971a5fa8a834738920aa320c7f8d4081bb12`，对应当前 0.1.0 (3) 开发线，资料库 schema 11。
-- Swift 包：28 个库 Swift 文件、31 个测试 Swift 文件、Package.swift；附带必要的目录 JSON、合成备份 ZIP 与校验清单。
-- 附带的 JSON 包含稳定 ID、家具类别、占地和互动坐标等程序数据；不包含正式网格、贴图或动作资源。
-- 不包含 SwiftUI App target、Live Activity 扩展、正式渲染器或完整 App 构建工程。运行核心测试不会启动带房间画面的 App；完整体验请使用 TestFlight。
+<!-- export-facts:begin -->
+| 项目 | 值 |
+| --- | --- |
+| 来源提交 | `50328a126753f611f2c9aec0c805c36a425a2b45`（2026-11-24） |
+| App 版本 | 1.0（9），最低 iOS 26.0 |
+| 资料库 schema | 12 |
+| App target | 244 个文件 |
+| 小组件、实时活动、控制中心与猫的下载扩展 | 53 |
+| MeowverseCore 与测试 | 226 |
+| UI 测试 | 79 |
+| Xcode 工程与构建设置 | 13 |
+| 构建与测试脚本 | 14 |
+| 工具（识别评测、DINOv2 转换） | 22 |
+| 技术文档 | 10 |
+| 发行时新增（占位图脚本、核心测试脚本） | 2 |
+| 未公开的美术与资源文件 | 642 |
+<!-- export-facts:end -->
 
-## 与原开发目录的差异
+表中数字由导出脚本按来源提交生成；每个文件的 SHA-256 记在 [SOURCE-MANIFEST.json](SOURCE-MANIFEST.json)，可以逐个对照。
 
-仅从导出副本的 `CatPackTests.swift` 中移除了依赖包外正式 Bella 素材的 `bundledBella` 集成测试。该测试在素材缺失时会直接返回；保留它会把未执行的素材验证误算为通过。其余核心源码和测试保持来源版本的字节内容。
+| 目录 | 内容 |
+| --- | --- |
+| `ios/Meowverse/` | App target 的 Swift 源码、界面文字（`.xcstrings`）、隐私清单；资产目录只留 `Contents.json` 和颜色 |
+| `ios/PocketCatShared/`、`ios/PocketCatWidget/` | 像素猫小组件、实时活动、控制中心控件和它们与 App 共用的代码 |
+| `ios/MeowverseAssets/` | 猫咪低档、高档模型的下载扩展（Background Assets） |
+| `ios/MeowverseCore/` | 核心库、测试和测试用的程序数据、合成备份 |
+| `ios/MeowverseUITests/` | 界面测试 |
+| `ios/Meowverse.xcodeproj/`、`ios/*.xcconfig`、`ios/*.entitlements`、`ios/*-Info.plist` | 工程、scheme、测试计划、构建设置、权益和 Info.plist |
+| `ios/*.sh`、`ios/*.py` | 构建、测试、录屏和本地化检查脚本 |
+| `ios/Tools/` | 家具识别评测工具、DINOv2 转 Core ML 的脚本、占位图脚本 |
+| `docs/` 中的技术文档 | iCloud 同步、猫咪包格式、照片库模型、新手导览、渲染与画质分档、语音控制、猫咪小知识来源 |
 
-原开发线声明 345 项核心测试，本包声明并实际运行 **344 项，44 个 suite，全部通过**。这不代表正式 App 的界面测试或真机性能验收。
+语音控制（Talk to Bella）在 1.0 中隐藏，编译时就不包含；它的源码随本次发行公开，打开方法见 `ios/Config.xcconfig`。
+
+关于页和猫咪卡片里的赞助人名字目前是占位写法（例如「〈猫名〉的铲屎官」），等真实信息确认后再更新，**不是正式的鸣谢名单**。
+
+## 不包含什么
+
+- **美术资源**：猫咪与家具的模型和网格、贴图、房间主题、插画、App 图标、像素猫图片、控制中心符号、音效、字体，以及 Blender 源文件和美术管线。它们是项目与合作者的作品，其中一部分按第三方许可使用；美术不随代码授权，也不适合按代码许可再分发。完整画面请看 App Store 上的喵空间。
+- **DINOv2 模型权重**（约 86 MB 的 Core ML 文件）：可以用 `ios/Tools/EmbeddingLab` 从上游模型自己转换。缺少时 App 改用系统 Vision 给家具建议。
+- 冻结的网页版 demo、私人素材、内部文档（进度、计划、审核记录、营销材料、团队配置），以及在维护者自己照片上做的识别评测记录。
+- 内购代码。1.0 全部免费，内购从未进入 1.0 的代码。
+
+代码注释里提到的一部分文档（如发版流程、导览台词稿、美术管线说明）属于内部文档，没有随本次发行公开。
+
+## 与开发仓库的差异
+
+- `ios/simulator-id.sh`：开发仓库里默认指向维护者 Mac 上的一台模拟器；公开版改成取第一台可用的 iPhone 模拟器。其余文件与来源提交逐字节相同。
+- 新增 `ios/Tools/make-placeholder-art.py`（生成占位图）、`ios/test-core.sh`（跑核心测试）、`SOURCE-MANIFEST.json`，`.gitignore` 加了一段占位图的忽略规则。
+
+## 怎么编译
+
+需要 macOS、Xcode 27 和 iOS 26 SDK。没有外部 Swift Package 依赖，不需要模型密钥。
+
+```sh
+python3 ios/Tools/make-placeholder-art.py   # 可选：给资产目录补上灰色占位图
+xcodebuild -project ios/Meowverse.xcodeproj -scheme Meowverse \
+  -destination 'generic/platform=iOS Simulator' build
+ios/test-core.sh                            # 核心库测试
+```
+
+不补占位图也能编过，只是 Xcode 会为每张缺失的图片报一条警告。补了以后 App 图标、插画处是灰色方块，控制中心符号是灰色圆点。家具、猫咪、房间主题、音效和字体在运行时读取，没有美术时这些位置是空的，App 里的房间不会是正式版的样子。
+
+装到真机需要自己的开发者团队：在 `ios/Local.xcconfig`（不进 git）里写 `DEVELOPMENT_TEAM = <你的 Team ID>`，并把 `MEOWVERSE_BUNDLE_ID` 换成自己的标识。权益文件里的 App Group 与 iCloud 容器写的是本项目的标识，要一起改成你自己注册的。
+
+`ios/test-core.sh` 跳过 10 条读取美术文件或网页的测试（脚本里逐条写明），而不是让它们失败或在文件缺失时不检查就算通过。
+
+## 测试结果
+
+<!-- 由 lead 在最终提交上重跑后更新 -->
+在来源提交的导出副本上（Xcode 27.2，macOS 26.7.2）：
+
+- 模拟器构建（`generic/platform=iOS Simulator`，Debug）：通过，补占位图前后都通过。
+- `ios/test-core.sh`：1262 条测试中，并行跑时 4 条计时测试在机器繁忙时失败，单独重跑通过；`--no-parallel` 全部通过。
+
+这些结果只说明公开的代码能编译、核心库测试能通过，不代表正式 App 的画面、真机性能或系统权限验收。
 
 ## 图片与许可
 
-README 的中英文截图（各三张）是单独供项目展示的开发版真实界面，采自 2026-11-15，晚于构建 3；照片内容为合成示意。来源、时间和第三方署名见 [图片说明](docs/media/ATTRIBUTION.md)。它们不作为本 Swift 库的运行画面，也不提供正式美术源资产。
+README 的中英文截图是单独供项目展示的成品界面，照片内容为合成示意。来源、时间和第三方署名见 [图片说明](docs/media/ATTRIBUTION.md)。它们不是运行本仓库代码得到的画面，也不提供正式美术源资产。
 
 代码、构建清单、必要程序数据和合成测试素材适用 [LICENSE](LICENSE)。成品宣传截图、README 等说明材料、群二维码不随代码授权为可复用素材，详见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。正式许可使用未经修改的官方英文正文，解释不能扩大或缩小该正文的权利范围。
 
-本次发行使用本文件列明的核心库范围及 PolyForm Noncommercial 许可，不包含此前社区版草案的界面或替换美术，也不撤销任何既有版本已有效授出的权利。
+本次发行不撤销任何既有版本已有效授出的权利。
 
-官方源码仓库为 [Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)。完整产品可从 [TestFlight](https://testflight.apple.com/join/WCuPQFsm) 体验；QQ 群为 **Meowverse/喵空间**，群号 **1132819295**，群二维码直接展示在 [README 下方](README.md#community)。测试、反馈和入群都免费。
+官方源码仓库为 [Fengyee/meowverse-core](https://github.com/Fengyee/meowverse-core)。QQ 群为 **Meowverse/喵空间**，群号 **1132819295**，群二维码直接展示在 [README 下方](README.md#community)。测试、反馈和入群都免费。

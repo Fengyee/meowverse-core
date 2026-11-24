@@ -1,0 +1,84 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "冬日针织" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Winter Knit" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "冬日针织" } }
+      }
+    },
+    "奶油橡木" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cream Oak" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "奶油橡木" } }
+      }
+    },
+    "森林书房" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Forest Library" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "森林书房" } }
+      }
+    },
+    "桃桃烘焙" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Peach Bakery" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "桃桃烘焙" } }
+      }
+    },
+    "樱花来信" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sakura Letters" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "樱花来信" } }
+      }
+    },
+    "海盐蓝岸" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sea Salt Shore" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "海盐蓝岸" } }
+      }
+    },
+    "蜂蜜野餐" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Honey Picnic" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "蜂蜜野餐" } }
+      }
+    },
+    "薄荷温室" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mint Conservatory" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "薄荷温室" } }
+      }
+    },
+    "雨后蘑菇" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "After-Rain Mushrooms" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "雨后蘑菇" } }
+      }
+    },
+    "雾紫月眠" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lilac Moon" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "雾紫月眠" } }
+      }
+    },
+    "江南雅居" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jiangnan Study" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "江南雅居" } }
+      }
+    },
+    "樱庭和室" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sakura Tatami" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "樱庭和室" } }
+      }
+    },
+    "鎏金宫廷" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Gilded Palace" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "鎏金宫廷" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

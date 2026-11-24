@@ -1,17 +1,41 @@
 import Foundation
 
 public enum CatPlayItem: String, CaseIterable, Codable, Sendable, Identifiable {
-    case toyMouse, toyBall, featherWand
+    case toyMouse, toyBall, featherWand, windUpMouse
     case treatSalmon, treatChicken, treatBiscuit
 
     public var id: String { rawValue }
 
-    public var isTreat: Bool {
-        switch self {
-        case .toyMouse, .toyBall, .featherWand: false
-        case .treatSalmon, .treatChicken, .treatBiscuit: true
+    public enum Contact: Sendable {
+        case groundPaw, raisedPaw, muzzle
+
+        public var clipName: String {
+            switch self {
+            case .groundPaw: "bat_ground"
+            case .raisedPaw: "bat_high"
+            case .muzzle: "eat"
+            }
+        }
+
+        /// Horizontal offset of the baked paw or muzzle from the cat's root, in cells.
+        fileprivate var offset: (x: Double, z: Double) {
+            switch self {
+            case .groundPaw: (0.013701, 0.55)
+            case .raisedPaw: (-0.150, 0.807)
+            case .muzzle: (-0.097085, 0.62)
+            }
         }
     }
+
+    public var contact: Contact {
+        switch self {
+        case .toyMouse, .toyBall, .windUpMouse: .groundPaw
+        case .featherWand: .raisedPaw
+        case .treatSalmon, .treatChicken, .treatBiscuit: .muzzle
+        }
+    }
+
+    public var isTreat: Bool { contact == .muzzle }
 
     public var action: CatAction { isTreat ? .eat : .play }
 }
@@ -33,6 +57,23 @@ public struct CatPlayRequest: Equatable, Sendable, Identifiable {
 }
 
 extension CatRoutine {
+    /// A short dash through unobstructed floor cells, favouring steps away from the cat.
+    public static func mouseRun(from start: GridCell, awayFrom cat: GridCell, blocked: Set<GridCell>) -> [GridCell] {
+        var visited = blocked.union([start, GridRules.entrance])
+        var path: [GridCell] = []
+        func distance(_ cell: GridCell) -> Int {
+            let dx = cell.x - cat.x, dz = cell.z - cat.z
+            return dx * dx + dz * dz
+        }
+        for _ in 0..<3 {
+            let choices = neighbours(of: path.last ?? start).filter { !visited.contains($0) }
+            guard let next = choices.max(by: { distance($0) < distance($1) }) else { break }
+            visited.insert(next)
+            path.append(next)
+        }
+        return path
+    }
+
     public static func floorTrip(items: [PhotoFurniture], from rest: CatRest, catalog: FurnitureCatalog,
                                  to cell: GridCell, action: CatAction) -> CatTrip? {
         let rest = settled(rest, items: items, catalog: catalog)
@@ -56,16 +97,9 @@ extension CatRoutine {
         guard let trip = candidates.min(by: { $0.path.count < $1.path.count }) else { return nil }
         let standing = cellPoint(trip.end.cell), goal = request.point
         let yaw = atan2(goal.x - standing.x, goal.z - standing.z)
-        let contact: (x: Double, z: Double)
-        switch request.item {
-        case .treatSalmon, .treatChicken, .treatBiscuit: contact = (-0.097085, 0.62)
-        case .toyMouse, .toyBall: contact = (0.013701, 0.55)
-        case .featherWand: contact = (-0.150, 0.807)
-        }
-        // Match each baked muzzle or paw contact while keeping the root in the adjacent cell.
-        let muzzleX = contact.x, muzzleZ = contact.z
-        let point = GridPoint(x: goal.x - cos(yaw) * muzzleX - sin(yaw) * muzzleZ, y: 0,
-                              z: goal.z + sin(yaw) * muzzleX - cos(yaw) * muzzleZ)
+        let contact = request.item.contact.offset
+        let point = GridPoint(x: goal.x - cos(yaw) * contact.x - sin(yaw) * contact.z, y: 0,
+                              z: goal.z + sin(yaw) * contact.x - cos(yaw) * contact.z)
         return CatTrip(end: trip.end, leaving: trip.leaving, path: trip.path, seat: point, rotation: yaw,
                        exitVia: trip.exitVia, entryVia: [], sharedAccessPath: nil,
                        legacyExit: trip.legacyExit, legacyEntry: false)

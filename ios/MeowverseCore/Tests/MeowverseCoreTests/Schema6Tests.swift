@@ -107,7 +107,8 @@ private func stool(_ id: String, x: Int, z: Int) -> PhotoFurniture {
         #expect(await store.snapshot() == before)
         let back = try await store.restoreFurniture(instanceId: chair.instanceId, placement: Placement(modelId: "kenney-chair", x: 0, z: 0, width: 2, depth: 2, turn: 1, finish: .blue))
         #expect(back.instanceId == chair.instanceId && back.sources == fewer.sources && back.displayName == "旧椅子")
-        #expect([back.x, back.z, back.turn] == [0, 0, 1] && back.finish == .blue && back.revision == fewer.revision + 1)
+        #expect(back.x == 0 && back.z == 0 && back.turn == 1)
+        #expect(back.finish == .blue && back.revision == fewer.revision + 1)
         state = await store.snapshot()
         #expect(state.storage.isEmpty && state.items.map(\.instanceId) == [squatter.instanceId, chair.instanceId])
 

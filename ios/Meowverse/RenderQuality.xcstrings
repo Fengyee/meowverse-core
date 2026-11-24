@@ -1,0 +1,294 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "中" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中"
+          }
+        }
+      }
+    },
+    "低" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Low"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "低"
+          }
+        }
+      }
+    },
+    "保留太阳投影，使用较小的家具贴图" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sun shadows and smaller furniture textures"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留太阳投影，使用较小的家具贴图"
+          }
+        }
+      }
+    },
+    "按这台设备的内存用「%@」，设备发热时先降一档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ on this device, based on its memory. One step lower if it gets hot"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按这台设备的内存用「%@」，设备发热时先降一档"
+          }
+        }
+      }
+    },
+    "正在准备简化的猫咪模型，准备好之前先用标准模型。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getting the simpler cat model ready. Until then, cats use the standard model."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备简化的猫咪模型，准备好之前先用标准模型。"
+          }
+        }
+      }
+    },
+    "高清画面、柔和接地影和更丰富的材质细节" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highest sharpness, soft contact shadows, and richer materials"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高清画面、柔和接地影和更丰富的材质细节"
+          }
+        }
+      }
+    },
+    "画质" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graphics Quality"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画质"
+          }
+        }
+      }
+    },
+    "画质影响房间的清晰度、阴影和部分家具的材质细节。首次使用「低」档时，简化的猫咪模型需要下载。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quality affects room sharpness, shadows, and material detail on select furniture. On Low, the simplified cat model needs a one-time download."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画质影响房间的清晰度、阴影和部分家具的材质细节。首次使用「低」档时，简化的猫咪模型需要下载。"
+          }
+        }
+      }
+    },
+    "画面" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graphics"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面"
+          }
+        }
+      }
+    },
+    "简化的猫咪模型暂时下载不了，先用标准模型。换一次画质或下次打开 App 时会再试。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The simpler cat model can’t be downloaded right now, so cats use the standard model. It will try again when you change graphics quality or next open the app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简化的猫咪模型暂时下载不了，先用标准模型。换一次画质或下次打开 App 时会再试。"
+          }
+        }
+      }
+    },
+    "自动" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
+    "自动：按这台设备的内存用「%@」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic uses %@ on this device, based on its memory."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动：按这台设备的内存用「%@」。"
+          }
+        }
+      }
+    },
+    "自动：设备刚才发热，这次先用「%@」，下次打开 App 时恢复「%@」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic: this device got warm, so it uses %1$@ for now and goes back to %2$@ when you next open the app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动：设备刚才发热，这次先用「%@」，下次打开 App 时恢复「%@」。"
+          }
+        }
+      }
+    },
+    "设备有点热，画质先降到「%@」，下次打开 App 时恢复。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This device is warm, so graphics quality is down to %@ until you next open the app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备有点热，画质先降到「%@」，下次打开 App 时恢复。"
+          }
+        }
+      }
+    },
+    "较低分辨率，保留家具接缝的层次" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lower resolution with shading where furniture surfaces meet"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "较低分辨率，保留家具接缝的层次"
+          }
+        }
+      }
+    },
+    "这台设备用「%@」：刚才发热，下次打开 App 时恢复「%@」" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ on this device for now: it got warm. Back to %2$@ when you next open the app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台设备用「%@」：刚才发热，下次打开 App 时恢复「%@」"
+          }
+        }
+      }
+    },
+    "这台设备的系统版本用不了简化的猫咪模型，猫咪用标准模型。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This device’s iOS version can’t use the simpler cat model, so cats use the standard model."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台设备的系统版本用不了简化的猫咪模型，猫咪用标准模型。"
+          }
+        }
+      }
+    },
+    "高" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "High"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

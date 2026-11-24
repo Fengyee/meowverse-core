@@ -76,11 +76,22 @@ public struct FeedbackReport: Sendable, Equatable {
     public let logLines: [String]
     /// nil: the log could not be read. Empty: it was read and had nothing from Meowverse.
     public let logUnavailableReason: String?
+    /// How long the latest feature prints took on this device; durations only.
+    public let featurePrint: FeaturePrintTimings
+    /// How picked photos were fetched since launch; counts only.
+    public let photoLoads: PhotoLoadStats
+    /// Which model makes the prints and how far they are; nil when not gathered.
+    public let recognition: RecognitionDiagnostics?
 
     /// `rawLogLines` are scrubbed here with `privateTerms` (see `privateTerms(in:)`) and paths removed.
     public init(environment: Environment, library: Library, rawLogLines: [String],
-                privateTerms: [String], logUnavailableReason: String? = nil) {
+                privateTerms: [String], logUnavailableReason: String? = nil,
+                featurePrint: FeaturePrintTimings = FeaturePrintTimings(), photoLoads: PhotoLoadStats = PhotoLoadStats(),
+                recognition: RecognitionDiagnostics? = nil) {
         self.environment = environment
+        self.featurePrint = featurePrint
+        self.photoLoads = photoLoads
+        self.recognition = recognition
         self.library = library
         let terms = Self.normalizedTerms(privateTerms)
         self.logLines = rawLogLines.suffix(Self.maxLogLines).map { Self.scrub($0, terms: terms) }
@@ -106,7 +117,20 @@ public struct FeedbackReport: Sendable, Equatable {
             "Furniture in storage: \(lib.furnitureInStorage)",
             "Library schema: \(lib.schemaVersion)",
             "Library revision: \(lib.revision)",
-        ].joined(separator: "\n")
+            Self.featurePrintLine(featurePrint),
+            photoLoads.line,
+        ].joined(separator: "\n") + (recognition.map { "\n" + $0.lines.joined(separator: "\n") } ?? "")
+    }
+
+    /// The app's own analyzer names; any other name is reported as "other", never as written.
+    static let knownAnalyzers: Set<String> = ["vision.featurePrint", "vision.featurePrint.catCovered", "test.colorGrid",
+                                              "dinov2.vitb14reg.int8.meanpatch"]
+
+    /// e.g. "Feature print: median 142 ms over the last 20 (vision.featurePrint.catCovered)".
+    public static func featurePrintLine(_ timings: FeaturePrintTimings) -> String {
+        guard let median = timings.median else { return "Feature print: not timed yet" }
+        let analyzer = timings.analyzer.flatMap { knownAnalyzers.contains($0) ? $0 : nil } ?? "other"
+        return "Feature print: median \(Int(median.rounded())) ms over the last \(timings.count) (\(analyzer))"
     }
 
     /// The full block shown to the user and attached to the mail.

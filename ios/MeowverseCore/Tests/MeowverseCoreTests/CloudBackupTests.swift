@@ -42,6 +42,8 @@ struct CloudBackupTests {
     private func settings(enabled: Bool = true) -> CloudBackupSettings {
         var settings = CloudBackupSettings()
         settings.enabled = enabled
+        // Turned on while signed in to the account the plain folder reports.
+        settings.account = FolderBackupDestination.defaultAccount
         return settings
     }
 
@@ -72,6 +74,47 @@ struct CloudBackupTests {
         let name = CloudBackupName(deviceID: id, createdAt: date, revision: revision)!
         return CloudBackupEntry(name: name, info: nil, byteSize: 100, isDownloaded: true, upload: upload,
                                 condition: condition, isFromThisDevice: id == device)
+    }
+
+    // MARK: The restore offer (QA_T2 R2-1)
+
+    private func entry(_ id: String, photos: Int, furniture: Int, at date: Date? = nil) -> CloudBackupEntry {
+        let date = date ?? t0
+        var listed = entry(id, at: date)
+        listed.info = CloudBackupInfo(
+            format: CloudBackupInfo.format, version: CloudBackupInfo.version, archiveName: listed.name.archiveName,
+            deviceID: id, deviceKind: "iPhone", createdAt: date, revision: 1, photoCount: photos, furnitureCount: furniture,
+            byteSize: 100, sha256: String(repeating: "0", count: 64), appVersion: "1")
+        return listed
+    }
+
+    /// An empty room is offered another device's backup with something in it, never its own backup
+    /// (it holds what this library had) and never one known to hold nothing.
+    @Test func theRestoreOfferSkipsThisDevicesOwnAndEmptyBackups() {
+        #expect(CloudBackupPolicy.offersRestore(of: entry(otherDevice, photos: 1, furniture: 1)))
+        #expect(CloudBackupPolicy.offersRestore(of: entry(otherDevice, photos: 0, furniture: 2)))
+        #expect(CloudBackupPolicy.offersRestore(of: entry(otherDevice, photos: 3, furniture: 0)))
+        #expect(!CloudBackupPolicy.offersRestore(of: entry(device, photos: 1, furniture: 1)), "this device's own")
+        #expect(!CloudBackupPolicy.offersRestore(of: entry(otherDevice, photos: 0, furniture: 0)), "nothing to bring back")
+        #expect(CloudBackupPolicy.offersRestore(of: entry(otherDevice, at: t0)), "contents not known yet: unknown is not empty")
+        #expect(!CloudBackupPolicy.offersRestore(of: entry(device, at: t0)))
+    }
+
+    /// QA_T2 R3-1: the offer is the newest of the backups it may offer, not the newest backup. A
+    /// third device's newer empty backup, or this device's own newer one, leaves the older
+    /// backup with photos offered.
+    @Test func theRestoreOfferLooksPastANewerEmptyBackup() {
+        let thirdDevice = "aaaabbbbcccc"
+        let withPhotos = entry(otherDevice, photos: 12, furniture: 3, at: t0)
+        let newerEmpty = entry(thirdDevice, photos: 0, furniture: 0, at: t0 + day)
+        let newestOwn = entry(device, photos: 5, furniture: 1, at: t0 + 2 * day)
+        #expect(CloudBackupPolicy.recommended([withPhotos, newerEmpty, newestOwn])?.name == newestOwn.name)
+        #expect(CloudBackupPolicy.restoreOffer([withPhotos, newerEmpty])?.name == withPhotos.name)
+        #expect(CloudBackupPolicy.restoreOffer([newerEmpty, withPhotos, newestOwn])?.name == withPhotos.name)
+        // Of two it may offer, the newer one.
+        let newerWithPhotos = entry(thirdDevice, photos: 1, furniture: 0, at: t0 + 3 * day)
+        #expect(CloudBackupPolicy.restoreOffer([withPhotos, newerEmpty, newerWithPhotos])?.name == newerWithPhotos.name)
+        #expect(CloudBackupPolicy.restoreOffer([newerEmpty, newestOwn]) == nil, "nothing to offer")
     }
 
     // MARK: Names
@@ -543,6 +586,7 @@ struct UnreadableInfoDestination: BackupDestination {
     let unreadable: Set<String>
 
     func availability() -> CloudAvailability { base.availability() }
+    func accountFingerprint() -> String? { base.accountFingerprint() }
     func list() throws -> [CloudBackupFile] { try base.list() }
     func readSmallFile(_ name: String) throws -> Data {
         if unreadable.contains(name) { throw CloudBackupError.notFound }
@@ -571,6 +615,7 @@ final class FailingDestination: BackupDestination {
     }
 
     func availability() -> CloudAvailability { base.availability() }
+    func accountFingerprint() -> String? { base.accountFingerprint() }
     func list() throws -> [CloudBackupFile] { try base.list() }
     func readSmallFile(_ name: String) throws -> Data { try base.readSmallFile(name) }
     func remove(_ name: String) throws { try base.remove(name) }

@@ -9,6 +9,7 @@ public enum CatPackError: Error, Equatable, Sendable {
     case notArchive
     /// One file, the total, or the number of files is over `CatPackLimits`.
     case tooLarge
+    case renderBudgetExceeded
     /// A name in the archive is not a plain relative name (path traversal, hidden, links).
     case unsafeName
     /// The files are inside a folder instead of at the root of the archive.
@@ -74,6 +75,11 @@ public struct CatPackManifest: Codable, Sendable, Equatable {
     public let preview: String?
     public let license: String?
     public let attribution: String?
+    /// 低 and 高 meshes (`CatPackTiers.swift`); nil in every pack from before tiers, and in a
+    /// pack that only has 中. Optional, so the synthesized decoder reads it with
+    /// `decodeIfPresent`: a manifest without the key reads as before. Older app versions ignore
+    /// the key and show 中.
+    public let tiers: CatPackTiers?
 
     /// Decodes and validates.
     public static func decode(_ data: Data) throws -> CatPackManifest {
@@ -110,6 +116,7 @@ public struct CatPackManifest: Codable, Sendable, Equatable {
         }
         if let inspect { try check(inspect, ["usdz"]) }
         if let preview { try check(preview, Self.imageExtensions) }
+        try validateTiers(check: check)
     }
 
     static let imageExtensions: Set<String> = ["png", "jpg", "jpeg", "webp"]
@@ -229,12 +236,15 @@ public struct CatPoseMesh: Decodable, Sendable {
 
     public static func decode(_ data: Data, name: String = "mesh") throws -> CatPoseMesh {
         guard let mesh = try? JSONDecoder().decode(CatPoseMesh.self, from: data) else { throw CatPackError.badMesh(name) }
+        guard !mesh.parts.isEmpty else { throw CatPackError.badMesh(name) }
+        guard CatPackValidator.fitsMeshBudget(vertices: mesh.parts.map { $0.positions.count / 3 },
+                                              indices: mesh.parts.map { $0.indices.count }) else { throw CatPackError.renderBudgetExceeded }
         guard mesh.isValid else { throw CatPackError.badMesh(name) }
         return mesh
     }
 
     var isValid: Bool {
-        !parts.isEmpty && parts.allSatisfy { part in
+        parts.allSatisfy { part in
             let count = part.positions.count / 3
             guard count > 0, !part.material.isEmpty, part.positions.count == count * 3,
                   part.normals.count == part.positions.count, part.uvs.count == count * 2,
@@ -292,6 +302,13 @@ public struct CatGaitRig: Decodable, Sendable {
         public let still: Double
         public let tracks: [Track]
 
+        /// Reduce the numerator before dividing so that a looping clip cannot overflow at large elapsed times.
+        public static func phase(_ progress: Double, period: Double, looping: Bool) -> Double {
+            guard progress.isFinite, period.isFinite, period > 0, progress > 0 else { return 0 }
+            if looping { return progress.truncatingRemainder(dividingBy: period) / period }
+            return min(progress, period) / period
+        }
+
         enum CodingKeys: String, CodingKey { case duration, stride, loop, still, tracks }
 
         public init(from decoder: Decoder) throws {
@@ -333,29 +350,39 @@ public struct CatGaitRig: Decodable, Sendable {
                   joint.parent.map({ $0 >= 0 && $0 < index }) ?? true else { throw CatPackError.badGaits }
         }
         guard !parts.isEmpty else { throw CatPackError.badGaits }
-        for part in parts {
-            let count = part.positions.count / 3
-            guard count > 0, !part.material.isEmpty, part.positions.count == count * 3,
-                  part.normals.count == part.positions.count, part.uvs.count == count * 2,
-                  part.weights.count == count * 4, part.jointIndices.count == part.weights.count,
-                  !part.indices.isEmpty, part.indices.count.isMultiple(of: 3),
-                  part.indices.allSatisfy({ Int($0) < count }),
-                  part.jointIndices.allSatisfy({ (0..<joints.count).contains($0) }) else { throw CatPackError.badGaits }
-        }
+        guard CatPackValidator.fitsMeshBudget(vertices: parts.map { $0.positions.count / 3 },
+                                              indices: parts.map { $0.indices.count }),
+              clips.count <= 128,
+              clips.values.reduce(0, { $0 + $1.tracks.count }) <= 4_096,
+              clips.values.reduce(0, { $0 + $1.tracks.reduce(0, { $0 + $1.values.count }) }) <= 2_097_152
+        else { throw CatPackError.renderBudgetExceeded }
+        for part in parts where !Self.isValid(part, jointCount: joints.count) { throw CatPackError.badGaits }
         for name in Self.requiredClips {
-            guard let clip = clips[name], clip.stride > 0, clip.stride.isFinite else { throw CatPackError.badGaits }
+            guard let clip = clips[name], (0.001...1_000).contains(clip.stride) else { throw CatPackError.badGaits }
         }
         if playsActions {
             for name in Self.actionClips where clips[name] == nil { throw CatPackError.badGaits }
         }
         for clip in clips.values {
-            guard clip.duration > 0, clip.duration.isFinite, clip.stride >= 0, clip.stride.isFinite,
+            guard (0.001...3_600).contains(clip.duration), (0...1_000).contains(clip.stride),
                   clip.still.isFinite, (0...1).contains(clip.still),
                   !clip.tracks.isEmpty, clip.tracks.allSatisfy({ track in
                       joints.indices.contains(track.joint) && track.values.count >= track.width
                           && track.values.count.isMultiple(of: track.width)
                   }) else { throw CatPackError.badGaits }
         }
+    }
+
+    /// One skinned part: consistent arrays, four influences per vertex, joints in range.
+    /// Shared with a tier's `CatSkin`.
+    static func isValid(_ part: Part, jointCount: Int) -> Bool {
+        let count = part.positions.count / 3
+        return count > 0 && !part.material.isEmpty && part.positions.count == count * 3
+            && part.normals.count == part.positions.count && part.uvs.count == count * 2
+            && part.weights.count == count * 4 && part.jointIndices.count == part.weights.count
+            && !part.indices.isEmpty && part.indices.count.isMultiple(of: 3)
+            && part.indices.allSatisfy({ Int($0) < count })
+            && part.jointIndices.allSatisfy({ (0..<jointCount).contains($0) })
     }
 }
 
@@ -365,36 +392,71 @@ public enum CatPackValidator {
     /// Largest texture edge accepted (pixels).
     public static let maxTextureEdge = 8192
 
-    /// Checks every file the manifest names. `file` returns nil for a file that is not there.
-    public static func validate(manifest: CatPackManifest, file: (String) throws -> Data?) throws {
-        for name in manifest.requiredFiles + manifest.optionalFiles {
+    public static let roomTextureEdge = 2048
+
+    static func fitsMeshBudget(vertices: [Int], indices: [Int]) -> Bool {
+        (1...128).contains(vertices.count) && vertices.reduce(0, +) <= 65_536 && indices.reduce(0, +) <= 393_216
+    }
+
+    /// Checks every distinct file. The texture budget counts the source dimensions before downsampling,
+    /// per tier: the room wears one tier's textures at a time.
+    ///
+    /// `tiers`: which of the manifest's tiers to check as well; nil checks every tier it declares
+    /// (an imported pack carries them all). A built-in pack's tiers are downloaded, not in the
+    /// bundle, so its bundle is checked with `tiers: []`.
+    public static func validate(manifest: CatPackManifest, limits: CatPackLimits = .standard, tiers: [CatMeshTier]? = nil,
+                                file: (String) throws -> Data?) throws {
+        let textures = Set(manifest.materials.values.flatMap { [$0.baseColor, $0.sleepBaseColor].compactMap { $0 } })
+        var remaining = limits.maxTotalTexturePixels
+        var pixels: [String: Int] = [:]
+        var rig: CatGaitRig?
+        for name in Set(manifest.requiredFiles + manifest.optionalFiles).sorted() {
             guard let data = try file(name) else { throw CatPackError.missingFile(name) }
-            try validate(name: name, data: data, manifest: manifest)
+            if CatPackPose.allCases.contains(where: { manifest.file(for: $0) == name }) {
+                _ = try CatPoseMesh.decode(data, name: name)
+            }
+            if name == manifest.groundGaits { rig = try CatGaitRig.decode(data) }
+            if textures.contains(name) {
+                guard let count = imagePixels(data) else { throw CatPackError.badTexture(name) }
+                guard count <= remaining else { throw CatPackError.renderBudgetExceeded }
+                remaining -= count
+                pixels[name] = count
+            }
+            if name == manifest.inspect {
+                guard data.count > 4, data.prefix(4) == Data([0x50, 0x4b, 0x03, 0x04]) else { throw CatPackError.badInspect }
+            }
+            if name == manifest.preview, imagePixels(data) == nil { throw CatPackError.badPreview }
+        }
+
+        for tier in (tiers ?? manifest.declaredTiers) where tier != .medium {
+            guard let entry = manifest.tier(tier) else { continue }
+            // Its own meshes on 中's textures come out scrambled (`textureGap`): refused, not shown.
+            guard manifest.textureGap(of: tier) == nil else { throw CatPackError.badManifest }
+            for name in entry.files {
+                guard let data = try file(name) else { throw CatPackError.missingFile(name) }
+                if name == entry.skin {
+                    guard let rig else { throw CatPackError.badGaits }
+                    _ = try CatSkin.decode(data, name: name, for: rig)
+                } else if CatPackPose.allCases.contains(where: { entry.poseFile($0) == name }) {
+                    _ = try CatPoseMesh.decode(data, name: name)
+                } else {
+                    guard let count = imagePixels(data) else { throw CatPackError.badTexture(name) }
+                    pixels[name] = count
+                }
+            }
+            let worn = manifest.textures(tier: tier).reduce(0) { $0 + (pixels[$1] ?? 0) }
+            guard worn <= limits.maxTotalTexturePixels else { throw CatPackError.renderBudgetExceeded }
         }
     }
 
-    static func validate(name: String, data: Data, manifest: CatPackManifest) throws {
-        if CatPackPose.allCases.contains(where: { manifest.file(for: $0) == name }) {
-            _ = try CatPoseMesh.decode(data, name: name)
-        }
-        if name == manifest.groundGaits { _ = try CatGaitRig.decode(data) }
-        if manifest.materials.values.contains(where: { $0.baseColor == name || $0.sleepBaseColor == name }) {
-            guard isImage(data) else { throw CatPackError.badTexture(name) }
-        }
-        if name == manifest.inspect {
-            // USDZ is an uncompressed ZIP container.
-            guard data.count > 4, data.prefix(4) == Data([0x50, 0x4b, 0x03, 0x04]) else { throw CatPackError.badInspect }
-        }
-        if name == manifest.preview, !isImage(data) { throw CatPackError.badPreview }
-    }
-
-    static func isImage(_ data: Data) -> Bool {
+    public static func imagePixels(_ data: Data) -> Int? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil),
               let type = CGImageSourceGetType(source) as String?,
               [UTType.png, .jpeg, .webP].map(\.identifier).contains(type),
               let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
               let width = properties[kCGImagePropertyPixelWidth] as? Int,
-              let height = properties[kCGImagePropertyPixelHeight] as? Int else { return false }
-        return (1...maxTextureEdge).contains(width) && (1...maxTextureEdge).contains(height)
+              let height = properties[kCGImagePropertyPixelHeight] as? Int,
+              (1...maxTextureEdge).contains(width), (1...maxTextureEdge).contains(height) else { return nil }
+        return width * height
     }
 }

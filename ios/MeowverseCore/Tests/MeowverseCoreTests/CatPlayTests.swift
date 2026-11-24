@@ -12,6 +12,19 @@ import Testing
                        sources: [.manual(photoId: "p")], tags: [], revision: 1)
     }
 
+    @Test(arguments: CatPlayItem.allCases) func selectsContactForEachItem(item: CatPlayItem) {
+        let expected: CatPlayItem.Contact
+        let clip: String
+        switch item {
+        case .toyMouse, .toyBall, .windUpMouse: (expected, clip) = (.groundPaw, "bat_ground")
+        case .featherWand: (expected, clip) = (.raisedPaw, "bat_high")
+        case .treatSalmon, .treatChicken, .treatBiscuit: (expected, clip) = (.muzzle, "eat")
+        }
+        #expect(item.contact == expected)
+        #expect(item.contact.clipName == clip)
+        #expect(item.action == (expected == .muzzle ? .eat : .play))
+    }
+
     @Test(arguments: CatPlayItem.allCases) func emptyRoomTargetsHaveSafeApproachAndExactContact(item: CatPlayItem) throws {
         for z in 0..<GridRules.size {
             for x in 0..<GridRules.size {
@@ -27,7 +40,7 @@ import Testing
                 let localX: Double, localZ: Double
                 switch item {
                 case .treatSalmon, .treatChicken, .treatBiscuit: (localX, localZ) = (-0.097085, 0.62)
-                case .toyMouse, .toyBall: (localX, localZ) = (0.013701, 0.55)
+                case .toyMouse, .windUpMouse, .toyBall: (localX, localZ) = (0.013701, 0.55)
                 case .featherWand: (localX, localZ) = (-0.15, 0.807)
                 }
                 let yaw = trip.rotation
@@ -63,6 +76,22 @@ import Testing
         #expect(trip.path.allSatisfy { !blocked.contains($0) })
         #expect(zip(trip.path, trip.path.dropFirst()).allSatisfy { abs($0.x - $1.x) + abs($0.z - $1.z) == 1 })
         #expect(trip.end.lastItemId == chair.instanceId)
+    }
+
+    @Test func windUpMouseFleesAcrossAdjacentFreeCellsAndStopsInACorner() throws {
+        let start = GridCell(x: 0, z: 0)
+        let blocked = Set([GridCell(x: 1, z: 0), GridCell(x: 0, z: 2)])
+        let cat = GridCell(x: 0, z: 10)
+        let path = CatRoutine.mouseRun(from: start, awayFrom: cat, blocked: blocked)
+        #expect(path.first == GridCell(x: 0, z: 1))
+        #expect(path.count == 3 && Set(path).count == 3)
+        for (from, to) in zip([start] + path, path) {
+            #expect(abs(from.x - to.x) + abs(from.z - to.z) == 1)
+            #expect(!blocked.contains(to) && GridRules.inRoom(x: to.x, z: to.z))
+        }
+        #expect(CatRoutine.mouseRun(from: start, awayFrom: cat, blocked: blocked.union([GridCell(x: 0, z: 1)])).isEmpty)
+        let middle = GridCell(x: 6, z: 6)
+        #expect(CatRoutine.mouseRun(from: middle, awayFrom: GridCell(x: 5, z: 6), blocked: []).first != GridCell(x: 5, z: 6))
     }
 
     @Test func replacingARequestKeepsDistinctConsumptionIdentity() {

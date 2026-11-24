@@ -1,0 +1,342 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "Bella 带你认识这个家。想再看一遍：设置 › 使用导览。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bella shows you around your home. To see it again: Settings › Tour."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bella 带你认识这个家。想再看一遍：设置 › 使用导览。"
+          }
+        }
+      }
+    },
+    "top.news" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "News"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "公告"
+          }
+        }
+      }
+    },
+    "三套新家具" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Three new furniture sets"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三套新家具"
+          }
+        }
+      }
+    },
+    "使用导览" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用导览"
+          }
+        }
+      }
+    },
+    "八只猫和它们的角色卡" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eight cats, each with a card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "八只猫和它们的角色卡"
+          }
+        }
+      }
+    },
+    "公告" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "News"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "公告"
+          }
+        }
+      }
+    },
+    "和猫咪说话" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Talk to your cat"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和猫咪说话"
+          }
+        }
+      }
+    },
+    "在猫咪管理的猫咪模型里点一只，先看看它是谁，再决定要不要换。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap one under Cat model in Cats to see who it is before you decide to switch."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在猫咪管理的猫咪模型里点一只，先看看它是谁，再决定要不要换。"
+          }
+        }
+      }
+    },
+    "在设置里选自动、高、中或低。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Automatic, High, Medium or Low in Settings."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在设置里选自动、高、中或低。"
+          }
+        }
+      }
+    },
+    "小组件和控制中心" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widgets and Control Center"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小组件和控制中心"
+          }
+        }
+      }
+    },
+    "把像素小猫放到主屏幕和锁屏，或者从控制中心让它陪你一会儿。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Put the pixel cat on your Home and Lock Screens, or have it keep you company from Control Center."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把像素小猫放到主屏幕和锁屏，或者从控制中心让它陪你一会儿。"
+          }
+        }
+      }
+    },
+    "新功能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s new"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能"
+          }
+        }
+      }
+    },
+    "新功能、正在计划和鸣谢" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s new, what’s planned, and thanks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能、正在计划和鸣谢"
+          }
+        }
+      }
+    },
+    "新功能和正在计划" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s new and what’s planned"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能和正在计划"
+          }
+        }
+      }
+    },
+    "新功能和鸣谢" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s new and thanks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能和鸣谢"
+          }
+        }
+      }
+    },
+    "正在计划" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planned"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在计划"
+          }
+        }
+      }
+    },
+    "点房间角落的猫咪头像，说“去沙发上躺着”或“过来”。识别只在这台设备上进行，不录音。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the cat’s head in the corner of the room and say “go lie on the sofa” or “come here”. Speech is recognised only on this device; nothing is recorded."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点房间角落的猫咪头像，说“去沙发上躺着”或“过来”。识别只在这台设备上进行，不录音。"
+          }
+        }
+      }
+    },
+    "画质三档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Three levels of graphics quality"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画质三档"
+          }
+        }
+      }
+    },
+    "赞助人" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sponsors"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助人"
+          }
+        }
+      }
+    },
+    "鎏金宫廷、江南雅居、樱庭和室。三套家具各有配套的房间主题。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gilded Palace, Jiangnan Study and Sakura Tatami. Each furniture set now has a matching room theme."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鎏金宫廷、江南雅居、樱庭和室。三套家具各有配套的房间主题。"
+          }
+        }
+      }
+    },
+    "鸣谢" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鸣谢"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

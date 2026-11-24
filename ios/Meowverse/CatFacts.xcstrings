@@ -1,0 +1,366 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "fact.dawn-dusk" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wide awake at dawn? Cats are crepuscular: they’re naturally at their liveliest at dawn and dusk."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天还没亮它就来闹你？猫天生在清晨和黄昏最有精神，这叫“晨昏性”。"
+          }
+        }
+      }
+    },
+    "fact.slow-blink" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your cat’s slow blink may be a relaxed, positive signal. Blink slowly back, and it’s more likely to come over."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它对你慢慢眨眼，可能是在表达放松和好感。你也慢慢眨回去，它更可能走到你身边。"
+          }
+        }
+      }
+    },
+    "fact.tail-up" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your cat comes over with its tail held straight up, it’s usually a friendly hello."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它竖着尾巴朝你走来，通常是在跟你友好地打招呼。"
+          }
+        }
+      }
+    },
+    "fact.purr" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purring isn’t always happiness: cats purr when relaxed, and sometimes when tense. Ears and tail tell you more."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "呼噜不一定只是开心。它放松时会呼噜，紧张时也可能呼噜，耳朵和尾巴会告诉你更多。"
+          }
+        }
+      }
+    },
+    "fact.kneading" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kneading starts with nursing kittens. Grown cats who knead are often thought to feel that same contentment."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它用前爪一下一下地踩，是吃奶时留下的小习惯。长大后还这样踩，常被认为是又感到了那份满足。"
+          }
+        }
+      }
+    },
+    "fact.scratching" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scratching has a purpose: it sheds worn claw sheaths, makes a good stretch and leaves scent from the paws."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它爱抓抓挠挠，是有原因的：褪掉爪子外层的旧鞘，伸个懒腰，再留下爪垫的气味。"
+          }
+        }
+      }
+    },
+    "fact.cheek-rub" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your cat rubs its cheek and body against you, it’s swapping scent, the way it would greet a cat friend."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它用脸颊和身子蹭你，是在和你交换气味，就像跟要好的猫打招呼一样。"
+          }
+        }
+      }
+    },
+    "fact.carpal-whiskers" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your cat has whiskers on the backs of its front legs too, sensing the world just like the ones on its face."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫的胡须不只长在脸上，前腿后侧也藏着几根，和脸上的一样，用来感知周围。"
+          }
+        }
+      }
+    },
+    "fact.night-eyes" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A shiny layer in its eyes helps it see in dim light and glows when light hits. Total darkness stumps it too."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫眼底有一层反光膜，暗处也看得清，被光一照还会发亮。不过漆黑一片时，它也看不见。"
+          }
+        }
+      }
+    },
+    "fact.high-hearing" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cats hear far higher pitches than we do, including the ultrasonic chatter of small rodents."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫能听见比人高得多的声音，连小老鼠细细的高频叫声，它都听得到。"
+          }
+        }
+      }
+    },
+    "fact.no-sweet" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cats shrug at sweets. One of their sweet-taste genes is broken, so they most likely can’t taste sugar at all."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "猫对甜味没什么兴趣：感受甜味的一个基因在猫身上失效了，它很可能根本尝不出甜。"
+          }
+        }
+      }
+    },
+    "fact.tongue" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The tiny spines on your cat’s tongue have hollow, scoop-shaped tips that carry saliva deep into its fur."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它舌头上的小倒刺，尖端是中空的小勺，能把唾液送进毛的深处，难怪舔毛这么有效。"
+          }
+        }
+      }
+    },
+    "fact.flehmen" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That open-mouthed grimace after a sniff? It sends the scent to a special organ in the roof of the mouth."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它闻完东西微微张嘴，像在做鬼脸？其实是在把气味送到上颚一个特别的器官。"
+          }
+        }
+      }
+    },
+    "fact.meow-for-you" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adult cats rarely meow at each other. Those meows? They’re mostly meant for people, like you."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成年猫之间很少喵喵叫。它的喵声多半是说给人听的，比如你。"
+          }
+        }
+      }
+    },
+    "fact.high-places" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From up high, a cat can keep watch around it, and that helps it feel safe. Hello, cat trees and windowsills."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "它爱待在高处，把四周看得清清楚楚，会觉得更安心。猫爬架和窗台就是它的瞭望台。"
+          }
+        }
+      }
+    },
+    "fact.separate-resources" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In feline vets’ guidelines for a cat-friendly home, food, water, litter box and bed each get their own spot."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在猫科兽医的指南里，猫的家是分好区的：吃饭、喝水、上厕所和睡觉，各在一处。"
+          }
+        }
+      }
+    },
+    "fact.hiding-spot" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A hideaway helps a cat feel secure, and a cardboard box or a carrier it can tuck into counts as one."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有个能钻进去躲一躲的地方，猫会更安心。一个纸箱、一个猫包，都能当它的小基地。"
+          }
+        }
+      }
+    },
+    "fact.catch-the-toy" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When a wand game ends with your cat making the catch, it’s just like finishing a real hunt."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "逗猫棒玩到最后被它“抓到”，就像一场狩猎有了结局。"
+          }
+        }
+      }
+    },
+    "fact.wildcat-ancestor" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "House cats come from the Near Eastern wildcat. In Cyprus, a person was buried with a cat some 9,500 years ago."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你家猫的祖先是近东野猫。塞浦路斯有座约九千五百年前的墓，里面人和猫葬在一起。"
+          }
+        }
+      }
+    },
+    "fact.kitten-social" : {
+      "comment" : "Cat fact notification body. Shown verbatim; keep it to one or two short sentences. Source: docs/CAT_FACTS_SOURCES.md",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roughly weeks two to seven are a kitten’s key window for getting to know people and new things."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小猫出生后大约第 2 到第 7 周，是它认识人和新鲜事物的关键时光。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

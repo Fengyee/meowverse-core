@@ -166,6 +166,10 @@ public enum BackupArchive {
     static func write(state: AppState, root: URL, to fileURL: URL, appVersion: String,
                       progress: @Sendable (BackupProgress) -> Void) throws -> BackupSummary {
         let fm = FileManager.default
+        guard LibraryStore.isConsistent(state) else { throw BackupError.damaged("state") }
+        try validateValuesAndPaths(state)
+        let stateData = try LibraryStore.encodeState(state)
+        guard stateData.count <= maxJSONBytes else { throw BackupError.tooLarge }
         let total = state.photos.reduce(0) { $0 + $1.byteSize }
         var done = 0
         progress(BackupProgress(completedBytes: 0, totalBytes: total))
@@ -179,8 +183,7 @@ public enum BackupArchive {
         guard damaged == 0 else { throw BackupError.libraryDamaged(damaged) }
 
         do {
-            let writer = try ZipWriter(url: fileURL)
-            let stateData = try LibraryStore.encodeState(state)
+            let writer = try ZipWriter(url: fileURL, limits: .backup)
             try writer.add(path: statePath, data: stateData)
             var files: [FileEntry] = []
             var written = Set<String>()
@@ -213,7 +216,9 @@ public enum BackupArchive {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
             encoder.dateEncodingStrategy = .iso8601
-            try writer.add(path: manifestPath, data: try encoder.encode(manifest))
+            let manifestData = try encoder.encode(manifest)
+            guard manifestData.count <= maxJSONBytes else { throw BackupError.tooLarge }
+            try writer.add(path: manifestPath, data: manifestData)
             let size = try writer.finish()
             return BackupSummary(photoCount: state.photos.count, furnitureCount: state.items.count + state.storage.count, byteSize: size)
         } catch let error as ZipError {
@@ -311,19 +316,8 @@ public enum BackupArchive {
             if !decoded.cats.isEmpty { decoded.cats[0].name = decoded.catName }
             state = decoded
         }
-        guard (state.items + state.storage).allSatisfy(isPlausible), state.photos.allSatisfy({ $0.note.utf16.count <= LibraryStore.maxNoteLength }) else {
-            throw BackupError.damaged("stateValues")
-        }
-
-        // Every stored path must be one the app itself would have written.
-        var referenced = Set<String>()
-        for photo in state.photos {
-            guard isHash(photo.sha256), photo.byteSize > 0, photo.byteSize <= PhotoIngest.maxBytes,
-                  isOriginalPath(photo.originalFile, sha256: photo.sha256), isThumbnailPath(photo.thumbnailFile),
-                  referenced.insert(photo.originalFile).inserted, referenced.insert(photo.thumbnailFile).inserted,
-                  described[photo.originalFile] != nil
-            else { throw BackupError.damaged("photoPaths") }
-        }
+        let referenced = try validateValuesAndPaths(state)
+        guard state.photos.allSatisfy({ described[$0.originalFile] != nil }) else { throw BackupError.damaged("photoPaths") }
         guard described.keys.allSatisfy(referenced.contains) else { throw BackupError.damaged("extraFiles") }
 
         try staging.create()
@@ -366,14 +360,32 @@ public enum BackupArchive {
         return PreparedLibrary(preview: preview, stagingURL: staging.url, state: state)
     }
 
+    @discardableResult
+    private static func validateValuesAndPaths(_ state: AppState) throws -> Set<String> {
+        guard state.photos.count <= ZipLimits.backup.maxEntries - 2 else { throw BackupError.tooLarge }
+        guard (state.items + state.storage).allSatisfy(isPlausible), state.photos.allSatisfy({ $0.note.utf16.count <= LibraryStore.maxNoteLength }) else {
+            throw BackupError.damaged("stateValues")
+        }
+
+        // Every stored path must be one the app itself would have written.
+        var referenced = Set<String>()
+        for photo in state.photos {
+            guard isHash(photo.sha256), photo.byteSize > 0, photo.byteSize <= PhotoIngest.maxBytes,
+                  isOriginalPath(photo.originalFile, sha256: photo.sha256), isThumbnailPath(photo.thumbnailFile),
+                  referenced.insert(photo.originalFile).inserted, referenced.insert(photo.thumbnailFile).inserted
+            else { throw BackupError.damaged("photoPaths") }
+        }
+        return referenced
+    }
+
     /// Not the grid rules (rooms are never re-validated on load), only values a renderer can
     /// take: a quarter turn, a footprint and a position of sane size, bounded text.
     static func isPlausible(_ item: PhotoFurniture) -> Bool {
         (0...3).contains(item.turn) && (1...32).contains(item.width) && (1...32).contains(item.depth)
             && (-64...64).contains(item.x) && (-64...64).contains(item.z)
             && !item.instanceId.isEmpty && item.instanceId.utf8.count <= 200 && item.modelId.utf8.count <= 200
-            && item.displayName.count <= 200 && item.tags.count <= 50 && item.tags.allSatisfy { $0.count <= 200 }
-            && item.revision >= 0
+            && item.tags.count <= 50 && item.tags.allSatisfy { $0.count <= 200 }
+            && LibraryStore.validRevision(item.revision)
     }
 
     /// `originals/<sha256>.<ext>` with a short lowercase extension.

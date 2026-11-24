@@ -11,13 +11,15 @@ public struct ColorGridEmbedder: PhotoEmbedding {
 
     public init() {}
 
-    public var analyzer: String { "test.colorGrid" }
+    public static let analyzerName = "test.colorGrid"
+    public var analyzer: String { Self.analyzerName }
+    public var revision: Int { 1 }
 
     public func featurePrint(imageData: Data) async throws -> FeaturePrint {
         guard let image = PhotoIngest.downsampledImage(data: imageData, maxPixel: PhotoIngest.thumbnailMaxPixel),
               let vector = Self.grid(image)
         else { throw RecognitionError.undecodableImage }
-        return FeaturePrint(analyzer: analyzer, revision: 1, vector: vector)
+        return FeaturePrint(analyzer: analyzer, revision: revision, vector: vector)
     }
 
     static func grid(_ image: CGImage) -> [Float]? {

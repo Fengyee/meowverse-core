@@ -1,0 +1,3449 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "三层滚球塔": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ball track"
+          }
+        }
+      }
+    },
+    "三折晨光矮妆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning Triptych Vanity"
+          }
+        }
+      }
+    },
+    "三脚凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three-leg stool"
+          }
+        }
+      }
+    },
+    "三脚小伞灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tripod Parasol Lamp"
+          }
+        }
+      }
+    },
+    "上层软台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper padded step"
+          }
+        }
+      }
+    },
+    "上层软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper cushion"
+          }
+        }
+      }
+    },
+    "下层踏板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower step"
+          }
+        }
+      }
+    },
+    "丝绒侧台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velvet side perch"
+          }
+        }
+      }
+    },
+    "丝绒右座": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right velvet seat"
+          }
+        }
+      }
+    },
+    "丝绒左座": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left velvet seat"
+          }
+        }
+      }
+    },
+    "丝绒帷幔小寝宫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velvet Curtain Nook"
+          }
+        }
+      }
+    },
+    "丝绒床面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velvet bed"
+          }
+        }
+      }
+    },
+    "两级软垫台阶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two-step block"
+          }
+        }
+      }
+    },
+    "中层": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle tier"
+          }
+        }
+      }
+    },
+    "中层圆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle platform"
+          }
+        }
+      }
+    },
+    "中层观景板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle shelf"
+          }
+        }
+      }
+    },
+    "中层跳台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle perch"
+          }
+        }
+      }
+    },
+    "中间": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle"
+          }
+        }
+      }
+    },
+    "乡居木壁炉": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cottage Mantel Hearth"
+          }
+        }
+      }
+    },
+    "乡间双门餐边柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cottage Linen Sideboard"
+          }
+        }
+      }
+    },
+    "书架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bookcase"
+          }
+        }
+      }
+    },
+    "书桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writing desk"
+          }
+        }
+      }
+    },
+    "云山观景阁": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud Mountain Lookout"
+          }
+        }
+      }
+    },
+    "云朵贵妃沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud chaise sofa"
+          }
+        }
+      }
+    },
+    "云纹茶案": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud Apron Tea Table"
+          }
+        }
+      }
+    },
+    "人体工学椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ergonomic chair"
+          }
+        }
+      }
+    },
+    "会挡住墙上的「%@」": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This would hide “%@” on the wall"
+          }
+        }
+      }
+    },
+    "低座座布团": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low zabuton"
+          }
+        }
+      }
+    },
+    "低踏台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low step"
+          }
+        }
+      }
+    },
+    "俱乐部扶手椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Club armchair"
+          }
+        }
+      }
+    },
+    "储物箱长凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest bench"
+          }
+        }
+      }
+    },
+    "内圈软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inner cushion"
+          }
+        }
+      }
+    },
+    "凳面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seat"
+          }
+        }
+      }
+    },
+    "分节隧道": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segmented tunnel"
+          }
+        }
+      }
+    },
+    "剑麻抓柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sisal scratching post"
+          }
+        }
+      }
+    },
+    "剑麻柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sisal post"
+          }
+        }
+      }
+    },
+    "剑麻猫抓柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sisal post"
+          }
+        }
+      }
+    },
+    "剑麻面板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sisal panel"
+          }
+        }
+      }
+    },
+    "半月浮岛书桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crescent Island Writing Desk"
+          }
+        }
+      }
+    },
+    "单人床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Single bed"
+          }
+        }
+      }
+    },
+    "卷木圆鼓边柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tambour Drum Cabinet"
+          }
+        }
+      }
+    },
+    "双人床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double bed"
+          }
+        }
+      }
+    },
+    "双人沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two-seat sofa"
+          }
+        }
+      }
+    },
+    "双层茶几": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coffee table"
+          }
+        }
+      }
+    },
+    "双碗御膳餐台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Royal Twin Bowls"
+          }
+        }
+      }
+    },
+    "双碗餐台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double-bowl stand"
+          }
+        }
+      }
+    },
+    "发条小鼠": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind-up mouse"
+          }
+        }
+      }
+    },
+    "台下阴凉": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the deck"
+          }
+        }
+      }
+    },
+    "台阶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step"
+          }
+        }
+      }
+    },
+    "右座垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right cushion"
+          }
+        }
+      }
+    },
+    "右枕头": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right pillow"
+          }
+        }
+      }
+    },
+    "右边座位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right seat"
+          }
+        }
+      }
+    },
+    "叶子台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaf pad"
+          }
+        }
+      }
+    },
+    "听歌位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listening perch"
+          }
+        }
+      }
+    },
+    "和纸落地灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Washi Floor Lantern"
+          }
+        }
+      }
+    },
+    "和风座椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zaisu Floor Chair"
+          }
+        }
+      }
+    },
+    "唱片小客厅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vinyl Listening Console"
+          }
+        }
+      }
+    },
+    "团圆圈椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horseshoe Chair"
+          }
+        }
+      }
+    },
+    "围炉垂被内": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the kotatsu quilt"
+          }
+        }
+      }
+    },
+    "围炉茶几": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kotatsu Tea Table"
+          }
+        }
+      }
+    },
+    "圆凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round stool"
+          }
+        }
+      }
+    },
+    "圆形拉扣坐垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tufted round cushion"
+          }
+        }
+      }
+    },
+    "圆月单柱梳妆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moonrise Pedestal Vanity"
+          }
+        }
+      }
+    },
+    "圆桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round table"
+          }
+        }
+      }
+    },
+    "圆盆猫砂盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round basin"
+          }
+        }
+      }
+    },
+    "圆盆细砂": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basin sand"
+          }
+        }
+      }
+    },
+    "圆窗花格屏": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round Window Lattice Screen"
+          }
+        }
+      }
+    },
+    "圆肚小火炉": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potbelly Stove"
+          }
+        }
+      }
+    },
+    "圆背椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round-back chair"
+          }
+        }
+      }
+    },
+    "圆顶停留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drum top perch"
+          }
+        }
+      }
+    },
+    "圆顶猫砂屋": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hooded dome"
+          }
+        }
+      }
+    },
+    "圈椅软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horseshoe chair cushion"
+          }
+        }
+      }
+    },
+    "地毯上": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the rug"
+          }
+        }
+      }
+    },
+    "坐垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pad"
+          }
+        }
+      }
+    },
+    "坐垫上": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the cushion"
+          }
+        }
+      }
+    },
+    "坐垫上打盹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Napping on the pad"
+          }
+        }
+      }
+    },
+    "垂樱铃前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In front of the sakura bell"
+          }
+        }
+      }
+    },
+    "墩子顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top of the pouf"
+          }
+        }
+      }
+    },
+    "壁炉": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fireplace"
+          }
+        }
+      }
+    },
+    "大树猫爬架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Branching tree"
+          }
+        }
+      }
+    },
+    "大水盆侧边": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beside the basin"
+          }
+        }
+      }
+    },
+    "大水盆前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In front of the basin"
+          }
+        }
+      }
+    },
+    "奶糖复古电视柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caramel Retro Television"
+          }
+        }
+      }
+    },
+    "如意罗汉榻": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruyi Daybed"
+          }
+        }
+      }
+    },
+    "安静歇脚": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiet resting spot"
+          }
+        }
+      }
+    },
+    "宫廷拱门猫砂箱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palace Arch Litter Box"
+          }
+        }
+      }
+    },
+    "宫廷砂盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palace litter"
+          }
+        }
+      }
+    },
+    "家具": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Furniture"
+          }
+        }
+      }
+    },
+    "宽口水盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wide water basin"
+          }
+        }
+      }
+    },
+    "小屋里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inside the cottage"
+          }
+        }
+      }
+    },
+    "小屋顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "House roof"
+          }
+        }
+      }
+    },
+    "小鱼布玩具": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Little fish plush"
+          }
+        }
+      }
+    },
+    "小鱼背上": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fish's back"
+          }
+        }
+      }
+    },
+    "小鼠尾穗": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouse tail tassel"
+          }
+        }
+      }
+    },
+    "层层猫爬架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiered cat tower"
+          }
+        }
+      }
+    },
+    "屋脊软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ridge cushion"
+          }
+        }
+      }
+    },
+    "屋顶躺椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roof lounge"
+          }
+        }
+      }
+    },
+    "屏风": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Room divider"
+          }
+        }
+      }
+    },
+    "左座垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left cushion"
+          }
+        }
+      }
+    },
+    "左枕头": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left pillow"
+          }
+        }
+      }
+    },
+    "左边座位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left seat"
+          }
+        }
+      }
+    },
+    "帷幔内软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushion behind the curtains"
+          }
+        }
+      }
+    },
+    "帷幔门口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the curtains"
+          }
+        }
+      }
+    },
+    "干粮碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food bowl side"
+          }
+        }
+      }
+    },
+    "平台软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deck mat"
+          }
+        }
+      }
+    },
+    "床尾": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foot of the bed"
+          }
+        }
+      }
+    },
+    "底层": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low tier"
+          }
+        }
+      }
+    },
+    "底层猫洞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ground-level cubby"
+          }
+        }
+      }
+    },
+    "座位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seat"
+          }
+        }
+      }
+    },
+    "座垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seat"
+          }
+        }
+      }
+    },
+    "座垫中间": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle of the seat"
+          }
+        }
+      }
+    },
+    "座面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seat"
+          }
+        }
+      }
+    },
+    "开放式猫砂盘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open tray"
+          }
+        }
+      }
+    },
+    "弯月纸灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moonhook Paper Lantern"
+          }
+        }
+      }
+    },
+    "弹簧布隧道": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pop-up tunnel"
+          }
+        }
+      }
+    },
+    "弹簧摇摇鼠": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wobble spring mouse"
+          }
+        }
+      }
+    },
+    "弹簧逗猫鼠": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spring toy mouse"
+          }
+        }
+      }
+    },
+    "彩虹逗猫拱门": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play arch"
+          }
+        }
+      }
+    },
+    "影音柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Media console"
+          }
+        }
+      }
+    },
+    "御膳水碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the royal water bowl"
+          }
+        }
+      }
+    },
+    "御膳粮碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the royal food bowl"
+          }
+        }
+      }
+    },
+    "悬框格栅餐边柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Floating Slat Sideboard"
+          }
+        }
+      }
+    },
+    "懒人豆袋沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slouch beanbag sofa"
+          }
+        }
+      }
+    },
+    "托盘前方": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front of the tray"
+          }
+        }
+      }
+    },
+    "扶手顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top of the arm"
+          }
+        }
+      }
+    },
+    "抓柱正面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front of the post"
+          }
+        }
+      }
+    },
+    "折叠懒人椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folding floor chair"
+          }
+        }
+      }
+    },
+    "抹茶坐榻": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matcha daybed"
+          }
+        }
+      }
+    },
+    "拉扣软包沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puff tufted sofa"
+          }
+        }
+      }
+    },
+    "拍橡果": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acorn"
+          }
+        }
+      }
+    },
+    "拍球台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ball deck"
+          }
+        }
+      }
+    },
+    "拱廊宫廷藏书架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arcade Palace Bookcase"
+          }
+        }
+      }
+    },
+    "拱廊玄关挂架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arcade Hall Stand"
+          }
+        }
+      }
+    },
+    "拱窗秘书桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arched Story Secretary"
+          }
+        }
+      }
+    },
+    "拱门三折屏": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three Arch Folding Screen"
+          }
+        }
+      }
+    },
+    "拱门故事书架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storybook Arch Bookcase"
+          }
+        }
+      }
+    },
+    "推车花铺": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garden Cart Stand"
+          }
+        }
+      }
+    },
+    "摆设": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decor"
+          }
+        }
+      }
+    },
+    "摆设，猫咪会绕开": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decor, the cat walks round it"
+          }
+        }
+      }
+    },
+    "斜坡上": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the ramp"
+          }
+        }
+      }
+    },
+    "斜坡猫抓板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scratch ramp"
+          }
+        }
+      }
+    },
+    "方凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Square stool"
+          }
+        }
+      }
+    },
+    "方块小屋": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block house"
+          }
+        }
+      }
+    },
+    "方块顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block top"
+          }
+        }
+      }
+    },
+    "春眠和式床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spring Futon Bed"
+          }
+        }
+      }
+    },
+    "春眠铺盖": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spring futon"
+          }
+        }
+      }
+    },
+    "暖帘下": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the noren"
+          }
+        }
+      }
+    },
+    "月影架子床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moonshadow Canopy Bed"
+          }
+        }
+      }
+    },
+    "月桂皇家观景塔": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laurel Royal Lookout"
+          }
+        }
+      }
+    },
+    "月桂迷你王座": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laurel Mini Throne"
+          }
+        }
+      }
+    },
+    "月洞内软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushion inside the moon gate"
+          }
+        }
+      }
+    },
+    "月洞小寝居": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moon Gate Nook"
+          }
+        }
+      }
+    },
+    "月洞门口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the moon gate"
+          }
+        }
+      }
+    },
+    "月牙花架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crescent Garden Stand"
+          }
+        }
+      }
+    },
+    "木床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cottage bed"
+          }
+        }
+      }
+    },
+    "木托双碗餐台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wooden two-bowl feeder"
+          }
+        }
+      }
+    },
+    "木方块顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wood block top"
+          }
+        }
+      }
+    },
+    "木框靠枕沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loaf frame sofa"
+          }
+        }
+      }
+    },
+    "木桥平台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bridge deck"
+          }
+        }
+      }
+    },
+    "木椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wooden chair"
+          }
+        }
+      }
+    },
+    "木长凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wooden bench"
+          }
+        }
+      }
+    },
+    "条纹屋顶小屋": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cottage house"
+          }
+        }
+      }
+    },
+    "枕头": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillow"
+          }
+        }
+      }
+    },
+    "林间绘图桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woodland Drafting Desk"
+          }
+        }
+      }
+    },
+    "枝芽书树": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Branching Book Tree"
+          }
+        }
+      }
+    },
+    "架子床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canopy bed"
+          }
+        }
+      }
+    },
+    "柜下小憩": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under-cabinet lounge"
+          }
+        }
+      }
+    },
+    "柱顶软台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padded top"
+          }
+        }
+      }
+    },
+    "树冠软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canopy cushion"
+          }
+        }
+      }
+    },
+    "树根小憩": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Root reading perch"
+          }
+        }
+      }
+    },
+    "树桩顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stump top"
+          }
+        }
+      }
+    },
+    "树洞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hollow stump"
+          }
+        }
+      }
+    },
+    "桌子底下": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the table"
+          }
+        }
+      }
+    },
+    "桌面中间": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle of the tabletop"
+          }
+        }
+      }
+    },
+    "桌面右边": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right of the tabletop"
+          }
+        }
+      }
+    },
+    "桌面左边": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left of the tabletop"
+          }
+        }
+      }
+    },
+    "梳妆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vanity"
+          }
+        }
+      }
+    },
+    "椭圆编织地毯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oval braided rug"
+          }
+        }
+      }
+    },
+    "樱庭猫爬架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sakura Engawa Climber"
+          }
+        }
+      }
+    },
+    "樱木榻榻米沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sakura Tatami Sofa"
+          }
+        }
+      }
+    },
+    "樱铃逗猫玩具": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sakura Bell Toy"
+          }
+        }
+      }
+    },
+    "橡果衣帽树": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acorn Coat Tree"
+          }
+        }
+      }
+    },
+    "毛毡圆顶窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felt dome"
+          }
+        }
+      }
+    },
+    "毛毡小鼠": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felt mouse"
+          }
+        }
+      }
+    },
+    "毛毡星星": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felt star"
+          }
+        }
+      }
+    },
+    "毛毡洞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felt cave"
+          }
+        }
+      }
+    },
+    "毛线球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yarn ball"
+          }
+        }
+      }
+    },
+    "毛线球小篮": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basket of yarn"
+          }
+        }
+      }
+    },
+    "毡窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felt den"
+          }
+        }
+      }
+    },
+    "毡窝顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den roof"
+          }
+        }
+      }
+    },
+    "水碗": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water bowl"
+          }
+        }
+      }
+    },
+    "水碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water bowl side"
+          }
+        }
+      }
+    },
+    "沙发椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lounge chair"
+          }
+        }
+      }
+    },
+    "沿座垫横卧": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Along the seat"
+          }
+        }
+      }
+    },
+    "波浪猫抓板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wave lounger"
+          }
+        }
+      }
+    },
+    "波谷": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The dip"
+          }
+        }
+      }
+    },
+    "浴缸猫窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bathtub cat bed"
+          }
+        }
+      }
+    },
+    "浴缸窝里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the tub nest"
+          }
+        }
+      }
+    },
+    "温莎椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windsor chair"
+          }
+        }
+      }
+    },
+    "照片板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo board"
+          }
+        }
+      }
+    },
+    "照片板会被「%@」挡住": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo board would be hidden behind “%@”"
+          }
+        }
+      }
+    },
+    "独脚圆桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedestal table"
+          }
+        }
+      }
+    },
+    "猫咪跑轮": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cat wheel"
+          }
+        }
+      }
+    },
+    "王座软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Throne cushion"
+          }
+        }
+      }
+    },
+    "玲珑博古架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moon Ring Curio Shelf"
+          }
+        }
+      }
+    },
+    "珠冠悬铃逗猫玩具": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crowned Bell Toy"
+          }
+        }
+      }
+    },
+    "珠冠软包寝榻": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pearl Crown Bed"
+          }
+        }
+      }
+    },
+    "瓦楞斜面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corrugated ramp"
+          }
+        }
+      }
+    },
+    "瓦楞斜面抓板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corrugated ramp scratcher"
+          }
+        }
+      }
+    },
+    "甜甜圈猫窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donut bed"
+          }
+        }
+      }
+    },
+    "甜甜圈软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donut cushion"
+          }
+        }
+      }
+    },
+    "町屋猫砂屋": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machiya Litter House"
+          }
+        }
+      }
+    },
+    "町屋砂盘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machiya litter tray"
+          }
+        }
+      }
+    },
+    "皇冠丝绒沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crowned Velvet Sofa"
+          }
+        }
+      }
+    },
+    "皇冠观景台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crown lookout"
+          }
+        }
+      }
+    },
+    "皇冠铃前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In front of the crown bell"
+          }
+        }
+      }
+    },
+    "盆内细砂": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine litter"
+          }
+        }
+      }
+    },
+    "瞭望台猫爬架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lookout cat tree"
+          }
+        }
+      }
+    },
+    "石拱暖炉": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stone Arch Hearth"
+          }
+        }
+      }
+    },
+    "砂面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Litter surface"
+          }
+        }
+      }
+    },
+    "磨爪": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scratch"
+          }
+        }
+      }
+    },
+    "积木猫爬架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stacked cubby"
+          }
+        }
+      }
+    },
+    "窗台中央软席": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle cushion"
+          }
+        }
+      }
+    },
+    "窗边双层小台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two-step window platform"
+          }
+        }
+      }
+    },
+    "窗边座位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seat by the window"
+          }
+        }
+      }
+    },
+    "窝口软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrance cushion"
+          }
+        }
+      }
+    },
+    "窝里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the nest"
+          }
+        }
+      }
+    },
+    "竹屏净砂盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bamboo Screen Litter Tray"
+          }
+        }
+      }
+    },
+    "竹影纸灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bamboo Shadow Lantern"
+          }
+        }
+      }
+    },
+    "竹编抓面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woven scratching face"
+          }
+        }
+      }
+    },
+    "竹编猫抓板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bamboo Woven Scratcher"
+          }
+        }
+      }
+    },
+    "箱门口探头": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peeking out the door"
+          }
+        }
+      }
+    },
+    "粮碗": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food bowl"
+          }
+        }
+      }
+    },
+    "纸箱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardboard box"
+          }
+        }
+      }
+    },
+    "纸箱里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the box"
+          }
+        }
+      }
+    },
+    "纸鸢前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In front of the kite"
+          }
+        }
+      }
+    },
+    "纸鸢燕铃": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swallow Kite Toy"
+          }
+        }
+      }
+    },
+    "罗汉榻坐垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybed cushion"
+          }
+        }
+      }
+    },
+    "罩内细砂": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Litter under the hood"
+          }
+        }
+      }
+    },
+    "羽毛挂件": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feather plume"
+          }
+        }
+      }
+    },
+    "羽毛逗猫棒托盘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feather wand tray"
+          }
+        }
+      }
+    },
+    "节节高抓柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bamboo Sisal Post"
+          }
+        }
+      }
+    },
+    "花喇叭留声柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petal Horn Gramophone"
+          }
+        }
+      }
+    },
+    "花园长椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garden bench"
+          }
+        }
+      }
+    },
+    "花架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plant stand"
+          }
+        }
+      }
+    },
+    "花瓣下的水面": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water under the petals"
+          }
+        }
+      }
+    },
+    "花瓣循环饮水机": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petal fountain"
+          }
+        }
+      }
+    },
+    "花瓣椭圆梳妆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petal Oval Vanity"
+          }
+        }
+      }
+    },
+    "花瓣珍珠落地灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petal Pearl Floor Lamp"
+          }
+        }
+      }
+    },
+    "茶几": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coffee table"
+          }
+        }
+      }
+    },
+    "茶室猫窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teahouse Cat Nook"
+          }
+        }
+      }
+    },
+    "茶室蒲团": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teahouse cushion"
+          }
+        }
+      }
+    },
+    "茶陶双碗餐台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tea Pottery Twin Bowls"
+          }
+        }
+      }
+    },
+    "茶陶水碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the tea-ware water bowl"
+          }
+        }
+      }
+    },
+    "茶陶粮碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the tea-ware food bowl"
+          }
+        }
+      }
+    },
+    "草席观景台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tatami lookout"
+          }
+        }
+      }
+    },
+    "莲花水盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lotus basin"
+          }
+        }
+      }
+    },
+    "莲花饮水器": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lotus fountain"
+          }
+        }
+      }
+    },
+    "落地灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Floor lamp"
+          }
+        }
+      }
+    },
+    "蒲公英放射衣帽架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dandelion Radial Stand"
+          }
+        }
+      }
+    },
+    "薄荷毡窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mint felt cave"
+          }
+        }
+      }
+    },
+    "蘑菇凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toadstool"
+          }
+        }
+      }
+    },
+    "蘑菇软光灯": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mushroom Glow Lamp"
+          }
+        }
+      }
+    },
+    "蘑菇顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mushroom top"
+          }
+        }
+      }
+    },
+    "蛋壳椅": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shell chair"
+          }
+        }
+      }
+    },
+    "蛋糕三层台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cake-stand tiers"
+          }
+        }
+      }
+    },
+    "衣帽架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coat rack"
+          }
+        }
+      }
+    },
+    "被子上": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the quilt"
+          }
+        }
+      }
+    },
+    "观景阁软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lookout cushion"
+          }
+        }
+      }
+    },
+    "象牙大理石茶桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ivory Marble Tea Table"
+          }
+        }
+      }
+    },
+    "贵妃位": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaise"
+          }
+        }
+      }
+    },
+    "跑轮里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the wheel"
+          }
+        }
+      }
+    },
+    "软包双人床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platform bed"
+          }
+        }
+      }
+    },
+    "软包长凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottoman bench"
+          }
+        }
+      }
+    },
+    "软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushion"
+          }
+        }
+      }
+    },
+    "软垫午睡": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushion nap"
+          }
+        }
+      }
+    },
+    "软垫长凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushioned bench"
+          }
+        }
+      }
+    },
+    "软垫飘窗": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushioned window seat"
+          }
+        }
+      }
+    },
+    "软垫飘窗凳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cushioned window bench"
+          }
+        }
+      }
+    },
+    "逗毛球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pompom"
+          }
+        }
+      }
+    },
+    "逗流苏球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tassel ball"
+          }
+        }
+      }
+    },
+    "鎏金绳柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gilded rope post"
+          }
+        }
+      }
+    },
+    "鎏金编绳抓柱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gilded Rope Scratcher"
+          }
+        }
+      }
+    },
+    "针织墩": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knit pouf"
+          }
+        }
+      }
+    },
+    "错层梯架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Staggered shelf ladder"
+          }
+        }
+      }
+    },
+    "错层琴键屏": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stepped Slat Screen"
+          }
+        }
+      }
+    },
+    "长条餐桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trestle table"
+          }
+        }
+      }
+    },
+    "长桌": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long table"
+          }
+        }
+      }
+    },
+    "长沙发": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long sofa"
+          }
+        }
+      }
+    },
+    "门洞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doorway"
+          }
+        }
+      }
+    },
+    "阅读窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading nook"
+          }
+        }
+      }
+    },
+    "阶梯停留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low step perch"
+          }
+        }
+      }
+    },
+    "阶梯小花园": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terraced Garden Stand"
+          }
+        }
+      }
+    },
+    "阶梯方格书塔": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step Cubby Book Tower"
+          }
+        }
+      }
+    },
+    "陶盆猫草": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cat grass planter"
+          }
+        }
+      }
+    },
+    "障子书架": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoji Bookcase"
+          }
+        }
+      }
+    },
+    "隧道口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunnel mouth"
+          }
+        }
+      }
+    },
+    "隧道里": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunnel interior"
+          }
+        }
+      }
+    },
+    "青瓷双碗膳台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celadon Twin Bowls"
+          }
+        }
+      }
+    },
+    "青瓷水碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the celadon water bowl"
+          }
+        }
+      }
+    },
+    "青瓷粮碗前": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the celadon food bowl"
+          }
+        }
+      }
+    },
+    "靠背顶": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top of the back"
+          }
+        }
+      }
+    },
+    "鞍形软碗": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saddle bowl"
+          }
+        }
+      }
+    },
+    "鞍形高台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedestal saddle perch"
+          }
+        }
+      }
+    },
+    "顶上软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top perch"
+          }
+        }
+      }
+    },
+    "顶层小球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top ball"
+          }
+        }
+      }
+    },
+    "顶层蛋糕": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top tier"
+          }
+        }
+      }
+    },
+    "顶层软垫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top cushion"
+          }
+        }
+      }
+    },
+    "顶层软窝": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top bed"
+          }
+        }
+      }
+    },
+    "餐边柜": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sideboard"
+          }
+        }
+      }
+    },
+    "高层圆台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper platform"
+          }
+        }
+      }
+    },
+    "鲜嫩草尖": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grass shoots"
+          }
+        }
+      }
+    },
+    "鼠尾草绿开放猫砂盆": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sage green open litter box"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

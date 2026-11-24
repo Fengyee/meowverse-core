@@ -38,7 +38,7 @@ As of November 14, 2026, the current TestFlight build is **0.1.0 (3)**. This rou
 
 Start with a cat photo you have permission to use. Check the furniture suggestion, choose a model and a position, and confirm it. Later, tap that piece of furniture to open its linked photos. Apple's Vision framework suggests furniture from a preset catalog on your device, and you make the final choice. This is not photo-to-3D reconstruction.
 
-> **Try the complete app in TestFlight.** This repository contains `MeowverseCore`, extracted from the November 14, 2026 main branch (`0084971`, schema 11), which builds and tests independently. The complete app's interface, 3D renderer and production artwork are not included. The code is **source-available** under a noncommercial license; see [Source and license](#source).
+> **This repository holds all the code of Meowverse 1.0; the art is not published.** It contains the app, the widgets and Live Activity, the `MeowverseCore` library, the tests and the Xcode project of the 1.0 version being prepared for the App Store, and it builds and tests without the art. The production cats, furniture, icons and other art are not included. The code is **source-available** under a noncommercial license; see [Source and license](#source).
 
 <a name="your-cat"></a>
 
@@ -107,44 +107,49 @@ Furniture appearances come from preset models. Recognition suggestions and cat a
 <a name="source"></a>
 
 <details>
-<summary>Source scope: the current core library and its noncommercial license</summary>
+<summary>Source scope: all of the 1.0 code and its noncommercial license</summary>
 
-This package was extracted from **main on November 14, 2026, at commit 0084971**, with library schema **11**. It contains `MeowverseCore` code, tests, required catalog JSON and a synthetic backup fixture. The core covers data models, photo reading and reduction, furniture catalogs and grid rules, interaction routes and state, library persistence, photo and furniture queries, reminder planning and backup validation.
+This repository publishes all the code of Meowverse 1.0, the version being prepared for the App Store: the SwiftUI app and RealityKit room, photo import and organizing, furniture recognition, iCloud backup and sync, the onboarding tour, AR, the widgets, Live Activity and Control Center controls, the cat download extension, the `MeowverseCore` library, the unit and interface tests, and the Xcode project and build scripts. The source commit, file counts and differences from the development repository are in [SOURCE-RELEASE.en.md](SOURCE-RELEASE.en.md).
 
-This is an independently buildable Swift library. It does not include the TestFlight app's SwiftUI interface, RealityKit renderer, app-level photo-library and notification integration, Lock Screen and Dynamic Island extensions, or production cat, furniture and icon assets. The screenshots show recent app development builds, rather than a screen produced by running this library.
+**The art is not published**: cat and furniture models, textures, room themes, illustrations, app icons, sounds, fonts and design source files are not in this repository. They are the work of the project and its collaborators, some used under third-party licenses, and they are not licensed with the code. The screenshots show the finished app, not what this repository alone produces.
+
+The sponsor names on the About page and the cat cards are placeholders until the real details are confirmed; they are not the final list of credits.
 
 The code and the identified required program data use the **[PolyForm Noncommercial License 1.0.0](LICENSE)**. You may use, modify and redistribute them for purposes permitted by that license; commercial use requires separate authorization. Redistribution must retain the terms and required notices as specified in the license.
 
-This is **source-available** software. Because it restricts commercial use, it is not described as a standard open-source release. The full [LICENSE](LICENSE) governs; see [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md) for the file and non-code material boundaries, and [SOURCE-RELEASE.en.md](SOURCE-RELEASE.en.md) for the extraction record.
+This is **source-available** software. Because it restricts commercial use, it is not described as a standard open-source release. The full [LICENSE](LICENSE) governs; see [LICENSE-SCOPE.en.md](LICENSE-SCOPE.en.md) for the file and non-code material boundaries.
 
 </details>
 
 <a name="build"></a>
 
 <details>
-<summary>Build the core library and run its tests</summary>
+<summary>Build the app and run the tests</summary>
 
-You need macOS 15 or later, Swift 6 and the complete Apple developer toolchain. The package declares iOS 18 compatibility. It uses Apple system frameworks, has no external Swift Package dependencies and requires no model API key.
+You need macOS, Xcode 27 and the iOS 26 SDK. There are no external Swift Package dependencies and no model API key to configure.
 
-Run this command from the repository root:
+Run these commands from the repository root:
 
 ```sh
-swift test --package-path ios/MeowverseCore
+python3 ios/Tools/make-placeholder-art.py   # optional: grey placeholders for the asset catalogs
+xcodebuild -project ios/Meowverse.xcodeproj -scheme Meowverse \
+  -destination 'generic/platform=iOS Simulator' build
+ios/test-core.sh                            # core library tests
 ```
 
-It builds the core library and runs the included tests. The images and ZIP files used in tests are synthetic, and the required fixtures are included. You do not need private photos or production model files.
-
-Independent local verification: **344 tests across 44 suites passed**. This result covers the included core library, not the complete app's UI, system permissions or performance on a physical device.
-
-There is no complete app target here, so this command does not produce an installable Meowverse app. Use TestFlight for the full product experience. Core tests do not replace UI, device or permission checks.
+The app builds and launches without the art, but icons and illustrations are grey squares and the room has no furniture or cat, so it does not look like the released app. The core tests use synthetic images and ZIP files; `ios/test-core.sh` skips the few tests that read art files and lists each one in the script. To install on a device you need your own developer team and app identifiers; see [SOURCE-RELEASE.en.md](SOURCE-RELEASE.en.md) for how, and for the test results. These checks do not stand for the released app's look, on-device performance or system permission acceptance.
 
 ```text
-ios/MeowverseCore/
-  Package.swift                 Swift library and test definitions
-  Sources/MeowverseCore/         Core code and required catalog data
-  Tests/MeowverseCoreTests/      Unit tests and synthetic fixtures
-docs/media/                     Finished screenshots for the project showcase
-support/                        Project community and information images
+ios/Meowverse/                  App source (asset catalogs hold only Contents.json and colors)
+ios/PocketCatShared/            Code shared by the app, widgets and Live Activity
+ios/PocketCatWidget/            Widgets, Live Activity and Control Center extension
+ios/MeowverseAssets/            Download extension for the cats' model tiers
+ios/MeowverseCore/              Core library, unit tests and synthetic fixtures
+ios/MeowverseUITests/           Interface tests
+ios/Meowverse.xcodeproj/        Xcode project
+ios/Tools/                      Recognition evaluation, DINOv2 conversion, placeholder art
+docs/                           Technical documents, the cat reference guide, screenshots
+support/                        Project community image
 ```
 
 </details>

@@ -1,0 +1,366 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "双指缩放、旋转，拖动换位置；点家具看照片" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinch to resize, twist to turn, drag to move. Tap a piece to see its photos."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双指缩放、旋转，拖动换位置；点家具看照片"
+          }
+        }
+      }
+    },
+    "回到房间" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back to the room"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回到房间"
+          }
+        }
+      }
+    },
+    "在系统设置里打开喵空间的相机权限，就能把房间放到桌上。相机画面只在这台设备上显示，不录制，也不保存。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on camera access for Meowverse in Settings to put the room on a table. The live camera view is shown only on this device and is never recorded or saved."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在系统设置里打开喵空间的相机权限，就能把房间放到桌上。相机画面只在这台设备上显示，不录制，也不保存。"
+          }
+        }
+      }
+    },
+    "家具" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Furniture"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家具"
+          }
+        }
+      }
+    },
+    "慢慢移动设备，找一块平的桌面" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Move your phone slowly to find a flat table"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Move your iPad slowly to find a flat table"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Move your device slowly to find a flat table"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "慢慢移动手机，找一块平的桌面"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "慢慢移动 iPad，找一块平的桌面"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "慢慢移动设备，找一块平的桌面"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "打开系统设置" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开系统设置"
+          }
+        }
+      }
+    },
+    "把房间放到桌上，需要能识别周围空间的 iPhone 或 iPad。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Putting the room on a table needs an iPhone or iPad that can track the space around it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把房间放到桌上，需要能识别周围空间的 iPhone 或 iPad。"
+          }
+        }
+      }
+    },
+    "换一块光线好一点、有花纹的桌面试试" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try a brighter table with some pattern or texture"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换一块光线好一点、有花纹的桌面试试"
+          }
+        }
+      }
+    },
+    "放到桌上看看" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See it on a table"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放到桌上看看"
+          }
+        }
+      }
+    },
+    "放在这里" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place here"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "放在这里"
+          }
+        }
+      }
+    },
+    "点一下桌面，把房间放上去" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the table to put the room on it"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一下桌面，把房间放上去"
+          }
+        }
+      }
+    },
+    "用相机把房间放到真实的桌面上。相机画面只在这台设备上显示，不录制，也不保存。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uses the camera to put the room on a real table. The live camera view is shown only on this device and is never recorded or saved."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用相机把房间放到真实的桌面上。相机画面只在这台设备上显示，不录制，也不保存。"
+          }
+        }
+      }
+    },
+    "相机暂时用不了，稍等一下；在 iPad 上请全屏使用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The camera is unavailable for now. Wait a moment; on iPad, use Meowverse full screen."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相机暂时用不了，稍等一下；在 iPad 上请全屏使用"
+          }
+        }
+      }
+    },
+    "相机权限已关闭" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera access is off"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相机权限已关闭"
+          }
+        }
+      }
+    },
+    "相机权限已关闭，打开后才能用。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera access is off. Turn it on to use this."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相机权限已关闭，打开后才能用。"
+          }
+        }
+      }
+    },
+    "设备有点热了，猫咪先歇一会儿" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your phone is warm, so the cat is taking a rest"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your iPad is warm, so the cat is taking a rest"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your device is warm, so the cat is taking a rest"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "手机有点热了，猫咪先歇一会儿"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "iPad 有点热了，猫咪先歇一会儿"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "设备有点热了，猫咪先歇一会儿"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "这台设备不能用 AR" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AR isn’t available on this device"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台设备不能用 AR"
+          }
+        }
+      }
+    },
+    "重新放置" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place again"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新放置"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

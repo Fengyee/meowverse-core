@@ -1,0 +1,593 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "以兼容图片分享，保留所用照片的像素尺寸。要保留文件格式和原始数据，请选择“分享原文件”。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shares a compatible image at the available resolution. To keep the file format and original data, choose Share original file."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以兼容图片分享，保留所用照片的像素尺寸。要保留文件格式和原始数据，请选择“分享原文件”。"
+          }
+        }
+      }
+    },
+    "保存到系统相册": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save to Photos"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存到系统相册"
+          }
+        }
+      }
+    },
+    "关闭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关闭"
+          }
+        }
+      }
+    },
+    "分享原文件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share original file"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享原文件"
+          }
+        }
+      }
+    },
+    "分享照片": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share photos"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享照片"
+          }
+        }
+      }
+    },
+    "将从完整原件准备图片：%lld 张。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing images from full originals: %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将从完整原件准备图片：%lld 张。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "将原件加入 Meowverse 相簿": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add originals to the Meowverse album"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将原件加入 Meowverse 相簿"
+          }
+        }
+      }
+    },
+    "将导出完整原件：%lld 张。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full originals to export: %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将导出完整原件：%lld 张。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "已保存到系统相册：%lld 张。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos saved to your library: %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已保存到系统相册：%lld 张。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "已保存完整原件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full original saved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已保存完整原件"
+          }
+        }
+      }
+    },
+    "已保存完整原件：%lld 张。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full originals saved: %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已保存完整原件：%lld 张。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "已保存缩小副本，请保留系统相册里的原件。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduced copy saved. Keep the original in Photos."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已保存缩小副本，请保留系统相册里的原件。"
+          }
+        }
+      }
+    },
+    "已保存缩小副本：%lld 张。请保留系统相册里的原件。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduced copies saved: %lld. Keep their originals in Photos."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已保存缩小副本：%lld 张。请保留系统相册里的原件。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "已加入回忆。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added to memories."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已加入回忆。"
+          }
+        }
+      }
+    },
+    "已在 Meowverse 相簿：%lld / %lld。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected photos in the Meowverse album: %lld of %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已在 Meowverse 相簿：%lld / %lld。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "当前相册找不到原件。如果误删了，请到系统照片的“最近删除”恢复，再重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original could not be found in this library. If you deleted it, restore it from Recently Deleted in Photos, then try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前相册找不到原件。如果误删了，请到系统照片的“最近删除”恢复，再重试。"
+          }
+        }
+      }
+    },
+    "所选照片中有 %lld 张仅能导出本地缩小副本。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available only as local reduced copies: %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选照片中有 %lld 张仅能导出本地缩小副本。"
+          }
+        }
+      },
+      "comment": "no-plural: the label introduces a count."
+    },
+    "无法准备所选照片。请检查本地副本或从备份恢复，再重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The selected photos could not be prepared. Check the stored copies or restore a backup, then try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法准备所选照片。请检查本地副本或从备份恢复，再重试。"
+          }
+        }
+      }
+    },
+    "暂时无法下载 iCloud 原件。请联网，在系统照片中打开原图后重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The iCloud original could not be downloaded. Connect to the internet, open the photo in Photos, then try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂时无法下载 iCloud 原件。请联网，在系统照片中打开原图后重试。"
+          }
+        }
+      }
+    },
+    "正在准备照片…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing photos…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在准备照片…"
+          }
+        }
+      }
+    },
+    "没有可读取的相册原件。若原件仍在，请打开“从相册读取大图”，再选择原来的照片导入。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No original is linked. If it is still in Photos, turn on “Read full-size photos from Photos” and import the same photo again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可读取的相册原件。若原件仍在，请打开“从相册读取大图”，再选择原来的照片导入。"
+          }
+        }
+      }
+    },
+    "没有找到可归集的原件。请打开“从相册读取大图”，并检查系统照片中的原件。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No linked originals were found. Turn on “Read full-size photos from Photos” and check the originals in Photos."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有找到可归集的原件。请打开“从相册读取大图”，并检查系统照片中的原件。"
+          }
+        }
+      }
+    },
+    "相册中的文件与导入时不同。请在备份中查找当时的原件。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file in Photos differs from the one you imported. Look for the imported original in your backups."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "相册中的文件与导入时不同。请在备份中查找当时的原件。"
+          }
+        }
+      }
+    },
+    "相册读取权限不足。请在系统设置中允许喵空间完整访问照片，再重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meowverse needs permission to read the original. Allow Full Access to Photos in Settings, then try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "相册读取权限不足。请在系统设置中允许喵空间完整访问照片，再重试。"
+          }
+        }
+      }
+    },
+    "系统照片暂时无法读取原件，请稍后重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos could not read the original right now. Try again later."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统照片暂时无法读取原件，请稍后重试。"
+          }
+        }
+      }
+    },
+    "系统照片未完成此操作，请检查剩余空间后重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos could not finish. Check the available storage and try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统照片未完成此操作，请检查剩余空间后重试。"
+          }
+        }
+      }
+    },
+    "系统相簿只归集仍在系统照片中的原件。删除原件也会将它移出相簿，相簿不能用作备份。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This album groups originals that are still in Photos. Deleting an original also removes it from the album. Keep a separate backup."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统相簿只归集仍在系统照片中的原件。删除原件也会将它移出相簿，相簿不能用作备份。"
+          }
+        }
+      }
+    },
+    "缩小副本沿用你在这里看到的拍摄日期。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduced copies use the capture day shown here."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缩小副本沿用你在这里看到的拍摄日期。"
+          }
+        }
+      }
+    },
+    "只有日期时，系统相册用当地中午 12 点排列。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos uses noon in your current time zone to place day-only memories in order."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "只有日期时，系统相册用当地中午 12 点排列。"
+          }
+        }
+      }
+    },
+    "%lld 张的拍摄日在当地没有中午 12 点，改用同一天稍后的时刻。": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copy is from a day with no 12:00 noon in your time zone, so it uses the next moment that day."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copies are from a day with no 12:00 noon in your time zone, so they use the next moment that day."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 张的拍摄日在当地没有中午 12 点，改用同一天稍后的时刻。"
+          }
+        }
+      }
+    },
+    "%lld 张的拍摄日在当地时区里被整天跳过，不会带上日期，由系统相册安排；喵空间里的日期不变。": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copy is from a day your time zone skipped entirely. It is saved without a date and Photos chooses one; the day in Meowverse stays the same."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copies are from a day your time zone skipped entirely. They are saved without a date and Photos chooses one; the days in Meowverse stay the same."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 张的拍摄日在当地时区里被整天跳过，不会带上日期，由系统相册安排；喵空间里的日期不变。"
+          }
+        }
+      }
+    },
+    "%lld 张日期未知，由系统相册安排。": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copy has an unknown date; Photos chooses one."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copies have unknown dates; Photos chooses them."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 张日期未知，由系统相册安排。"
+          }
+        }
+      }
+    },
+    "请在系统设置中允许喵空间添加照片，然后重试。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Meowverse to add photos in Settings, then try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在系统设置中允许喵空间添加照片，然后重试。"
+          }
+        }
+      }
+    },
+    "这里保存的是缩小副本。导入时的原件尺寸为 %@。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reduced copy is stored here. The imported original measured %@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这里保存的是缩小副本。导入时的原件尺寸为 %@。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

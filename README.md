@@ -38,7 +38,7 @@
 
 从一张你有权使用的猫咪照片开始，检查家具建议，选好款式和位置；以后点家具，就能打开与它关联的照片。识别由系统 Vision 在本机提出预设家具建议，最终由你确认；不提供照片的 3D 重建。
 
-> **完整体验在 TestFlight，源码范围是核心库。** 本仓库提供 `MeowverseCore`，取自 2026-11-14 的 main（`0084971`，schema 11），可独立构建和测试。完整 App 的界面、3D 渲染器和正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
+> **源码范围是喵空间 1.0 的全部代码，美术不公开。** 本仓库提供准备上架 App Store 的 1.0 的 App、小组件与实时活动、核心库 `MeowverseCore`、测试和 Xcode 工程，可以在没有美术的情况下编译和测试。猫咪、家具、图标等正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
 
 <a name="your-cat"></a>
 
@@ -103,15 +103,17 @@
 <a name="source"></a>
 
 <details>
-<summary>源码范围：最新核心库与非商业许可</summary>
+<summary>源码范围：1.0 的全部代码与非商业许可</summary>
 
-本包提取自 **2026-11-14 的 main，提交 0084971**，资料库 schema 为 **11**。提供 `MeowverseCore` 的程序、测试、运行所需目录 JSON 与合成测试备份，保留数据模型、照片读取与缩小、家具目录与网格规则、互动路线与状态、资料库持久化、照片与家具检索、提醒计划及备份校验等核心逻辑。
+本仓库公开准备上架的喵空间 1.0 的全部代码：SwiftUI App 与 RealityKit 房间、照片导入与整理、家具识别、iCloud 备份与同步、新手导览、AR、小组件、实时活动和控制中心、猫咪分档下载扩展，以及 `MeowverseCore` 核心库、单元测试和界面测试、Xcode 工程与构建脚本。来源提交、文件统计和与开发仓库的差异见 [SOURCE-RELEASE.md](SOURCE-RELEASE.md)。
 
-本包是可独立构建的 Swift 库。TestFlight 中的 SwiftUI 界面、RealityKit 渲染器、系统图库与通知的 App 层接入、锁屏及灵动岛扩展，以及猫咪、家具、图标等正式素材均不随包提供。宣传截图展示 App 的近期开发界面，不是运行本库直接得到的画面。
+**美术不公开**：猫咪与家具的模型、贴图、房间主题、插画、App 图标、音效、字体和设计源文件都不在本仓库。它们是项目与合作者的作品，部分按第三方许可使用，不随代码授权。宣传截图展示的是成品 App，不是只靠本仓库能得到的画面。
+
+关于页和猫咪卡片中的赞助人名字目前是占位写法，等真实信息确认后再更新，不是正式的鸣谢名单。
 
 源码与列明的必要程序数据采用 **[PolyForm Noncommercial License 1.0.0](LICENSE)**：可以在许可证定义的许可用途内使用、修改和再分发；商业用途需要另行取得授权。再分发时须按原文保留许可条款和必要声明。
 
-这是 **源码可见（source-available）** 的发行范围，因含非商业用途限制，不称为标准开源发行。条款以 [LICENSE](LICENSE) 全文为准；具体文件与非代码材料的范围见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)，本次整理决定见 [SOURCE-RELEASE.md](SOURCE-RELEASE.md)。
+这是 **源码可见（source-available）** 的发行范围，因含非商业用途限制，不称为标准开源发行。条款以 [LICENSE](LICENSE) 全文为准；具体文件与非代码材料的范围见 [LICENSE-SCOPE.md](LICENSE-SCOPE.md)。
 
 </details>
 
@@ -120,26 +122,29 @@
 <details>
 <summary>从源码构建与运行测试</summary>
 
-需要 macOS 15 或更新版本、Swift 6 和完整的 Apple 开发工具链。包声明支持 iOS 18；依赖 Apple 系统框架，没有外部 Swift Package 依赖，也不需要配置模型密钥。
+需要 macOS、Xcode 27 和 iOS 26 SDK。没有外部 Swift Package 依赖，也不需要配置模型密钥。
 
-在本包根目录运行：
+在仓库根目录运行：
 
 ```sh
-swift test --package-path ios/MeowverseCore
+python3 ios/Tools/make-placeholder-art.py   # 可选：给资产目录补上灰色占位图
+xcodebuild -project ios/Meowverse.xcodeproj -scheme Meowverse \
+  -destination 'generic/platform=iOS Simulator' build
+ios/test-core.sh                            # 核心库测试
 ```
 
-命令会构建核心库并运行随附测试。测试素材是程序构造的图片与 ZIP，本包已包含所需测试资源；无需取得私人照片或正式模型文件。
-
-本地独立验证结果：**344 项测试、44 个 suite 全部通过**。这只覆盖随包提供的核心库，不代表完整 App 的界面、系统权限或真机性能验收。
-
-这里没有完整 App target，因此不会生成可安装的 Meowverse App。完整产品体验和反馈使用上方 TestFlight 入口；核心测试不能替代 App 的界面、真机性能或系统权限验收。
+没有美术也能编译和启动，但图标、插画是灰色方块，房间里没有家具和猫，和正式版的样子不同。核心库测试的素材是程序构造的图片与 ZIP；`ios/test-core.sh` 跳过少数需要读取美术文件的测试，并在脚本里逐条写明。装到真机需要自己的开发者团队和 App 标识，做法和测试结果见 [SOURCE-RELEASE.md](SOURCE-RELEASE.md)。这些检查不代表正式 App 的画面、真机性能或系统权限验收。
 
 ```text
-ios/MeowverseCore/
-  Package.swift                 Swift 库与测试定义
-  Sources/MeowverseCore/         核心代码与程序目录数据
-  Tests/MeowverseCoreTests/      单元测试与合成测试资源
-docs/media/                     仅用于项目展示的成品截图
+ios/Meowverse/                  App 源码（资产目录只有 Contents.json 和颜色）
+ios/PocketCatShared/            小组件、实时活动与 App 共用的代码
+ios/PocketCatWidget/            小组件、实时活动、控制中心扩展
+ios/MeowverseAssets/            猫咪分档模型的下载扩展
+ios/MeowverseCore/              核心库、单元测试与合成测试资源
+ios/MeowverseUITests/           界面测试
+ios/Meowverse.xcodeproj/        Xcode 工程
+ios/Tools/                      识别评测、DINOv2 转换、占位图脚本
+docs/                           技术文档、猫咪参考图教程、展示截图
 support/                        群二维码
 ```
 

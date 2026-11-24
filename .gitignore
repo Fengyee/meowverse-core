@@ -14,3 +14,12 @@ backups/
 *.p12
 *.p8
 *.mobileprovision
+
+# >>> public source export (managed by the export script; edit there)
+# Placeholders from ios/Tools/make-placeholder-art.py; the release has no art.
+ios/**/*.xcassets/**/*.png
+ios/**/*.xcassets/**/*.svg
+ios/Tools/.placeholder-art-written
+# Per-checkout simulator choice read by ios/simulator-id.sh.
+ios/Simulator.local
+# <<< public source export

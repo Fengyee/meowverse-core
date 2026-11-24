@@ -255,6 +255,91 @@ import UniformTypeIdentifiers
         #expect(again.photoId == kept.photoId && again.width == 2048)
     }
 
+    @Test func fullOriginalPickedAfterLinkedPreviewKeepsThePhotoAndRebindsOnlyTheVerifiedMissingPair() async throws {
+        let root = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: root) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        let source = Self.noisyData(width: 1500, height: 800, seed: 19)
+        var preview = try PhotoIngest.makeDraft(data: source, filename: nil, maxPixel: PhotoIngest.linkedMaxPixel)
+        preview.assetIdentifier = "MISSING"
+        let first = try await store.addPhoto(draft: preview)
+        #expect(first.reducedFrom != nil)
+        var original = try PhotoIngest.makeDraft(data: source, filename: nil)
+        #expect(original.reducedFrom == nil)
+        original.assetIdentifier = "NEW"
+        original.cloudIdentifier = "NEW-CLOUD"
+        #expect(try await store.addPhoto(draft: original) == first)
+        original.missingLibraryBinding = MissingLibraryBinding.confirmed(photo: first, selected: "NEW", hasFullAccess: { true },
+                                                                        localExists: { $0 == "NEW" }, cloudIsMissing: { _ in true })
+        let relinked = try await store.addPhoto(draft: original)
+        #expect(relinked.photoId == first.photoId && relinked.sha256 == first.sha256)
+        #expect(relinked.assetIdentifier == "NEW" && relinked.cloudIdentifier == "NEW-CLOUD")
+        original.assetIdentifier = "OTHER"
+        #expect(try await store.addPhoto(draft: original) == relinked)
+        #expect(try await LibraryStore(root: root, catalog: catalog).load().photos == [relinked])
+    }
+
+    @Test func uncertainPhotosPermissionOrCloudIdentityKeepsTheOriginalBinding() async throws {
+        let root = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: root) }
+        let store = LibraryStore(root: root, catalog: catalog)
+        var draft = try TestSupport.draft(seed: 996)
+        draft.assetIdentifier = "OLD"
+        draft.cloudIdentifier = "CLOUD"
+        let photo = try await store.addPhoto(draft: draft)
+        func evidence(access: Bool, existingLocals: Set<String>, cloudMissing: Bool) -> MissingLibraryBinding? {
+            MissingLibraryBinding.confirmed(photo: photo, selected: "NEW", hasFullAccess: { access },
+                                            localExists: existingLocals.contains, cloudIsMissing: { _ in cloudMissing })
+        }
+        #expect(evidence(access: false, existingLocals: ["NEW"], cloudMissing: true) == nil)
+        #expect(evidence(access: true, existingLocals: [], cloudMissing: true) == nil)
+        #expect(evidence(access: true, existingLocals: ["OLD", "NEW"], cloudMissing: true) == nil)
+        #expect(evidence(access: true, existingLocals: ["NEW"], cloudMissing: false) == nil)
+        #expect(evidence(access: true, existingLocals: ["NEW"], cloudMissing: true) != nil)
+    }
+
+    @Test func lateFurnitureAppendCannotWriteToRestoredFurnitureWithTheSameID() async throws {
+        let parent = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: parent) }
+        let store = LibraryStore(root: parent.appending(path: "live"), catalog: catalog)
+        let chair = try await store.commitNewFurniture(
+            draft: try TestSupport.draft(seed: 920),
+            placement: Placement(modelId: "kenney-chair", x: 4, z: 4, width: 2, depth: 2, finish: .sage),
+            displayName: "椅", decision: .manual)
+        let old = await store.generation
+        let url = parent.appending(path: "backup.zip")
+        _ = try await store.exportBackup(to: url, appVersion: "9.9")
+        let prepared = try BackupArchive.prepare(file: url, stagingURL: store.makeStagingURL(), catalog: catalog)
+        let restored = try await store.replaceLibrary(with: prepared)
+        let draft = try TestSupport.draft(seed: 921)
+        await #expect(throws: CancellationError.self) {
+            try await store.addSource(draft: draft, toInstance: chair.instanceId, decision: .manual, generation: old)
+        }
+        #expect(await store.snapshot() == restored)
+        let next = await store.generation
+        _ = try await store.clearAll()
+        await #expect(throws: CancellationError.self) { try await store.importPhotos([draft], generation: next) }
+        #expect(await store.snapshot().photos.isEmpty)
+    }
+
+    @Test func batchCheckpointDeduplicatesAndRollsBackEveryNewBlobOnFailure() async throws {
+        let root = TestSupport.tempDir()
+        defer { try? fm.removeItem(at: root) }
+        let drafts = try [901, 902, 901].map { try TestSupport.draft(seed: $0) }
+        let failing = LibraryStore(root: root, catalog: catalog) { step in
+            if step == .writeState { throw StoreError.io("test") }
+        }
+        await #expect(throws: StoreError.io("test")) { try await failing.importPhotos(drafts) }
+        #expect(await failing.snapshot().photos.isEmpty)
+        #expect(await failing.integrityReport().isClean)
+        let store = LibraryStore(root: root, catalog: catalog)
+        let results = try await store.importPhotos(drafts)
+        #expect(results.map(\.inserted) == [true, true, false])
+        #expect(results.first?.photo == results.last?.photo)
+        let reopened = try await LibraryStore(root: root, catalog: catalog).load()
+        #expect(reopened.photos.count == 2 && reopened.revision == 1)
+    }
+
     @Test func aPhotoAlreadySmallEnoughIsUntouchedWhenLinked() throws {
         let source = Self.noisyData(width: 1024, height: 700, seed: 10)
         let draft = try PhotoIngest.makeDraft(data: source, filename: nil, maxPixel: PhotoIngest.linkedMaxPixel)
