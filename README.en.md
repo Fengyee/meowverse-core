@@ -10,15 +10,15 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
-  <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-18%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS and iPadOS 18 or later">
-  <a href="https://testflight.apple.com/join/WCuPQFsm"><img src="https://img.shields.io/badge/TestFlight-0.1.0%20%283%29-0A84FF" alt="TestFlight 0.1.0 (3)"></a>
+  <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS and iPadOS 26 or later">
+  <img src="https://img.shields.io/badge/1.0-Coming%20to%20the%20App%20Store%20%C2%B7%20Free-0A84FF" alt="1.0 coming to the App Store · Free">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available code"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
 
-### [Join the iOS TestFlight beta →](https://testflight.apple.com/join/WCuPQFsm)
+### [Try it on TestFlight before the App Store release →](https://testflight.apple.com/join/WCuPQFsm)
 
-**iPhone / iPad · Simplified Chinese / English · Free beta**
+**iPhone / iPad · Simplified Chinese / English · Free**
 
 [Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [A labor of love](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
@@ -26,7 +26,7 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 </div>
 
-As of November 14, 2026, the current TestFlight build is **0.1.0 (3)**. This round is capped at **200 testers**; check the TestFlight page for availability. Testing and feedback are free. The web version remains a frozen feature demo, while development focuses on the native iOS app.
+As of November 24, 2026, Meowverse **1.0 (9)** is on its way to the App Store. It is entirely free, with no in-app purchases. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
 
 <a name="try"></a>
 
@@ -36,7 +36,7 @@ As of November 14, 2026, the current TestFlight build is **0.1.0 (3)**. This rou
 - **You want a quiet break after a busy day.** Arrange the room, play with the cat using a toy, or keep a pixel cat on your Lock Screen.
 - **You want to keep your little world.** Make a room postcard or export a ZIP backup to help when moving to another device.
 
-Start with a cat photo you have permission to use. Check the furniture suggestion, choose a model and a position, and confirm it. Later, tap that piece of furniture to open its linked photos. Apple's Vision framework suggests furniture from a preset catalog on your device, and you make the final choice. This is not photo-to-3D reconstruction.
+Start with a cat photo you have permission to use. Check the furniture suggestion, choose a model and a position, and confirm it. Later, tap that piece of furniture to open its linked photos. Recognition runs on your device and suggests furniture from a preset catalog; you make the final choice. This is not photo-to-3D reconstruction.
 
 > **This repository holds all the code of Meowverse 1.0; the art is not published.** It contains the app, the widgets and Live Activity, the `MeowverseCore` library, the tests and the Xcode project of the 1.0 version being prepared for the App Store, and it builds and tests without the art. The production cats, furniture, icons and other art are not included. The code is **source-available** under a noncommercial license; see [Source and license](#source).
 
@@ -78,20 +78,22 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
   </tr>
 </table>
 
-*Real interfaces from a development build running in the simulator; the photos are programmatically drawn examples. These screenshots were captured from the development main line on November 15, 2026, after 0.1.0 (3), so some of what they show may not be in TestFlight yet. The current TestFlight app is the reference for the available experience. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
+*Real interfaces from a development build running in the simulator; the photos are programmatically drawn examples. These screenshots were captured from a development build on November 15, 2026, before 1.0, so some screens differ from the released app. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
 
 <details>
-<summary>What you can try in the current TestFlight app</summary>
+<summary>What is in 1.0</summary>
 
 - **Organize memories.** Add one or several photos, then sort or skip them one at a time. Choose a cover for a piece of furniture and browse the links from either the photos or the furniture.
 - **Decorate the room.** Pinch to zoom and pan around the 15×15 room. Choose seasonal wallpapers and optionally let the lighting follow the local time of day.
 - **Tidy your furniture.** Search, filter, sort, lock and select several pieces in the furniture library. Put stored furniture in the chest beside the room.
 - **Play with the cat.** Invite the cat onto furniture, pick a toy or offer a treat. On devices with Live Activities, start a Lock Screen pixel cat from Play; iPhones with Dynamic Island can also show it there.
-- **Use it your way.** Use iPad in portrait or landscape. The interface follows your system's Simplified Chinese or English language setting, and local reminders are optional.
+- **See it elsewhere.** Home Screen and Lock Screen widgets and a Control Center control; on supported devices, AR puts the room on a real table.
+- **Keep and sync it.** Export a ZIP backup, or turn on iCloud Drive backup and iCloud Sync to sync your room and photos between your own devices.
+- **Use it your way.** Pick any of eight built-in cats and a quality tier. Use iPad in portrait or landscape. The interface follows your system's Simplified Chinese or English language setting, and local reminders are optional.
 
-New Room and Add Cat currently show a lock and open an explanation of a future version. They are not enabled in this beta. In-app iCloud room syncing is not available either.
+1.0 is entirely free, with no locks or in-app purchases. Several rooms, several cats and voice control are not finished and stay off in 1.0; a second room or cat already in a saved library still shows as usual.
 
-We would especially like feedback on whether your existing photos and furniture survive an update, whether an exported backup restores correctly, and how reminders behave over several days. The beta is still being improved; use the installed build as the reference.
+We would especially like feedback on whether your existing photos and furniture survive an update, whether a backup restores correctly, how sync behaves between two devices, and how reminders behave over several days. The installed version is the reference for the experience.
 
 </details>
 
@@ -137,6 +139,8 @@ xcodebuild -project ios/Meowverse.xcodeproj -scheme Meowverse \
 ios/test-core.sh                            # core library tests
 ```
 
+The DINOv2 model weights used for furniture recognition (about 86 MB) are not in the repository. If you want them, convert `facebook/dinov2-with-registers-base` from Hugging Face (Apache 2.0) as described in [ios/Tools/EmbeddingLab/PROVENANCE.md](ios/Tools/EmbeddingLab/PROVENANCE.md) and put the result at `ios/Meowverse/Resources/Models/DinoV2ViTB14Reg.mlpackage`; that file gives the SHA-256 both model files should have. Without them the app makes furniture suggestions with Apple’s Vision framework.
+
 The app builds and launches without the art, but icons and illustrations are grey squares and the room has no furniture or cat, so it does not look like the released app. The core tests use synthetic images and ZIP files; `ios/test-core.sh` skips the few tests that read art files and lists each one in the script. To install on a device you need your own developer team and app identifiers; see [SOURCE-RELEASE.en.md](SOURCE-RELEASE.en.md) for how, and for the test results. These checks do not stand for the released app's look, on-device performance or system permission acceptance.
 
 ```text
@@ -159,15 +163,17 @@ support/                        Project community image
 
 **The web demo.** Importing and organizing photos normally uses local browser storage. Its optional Claude analysis is a separate flow: you enter your own Anthropic API key, preview the image copies and explicitly consent before the browser sends those copies to Anthropic. Image content leaves your browser, and any charges belong to your API account. Removing metadata does not make a photo anonymous.
 
-**The current TestFlight app.** You can use the system photo picker without granting full library access. The app also explains an optional feature for reading larger photos from your library, which works after you enable it and grant full access. It uses that access to look up photos already imported into the app. You can continue using the picker after declining or granting only limited access. Depending on your storage settings, the app keeps a reduced copy, or a small preview with larger images read from the system library when needed. If a library photo is removed or unavailable, retrieving the larger image depends on the system library; the saved preview remains available.
+**Meowverse 1.0.** The app reads only the photos you pick. The first time you add a photo, it asks once for access to your photos: with access it keeps only a small preview and reads the full-size photo from your library, and only for photos you have imported. Everything works without access; the app then keeps a reduced copy. If a library photo is removed or unavailable, retrieving the larger image depends on the system library; the saved preview remains available.
 
-Vision generates furniture suggestions on your device; there is no cloud photo-analysis service. Reminders are optional local notifications. Reporting a problem opens the system mail composer, where you review the content and decide whether to send it. Apple's Photos service may download library images from iCloud according to your device settings. In-app iCloud room syncing is not available. Choose where to save or share device backups and exported ZIP files.
+Furniture recognition runs on your device (a DINOv2 model, or Apple's Vision framework without it); there is no cloud photo-analysis service. Meowverse has no server of its own: when a quality tier needs the simplified cat models, the system downloads them from the App Store, and your photos and room are not sent anywhere. Reminders are optional local notifications. Reporting a problem opens the system mail composer, where you review the content and decide whether to send it. Apple's Photos service may download library images from iCloud according to your device settings.
 
-**This library's storage rules.** `PhotoIngest.makeDraft` tries by default to reduce larger photos to a longest side of 2048 pixels. It stores the reduced copy only if conversion succeeds and produces a smaller file; otherwise it retains the input bytes. Callers can use a 1024-pixel limit for small previews linked to library photos. `reducedFrom` records the source hash, dimensions and byte size before reduction. A photo record's hash verifies the bytes actually stored; this does not mean that every mode retains the original file from Photos.
+**iCloud backup and sync are on in the 1.0 release, for free.** With Back Up to iCloud Drive on, backups go to your own iCloud Drive and the system uploads them. With iCloud Sync on, Meowverse syncs with your own devices through Apple’s iCloud, and the developer has no access to this data. You turn each one on in Settings. You decide where exported ZIP files are kept and who they are shared with.
 
-Library identifiers can be saved with the record. PhotoKit access, permission handling and user-facing notices belong to the app layer and are not included in this library. Capture dates distinguish image metadata, dates entered by the user and unknown dates. Backup and restore validate the hashes of stored files and preserve the bytes described by the backup; replacement follows confirmation.
+**The core library's storage rules.** `PhotoIngest.makeDraft` tries by default to reduce larger photos to a longest side of 2048 pixels. It stores the reduced copy only if conversion succeeds and produces a smaller file; otherwise it retains the input bytes. Callers can use a 1024-pixel limit for small previews linked to library photos. `reducedFrom` records the source hash, dimensions and byte size before reduction. A photo record's hash verifies the bytes actually stored; this does not mean that every mode retains the original file from Photos.
 
-The library contains rules for cloud-backup state and retention. Their presence does not mean that the app has enabled cloud syncing, and they do not provide a cloud photo-analysis service. For the behavior of a particular app version, also check About & Privacy inside that version and the [current privacy policy](https://fengyee.github.io/meowverse/privacy.html).
+Library identifiers can be saved with the record. PhotoKit access, permission handling and user-facing notices are in the app layer (`ios/Meowverse/Photos/`, `ios/Meowverse/Import/`). Capture dates distinguish image metadata, dates entered by the user and unknown dates. Backup and restore validate the hashes of stored files and preserve the bytes described by the backup; replacement follows confirmation.
+
+The sync merge rules and the cloud backup state and retention rules are in `MeowverseCore`; the connections to CloudKit and iCloud Drive are in the app layer (`ios/Meowverse/Sync/`), designed in [docs/ICLOUD_SYNC.md](docs/ICLOUD_SYNC.md). For the behavior of a particular app version, About & Privacy inside that version and the [current privacy policy](https://fengyee.github.io/meowverse/privacy.html) are the reference.
 
 </details>
 

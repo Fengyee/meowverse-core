@@ -20,6 +20,8 @@ backups/
 ios/**/*.xcassets/**/*.png
 ios/**/*.xcassets/**/*.svg
 ios/Tools/.placeholder-art-written
+# DINOv2 weights converted locally (ios/Tools/EmbeddingLab/PROVENANCE.md); about 86 MB, not published.
+ios/Meowverse/Resources/Models/
 # Per-checkout simulator choice read by ios/simulator-id.sh.
 ios/Simulator.local
 # <<< public source export

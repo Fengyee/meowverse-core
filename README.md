@@ -10,15 +10,15 @@
 
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
-  <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-18%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS 和 iPadOS 18 或更新版本">
-  <a href="https://testflight.apple.com/join/WCuPQFsm"><img src="https://img.shields.io/badge/TestFlight-0.1.0%20%283%29-0A84FF" alt="TestFlight 0.1.0（3）"></a>
+  <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS 和 iPadOS 26 或更新版本">
+  <img src="https://img.shields.io/badge/1.0-%E5%8D%B3%E5%B0%86%E4%B8%8A%E6%9E%B6%20App%20Store%20%C2%B7%20%E5%85%A8%E9%83%A8%E5%85%8D%E8%B4%B9-0A84FF" alt="1.0 即将上架 App Store · 全部免费">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available 源码可见"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
 
-### [立即加入 iOS TestFlight 测试 →](https://testflight.apple.com/join/WCuPQFsm)
+### [上架前，可以先用 TestFlight 试用 →](https://testflight.apple.com/join/WCuPQFsm)
 
-**iPhone / iPad · 简体中文 / English · 免费测试**
+**iPhone / iPad · 简体中文 / English · 全部免费**
 
 [先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [为爱发电](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
@@ -26,7 +26,7 @@
 
 </div>
 
-2026-11-14：当前 TestFlight 为 **0.1.0（3）**，本轮测试人数上限 **200 人**；能否加入以 TestFlight 页面显示为准。参与测试和反馈都免费。网页版保留为功能演示，开发主线是原生 iOS App。
+2026-11-24：喵空间 **1.0（9）** 即将上架 App Store，全部免费，没有内购。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
 
 <a name="try"></a>
 
@@ -36,7 +36,7 @@
 - **忙完之后，想有一点安静的陪伴。** 布置小房间、拿玩具陪猫玩，或在锁屏留一只像素猫。
 - **想把小世界留住。** 制作房间明信片，或导出 ZIP 备份，为换设备做准备。
 
-从一张你有权使用的猫咪照片开始，检查家具建议，选好款式和位置；以后点家具，就能打开与它关联的照片。识别由系统 Vision 在本机提出预设家具建议，最终由你确认；不提供照片的 3D 重建。
+从一张你有权使用的猫咪照片开始，检查家具建议，选好款式和位置；以后点家具，就能打开与它关联的照片。识别在本机运行，从预设家具里提出建议，最终由你确认；不提供照片的 3D 重建。
 
 > **源码范围是喵空间 1.0 的全部代码，美术不公开。** 本仓库提供准备上架 App Store 的 1.0 的 App、小组件与实时活动、核心库 `MeowverseCore`、测试和 Xcode 工程，可以在没有美术的情况下编译和测试。猫咪、家具、图标等正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
 
@@ -74,20 +74,22 @@
   </tr>
 </table>
 
-*开发版真实界面（模拟器）；照片为程序绘制示意。截图采自 2026-11-15 的开发主线，晚于 0.1.0（3），部分画面可能还没有进入 TestFlight；当前体验以 TestFlight 为准。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
+*开发版真实界面（模拟器）；照片为程序绘制示意。截图采自 2026-11-15 的开发版，早于 1.0，部分画面和正式版不同。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
 
 <details>
-<summary>当前 TestFlight：可以体验什么</summary>
+<summary>1.0 里有什么</summary>
 
 - **整理回忆。** 添加一张或多张照片，逐张整理或跳过；为家具选择封面，从照片和家具两边回看关联。
 - **装扮房间。** 15×15 房间支持双指缩放与平移，提供季节墙纸；可选择让光线跟随当地时间。
 - **收拾家具。** 家具库支持搜索、筛选、排序、锁定和多选；收起的家具放在房间旁的宝箱中。
 - **陪猫互动。** 邀请猫咪到家具上，选玩具或喂零食；支持实时活动的设备可从“互动”启动锁屏像素猫，支持灵动岛的 iPhone 还能在灵动岛查看。
-- **按自己的习惯使用。** iPad 支持横竖屏；界面跟随系统使用简体中文或英文；本地提醒由你选择开启。
+- **在别处看到它。** 主屏和锁屏小组件、控制中心控件；支持的设备上可以用 AR 把房间放在真实的桌面上。
+- **留住和同步。** 导出 ZIP 备份，或打开 iCloud 云盘备份和 iCloud 同步，在自己的设备之间同步房间和照片。
+- **按自己的习惯使用。** 八只内置猫咪任选；画质分档；iPad 支持横竖屏；界面跟随系统使用简体中文或英文；本地提醒由你选择开启。
 
-“新建房间”和“添加猫咪”当前显示为锁定，只打开后续版本的说明。本轮尚未开放这些功能，也没有开放 iCloud 房间同步。
+1.0 全部免费，没有锁和内购。多个房间、多只猫和语音控制还没做完，1.0 先不开放；已有存档里的第二个房间或第二只猫照常显示。
 
-欢迎重点试一试升级后原来的照片和家具是否都在、导出备份后能否恢复，以及连续使用几天后的提醒表现。测试版仍在改进，当前体验以实际安装的构建为准。
+欢迎重点试一试升级后原来的照片和家具是否都在、备份能否恢复、两台设备之间的同步，以及连续使用几天后的提醒表现。具体体验以实际安装的版本为准。
 
 </details>
 
@@ -133,6 +135,8 @@ xcodebuild -project ios/Meowverse.xcodeproj -scheme Meowverse \
 ios/test-core.sh                            # 核心库测试
 ```
 
+家具识别用的 DINOv2 模型权重（约 86 MB）不在仓库里。需要时按 [ios/Tools/EmbeddingLab/PROVENANCE.md](ios/Tools/EmbeddingLab/PROVENANCE.md) 从 Hugging Face 上的 `facebook/dinov2-with-registers-base`（Apache 2.0）转换，把生成的模型放到 `ios/Meowverse/Resources/Models/DinoV2ViTB14Reg.mlpackage`；那份说明里有两个文件应得到的 SHA-256。不放时 App 改用系统 Vision 给家具建议。
+
 没有美术也能编译和启动，但图标、插画是灰色方块，房间里没有家具和猫，和正式版的样子不同。核心库测试的素材是程序构造的图片与 ZIP；`ios/test-core.sh` 跳过少数需要读取美术文件的测试，并在脚本里逐条写明。装到真机需要自己的开发者团队和 App 标识，做法和测试结果见 [SOURCE-RELEASE.md](SOURCE-RELEASE.md)。这些检查不代表正式 App 的画面、真机性能或系统权限验收。
 
 ```text
@@ -155,15 +159,17 @@ support/                        群二维码
 
 **网页版 demo。** 普通导入与整理使用浏览器本地存储。可选的 Claude 分析是另一条流程：需要你输入自己的 Anthropic API key，预览分析副本并明确同意后，浏览器才把这些副本发送给 Anthropic，费用计入该 key 的账户。照片内容会离开浏览器，去掉元数据不等于匿名。
 
-**当前 TestFlight。** 可使用系统照片选择器，也可在明确说明和你同意后授权图库读取。当前版本按存储设置保存缩小副本；开启并授权“从相册读取大图”后，会保存小预览，再按需从系统图库读取大图。相册里的照片被移除或无法读取时，大图能否取回取决于系统图库，界面会说明当前使用的预览。
+**喵空间 1.0。** 只读取你在相册里选中的照片。第一次添加照片时会问一次相册权限：允许后每张照片只存小预览，看大图时从相册读取，而且只读你导入过的照片；不允许也能照常使用，App 存一份缩小的副本。相册里的照片被移除或无法读取时，大图能否取回取决于系统图库，界面会说明当前使用的预览。
 
-家具建议在本机通过 Vision 生成，没有云端照片分析服务。提醒是可选的本地通知。反馈入口打开系统邮件编辑器，由你检查内容并决定发送。当前没有开放 iCloud 房间同步；设备备份和手动导出的 ZIP 应自行选择保存、分享位置。
+家具识别在这台设备上运行（DINOv2 模型；没有它时用系统 Vision），没有云端照片分析服务。喵空间没有自己的服务器：画质用到“低”档时，系统从 App Store 下载简化的猫咪模型，下载时不会传出你的照片和房间。提醒是可选的本地通知。反馈入口打开系统邮件编辑器，由你检查内容并决定发送。
 
-**本库的保存规则。** `PhotoIngest.makeDraft` 默认尝试把较大照片缩到长边 2048 像素；仅在转换成功且文件更小时保存缩小副本，否则保留输入字节。调用方可使用 1024 像素上限供已链接图库照片的小预览使用。`reducedFrom` 记录缩小前来源的哈希、尺寸和大小，照片记录的哈希核对实际保存的字节，不能据此宣称所有模式都保留了相册原始文件。
+**iCloud 备份和同步在 1.0 正式版里开着，免费。** 打开“备份到 iCloud 云盘”后，备份存在你自己的 iCloud 云盘，由系统上传；打开 iCloud 同步后，喵空间通过 Apple 的 iCloud 在你自己的设备之间同步，开发者拿不到这些数据。两项都由你在设置里打开。手动导出的 ZIP 存到哪里、分享给谁，由你决定。
 
-图库标识可随记录保存；图库权限、PhotoKit 读取和页面提示由 App 层负责，不包含在本库中。拍摄日期区分图片记录、手动填写与未知。备份与恢复核对已存文件的哈希，恢复时保留备份中描述的字节，确认后才替换资料库。
+**核心库的保存规则。** `PhotoIngest.makeDraft` 默认尝试把较大照片缩到长边 2048 像素；仅在转换成功且文件更小时保存缩小副本，否则保留输入字节。调用方可使用 1024 像素上限供已链接图库照片的小预览使用。`reducedFrom` 记录缩小前来源的哈希、尺寸和大小，照片记录的哈希核对实际保存的字节，不能据此宣称所有模式都保留了相册原始文件。
 
-库中包含云备份状态与轮换等规则，不表示当前 App 已开放云同步，也不提供云端照片分析服务。具体隐私行为请同时查看安装版本内的“关于与隐私”和 [当前隐私政策](https://fengyee.github.io/meowverse/privacy.html)。
+图库标识可随记录保存；图库权限、PhotoKit 读取和页面提示在 App 层（`ios/Meowverse/Photos/`、`ios/Meowverse/Import/`）。拍摄日期区分图片记录、手动填写与未知。备份与恢复核对已存文件的哈希，恢复时保留备份中描述的字节，确认后才替换资料库。
+
+同步的合并规则、云备份的状态与轮换在 `MeowverseCore`，和 CloudKit、iCloud 云盘的连接在 App 层（`ios/Meowverse/Sync/`），设计见 [docs/ICLOUD_SYNC.md](docs/ICLOUD_SYNC.md)。具体隐私行为以安装版本内的“关于与隐私”和 [当前隐私政策](https://fengyee.github.io/meowverse/privacy.html) 为准。
 
 </details>
 
