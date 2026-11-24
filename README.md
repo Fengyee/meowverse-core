@@ -11,14 +11,14 @@
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS 和 iPadOS 26 或更新版本">
-  <img src="https://img.shields.io/badge/1.0-%E5%8D%B3%E5%B0%86%E4%B8%8A%E6%9E%B6%20App%20Store%20%C2%B7%20%E5%85%A8%E9%83%A8%E5%85%8D%E8%B4%B9-0A84FF" alt="1.0 即将上架 App Store · 全部免费">
+  <img src="https://img.shields.io/badge/1.0-%E5%8D%B3%E5%B0%86%E4%B8%8A%E6%9E%B6%20App%20Store-0A84FF" alt="1.0 即将上架 App Store">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available 源码可见"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
 
 ### [上架前，可以先用 TestFlight 试用 →](https://testflight.apple.com/join/WCuPQFsm)
 
-**iPhone / iPad · 简体中文 / English · 全部免费**
+**iPhone / iPad · 简体中文 / English**
 
 [先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [为爱发电](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
@@ -26,7 +26,7 @@
 
 </div>
 
-2026-11-24：喵空间 **1.0（9）** 即将上架 App Store，全部免费，没有内购。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
+2026-11-24：喵空间 **1.0（9）** 即将上架 App Store。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
 
 <a name="try"></a>
 
@@ -87,7 +87,7 @@
 - **留住和同步。** 导出 ZIP 备份，或打开 iCloud 云盘备份和 iCloud 同步，在自己的设备之间同步房间和照片。
 - **按自己的习惯使用。** 八只内置猫咪任选；画质分档；iPad 支持横竖屏；界面跟随系统使用简体中文或英文；本地提醒由你选择开启。
 
-1.0 全部免费，没有锁和内购。多个房间、多只猫和语音控制还没做完，1.0 先不开放；已有存档里的第二个房间或第二只猫照常显示。
+多个房间、多只猫和语音控制还没做完，1.0 先不开放；已有存档里的第二个房间或第二只猫照常显示。
 
 欢迎重点试一试升级后原来的照片和家具是否都在、备份能否恢复、两台设备之间的同步，以及连续使用几天后的提醒表现。具体体验以实际安装的版本为准。
 
@@ -163,7 +163,7 @@ support/                        群二维码
 
 家具识别在这台设备上运行（DINOv2 模型；没有它时用系统 Vision），没有云端照片分析服务。喵空间没有自己的服务器：画质用到“低”档时，系统从 App Store 下载简化的猫咪模型，下载时不会传出你的照片和房间。提醒是可选的本地通知。反馈入口打开系统邮件编辑器，由你检查内容并决定发送。
 
-**iCloud 备份和同步在 1.0 正式版里开着，免费。** 打开“备份到 iCloud 云盘”后，备份存在你自己的 iCloud 云盘，由系统上传；打开 iCloud 同步后，喵空间通过 Apple 的 iCloud 在你自己的设备之间同步，开发者拿不到这些数据。两项都由你在设置里打开。手动导出的 ZIP 存到哪里、分享给谁，由你决定。
+**iCloud 备份和同步在 1.0 正式版里开着。** 打开“备份到 iCloud 云盘”后，备份存在你自己的 iCloud 云盘，由系统上传；打开 iCloud 同步后，喵空间通过 Apple 的 iCloud 在你自己的设备之间同步，开发者拿不到这些数据。两项都由你在设置里打开。手动导出的 ZIP 存到哪里、分享给谁，由你决定。
 
 **核心库的保存规则。** `PhotoIngest.makeDraft` 默认尝试把较大照片缩到长边 2048 像素；仅在转换成功且文件更小时保存缩小副本，否则保留输入字节。调用方可使用 1024 像素上限供已链接图库照片的小预览使用。`reducedFrom` 记录缩小前来源的哈希、尺寸和大小，照片记录的哈希核对实际保存的字节，不能据此宣称所有模式都保留了相册原始文件。
 

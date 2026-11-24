@@ -11,14 +11,14 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS and iPadOS 26 or later">
-  <img src="https://img.shields.io/badge/1.0-Coming%20to%20the%20App%20Store%20%C2%B7%20Free-0A84FF" alt="1.0 coming to the App Store · Free">
+  <img src="https://img.shields.io/badge/1.0-Coming%20to%20the%20App%20Store-0A84FF" alt="1.0 coming to the App Store">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available code"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
 
 ### [Try it on TestFlight before the App Store release →](https://testflight.apple.com/join/WCuPQFsm)
 
-**iPhone / iPad · Simplified Chinese / English · Free**
+**iPhone / iPad · Simplified Chinese / English**
 
 [Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [A labor of love](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
@@ -26,7 +26,7 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 </div>
 
-As of November 24, 2026, Meowverse **1.0 (9)** is on its way to the App Store. It is entirely free, with no in-app purchases. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
+As of November 24, 2026, Meowverse **1.0 (9)** is on its way to the App Store. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
 
 <a name="try"></a>
 
@@ -91,7 +91,7 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
 - **Keep and sync it.** Export a ZIP backup, or turn on iCloud Drive backup and iCloud Sync to sync your room and photos between your own devices.
 - **Use it your way.** Pick any of eight built-in cats and a quality tier. Use iPad in portrait or landscape. The interface follows your system's Simplified Chinese or English language setting, and local reminders are optional.
 
-1.0 is entirely free, with no locks or in-app purchases. Several rooms, several cats and voice control are not finished and stay off in 1.0; a second room or cat already in a saved library still shows as usual.
+Several rooms, several cats and voice control are not finished and stay off in 1.0; a second room or cat already in a saved library still shows as usual.
 
 We would especially like feedback on whether your existing photos and furniture survive an update, whether a backup restores correctly, how sync behaves between two devices, and how reminders behave over several days. The installed version is the reference for the experience.
 
@@ -167,7 +167,7 @@ support/                        Project community image
 
 Furniture recognition runs on your device (a DINOv2 model, or Apple's Vision framework without it); there is no cloud photo-analysis service. Meowverse has no server of its own: when a quality tier needs the simplified cat models, the system downloads them from the App Store, and your photos and room are not sent anywhere. Reminders are optional local notifications. Reporting a problem opens the system mail composer, where you review the content and decide whether to send it. Apple's Photos service may download library images from iCloud according to your device settings.
 
-**iCloud backup and sync are on in the 1.0 release, for free.** With Back Up to iCloud Drive on, backups go to your own iCloud Drive and the system uploads them. With iCloud Sync on, Meowverse syncs with your own devices through Apple’s iCloud, and the developer has no access to this data. You turn each one on in Settings. You decide where exported ZIP files are kept and who they are shared with.
+**iCloud backup and sync are on in the 1.0 release.** With Back Up to iCloud Drive on, backups go to your own iCloud Drive and the system uploads them. With iCloud Sync on, Meowverse syncs with your own devices through Apple’s iCloud, and the developer has no access to this data. You turn each one on in Settings. You decide where exported ZIP files are kept and who they are shared with.
 
 **The core library's storage rules.** `PhotoIngest.makeDraft` tries by default to reduce larger photos to a longest side of 2048 pixels. It stores the reduced copy only if conversion succeeds and produces a smaller file; otherwise it retains the input bytes. Callers can use a 1024-pixel limit for small previews linked to library photos. `reducedFrom` records the source hash, dimensions and byte size before reduction. A photo record's hash verifies the bytes actually stored; this does not mean that every mode retains the original file from Photos.
 
