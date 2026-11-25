@@ -20,13 +20,13 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 **iPhone / iPad · Simplified Chinese / English**
 
-[Try the web demo](https://fengyee.github.io/meowverse/) · [QQ community](#community) · [A labor of love](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
+[Website and film](https://fengyee.github.io/meowverse/#en) · [QQ community](#community) · [A labor of love](#support) · [Report a problem](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [Get started](#try) · [Your own cat](#your-cat) · [Screenshots](#preview) · [Source and license](#source) · [Build and test](#build) · [Contributors](#contributors) · [Feedback](#feedback)
 
 </div>
 
-On November 24, 2026, Meowverse **1.0 (14)** was submitted for App Store review; it comes to the App Store once approved. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
+On November 24, 2026, Meowverse **1.0 (14)** was submitted for App Store review; it comes to the App Store once approved. Until then you can try it through TestFlight; check the TestFlight page for availability. The early web demo has been retired; the [website](https://fengyee.github.io/meowverse/#en) is now an introduction with the film.
 
 <a name="try"></a>
 
@@ -160,8 +160,6 @@ support/                        Project community image
 
 <details>
 <summary>Photos, privacy and backups</summary>
-
-**The web demo.** Importing and organizing photos normally uses local browser storage. Its optional Claude analysis is a separate flow: you enter your own Anthropic API key, preview the image copies and explicitly consent before the browser sends those copies to Anthropic. Image content leaves your browser, and any charges belong to your API account. Removing metadata does not make a photo anonymous.
 
 **Meowverse 1.0.** The app reads only the photos you pick. The first time you add a photo, it asks once for access to your photos: with access it keeps only a small preview and reads the full-size photo from your library, and only for photos you have imported. Everything works without access; the app then keeps a reduced copy. If a library photo is removed or unavailable, retrieving the larger image depends on the system library; the saved preview remains available.
 

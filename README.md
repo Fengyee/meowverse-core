@@ -20,13 +20,13 @@
 
 **iPhone / iPad · 简体中文 / English**
 
-[先看网页版演示](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [为爱发电](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
+[官网和宣传片](https://fengyee.github.io/meowverse/) · [领取自己的猫猫](#your-cat) · [加入 QQ 群](#community) · [为爱发电](#support) · [反馈问题](https://github.com/Fengyee/meowverse-core/issues/new/choose)
 
 [开始体验](#try) · [画面预览](#preview) · [源码与许可](#source) · [构建测试](#build) · [协作致谢](#contributors) · [一起反馈](#feedback)
 
 </div>
 
-2026-11-24：喵空间 **1.0（14）** 已提交 App Store 审核，审核通过后上架。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
+2026-11-24：喵空间 **1.0（14）** 已提交 App Store 审核，审核通过后上架。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。早期的网页版 demo 已经下线，[官网](https://fengyee.github.io/meowverse/)换成了介绍页和宣传片。
 
 <a name="try"></a>
 
@@ -156,8 +156,6 @@ support/                        群二维码
 
 <details>
 <summary>照片、隐私与备份</summary>
-
-**网页版 demo。** 普通导入与整理使用浏览器本地存储。可选的 Claude 分析是另一条流程：需要你输入自己的 Anthropic API key，预览分析副本并明确同意后，浏览器才把这些副本发送给 Anthropic，费用计入该 key 的账户。照片内容会离开浏览器，去掉元数据不等于匿名。
 
 **喵空间 1.0。** 只读取你在相册里选中的照片。第一次添加照片时会问一次相册权限：允许后每张照片只存小预览，看大图时从相册读取，而且只读你导入过的照片；不允许也能照常使用，App 存一份缩小的副本。相册里的照片被移除或无法读取时，大图能否取回取决于系统图库，界面会说明当前使用的预览。
 
