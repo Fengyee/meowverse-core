@@ -2,54 +2,51 @@
 
 简体中文 | [English](#english)
 
-这里的中英两组、共六张图是完整 Meowverse 原生 iOS App 的开发版截图，供展示项目用途。这些图不作为源码候选包的运行截图；源码公开范围与正式 App 的素材范围分别说明。
+这里的中英两组、共六张图是喵空间 1.0 的 App Store 截图，供展示项目用途。它们展示的是带正式美术的成品 App，不是只靠本仓库的源码就能得到的画面。
 
-## 拍摄时间与版本
+## 拍摄与处理
 
-本组中文、英文商店底稿由项目的 `StoreScreenshotsUITests` 和 `ios/store-shots.sh` 在 iPhone 18 Pro Max 模拟器（iOS 27.2）中生成，两种语言共用同一拍摄流程，取自 2026-11-15 的开发主线。对应结果包记录的时间是 **2026-11-15 21:55–22:04 UTC（美国东部时间当天下午）**。
+截图由项目的商店截图流程在 iPhone 模拟器（iOS 27.2）上拍摄，界面是 1.0 的真实界面，英文截图是真实的英文界面。之后加上了标题、副标题和设备外框，与 App Store 上的截图相同（2026-11-24）。
 
-这些图晚于 **0.1.0 (3)** 的 2026-11-14 归档，图中部分界面可能还没有进入 TestFlight，不标为任何已上传构建的截图。PNG 本身不提供可独立验证的 App 构建号。
-
-六张文件尺寸均为 **1320 × 2868**，与模拟器截图相同。为减小仓库体积，原始 PNG 经 256 色调色板量化（Floyd–Steinberg 抖动）后重新保存，没有裁切、缩放、重绘界面或拼接额外功能。英文截图是真实的英文 UI，不是把中文截图的文字覆盖为英文。
+六张文件尺寸均为 **1320 × 2868**。为减小仓库体积，PNG 经 256 色调色板量化（Floyd–Steinberg 抖动）后重新保存，没有裁切、缩放或重绘界面。
 
 ## 照片与隐私
 
-- `ios-room.png`、`ios-play.png` 及其 `-en.png` 对应图只展示 App 渲染的虚拟场景、猫咪和道具。
-- `ios-memories.png`、`ios-memories-en.png` 内的来源图片是程序画出的猫咪与沙发示意图，来自 App 的合成测试导入流程。图上的拍摄日期和导入时间属于该合成测试图片，不代表任何真实猫咪照片的日期。
-- 图中猫咪的名字是 App 的默认名 Kitty。这些图没有包含私人原照片、真实相册内容、个人姓名或设备标识。
+这六张图只有 App 渲染的虚拟房间、猫咪、家具和道具，**不含任何照片**。商店截图里另有几张展示照片整理的图，用了真实的猫咪照片，没有放进本仓库。图中的猫是内置的 Bella，没有个人姓名或设备标识。
 
 ## 权利范围与第三方署名
 
-这六份 PNG 产品预览图作为展示材料保留权利，不随程序代码许可授予美术复用权。截图的公开展示不表示正式模型、贴图、动画或设计源文件一并开源。此说明不改变适用代码许可证授予的权利；第三方内容已有的许可和权利不受此声明影响。
+这六份 PNG 作为展示材料保留权利，不随程序代码许可授予美术复用权；公开展示不表示正式模型、贴图、动画或设计源文件一并开源。第三方内容已有的许可和权利不受此声明影响。
 
-- 图中的猫是 App 内置的猫咪，网格与毛色由 Meowverse 制作，骨架、蒙皮权重和动作片段来自 Meowverse 的猫咪骨架流程。App 的署名文件仍保留早期模板的来源署名，这里照录：**“3d modelling my cat: Fripouille” — guillaume bolis（2020）**，原作品适用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。[原作页面](https://sketchfab.com/3d-models/3d-modelling-my-cat-fripouille-0ab14bf98e754f8d90fe1bf1c84ca66c) · [作者](https://sketchfab.com/guillaume.bolis)。
-- 图中可见的家具（层层猫爬架、云朵贵妃沙发、莲花饮水器、甜甜圈猫窝）是 Meowverse 的原创程序模型；收纳箱、羽毛逗猫棒、地板与墙面，以及合成来源图片，由 Meowverse 的程序在本机生成或绘制。这组截图中没有出现 App 目录里来自 Kenney 或 3D Assets 的 CC0 家具。
-
-本目录只包含展示用截图，没有包含上述正式几何体、纹理或动画源文件。
+- **猫。** 内置猫 Bella 由腾讯混元 3D（Tencent Hunyuan3D）从参考图生成，再由 Meowverse 修整，骨架、蒙皮权重和动作片段来自 Meowverse 的猫咪骨架流程。Tencent Hunyuan 3D 2.0 is licensed under the Tencent Hunyuan 3D 2.0 Community License Agreement, Copyright © 2025 Tencent. All Rights Reserved. The trademark rights of “Tencent Hunyuan” are owned by Tencent or its affiliate. App 的署名文件仍保留早期模板的来源署名，这里照录：**“3d modelling my cat: Fripouille” — guillaume bolis（2020）**，原作品适用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。[原作页面](https://sketchfab.com/3d-models/3d-modelling-my-cat-fripouille-0ab14bf98e754f8d90fe1bf1c84ca66c) · [作者](https://sketchfab.com/guillaume.bolis)。
+- **家具、房间主题和道具。** 来自 App 的家具目录：Meowverse 的原创程序模型、owner 提供并用 Meowverse 家具工具建的模型，以及 Kenney 和 3D Assets 的 CC0 模型（CC0 不要求署名，完整清单见 App 内「关于与隐私」）。墙纸、地板、角饰和玩具道具由 Meowverse 制作。
 
 ## 文件校验
 
-来源路径均为原开发项目内的相对路径，用于说明拍摄出处。下表是本目录中压缩后文件的 SHA-256。
+下表是本目录中文件的 SHA-256。
 
-| 文件 | 来源 | SHA-256 |
+| 文件 | 商店截图 | SHA-256 |
 | --- | --- | --- |
-| `ios-room.png` | `docs/store-shots/zh-Hans/1-room.png` | `a270aba65fb59813ca94cffbe7efda70ea60c9e6d28e05c171403e417f6a9b04` |
-| `ios-memories.png` | `docs/store-shots/zh-Hans/3-furniture-photo.png` | `3671dc73194f73c8bf9e4e03368e751ed762f74ef9b6e55c040ea7cd2e16a9f5` |
-| `ios-play.png` | `docs/store-shots/zh-Hans/4-play.png` | `e3d5acce8bf1eadb89fb05d82626fd738fb4bc6154fb58028fade4c22579ee0a` |
-| `ios-room-en.png` | `docs/store-shots/en-US/1-room.png` | `643e3af5908f31d19b7916a09d483cd3a3f91175c14325e3ac2d3223e07b3678` |
-| `ios-memories-en.png` | `docs/store-shots/en-US/3-furniture-photo.png` | `e84af252543638efd6d3729254644038c9d5c32d423d10af18da235feea10ef2` |
-| `ios-play-en.png` | `docs/store-shots/en-US/4-play.png` | `4542f8cd2d4c3ff32a8775dca082c89c0b70b9e754fc1659077edc9ce24726db` |
+| `ios-room.png` | 中文第 1 张 | `bd986e2f452a2dd7e92f6c5890c109d4326d554f1506483dea8242227cabb9e1` |
+| `ios-play.png` | 中文第 4 张 | `542570a6592d05a2c665ee99f4a1f9d83fba0f9a1f88c66fce9a92c14d3e8123` |
+| `ios-themes.png` | 中文第 5 张 | `f4d98f0a84ed7d3761a8000718e59826ee7ff9393d1bd4f460a29ee3dea80abc` |
+| `ios-room-en.png` | 英文第 1 张 | `eccceee93dd9de2b3fa0bd05b0486cee6969fbd155e1f68bd2b329413ae08e7e` |
+| `ios-play-en.png` | 英文第 4 张 | `83d7a03dc358a12bf4c1a61201f6ddf34f67c2b3831a75320bf20f6dac4c7ca2` |
+| `ios-themes-en.png` | 英文第 5 张 | `4cdcd84912c7143d2b36d60ca9f74d811eb4a48e9c2fd8ad0f7ec4eb6e63c144` |
 
 <a name="english"></a>
 
 ## English
 
-These six images, one Chinese and one English set, are screenshots of a development build of the full native Meowverse iOS app, shown to present the project. They are not screens produced by running the source package.
+These six images, one Chinese and one English set, are the App Store screenshots of Meowverse 1.0, shown to present the project. They show the finished app with its production art, not what the source in this repository produces on its own.
 
-**When and how.** Both languages were captured by the project's `StoreScreenshotsUITests` and `ios/store-shots.sh` on an iPhone 18 Pro Max simulator (iOS 27.2) from the development main line of November 15, 2026. The result bundle records **21:55–22:04 UTC on 2026-11-15**. They are newer than the 0.1.0 (3) archive of November 14, 2026, so some of what they show may not be in TestFlight yet; they are not labelled as screenshots of any uploaded build.
+**How.** The project's store screenshot pipeline captured them in an iPhone simulator (iOS 27.2) from the real 1.0 interface; the English images show the real English interface. A title, a subtitle and a device frame were then added, as on the App Store (November 24, 2026). All six are **1320 × 2868**. To keep the repository small, the PNGs were quantised to a 256-colour palette with Floyd–Steinberg dithering and saved again, without cropping, scaling or redrawing the interface.
 
-**Processing.** All six files keep the simulator size of **1320 × 2868**. To keep the repository small, the original PNGs were quantised to a 256-colour palette with Floyd–Steinberg dithering and saved again. Nothing was cropped, scaled, redrawn or composited. The English screenshots show the real English UI, not Chinese screenshots with replaced text.
+**Photos and privacy.** These six images show only the app's rendered virtual room, cat, furniture and props, and **no photos at all**. The other store screenshots, which show photo organizing with real cat photos, are not in this repository. The cat is the built-in Bella; there are no personal names or device identifiers.
 
-**Photos and privacy.** The room and play images show only the app's rendered scene, cat and props. The source picture in the memories images is a programmatically drawn cat-and-sofa sample from the app's synthetic test import; its capture date and import time belong to that sample. The cat's name is the app default, Kitty. The images contain no private photos, real photo-library content, personal names or device identifiers.
+**Rights and attribution.** The screenshots are presentation material; their rights are reserved and are not granted under the code license, and showing them does not open-source the production models, textures, animations or design files. Existing licenses and rights of third-party content are unaffected.
 
-**Rights and attribution.** The screenshots are presentation material; their rights are reserved and are not granted under the code license, and showing them does not open-source the production models, textures, animations or design files. The cat is the app's built-in cat, with mesh and coat made by Meowverse and the skeleton, skin weights and clips from Meowverse's cat rig. The app's attribution file still keeps the credit for the earlier template, reproduced here: **“3d modelling my cat: Fripouille” by guillaume bolis (2020)**, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ([model](https://sketchfab.com/3d-models/3d-modelling-my-cat-fripouille-0ab14bf98e754f8d90fe1bf1c84ca66c) · [author](https://sketchfab.com/guillaume.bolis)). The visible furniture (Tiered cat tower, Cloud chaise sofa, Lotus fountain and Donut bed) is original procedural work by Meowverse; the storage chest, feather wand, floor, walls and the synthetic source picture are generated or drawn locally by Meowverse code. No Kenney or 3D Assets CC0 furniture from the app catalog appears in these screenshots. The SHA-256 of each file is in the table above.
+- **The cat.** The built-in cat Bella was generated with Tencent Hunyuan3D from reference images and reworked by Meowverse; the skeleton, skin weights and clips come from Meowverse's cat rig. Tencent Hunyuan 3D 2.0 is licensed under the Tencent Hunyuan 3D 2.0 Community License Agreement, Copyright © 2025 Tencent. All Rights Reserved. The trademark rights of “Tencent Hunyuan” are owned by Tencent or its affiliate. The app's attribution file still keeps the credit for the earlier template, reproduced here: **“3d modelling my cat: Fripouille” by guillaume bolis (2020)**, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ([model](https://sketchfab.com/3d-models/3d-modelling-my-cat-fripouille-0ab14bf98e754f8d90fe1bf1c84ca66c) · [author](https://sketchfab.com/guillaume.bolis)).
+- **Furniture, room themes and props.** From the app's furniture catalog: original procedural models by Meowverse, models provided by the owner and built with the Meowverse furniture toolkit, and CC0 models from Kenney and 3D Assets (CC0 requires no attribution; the full list is under About & Privacy in the app). Wallpapers, floors, corner ornaments and toys are made by Meowverse.
+
+The SHA-256 of each file is in the table above.

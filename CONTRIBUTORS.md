@@ -4,6 +4,12 @@
 
 Each section is in Chinese first, then English.
 
+## 出品 · Made by
+
+**枫雪工作室**出品。
+
+Made by **Fengxue Studio**.
+
 ## 项目维护 · Maintainer
 
 [Fengyee](https://github.com/Fengyee) 维护 Meowverse，负责产品决策和发布。
@@ -15,6 +21,12 @@ Each section is in Chinese first, then English.
 **Omucat**：创意。
 
 **Omucat**: creative ideas.
+
+## 赞助人 · Sponsors
+
+**Omucat**、**阳子**、**锤宝**、**Xin**、**科内利乌斯**：喵空间 1.0 内置猫咪的赞助人，用的是他们自己给的昵称。App 的关于页、公告和猫咪卡片里也有这份名单。
+
+**Omucat**, **Yoko**, **Chuibao**, **Xin** and **Cornelius** sponsor built-in cats in Meowverse 1.0, under the nicknames they gave. The same list is on the app's About page, in News and on the cat cards.
 
 ## 测试鸣谢 · Beta testers
 

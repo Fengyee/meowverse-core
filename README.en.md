@@ -11,7 +11,7 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS and iPadOS 26 or later">
-  <img src="https://img.shields.io/badge/1.0-Coming%20to%20the%20App%20Store-0A84FF" alt="1.0 coming to the App Store">
+  <img src="https://img.shields.io/badge/1.0-In%20App%20Store%20review-0A84FF" alt="1.0 in App Store review">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available code"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
@@ -26,7 +26,7 @@ Build your cat a home, and turn the sofa it naps on or the sunny windowsill into
 
 </div>
 
-As of November 24, 2026, Meowverse **1.0 (9)** is on its way to the App Store. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
+On November 24, 2026, Meowverse **1.0 (14)** was submitted for App Store review; it comes to the App Store once approved. Until then you can try it through TestFlight; check the TestFlight page for availability. The web version remains a frozen feature demo, while development focuses on the native iOS app.
 
 <a name="try"></a>
 
@@ -67,18 +67,18 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
 
 <table>
   <tr>
-    <th align="center">Arrange everyday memories</th>
-    <th align="center">Tap furniture to revisit a photo</th>
-    <th align="center">Spend a moment with your cat</th>
+    <th align="center">A little home for your cat photos</th>
+    <th align="center">Stay and play a while</th>
+    <th align="center">Give the room a new look</th>
   </tr>
   <tr>
-    <td align="center"><img src="docs/media/ios-room-en.png" width="250" alt="Meowverse development build, room screen: the cat loafing on a sofa beside a cat tower, a bed and a fountain"></td>
-    <td align="center"><img src="docs/media/ios-memories-en.png" width="250" alt="Meowverse development build, furniture memories screen: a programmatically drawn sample photo of the sofa with its capture date"></td>
-    <td align="center"><img src="docs/media/ios-play-en.png" width="250" alt="Meowverse development build, play screen: the cat chasing the feather wand"></td>
+    <td align="center"><img src="docs/media/ios-room-en.png" width="250" alt="Meowverse 1.0, the room: Bella asleep on the cloud chaise sofa beside a cat tower and a cardboard box"></td>
+    <td align="center"><img src="docs/media/ios-play-en.png" width="250" alt="Meowverse 1.0, playing: Bella chasing the feather wand"></td>
+    <td align="center"><img src="docs/media/ios-themes-en.png" width="250" alt="Meowverse 1.0, a room in another theme: Bella on top of the cat tower, a fireplace beside her"></td>
   </tr>
 </table>
 
-*Real interfaces from a development build running in the simulator; the photos are programmatically drawn examples. These screenshots were captured from a development build on November 15, 2026, before 1.0, so some screens differ from the released app. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
+*App Store screenshots of 1.0 (taken in the simulator, with a title and device frame added). These three show only the app’s virtual room and no photos. [Image sources and attribution](docs/media/ATTRIBUTION.md).*
 
 <details>
 <summary>What is in 1.0</summary>
@@ -89,7 +89,7 @@ Participation is optional. Preparation is manual, with no guaranteed acceptance,
 - **Play with the cat.** Invite the cat onto furniture, pick a toy or offer a treat. On devices with Live Activities, start a Lock Screen pixel cat from Play; iPhones with Dynamic Island can also show it there.
 - **See it elsewhere.** Home Screen and Lock Screen widgets and a Control Center control; on supported devices, AR puts the room on a real table.
 - **Keep and sync it.** Export a ZIP backup, or turn on iCloud Drive backup and iCloud Sync to sync your room and photos between your own devices.
-- **Use it your way.** Pick any of eight built-in cats and a quality tier. Use iPad in portrait or landscape. The interface follows your system's Simplified Chinese or English language setting, and local reminders are optional.
+- **Use it your way.** Pick any of nine built-in cats and a quality tier. Use iPad in portrait or landscape. The interface follows your system's Simplified Chinese or English language setting, and local reminders are optional.
 
 Several rooms, several cats and voice control are not finished and stay off in 1.0; a second room or cat already in a saved library still shows as usual.
 
@@ -115,7 +115,7 @@ This repository publishes all the code of Meowverse 1.0, the version being prepa
 
 **The art is not published**: cat and furniture models, textures, room themes, illustrations, app icons, sounds, fonts and design source files are not in this repository. They are the work of the project and its collaborators, some used under third-party licenses, and they are not licensed with the code. The screenshots show the finished app, not what this repository alone produces.
 
-The sponsor names on the About page and the cat cards are placeholders until the real details are confirmed; they are not the final list of credits.
+The sponsors thanked on the About page, in News and on the cat cards appear under the nicknames they gave: Omucat, Yoko, Chuibao, Xin and Cornelius; the other cats read “〈cat〉’s human”.
 
 The code and the identified required program data use the **[PolyForm Noncommercial License 1.0.0](LICENSE)**. You may use, modify and redistribute them for purposes permitted by that license; commercial use requires separate authorization. Redistribution must retain the terms and required notices as specified in the license.
 
@@ -183,7 +183,11 @@ The sync merge rules and the cloud backup state and retention rules are in `Meow
 
 Project maintainer: [**Fengyee**](https://github.com/Fengyee).
 
+Made by **Fengxue Studio**.
+
 Creative: **Omucat**.
+
+Sponsors: **Omucat**, **Yoko**, **Chuibao**, **Xin**, **Cornelius**.
 
 Beta testers: list coming soon. Thank you to everyone who tests the TestFlight builds and sends feedback.
 

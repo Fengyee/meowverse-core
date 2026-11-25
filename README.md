@@ -11,7 +11,7 @@
 <p>
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/iOS%20%2F%20iPadOS-26%2B-1C1C1E?logo=apple&amp;logoColor=white" alt="iOS 和 iPadOS 26 或更新版本">
-  <img src="https://img.shields.io/badge/1.0-%E5%8D%B3%E5%B0%86%E4%B8%8A%E6%9E%B6%20App%20Store-0A84FF" alt="1.0 即将上架 App Store">
+  <img src="https://img.shields.io/badge/1.0-App%20Store%20%E5%AE%A1%E6%A0%B8%E4%B8%AD-0A84FF" alt="1.0 App Store 审核中">
   <a href="https://github.com/Fengyee/meowverse-core"><img src="https://img.shields.io/badge/Source-available-586A54" alt="Source-available 源码可见"></a>
   <a href="https://github.com/Fengyee/meowverse-core/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-697A89" alt="PolyForm Noncommercial License 1.0.0"></a>
 </p>
@@ -26,7 +26,7 @@
 
 </div>
 
-2026-11-24：喵空间 **1.0（9）** 即将上架 App Store。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
+2026-11-24：喵空间 **1.0（14）** 已提交 App Store 审核，审核通过后上架。上架前可以通过 TestFlight 试用，能否加入以 TestFlight 页面显示为准。网页版保留为功能演示，开发主线是原生 iOS App。
 
 <a name="try"></a>
 
@@ -38,7 +38,7 @@
 
 从一张你有权使用的猫咪照片开始，检查家具建议，选好款式和位置；以后点家具，就能打开与它关联的照片。识别在本机运行，从预设家具里提出建议，最终由你确认；不提供照片的 3D 重建。
 
-> **源码范围是喵空间 1.0 的全部代码，美术不公开。** 本仓库提供准备上架 App Store 的 1.0 的 App、小组件与实时活动、核心库 `MeowverseCore`、测试和 Xcode 工程，可以在没有美术的情况下编译和测试。猫咪、家具、图标等正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
+> **源码范围是喵空间 1.0 的全部代码，美术不公开。** 本仓库提供提交 App Store 审核的 1.0（14）的 App、小组件与实时活动、核心库 `MeowverseCore`、测试和 Xcode 工程，可以在没有美术的情况下编译和测试。猫咪、家具、图标等正式美术不随源码提供。源码采用非商业用途的 **source-available** 许可，具体范围见 [源码与许可](#source)。
 
 <a name="your-cat"></a>
 
@@ -63,18 +63,18 @@
 
 <table>
   <tr>
-    <th align="center">把日常摆进房间</th>
-    <th align="center">点家具，回到照片</th>
-    <th align="center">陪猫玩一会儿</th>
+    <th align="center">给猫的照片，安一个家</th>
+    <th align="center">陪它玩一会儿</th>
+    <th align="center">给小屋换个样子</th>
   </tr>
   <tr>
-    <td align="center"><img src="docs/media/ios-room.png" width="250" alt="Meowverse 开发版房间界面：猫咪窝在沙发上，旁边有猫爬架、猫窝和饮水器"></td>
-    <td align="center"><img src="docs/media/ios-memories.png" width="250" alt="Meowverse 开发版家具回忆界面：沙发里的一张程序绘制示意照片和拍摄日期"></td>
-    <td align="center"><img src="docs/media/ios-play.png" width="250" alt="Meowverse 开发版陪猫玩界面：猫咪追着羽毛逗猫棒"></td>
+    <td align="center"><img src="docs/media/ios-room.png" width="250" alt="喵空间 1.0 房间：Bella 睡在云朵贵妃沙发上，旁边有猫爬架和纸箱"></td>
+    <td align="center"><img src="docs/media/ios-play.png" width="250" alt="喵空间 1.0 陪猫玩：Bella 追着羽毛逗猫棒"></td>
+    <td align="center"><img src="docs/media/ios-themes.png" width="250" alt="喵空间 1.0 换了房间主题的小屋：Bella 坐在猫爬架顶上，旁边有壁炉"></td>
   </tr>
 </table>
 
-*开发版真实界面（模拟器）；照片为程序绘制示意。截图采自 2026-11-15 的开发版，早于 1.0，部分画面和正式版不同。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
+*1.0 的 App Store 截图（模拟器拍摄，加了标题和设备框）。这三张只有 App 里的虚拟房间，不含照片。[图片来源与署名](docs/media/ATTRIBUTION.md)。*
 
 <details>
 <summary>1.0 里有什么</summary>
@@ -85,7 +85,7 @@
 - **陪猫互动。** 邀请猫咪到家具上，选玩具或喂零食；支持实时活动的设备可从“互动”启动锁屏像素猫，支持灵动岛的 iPhone 还能在灵动岛查看。
 - **在别处看到它。** 主屏和锁屏小组件、控制中心控件；支持的设备上可以用 AR 把房间放在真实的桌面上。
 - **留住和同步。** 导出 ZIP 备份，或打开 iCloud 云盘备份和 iCloud 同步，在自己的设备之间同步房间和照片。
-- **按自己的习惯使用。** 八只内置猫咪任选；画质分档；iPad 支持横竖屏；界面跟随系统使用简体中文或英文；本地提醒由你选择开启。
+- **按自己的习惯使用。** 九只内置猫咪任选；画质分档；iPad 支持横竖屏；界面跟随系统使用简体中文或英文；本地提醒由你选择开启。
 
 多个房间、多只猫和语音控制还没做完，1.0 先不开放；已有存档里的第二个房间或第二只猫照常显示。
 
@@ -111,7 +111,7 @@
 
 **美术不公开**：猫咪与家具的模型、贴图、房间主题、插画、App 图标、音效、字体和设计源文件都不在本仓库。它们是项目与合作者的作品，部分按第三方许可使用，不随代码授权。宣传截图展示的是成品 App，不是只靠本仓库能得到的画面。
 
-关于页和猫咪卡片中的赞助人名字目前是占位写法，等真实信息确认后再更新，不是正式的鸣谢名单。
+关于页、公告和猫咪卡片里鸣谢的赞助人，用的是他们自己给的昵称：Omucat、阳子、锤宝、Xin、科内利乌斯；其余几只猫写作「〈猫名〉的铲屎官」。
 
 源码与列明的必要程序数据采用 **[PolyForm Noncommercial License 1.0.0](LICENSE)**：可以在许可证定义的许可用途内使用、修改和再分发；商业用途需要另行取得授权。再分发时须按原文保留许可条款和必要声明。
 
@@ -177,9 +177,13 @@ support/                        群二维码
 
 ## Contributors · 协作致谢
 
+出品：**枫雪工作室**。
+
 项目维护：[**Fengyee**](https://github.com/Fengyee)。
 
 创意：**Omucat**。
+
+赞助人：**Omucat**、**阳子**、**锤宝**、**Xin**、**科内利乌斯**。
 
 测试鸣谢：名单整理中。感谢每一位参与 TestFlight 测试和反馈的朋友。
 
