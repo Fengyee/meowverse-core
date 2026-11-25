@@ -347,7 +347,10 @@ public struct CatGaitRig: Decodable, Sendable {
         guard scale.isFinite, scale > 0, Set(joints.map(\.name)).count == joints.count else { throw CatPackError.badGaits }
         for (index, joint) in joints.enumerated() {
             guard !joint.name.isEmpty, joint.inverseBind.count == 16,
-                  joint.parent.map({ $0 >= 0 && $0 < index }) ?? true else { throw CatPackError.badGaits }
+                  joint.parent.map({ $0 >= 0 && $0 < index }) ?? true,
+                  joint.inverseBind.allSatisfy(\.isFinite),
+                  (0..<3).allSatisfy({ joint.translation[$0].isFinite }),
+                  Self.isUnitQuaternion(joint.rotation) else { throw CatPackError.badGaits }
         }
         guard !parts.isEmpty else { throw CatPackError.badGaits }
         guard CatPackValidator.fitsMeshBudget(vertices: parts.map { $0.positions.count / 3 },
@@ -369,6 +372,10 @@ public struct CatGaitRig: Decodable, Sendable {
                   !clip.tracks.isEmpty, clip.tracks.allSatisfy({ track in
                       joints.indices.contains(track.joint) && track.values.count >= track.width
                           && track.values.count.isMultiple(of: track.width)
+                          && track.values.allSatisfy(\.isFinite)
+                          && (track.path != .rotation || Swift.stride(from: 0, to: track.values.count, by: 4).allSatisfy { i in
+                              Self.isUnitQuaternion(SIMD4(track.values[i], track.values[i + 1], track.values[i + 2], track.values[i + 3]))
+                          })
                   }) else { throw CatPackError.badGaits }
         }
     }
@@ -383,6 +390,22 @@ public struct CatGaitRig: Decodable, Sendable {
             && !part.indices.isEmpty && part.indices.count.isMultiple(of: 3)
             && part.indices.allSatisfy({ Int($0) < count })
             && part.jointIndices.allSatisfy({ (0..<jointCount).contains($0) })
+            && part.positions.allSatisfy(\.isFinite) && part.normals.allSatisfy(\.isFinite) && part.uvs.allSatisfy(\.isFinite)
+            && (0..<count).allSatisfy({ vertex in
+                let w = part.weights[vertex * 4 ..< vertex * 4 + 4]
+                return w.allSatisfy({ $0.isFinite && $0 >= 0 }) && abs(w.reduce(0, +) - 1) <= weightTolerance
+            })
+    }
+
+    /// The exporter (scripts/cat-rig) writes normalised weights and unit quaternions; this allows
+    /// for its float rounding, not for a different meaning (D24-06).
+    static let weightTolerance: Float = 0.01
+
+    /// A rotation RealityKit can use as is: finite and of unit length, within export rounding.
+    /// A zero or scaled quaternion would collapse or stretch the joint.
+    static func isUnitQuaternion(_ q: SIMD4<Float>) -> Bool {
+        guard (0..<4).allSatisfy({ q[$0].isFinite }) else { return false }
+        return abs((q * q).sum() - 1) <= 0.02
     }
 }
 

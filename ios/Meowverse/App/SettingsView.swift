@@ -417,8 +417,10 @@ struct RestorePreviewView: View {
     }
 
     private var currentIsEmpty: Bool { model.phase != .corruptLibrary && model.state.isEmptyForBackup }
-    /// With sync on, the restored library merges with the home in iCloud.
-    private var merges: Bool { model.phase != .corruptLibrary && model.cloudSyncOn }
+    /// With sync on, the restored library merges with the home in iCloud. Restoring a damaged
+    /// library happens before the settings are read: the saved ones say, as they do for the
+    /// restore itself (`noteLibraryReplacementForSync`; audit Z24-01).
+    private var merges: Bool { model.phase == .corruptLibrary ? model.syncOnForThisLibrary : model.cloudSyncOn }
 
     private var versionLine: String {
         if preview.kind == .webBackup { return String(localized: "网页版数据格式第 \(preview.schemaVersion) 版") }
@@ -427,7 +429,13 @@ struct RestorePreviewView: View {
     }
 
     private var replaceWarning: String {
-        if model.phase == .corruptLibrary { return String(localized: "确认后会使用这份备份打开房间。损坏的资料库会单独保存在本机。") }
+        if model.phase == .corruptLibrary {
+            let opens = String(localized: "确认后会使用这份备份打开房间。损坏的资料库会单独保存在本机。")
+            guard merges else { return opens }
+            // The normal restore's merge warning, without its advice to turn sync off first,
+            // which the damaged-library screen does not offer.
+            return Wording.sentences(opens, String(localized: "iCloud 同步开着：确认后，这台设备先换成这份备份，再和 iCloud 里的家合并。备份之后删掉的内容会回到所有同步的设备上；备份之后改过并已同步的内容大多保持现在的样子。", table: "ICloudSync"))
+        }
         if merges {
             return String(localized: "iCloud 同步开着：确认后，这台设备先换成这份备份，再和 iCloud 里的家合并。备份之后删掉的内容会回到所有同步的设备上；备份之后改过并已同步的内容大多保持现在的样子。这台设备上还没同步的改动会被替换，无法撤销。要让这台设备整份回到备份那时，请先取消并关闭同步。")
         }

@@ -76,9 +76,15 @@ nonisolated enum RoomPostcard {
     }
 
     private static func line(_ value: String, font name: String, size: CGFloat, ink: CGColor,
-                             x: CGFloat, baseline: CGFloat, rightAligned: Bool = false, in c: CGContext) {
+                             x: CGFloat, baseline: CGFloat, rightAligned: Bool = false, kern: CGFloat? = nil,
+                             in c: CGContext) {
         let font = CTFontCreateWithName(name as CFString, size, nil)
-        let line = CTLineCreateWithAttributedString(text(value, font: font, ink: ink))
+        let attributed = NSMutableAttributedString(attributedString: text(value, font: font, ink: ink))
+        if let kern {
+            attributed.addAttribute(NSAttributedString.Key(kCTKernAttributeName as String), value: kern,
+                                    range: NSRange(location: 0, length: attributed.length))
+        }
+        let line = CTLineCreateWithAttributedString(attributed)
         let offset = rightAligned ? CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil)) : 0
         c.textPosition = CGPoint(x: x - offset, y: side - baseline)
         CTLineDraw(line, c)
@@ -93,8 +99,26 @@ nonisolated enum RoomPostcard {
         c.interpolationQuality = .high
         c.draw(appIcon, in: stamp)
         c.restoreGState()
-        line("Meowverse", font: "Georgia", size: 51, ink: ink, x: stamp.maxX + 16, baseline: 99, in: c)
+        let x = stamp.maxX + 16
+        switch brand {
+        case .latin:
+            line(brand.words, font: "Georgia", size: 51, ink: ink, x: x, baseline: 99, in: c)
+        case .chinese:
+            // 48 pt KuaiLe on the same baseline: its ink (61–103 pt from the top) is centred where
+            // Georgia's capitals are (64–100), beside the 40–118 stamp, and the full-height Han
+            // weigh about as much as the Latin capitals. Kern 0: KuaiLe has no kern table, and
+            // CoreText's default spacing would add space after the glyphs (art-craft).
+            let font = CTFontCopyPostScriptName(CTFontCreateWithName(titleFace as CFString, 48, nil)) as String == titleFace
+                ? titleFace : "PingFangSC-Semibold"
+            line(brand.words, font: font, size: 48, ink: ink, x: x, baseline: 99, kern: 0, in: c)
+        }
     }
+
+    /// The app's name in the interface language (owner: 喵空间 everywhere in Chinese).
+    private static let brand = PostcardBrand.forInterface(languageCode: AppLanguage.code)
+    /// The title face (`RoomTitleFont.cuteFaceName`, bundled and listed in `UIAppFonts`). If it did not
+    /// register, CoreText substitutes another font, so the Chinese name falls back to PingFang.
+    private static let titleFace = "ZCOOLKuaiLe-Regular"
 
     // MARK: - Library statistics
 

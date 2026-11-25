@@ -22,6 +22,20 @@ public enum TestBuildNotice {
         switchedOn(switchValue) && receiptFileName == "sandboxReceipt"
     }
 
+    /// How this install came to the device, for the bug report (R01-002). Only a build archived
+    /// with the test-build switch and running on a sandbox receipt is a TestFlight test build. The
+    /// App Store archive also runs on a sandbox receipt, both under App Review and on internal
+    /// TestFlight, so with the switch off a sandbox receipt says only that: never "TestFlight".
+    /// No receipt on disk (Xcode and development installs) is unknown.
+    public static func channel(switchValue: Any?, receiptFileName: String?, receiptExists: Bool) -> BuildChannel {
+        guard receiptExists, let receiptFileName else { return .unknown }
+        switch receiptFileName {
+        case "sandboxReceipt": return switchedOn(switchValue) ? .testFlight : .sandbox
+        case "receipt": return .appStore
+        default: return .unknown
+        }
+    }
+
     /// The page comes once, after the opening (owner): when every chapter of the opening has an
     /// ending, whether read, skipped, skipped with everything, or waived for a home that was not
     /// empty. The chapters on demand are not waited for; they may stay open for weeks. Waiting for
@@ -29,5 +43,20 @@ public enum TestBuildNotice {
     public static func openingIsOver(_ catalog: TourCatalog, record: TourRecord) -> Bool {
         let opening = catalog.opening
         return !opening.isEmpty && opening.allSatisfy { record.entry(for: $0.id) != nil }
+    }
+}
+
+/// Where the running build came from, as far as the build and its receipt can tell.
+public enum BuildChannel: String, Sendable, Equatable {
+    case appStore, testFlight, sandbox, unknown
+
+    /// The words the bug report adds after the configuration; nil adds nothing.
+    public var reportLabel: String? {
+        switch self {
+        case .appStore: "App Store"
+        case .testFlight: "TestFlight"
+        case .sandbox: "sandbox receipt"
+        case .unknown: nil
+        }
     }
 }

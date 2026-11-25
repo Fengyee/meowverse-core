@@ -131,13 +131,15 @@ final class ReminderScheduler {
     }
 
     /// Turning a kind on asks for permission the first time. If the answer is no, nothing is
-    /// switched on: the settings page shows that notifications are off instead.
-    func set(_ kind: ReminderKind, on: Bool, state: AppState) async {
+    /// switched on: the settings page shows that notifications are off instead. `state` is read
+    /// after the answer: the library may have changed while the prompt was up, and a snapshot
+    /// from before would be queued after the newer plan and replace it (L24-08).
+    func set(_ kind: ReminderKind, on: Bool, state: @autoclosure () -> AppState) async {
         if on {
             await requestPermissionIfNeeded()
             guard authorization == .allowed else { return }
         }
-        update(state: state) { settings in
+        update(state: state()) { settings in
             switch kind {
             case .calls: settings.callsEnabled = on
             case .onThisDay: settings.onThisDayEnabled = on
@@ -180,13 +182,17 @@ final class ReminderScheduler {
         // A fact the system held last time and holds no longer, once its time could have come,
         // was shown: its week is spent, even if a photo added since makes that day busy (R5-04).
         let now = Date.now, calendar = Calendar.autoupdatingCurrent
-        catFactHistory.noteDeliveries(pending: await client.pendingIdentifiers(), now: now)
+        let pending = await client.pendingIdentifiers()
+        catFactHistory.noteDeliveries(pending: pending, now: now)
         let plan = authorization == .allowed && settings.anyEnabled
             ? ReminderPlanner.plan(state: state, settings: settings, now: now, calendar: calendar,
                                    consumedCatFactWeeks: catFactHistory.consumedWeeks)
             : []
         let signature = Signature(plan: plan, catName: state.primaryCat.name)
-        guard signature != lastScheduled else { return saveHistory() }
+        // The same plan is not proof the system still holds it (FF24-01): what it dropped, or
+        // holds beyond the plan, is put right by submitting the plan again.
+        guard signature != lastScheduled || !ReminderPlanner.pendingMatches(plan, pending: pending, now: now, calendar: calendar)
+        else { return saveHistory() }
         do {
             try await client.replacePending(with: plan.map { ReminderContent.request(for: $0, catName: state.primaryCat.name) })
             lastScheduled = signature

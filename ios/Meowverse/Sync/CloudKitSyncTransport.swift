@@ -37,8 +37,6 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
     /// (CloudKit does not download assets for a conflict's server record): fetched on their own.
     private var conflictsToRead: Set<String> = []
     private var fetchedSomething = false
-    /// Files known to be in the cloud (this account, this run): a photo record waits for one.
-    private var filesInCloud: Set<String> = []
     /// Answers to "is this file in the cloud" for the part of the cycle in progress, asked many
     /// at a time. Forgotten when a cycle starts and once a fetch brought a fresh view.
     private var fileAnswers: [String: Bool] = [:]
@@ -226,7 +224,6 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
             switch found[id] {
             case .success:
                 fileAnswers[sha] = true
-                filesInCloud.insert(sha)
             case .failure(let error) where (error as? CKError)?.code == .unknownItem:
                 fileAnswers[sha] = false
             default:
@@ -238,6 +235,27 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
         return false
     }
 
+    /// Asks the server about this one file now, past every remembered answer, and remembers
+    /// what it says for the rest of this part of the cycle.
+    func confirmFile(sha256: String) async throws -> Bool {
+        loadMirror()
+        try checkUsable()
+        try await ensureZones()
+        let id = CloudKitSyncCoding.fileRecordID(sha256: sha256, zones: zones)
+        let found: Result<CKRecord, any Error>?
+        do { found = try await database.records(for: [id], desiredKeys: [])[id] } catch { throw mapped(error) }
+        switch found {
+        case .success:
+            fileAnswers[sha256] = true
+            return true
+        case .failure(let error) where (error as? CKError)?.code == .unknownItem:
+            fileAnswers[sha256] = false
+            return false
+        case .failure(let error): throw mapped(error)
+        case nil: throw SyncTransportError.retryLater(seconds: 30)
+        }
+    }
+
     /// The server's creation date of the file record. Clean-up leaves a file stored within the
     /// last day alone: it may belong to a photo coming back whose record has not arrived yet.
     func fileStoredAt(sha256: String) async throws -> Date? {
@@ -247,7 +265,11 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
         let found: Result<CKRecord, any Error>?
         do { found = try await database.records(for: [id], desiredKeys: [])[id] } catch { throw mapped(error) }
         switch found {
-        case .success(let record): return record.creationDate
+        // A file record always has one; without it the age is unknown, and clean-up waits
+        // rather than reading that as "can't tell" (audit 2026-11-24, D24-03).
+        case .success(let record):
+            guard let created = record.creationDate else { throw SyncTransportError.retryLater(seconds: 30) }
+            return created
         case .failure(let error) where (error as? CKError)?.code == .unknownItem: return nil
         case .failure(let error): throw mapped(error)
         case nil: return nil
@@ -273,11 +295,9 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
         }
         switch saved {
         case .success:
-            filesInCloud.insert(sha256)
             fileAnswers[sha256] = true
         // Files never change: one already there under this hash is this file.
         case .failure(let error) where (error as? CKError)?.code == .serverRecordChanged:
-            filesInCloud.insert(sha256)
             fileAnswers[sha256] = true
         case .failure(let error): throw mapped(error)
         case nil: throw SyncTransportError.retryLater(seconds: 30)
@@ -316,7 +336,6 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
             throw mapped(error)
         }
         if case .failure(let error) = deleted, (error as? CKError)?.code != .unknownItem { throw mapped(error) }
-        filesInCloud.remove(sha256)
         fileAnswers[sha256] = false
     }
 
@@ -444,8 +463,10 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
 
     /// The records the engine delivered unreadable, fetched again one by one (with their
     /// assets). One that is still unreadable stays listed; one gone from the server is forgotten.
+    /// Each call goes on after the names the last one asked for, so records that stay
+    /// unreadable for good never keep the ones after them from their turn (audit D24-04).
     private func refetchUnreadable() async {
-        let names = Array(mirror.unfetchedNames.prefix(Self.refetchBatch))
+        let names = mirror.unfetchedToRefetch(limit: Self.refetchBatch)
         guard !names.isEmpty else { return }
         let ids = names.map { CKRecord.ID(recordName: $0, zoneID: zones.recordsZoneID) }
         let found: [CKRecord.ID: Result<CKRecord, any Error>]
@@ -453,6 +474,7 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
             log.notice("sync transport: records not read yet could not be fetched again")
             return
         }
+        mirror.noteRefetched(names)
         for id in ids {
             switch found[id] {
             case .success(let record):
@@ -565,8 +587,10 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
         }
     }
 
+    /// Answered for this part of the cycle (`hasFile`), never from what an earlier cycle or the
+    /// upload remembered: another device may have removed the file since (audit 2026-11-24,
+    /// D24-02).
     private func anyFileInCloud(_ hashes: [String]) async throws -> Bool {
-        if hashes.contains(where: filesInCloud.contains) { return true }
         for sha in hashes where try await hasFile(sha256: sha) { return true }
         return false
     }
@@ -574,7 +598,6 @@ actor CloudKitSyncTransport: SyncCloud, CKSyncEngineDelegate {
     private func dropEngine() async {
         if let engine { await engine.cancelOperations() }
         engine = nil
-        filesInCloud = []
         fileAnswers = [:]
         fileCandidates = nil
         files.dropEngineState()

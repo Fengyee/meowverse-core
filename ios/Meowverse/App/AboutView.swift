@@ -1,7 +1,7 @@
 import MeowverseCore
 import SwiftUI
 
-/// About and privacy, pushed from Settings: sponsors, thanks, open source and art, privacy,
+/// About and privacy, pushed from Settings: who makes it, sponsors, thanks, open source and art, privacy,
 /// version. The long texts (privacy, licences, the full art credits) are one level down.
 struct AboutView: View {
     var body: some View {
@@ -29,12 +29,23 @@ struct AboutView: View {
     }
 }
 
-/// 赞助人, 鸣谢 and 开源与素材: the first three sections of 关于与隐私, also drawn by the DEBUG
+/// 出品, 赞助人, 鸣谢 and 开源与素材: the first sections of 关于与隐私, also drawn by the DEBUG
 /// gallery with sample names (`-MeowverseOverlayGallery credits`).
 struct AboutCreditsSections: View {
     let roll: CreditsRoll
 
     var body: some View {
+        // Who makes the app (owner, 2026-11-24): the studio name the owner and their partner sign
+        // with. The name only: no real names, no link.
+        Section {
+            LabeledContent {
+                Text("枫雪工作室", tableName: "About")
+            } label: {
+                Text("出品", tableName: "About")
+            }
+            .accessibilityIdentifier("about-studio")
+        }
+
         // Thanks only. No amounts, links or asking: a sponsorship or tip outside In-App Purchase
         // is a review risk (App Review 3.1.1). A group with nobody in it does not show.
         let sponsors = roll.listedSponsors
@@ -80,7 +91,7 @@ struct AboutCreditsSections: View {
             } header: {
                 Text("鸣谢", tableName: "About")
             } footer: {
-                Text("喵空间由个人开发。喜欢的话，欢迎在 App Store 留下评分；有想法或遇到问题，可以在“设置 › 反馈问题”里告诉我们。")
+                Text("喵空间由枫雪工作室开发。喜欢的话，欢迎在 App Store 留下评分；有想法或遇到问题，可以在“设置 › 反馈问题”里告诉我们。")
             }
         }
 

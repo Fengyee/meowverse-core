@@ -123,6 +123,7 @@ extension AppModel {
         batch.progress = nil
         photos.addTask = nil
         photos.adding = nil
+        photos.addRun = nil
     }
 
     // MARK: Storing a batch
@@ -367,7 +368,7 @@ extension AppModel {
     func endImport(_ session: ImportSession, _ ending: ImportEnding) {
         guard importSession === session else { return }
         // Confirmed (stored by now) or discarded: the held capture has done its job.
-        if let held = session.pendingCaptureSHA { forgetPendingCapture(held) }
+        if let held = session.pendingCaptureSHA { forgetPendingCapture(held, library: session.generation) }
         if ending == .placed || ending.isAttachment { keepReviewPrint(of: session) }
         if let position = session.sorting {
             switch ending {

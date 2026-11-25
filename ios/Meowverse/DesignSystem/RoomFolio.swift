@@ -406,7 +406,7 @@ struct RoomChipFlow: Layout {
         for row in arrange(width: bounds.width, subviews: subviews) {
             var x = bounds.minX
             for index in row.indices {
-                let size = subviews[index].sizeThatFits(.unspecified)
+                let size = Self.size(of: subviews[index], width: bounds.width)
                 subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
                 x += size.width + spacing
             }
@@ -418,7 +418,7 @@ struct RoomChipFlow: Layout {
         var rows: [(indices: [Int], width: CGFloat, height: CGFloat)] = []
         var current: (indices: [Int], width: CGFloat, height: CGFloat) = ([], 0, 0)
         for index in subviews.indices {
-            let size = subviews[index].sizeThatFits(.unspecified)
+            let size = Self.size(of: subviews[index], width: width)
             let needed = current.indices.isEmpty ? size.width : current.width + spacing + size.width
             if needed > width, !current.indices.isEmpty {
                 rows.append(current)
@@ -429,6 +429,15 @@ struct RoomChipFlow: Layout {
         }
         if !current.indices.isEmpty { rows.append(current) }
         return rows
+    }
+
+    /// A chip at its natural size, or, when that is wider than the row (English at the largest
+    /// text sizes on a narrow phone: “Cautious but curious”), as wide as the row with its words
+    /// wrapped, so nothing runs off the card.
+    private static func size(of subview: LayoutSubview, width: CGFloat) -> CGSize {
+        let natural = subview.sizeThatFits(.unspecified)
+        guard natural.width > width, width.isFinite else { return natural }
+        return subview.sizeThatFits(ProposedViewSize(width: width, height: nil))
     }
 }
 

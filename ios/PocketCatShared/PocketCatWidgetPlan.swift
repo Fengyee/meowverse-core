@@ -74,8 +74,9 @@ nonisolated enum PocketCatWidgetPlan {
                            reloadAt: now.addingTimeInterval(fixedCompanionRecheck))
         }
         // The system's time limit falls inside this plan: company until then, the cat at rest
-        // from then on.
-        guard let end = companion.endsBy, end < company.reloadAt else { return company }
+        // from then on. A limit right on the reload too (X24-03): WidgetKit may ask late, and
+        // the last expression would stay up past the end until it does.
+        guard let end = companion.endsBy, end <= company.reloadAt else { return company }
         let rest = idlePlan(at: end)
         return Plan(moments: company.moments.filter { $0.date < end } + rest.moments, reloadAt: rest.reloadAt)
     }

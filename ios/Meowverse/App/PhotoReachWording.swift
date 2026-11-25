@@ -32,17 +32,17 @@ extension PhotoReach {
         case .thisDeviceOnly:
             String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会把任何照片上传。")
         case .iCloudDriveBackup:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了“备份到 iCloud 云盘”，喵空间存的副本会随备份存进你自己的 iCloud 云盘。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了“备份到 iCloud 云盘”，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会随备份存进你自己的 iCloud 云盘。")
         case .iCloudSync:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了 iCloud 同步，喵空间存的副本会通过 Apple 的 iCloud 同步到你自己的设备。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了 iCloud 同步，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会通过 Apple 的 iCloud 同步到你自己的设备。")
         case .backupAndSync:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了 iCloud 同步和“备份到 iCloud 云盘”，喵空间存的副本会通过 Apple 的 iCloud 同步到你自己的设备，也会随备份存进你自己的 iCloud 云盘。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了 iCloud 同步和“备份到 iCloud 云盘”，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会通过 Apple 的 iCloud 同步到你自己的设备，也会随备份存进你自己的 iCloud 云盘。")
         case .offWithBackupsLeft:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前存进你自己 iCloud 云盘的备份还在，里面有喵空间存的照片副本。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前存进你自己 iCloud 云盘的备份还在，里面有喵空间存的照片副本。")
         case .offWithSyncDataLeft:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。")
         case .offWithBothLeft:
-            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前的备份和同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。")
+            String(localized: "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前的备份和同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。")
         }
     }
 

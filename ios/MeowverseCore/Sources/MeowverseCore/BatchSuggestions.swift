@@ -128,12 +128,14 @@ public enum BatchSuggestions {
         return (all.flatMap { piece in piece.sources.map { (piece.instanceId, $0.photoId) } }, boards)
     }
 
-    /// The photos of `scope` that may be offered. Never a photo in a piece that is not a board.
-    public static func candidates(_ scope: SuggestionScope, in state: AppState, catalog: FurnitureCatalog) -> [SuggestionCandidate] {
+    /// The photos of `scope` that may be offered. Never a photo in a piece that is not a board,
+    /// nor one in `linkedElsewhere` (on a piece from a newer version this device keeps hidden).
+    public static func candidates(_ scope: SuggestionScope, in state: AppState, catalog: FurnitureCatalog,
+                                  linkedElsewhere: Set<String> = []) -> [SuggestionCandidate] {
         let (links, boards) = links(in: state, catalog: catalog)
         var holders: [String: Set<String>] = [:]
         for link in links { holders[link.photoId, default: []].insert(link.instanceId) }
-        let known = Set(state.photos.map(\.photoId))
+        let known = Set(state.photos.map(\.photoId)).subtracting(linkedElsewhere)
         switch scope {
         case .unfiled(let ids):
             var seen = Set<String>()
@@ -141,7 +143,8 @@ public enum BatchSuggestions {
                 .map { SuggestionCandidate(photoId: $0) }
         case .photoBoards:
             return state.photos.compactMap { photo in
-                guard let held = holders[photo.photoId], !held.isEmpty, held.isSubset(of: boards) else { return nil }
+                guard known.contains(photo.photoId), let held = holders[photo.photoId], !held.isEmpty,
+                      held.isSubset(of: boards) else { return nil }
                 return SuggestionCandidate(photoId: photo.photoId, boards: held)
             }
         }
@@ -161,6 +164,21 @@ public enum BatchSuggestions {
             return BatchSuggestion(photoId: candidate.photoId, instanceId: match.instanceId, closestPhotoId: match.photoId,
                                    distance: match.distance, fromBoards: candidate.boards)
         }
+    }
+
+    /// `offers`, from every link of the home (`links`) and the prints at hand for their photos.
+    /// Any filed photo without a print gives no offer at all: it may be the competing photo the
+    /// margin needs, so an offer without it would rest on part of the home (EE24-01).
+    public static func offers(for candidates: [SuggestionCandidate], prints: [String: FeaturePrint],
+                              links: [(instanceId: String, photoId: String)], referencePrints: [String: FeaturePrint],
+                              boards: Set<String>, declined: Set<String>,
+                              rule: AutoFileRule = BatchSuggestionSettings.rule) -> [BatchSuggestion] {
+        var references: [FurniturePhotoPrint] = []
+        for link in links {
+            guard let print = referencePrints[link.photoId] else { return [] }
+            references.append(FurniturePhotoPrint(instanceId: link.instanceId, photoId: link.photoId, print: print))
+        }
+        return offers(for: candidates, prints: prints, references: references, boards: boards, declined: declined, rule: rule)
     }
 
     /// Offers by piece: the piece with the most offers first, then by its first offer.

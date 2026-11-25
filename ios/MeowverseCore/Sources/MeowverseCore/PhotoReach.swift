@@ -43,7 +43,11 @@ public enum PhotoReach: Equatable, Sendable, CaseIterable {
     /// of them the last listing of the account they go to found, nil when there is no such
     /// listing (signed out, another account, not listed yet, the listing failed). Without one,
     /// `lastBackupKept`: this device made a backup and the app has not deleted it since.
-    public static func backupsLeft(listedOwnBackups: Int?, lastBackupKept: Bool) -> Bool {
+    /// `leftInAnotherAccount`: backup was moved to another Apple Account while backups were in the
+    /// first one (`CloudBackupSettings.backupsLeftInAnotherAccount`); a listing of the account
+    /// in use now says nothing about those (audit B24-05).
+    public static func backupsLeft(listedOwnBackups: Int?, lastBackupKept: Bool, leftInAnotherAccount: Bool = false) -> Bool {
+        if leftInAnotherAccount { return true }
         if let listedOwnBackups { return listedOwnBackups > 0 }
         return lastBackupKept
     }

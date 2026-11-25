@@ -179,6 +179,15 @@ struct ImportFlowView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .accessibilityIdentifier(save.saveFailed ? "capture-not-in-photos" : "capture-not-saved-yet")
                 }
+                // Holding it for a relaunch failed (audit E24-03): this review is its only copy.
+                if session.existingPhoto == nil, session.captureOnlyInMemory {
+                    Label("这张照片没能暂存在这台设备上，现在退出喵空间它就会丢失。放进家具或选“只存照片，不添家具”就会保存。",
+                          systemImage: "exclamationmark.triangle")
+                        .font(.footnote)
+                        .foregroundStyle(Color.subtle)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("capture-not-held")
+                }
                 photoHeader
                 if !session.alreadyIn.isEmpty {
                     duplicateNotice

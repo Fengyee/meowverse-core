@@ -157,7 +157,11 @@ final class TourCoordinator {
     /// The naming page, a sheet in the main window (the overlay window never has the keyboard).
     var namingShown = false
     /// Page mode's sheet.
-    var pageShown = false
+    var pageShown = false {
+        didSet { if pageShown { pageRun = showing?.run.id } }
+    }
+    /// The run page mode's sheet was presented for: its dismissal ends that run only (L24-07).
+    @ObservationIgnored private var pageRun: TourRunID?
     /// The existing message for a name that could not be saved.
     var renameFailure: String?
     /// The rename is being saved.
@@ -499,7 +503,8 @@ final class TourCoordinator {
         guard let machine, room.idle, !UserDefaults.standard.bool(forKey: Self.finaleKey(library: library)),
               TourRules.everythingSeen(catalog: catalog, record: machine.record, snapshot: snapshot()),
               let card = TourScript.card(.allDone, catName: catName) else { return }
-        UserDefaults.standard.set(true, forKey: Self.finaleKey(library: library))
+        // Marked once it has been answered (`finish`), not here: put away before it was seen,
+        // it comes at the next arrival instead (L24-09).
         let run = TourRun(id: .finale, chapter: .allDone, mode: .replay, demonstrates: false)
         let presentation: Presentation = TourLaunch.pageMode ? .page : .overlay
         // Its one button is 「知道了」, as on a placeholder card, and it has no 「全部跳过」.
@@ -866,6 +871,7 @@ final class TourCoordinator {
         namingShown = false
         namingDueSince = nil
         send(.finished(run: current.run.id, exit, snapshot()))
+        if current.run.id == .finale { UserDefaults.standard.set(true, forKey: Self.finaleKey(library: library)) }
         if current.run.mode == .replay {
             TourReplayEntry.ended(exit)
             // Shown for real (not the placeholder card) and read to its end: 看过 in Settings.
@@ -1120,8 +1126,10 @@ final class TourCoordinator {
     func skip() { finish(.skipped) }
 
     /// Page mode's sheet was swiped away: the same as 【跳过这一段】.
+    /// A sheet of an older run closing late (a new run's page is wanted, or was not asked for
+    /// yet) ends nothing.
     func pageClosed() {
-        guard showing?.presentation == .page else { return }
+        guard let current = showing, current.presentation == .page, !pageShown, current.run.id == pageRun else { return }
         finish(.skipped)
     }
     func skipAll() { finish(.skippedAll) }
@@ -1212,10 +1220,14 @@ final class TourCoordinator {
         }
         // Written at once. A name does not hide the iCloud restore offer
         // (`AppState.isEmptyForRestoreOffer`), and restoring replaces it with the backup's.
+        // Bound to the library it was typed for: a restore or clear meanwhile refuses the write,
+        // and a late answer shows no error over another run or library (D24-10).
+        let library = model.libraryGeneration
         renaming = true
         Task {
-            let failure = await model.renameCat(cat.catId, to: name)
+            let failure = await model.renameCat(cat.catId, to: name, generation: library)
             renaming = false
+            guard showing?.run.id == run, model.libraryGeneration == library else { return }
             if let failure { renameFailure = failure.message }
             continueAfterNaming(failure == nil ? .named(name) : .notNamed, run: run)
         }

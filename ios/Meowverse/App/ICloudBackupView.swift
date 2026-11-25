@@ -151,7 +151,7 @@ struct ICloudBackupView: View {
     }
 
     private var deleteMessage: String {
-        let bytes = ownBackups.compactMap(\.byteSize).reduce(0, +)
+        let bytes = CloudBackupPolicy.totalBytes(ownBackups.map(\.byteSize))
         let size = ByteCountFormatter.string(fromByteCount: Int64(bytes), countStyle: .file)
         let newest = ownBackups.first.map { $0.name.createdAt.formatted(date: .abbreviated, time: .shortened) } ?? ""
         return String(localized: "会从 iCloud 云盘删除这台设备存的 \(ownBackups.count) 份备份（共 \(size)），包括最新的一份（\(newest)）。删除后不能再用它们恢复。房间里的内容和其他设备存的备份都不受影响。")
@@ -358,7 +358,9 @@ struct ICloudRestoreList: View {
                 .foregroundStyle(Color.subtle)
                 .accessibilityIdentifier("icloud-restore-empty")
                 ForEach(model.cloud.entries) { entry in
-                    ICloudBackupRow(entry: entry, isRecommended: entry.id == model.recommendedCloudBackup?.id)
+                    // "最新的完好备份" only for one whose info file checked out: a backup whose info is
+                    // still downloading, or missing, is not called intact (audit B24-08).
+                    ICloudBackupRow(entry: entry, isRecommended: entry.id == model.recommendedCloudBackup?.id && entry.condition == .verified)
                 }
             } footer: {
                 Text("选一份备份后，会先下载（如果还不在这台设备上）并完整核对，再显示里面有什么。确认后才替换现在的房间。")

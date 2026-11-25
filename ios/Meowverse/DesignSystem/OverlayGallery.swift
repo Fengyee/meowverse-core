@@ -4,7 +4,7 @@ import SwiftUI
 
 /// A DEBUG-only page that lays out the round-6 overlay components the way art/ui/OVERLAY_SPEC.md
 /// places them, so they can be screenshotted before the room is wired. Launch with
-/// `-MeowverseOverlayGallery <page>`: `band` (default), `sound`, `rooms`, `theme`, `titles` or `cat-card` (a character card with a sample fun fact); the
+/// `-MeowverseOverlayGallery <page>`: `band` (default), `sound`, `rooms`, `theme`, `titles` or `cat-card` (a built-in cat's character card); the
 /// round-8 suggested-filing pages (`filing-…`) are listed in `FilingGallery`.
 /// `-MeowverseGalleryPlaying` shows the play-session state.
 /// The arrangement here is a reference for the room's top bar, not the shipped one.
@@ -330,21 +330,24 @@ private struct TitleSamples: View {
     }
 }
 
-/// `-MeowverseOverlayGallery cat-card`: the built-in Bella's character card with a sample 小趣事, so the line
-/// can be reviewed with real-looking text. The fact is the gallery's own sample, not one the owner wrote.
+/// `-MeowverseOverlayGallery cat-card`: a built-in cat's character card as it ships, Bella's or the
+/// one `-MeowverseGalleryCat <id>` names, for reviewing the tags and the 小趣事 at every text size.
 private struct CatProfileGallery: View {
     @State private var shown = true
-    private let pack = (Bundle.main.resourceURL).flatMap { try? CatPack.builtIn(id: "bella", resourceDirectory: $0) }
+    private let pack: CatPack? = {
+        let arguments = ProcessInfo.processInfo.arguments
+        let id = arguments.firstIndex(of: "-MeowverseGalleryCat").flatMap { arguments.indices.contains($0 + 1) ? arguments[$0 + 1] : nil } ?? "bella"
+        return Bundle.main.resourceURL.flatMap { try? CatPack.builtIn(id: id, resourceDirectory: $0) }
+    }()
 
     var body: some View {
         RoomPaper.paper.ignoresSafeArea()
             .sheet(isPresented: $shown) {
                 if let pack, let profile = pack.profile {
-                    CatProfileCardView(pack: pack, profile: profile.withFunFact(copy("（示例）听到冰箱门响，会从房间另一头一路小跑过来。", "(Sample) She trots over from across the room whenever the fridge door opens.")), // not-localized: DEBUG gallery sample
-                                       inUse: false, choose: {}, close: {})
+                    CatProfileCardView(pack: pack, profile: profile, inUse: false, choose: {}, close: {})
                         .interactiveDismissDisabled()
                 } else {
-                    Text(verbatim: "Bella's pack is missing")
+                    Text(verbatim: "The cat's pack is missing")
                 }
             }
     }

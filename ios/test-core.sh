@@ -11,6 +11,7 @@
 #   bundledCats                          every built-in cat's low tier, same folder
 #   everySoundHasItsRuntimeFile          the room sounds under ios/Meowverse/Resources/Sounds
 #   theBundledFontsCoverage              the title font under ios/Meowverse/Resources/Fonts
+#   theTitleFaceDrawsTheChineseName      the same font, for the postcard letterhead
 #   iconNamesMatchTheAssetCatalog        the app icon images in Assets.xcassets
 #   everyNoticeIsBackedByAShippedFile    the third-party notices next to the art
 #   everySourceSiteInTheAttributionHasARow  the art's ATTRIBUTION.txt
@@ -19,5 +20,5 @@
 # busy machine in a parallel run; they pass alone or with --no-parallel.
 set -eu
 cd "${0:A:h}/MeowverseCore"
-skip='bundledBella|bundledCats|everySoundHasItsRuntimeFile|theBundledFontsCoverage|iconNamesMatchTheAssetCatalog|everyNoticeIsBackedByAShippedFile|everySourceSiteInTheAttributionHasARow|thePrivacyPolicyHasBothSections'
+skip='bundledBella|bundledCats|everySoundHasItsRuntimeFile|theBundledFontsCoverage|theTitleFaceDrawsTheChineseName|iconNamesMatchTheAssetCatalog|everyNoticeIsBackedByAShippedFile|everySourceSiteInTheAttributionHasARow|thePrivacyPolicyHasBothSections'
 exec swift test --skip "$skip" "$@"

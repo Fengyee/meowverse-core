@@ -224,6 +224,9 @@ final class BellaActor {
         } catch {
             try Task.checkCancellation()
             Logger(subsystem: "Meowverse", category: "art").error("Ground gaits unavailable: \(String(describing: error), privacy: .public)")
+            // A downloaded tier whose skin or rig fails is unusable, not a still cat shown as
+            // that tier: the room falls back to 中 (G24-01).
+            guard art.variant.showsPosesWithoutSkeleton else { throw error }
         }
         var loaded: [ArtLibrary.BellaPose: BellaFigure] = [:]
         if player?.playsActions != true {

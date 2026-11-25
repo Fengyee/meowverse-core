@@ -11,6 +11,10 @@ on-device model), Info.plist for the microphone and speech recognition usage des
 The translations stay in InfoPlist.strings in both builds (one InfoPlist.xcstrings per target;
 iOS reads a translation only for a key Info.plist has), so they are listed as notes, not
 findings. The head itself is checked by `VoiceOffUITests`.
+
+Before any of that the product must be whole (audit 2026-11-24, E24-02): every bundle's
+executable present and a Mach-O file, and each expected extension there. A product with a hole
+fails in both modes instead of passing "absent" on nothing read.
 """
 import pathlib
 import plistlib
@@ -20,6 +24,9 @@ import sys
 FRAMEWORKS = ("Speech.framework", "FoundationModels.framework")
 SYMBOLS = ("SFSpeech", "16FoundationModels", "AVAudioEngine", "recordPermission", "requestRecordPermission")
 KEYS = ("NSMicrophoneUsageDescription", "NSSpeechRecognitionUsageDescription")
+# The extensions every Meowverse product embeds (PlugIns/ or Extensions/).
+EXTENSIONS = ("PocketCatWidget.appex", "MeowverseAssets.appex")
+MACHO_MAGICS = {bytes.fromhex(m) for m in ("feedface", "cefaedfe", "feedfacf", "cffaedfe", "cafebabe", "bebafeca", "cafebabf", "bfbafeca")}
 
 
 def binaries(app: pathlib.Path):
@@ -31,6 +38,29 @@ def binaries(app: pathlib.Path):
         yield from bundle.glob("*.debug.dylib")
 
 
+def incomplete(app: pathlib.Path) -> list[str]:
+    """What is missing from the product; empty when every binary the checks read is there."""
+    problems = []
+    if not (app / "Info.plist").is_file():
+        return [f"missing: {app.name}/Info.plist"]
+    present = {p.name for p in app.glob("**/*.appex")}
+    problems += [f"missing: extension {e}" for e in EXTENSIONS if e not in present]
+    for bundle in [app] + sorted(app.glob("**/*.appex")):
+        plist = bundle / "Info.plist"
+        info = plistlib.loads(plist.read_bytes()) if plist.is_file() else {}
+        name = info.get("CFBundleExecutable")
+        if not isinstance(name, str) or not name:
+            problems.append(f"missing: CFBundleExecutable in {bundle.relative_to(app.parent)}/Info.plist")
+            continue
+        exe = bundle / name
+        rel = exe.relative_to(app.parent)
+        if not exe.is_file():
+            problems.append(f"missing: {rel}")
+        elif exe.read_bytes()[:4] not in MACHO_MAGICS:
+            problems.append(f"not a Mach-O file: {rel}")
+    return problems
+
+
 def run(*cmd) -> str:
     return subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=120).stdout
 
@@ -38,8 +68,6 @@ def run(*cmd) -> str:
 def findings(app: pathlib.Path) -> list[str]:
     found = []
     for binary in binaries(app):
-        if not binary.exists():
-            continue
         name = binary.relative_to(app.parent)
         for line in run("otool", "-L", str(binary)).splitlines()[1:]:
             if any(f in line for f in FRAMEWORKS):
@@ -67,6 +95,12 @@ def main() -> int:
         print(__doc__.strip().split("\n\n")[1])
         return 2
     app, want = pathlib.Path(sys.argv[1]), sys.argv[2]
+    holes = incomplete(app)
+    if holes:
+        for line in holes:
+            print(line)
+        print(f"FAIL voice {want}: the product is incomplete ({len(holes)} problem(s)), nothing checked")
+        return 1
     found, translated = findings(app), notes(app)
     for line in found:
         print(line)

@@ -1909,62 +1909,62 @@
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了 iCloud 同步和“备份到 iCloud 云盘”，喵空间存的副本会通过 Apple 的 iCloud 同步到你自己的设备，也会随备份存进你自己的 iCloud 云盘。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了 iCloud 同步和“备份到 iCloud 云盘”，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会通过 Apple 的 iCloud 同步到你自己的设备，也会随备份存进你自己的 iCloud 云盘。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. You turned on iCloud Sync and Back Up to iCloud Drive, so the copies Meowverse keeps sync to your own devices through Apple’s iCloud and also go into your own iCloud Drive with each backup."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. You turned on iCloud Sync and Back Up to iCloud Drive, so the photos Meowverse keeps (for smaller photos and ones taken in the app, the original files) sync to your own devices through Apple’s iCloud and also go into your own iCloud Drive with each backup."
           }
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了 iCloud 同步，喵空间存的副本会通过 Apple 的 iCloud 同步到你自己的设备。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了 iCloud 同步，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会通过 Apple 的 iCloud 同步到你自己的设备。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. You turned on iCloud Sync, so the copies Meowverse keeps sync to your own devices through Apple’s iCloud."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. You turned on iCloud Sync, so the photos Meowverse keeps (for smaller photos and ones taken in the app, the original files) sync to your own devices through Apple’s iCloud."
           }
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。你打开了“备份到 iCloud 云盘”，喵空间存的副本会随备份存进你自己的 iCloud 云盘。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。你打开了“备份到 iCloud 云盘”，喵空间存的照片（较小的照片和在 App 里拍的照片就是原文件）会随备份存进你自己的 iCloud 云盘。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. You turned on Back Up to iCloud Drive, so the copies Meowverse keeps go into your own iCloud Drive with each backup."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. With Back Up to iCloud Drive on, the photos Meowverse keeps (for smaller photos and ones taken in the app, the original files) go into your own iCloud Drive with each backup."
           }
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. Nothing is uploaded now, but the home synced earlier is still in your own iCloud, with copies of the photos Meowverse keeps."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. Nothing is uploaded now, but the home synced earlier is still in your own iCloud, with copies of the photos Meowverse keeps."
           }
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前存进你自己 iCloud 云盘的备份还在，里面有喵空间存的照片副本。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前存进你自己 iCloud 云盘的备份还在，里面有喵空间存的照片副本。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. Nothing is uploaded now, but the backups made earlier are still in your own iCloud Drive, with copies of the photos Meowverse keeps."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. Nothing is uploaded now, but the backups made earlier are still in your own iCloud Drive, with copies of the photos Meowverse keeps."
           }
         }
       }
     },
-    "喵空间只读取你亲手选进来的照片，不会翻看其他照片，也不会上传相册里的原图。现在也不会上传任何照片，但之前的备份和同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。" : {
+    "喵空间只读取你亲手选进来的照片，不会翻看其他照片。现在不会上传任何照片，但之前的备份和同步的家还在你自己的 iCloud 里，里面有喵空间存的照片副本。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse reads only the photos you pick yourself. It does not look through your other photos and never uploads the originals in your photo library. Nothing is uploaded now, but the backups and the home synced earlier are still in your own iCloud, with copies of the photos Meowverse keeps."
+            "value" : "Meowverse reads only the photos you pick yourself and never looks at other photos. Nothing is uploaded now, but the backups and the home synced earlier are still in your own iCloud, with copies of the photos Meowverse keeps."
           }
         }
       }
@@ -2045,12 +2045,12 @@
         }
       }
     },
-    "喵空间由个人开发。喜欢的话，欢迎在 App Store 留下评分；有想法或遇到问题，可以在“设置 › 反馈问题”里告诉我们。" : {
+    "喵空间由枫雪工作室开发。喜欢的话，欢迎在 App Store 留下评分；有想法或遇到问题，可以在“设置 › 反馈问题”里告诉我们。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meowverse is made by one person. If you enjoy it, a rating on the App Store helps a lot. Ideas or problems? Tell us in Settings › Report a Problem."
+            "value" : "Meowverse is made by Fengxue Studio. If you enjoy it, a rating on the App Store helps a lot. Ideas or problems? Tell us in Settings › Report a Problem."
           }
         }
       }
@@ -2280,6 +2280,16 @@
         }
       }
     },
+    "iCloud 储存空间已满，这次没有备份。之前的备份没有受影响。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud storage is full, so no backup was made. Earlier backups are untouched."
+          }
+        }
+      }
+    },
     "iCloud 同步" : {
       "localizations" : {
         "en" : {
@@ -2388,6 +2398,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The home in iCloud will be deleted. On every iPhone and iPad signed in to the same Apple Account with iCloud Sync on, the photos, furniture, rooms and cats are erased too. This cannot be undone."
+          }
+        }
+      }
+    },
+    "已清除这台设备上的全部数据，也删除了 iCloud 里的家，但 iCloud 里有些记录这台设备读不懂或还没取到，原样留着，没有删除。其他设备同步后也会清空，这些记录里的内容除外。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All data on this device is erased and the home in iCloud is deleted, except some records this device can’t read or hasn’t fetched yet: they stay in iCloud as they are. Other devices are emptied when they sync, apart from what those records hold."
           }
         }
       }
@@ -9157,6 +9177,16 @@
         }
       }
     },
+    "这张照片没能暂存在这台设备上，现在退出喵空间它就会丢失。放进家具或选“只存照片，不添家具”就会保存。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This photo couldn’t be held on this device, so it will be lost if you quit Meowverse now. It’s saved once you put it in furniture or choose “Save the photo only, no furniture”."
+          }
+        }
+      }
+    },
     "这张刚拍的照片还没有存进喵空间，也不会存进“照片”。放进家具或选“只存照片，不添家具”后才会保存。" : {
       "localizations" : {
         "en" : {
@@ -12997,6 +13027,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Makes a new backup now. Nothing is repeated if the room hasn’t changed."
+          }
+        }
+      }
+    },
+    "现在没能确认 iCloud 云盘里有没有喵空间的备份。如果有，它们不会跟着删除。备份到 iCloud 云盘仍然开着：房间里再有内容时会备份新的一份，并删掉这台设备存的旧备份。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whether iCloud Drive holds Meowverse backups couldn’t be checked right now. Any that are there are not deleted with it. Back Up to iCloud Drive stays on: once the room has something in it again, a new backup is made and this device’s older one is removed."
+          }
+        }
+      }
+    },
+    "现在没能确认 iCloud 云盘里有没有喵空间的备份。如果有，它们不会跟着删除，可以在“文件”App 的 iCloud 云盘 › Meowverse 里查看。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whether iCloud Drive holds Meowverse backups couldn’t be checked right now. Any that are there are not deleted with it; you can find them in the Files app under iCloud Drive › Meowverse."
           }
         }
       }

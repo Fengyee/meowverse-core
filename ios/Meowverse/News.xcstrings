@@ -49,6 +49,22 @@
         }
       }
     },
+    "九只猫和它们的角色卡" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nine cats, each with a card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "九只猫和它们的角色卡"
+          }
+        }
+      }
+    },
     "使用导览" : {
       "localizations" : {
         "en" : {
@@ -61,22 +77,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用导览"
-          }
-        }
-      }
-    },
-    "八只猫和它们的角色卡" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eight cats, each with a card"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "八只猫和它们的角色卡"
           }
         }
       }
@@ -269,6 +269,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "点房间角落的猫咪头像，说“去沙发上躺着”或“过来”。识别只在这台设备上进行，不录音。"
+          }
+        }
+      }
+    },
+    "版本 %@ · %@ 更新" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$@ · updated %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %1$@ · %2$@ 更新"
           }
         }
       }

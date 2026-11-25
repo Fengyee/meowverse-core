@@ -8,6 +8,8 @@ import Foundation
 /// The file is not part of the library. Exports and iCloud backups list the library's own
 /// files only, sync sends records, the file is excluded from device backups, and restore and
 /// clear-all switch in a new library folder, which takes the file away with the old one.
+/// Repairing a damaged picker tail is the same library and keeps it. A file that cannot be
+/// read now stays; one that is not a whole capture of this library is set aside, not deleted.
 public struct PendingCapture: Sendable, Equatable {
     /// What Photos did with the capture: the review says the same thing again on reopening.
     public enum Save: String, Codable, Sendable { case notWanted, refused, failed }
@@ -25,6 +27,8 @@ public struct PendingCapture: Sendable, Equatable {
     /// One capture at a time: a newer one replaces the file.
     public static let fileName = "pending-capture"
     static let tempFileName = "pending-capture.tmp"
+    /// A held file that could not be offered, set aside unchanged (`<prefix><UUID>`).
+    public static let keptPrefix = "pending-capture.kept-"
     static let magic = Data("MVPENDING1\n".utf8)
 
     struct Header: Codable, Equatable {

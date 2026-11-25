@@ -9,6 +9,18 @@ enum News {
         let note: LocalizedStringResource
     }
 
+    /// The day this list was last brought up to date: change it whenever `features` or `plans`
+    /// change. A calendar day, not a moment (shown in UTC so it is the same day everywhere).
+    static let updated = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: .gmt,
+                                        year: 2026, month: 11, day: 24).date!
+
+    /// 公告's first line (the owner, 2026-11-24): the app's version and the day above.
+    static var versionLine: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+        let day = updated.formatted(Date.FormatStyle(date: .long, time: .omitted, timeZone: .gmt))
+        return String(localized: "版本 \(version) · \(day) 更新", table: "News")
+    }
+
     /// Only what is in the build that carries this list.
     static let features: [Item] = [
         Item(id: "furniture-sets",
@@ -19,7 +31,7 @@ enum News {
              note: .init("Bella 带你认识这个家。想再看一遍：设置 › 使用导览。", table: "News")),
     ] + talk + [
         Item(id: "cats",
-             title: .init("八只猫和它们的角色卡", table: "News"),
+             title: .init("九只猫和它们的角色卡", table: "News"),
              note: .init("在猫咪管理的猫咪模型里点一只，先看看它是谁，再决定要不要换。", table: "News")),
         Item(id: "companion",
              title: .init("小组件和控制中心", table: "News"),

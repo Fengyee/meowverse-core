@@ -71,7 +71,7 @@ import Testing
     @Test func turningOffClearsTheWidgetsCompanion() throws {
         let shelf = shelf()
         shelf.keep(sessionID: "A", state: state(.watching, at: t0), at: t0)
-        PocketCatCompanyToggle.ended(["A"], on: shelf)
+        PocketCatCompanyToggle.ended(PocketCatCompanyToggle.ending(["A"], on: shelf), on: shelf)
         #expect(!PocketCatCompanyToggle.isOn(shelf, at: t0.addingTimeInterval(1)))
         let plan = PocketCatWidgetPlan.plan(at: t0.addingTimeInterval(1), companion: shelf.companion(at: t0.addingTimeInterval(1)))
         #expect(plan.moments.first?.button == .start)
@@ -84,7 +84,7 @@ import Testing
     @Test func turningOffClearsACompanionTheAppNeverSawEnd() {
         let shelf = shelf()
         shelf.keep(sessionID: "A", state: state(.watching, at: t0), at: t0)
-        PocketCatCompanyToggle.ended([], on: shelf)
+        PocketCatCompanyToggle.ended(PocketCatCompanyToggle.ending([], on: shelf), on: shelf)
         #expect(shelf.record == nil)
         #expect(shelf.ended.contains("A"))
     }
@@ -93,8 +93,21 @@ import Testing
     @Test func turningOffEndsTheRunningOneAndTheShelvedOne() {
         let shelf = shelf()
         shelf.keep(sessionID: "A", state: state(.watching, at: t0), at: t0)
-        PocketCatCompanyToggle.ended(["B"], on: shelf)
+        PocketCatCompanyToggle.ended(PocketCatCompanyToggle.ending(["B"], on: shelf), on: shelf)
         #expect(shelf.record == nil)
         #expect(Set(shelf.ended).isSuperset(of: ["A", "B"]))
+    }
+
+    /// D24-09: off captured A, and while A's end was still being awaited company B started
+    /// (another control, the widget). When the old off finishes, only A is over.
+    @Test func aSlowOffLeavesACompanionStartedMeanwhile() throws {
+        let shelf = shelf()
+        shelf.keep(sessionID: "A", state: state(.watching, at: t0), at: t0)
+        let ending = PocketCatCompanyToggle.ending(["A"], on: shelf)
+        shelf.keep(sessionID: "B", state: state(.eating, at: t0.addingTimeInterval(5)), at: t0.addingTimeInterval(5))
+        PocketCatCompanyToggle.ended(ending, on: shelf)
+        #expect(try #require(shelf.companion(at: t0.addingTimeInterval(6))).sessionID == "B")
+        #expect(shelf.ended.contains("A"))
+        #expect(!shelf.ended.contains("B"))
     }
 }

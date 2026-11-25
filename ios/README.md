@@ -68,13 +68,13 @@
 - 发热：选「自动」时，`thermalState` 到 serious 或 critical，降一档（高 → 中、中 → 低，低不再降），只降不升，到下次启动为止；降的那一下用一条 4 秒自己消失、不拦点按的提示说明（`TransientNotice`），设置里的说明也改成“这次先用「中」”。手动选了高、中、低时不自动改。在发热时改回「自动」，立即按降过的一档。
 - 测试开关（DEBUG 和演练构建）：`-MeowverseQuality <auto|high|medium|low>` 启动时把选择写成这一档（会存下来）；`-MeowverseQualityMemory <GiB>` 假装设备有这么多内存；`-MeowverseQualityThermal <nominal|fair|serious|critical>` 假装发热状态，加 `-MeowverseQualityThermalAfter <秒>` 则在资料库就绪这么多秒后才到，相当于系统发来的变化；`-MeowverseQualityProbe` 在窗口上放一个 `room-quality-probe` 元素，值是房间视图实际的 `scale <倍率> shadows <on|off>`，同时传 `-MeowverseFurnitureTextureProbe` 可读家具已绑定的底色与材质图、自遮挡材质数、HDR 环境和地板遮挡图。`-MeowverseFurnitureOcclusion <on|off|legacy>` 单独切换材质的自遮挡，或用 `legacy` 走旧网格路径。用 `-MeowverseCapRoomScaleAt2x` 单独对照 2× 与 3× 的代价。UI 测试 `RenderQualityUITests`。
 - 120 件 v2 家具共用预烘焙的几何自遮挡，照相板由代码生成。三档的分辨率、动态阴影和样板底色仍各按表生效。
-- 猫也按档换网格（2026-11-20）：App 包里只有中档，低档按需下载（Background Assets），没下载、下载中或失败时用中档；「高」在还没有高档时也是中档。房间和 AR 用同一档，「查看 3D 模型」只读 `inspect.usdz`，明信片用现有最好的一档。切换时猫原地换网格，不回门口。格式、选择规则和下载的调研结论在 [猫咪包格式](../docs/CAT_PACK.md)「画质档」「按需下载」；Core 是 `CatPackTiers.swift`（`CatPackTierTests`），App 是 `App/CatTierSupport.swift`，UI 测试 `CatTierUITests`。下载扩展 `MeowverseAssets/`（Background Assets，Apple 托管）和 Info.plist 键 2026-11-20 接好了。八只内置猫的 App 清单（`Resources/Art/<id>-cat.json`）都带 `tiers.low`，低档文件不在 App 包里，是八个资源包 `cat-<id>-low`；资源包上传到 App Store Connect 之前，选「低」时猫下载不到，留在中档并显示失败的说明（模拟器上不设 URL Override 时就是这样；TestFlight 构建上没看过）。换了网格的档必须带齐自己的贴图，否则这一档不可用（`CatPackManifest.textureGap`，见猫咪包格式的字段表）。
+- 猫也按档换网格（2026-11-20）：App 包里只有中档，低档按需下载（Background Assets），没下载、下载中或失败时用中档；「高」在还没有高档时也是中档。房间和 AR 用同一档，「查看 3D 模型」只读 `inspect.usdz`，明信片用现有最好的一档。切换时猫原地换网格，不回门口。格式、选择规则和下载的调研结论在 [猫咪包格式](../docs/CAT_PACK.md)「画质档」「按需下载」；Core 是 `CatPackTiers.swift`（`CatPackTierTests`），App 是 `App/CatTierSupport.swift`，UI 测试 `CatTierUITests`。下载扩展 `MeowverseAssets/`（Background Assets，Apple 托管）和 Info.plist 键 2026-11-20 接好了。九只内置猫的 App 清单（`Resources/Art/<id>-cat.json`）都带 `tiers.low`，低档文件不在 App 包里，是九个资源包 `cat-<id>-low`（招财的 2026-11-24 上传）；资源包上传到 App Store Connect 之前，选「低」时猫下载不到，留在中档并显示失败的说明（模拟器上不设 URL Override 时就是这样；TestFlight 构建上没看过）。换了网格的档必须带齐自己的贴图，否则这一档不可用（`CatPackManifest.textureGap`，见猫咪包格式的字段表）。
 - 低档没就绪时（未下载、下载中、失败、iOS 26 以前），设置里「画面」和画质页的页脚各多一句说明，房间里不提示（`AppModel.catTierNote`，UI 测试 `testQualityNoteSaysTheCatIsOnTheStandardModelUntilLowIsReady`）。
 
 #### 低档资源包：整理、本机服务、端到端
 
 ```sh
-./ba-local.sh stage                        # 八只猫的真低档 → build/asset-packs/cat-<id>-low.aar（从 assets/cats/<id>/ 的 low-rigged.glb 和贴图现做）
+./ba-local.sh stage                        # 九只猫的真低档 → build/asset-packs/cat-<id>-low.aar（从 assets/cats/<id>/ 的 low-rigged.glb 和贴图现做）
 ./ba-local.sh stage --tier-source <目录>   # 或者读现成的文件：<目录>/<id>/low/<文件>
 ./ba-local.sh certs                        # 一次性的根证书和 localhost 证书，放进 build/ba-local 的单独钥匙串
 ./ba-local.sh sim <模拟器 UDID>            # 只在这台模拟器里信任根证书，并把 BA 的 URL Override 指向本机

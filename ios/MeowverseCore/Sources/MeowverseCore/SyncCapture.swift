@@ -218,6 +218,27 @@ enum SyncCapture {
         return SyncRegister(both, edited ? c.stamp : SyncClock.seed(rank: min(max(theirs.stamp.counter, c.rank), SyncStamp.maxCounter - 1) + 1))
     }
 
+    /// Two first syncs at once (audit C24-04, owner's choice 1): this device's offered note met
+    /// another one in a save conflict. When both are still offers from before sync (wall 0),
+    /// both non-empty and different, they are kept as two parts, by `firstSyncNote`'s rules,
+    /// except that the order does not depend on which device merges: the note the register
+    /// would keep comes first. One that holds the other is kept alone; together past the limit,
+    /// the register's choice stands. nil when the register's own join is already the answer
+    /// (so a merge met again is not made again) or when either note is not an offer: a note a
+    /// user wrote with sync on is never rewritten here.
+    static func concurrentFirstSyncNote(_ a: SyncRegister<String>, _ b: SyncRegister<String>) -> SyncRegister<String>? {
+        guard SyncClock.isSeed(a.stamp), SyncClock.isSeed(b.stamp), !a.value.isEmpty, !b.value.isEmpty,
+              a.value != b.value else { return nil }
+        let kept = a.joined(b), other = kept == a ? b : a
+        let both: String
+        if kept.value.contains(other.value) { both = kept.value }
+        else if other.value.contains(kept.value) { both = other.value }
+        else { both = "\(kept.value)\n\n\(other.value)" }
+        guard both != kept.value, both.utf16.count <= LibraryStore.maxNoteLength else { return nil }
+        let rank = min(max(a.stamp.counter, b.stamp.counter), SyncStamp.maxCounter - 1) + 1
+        return SyncRegister(both, SyncClock.seed(rank: rank))
+    }
+
     // MARK: Observations
 
     static func observations(base: AppState?, current: AppState, projected: AppState, _ c: inout Context) {
@@ -269,6 +290,11 @@ enum SyncCapture {
                     tags: SyncRegister(piece.tags, s), locked: SyncRegister(piece.locked, s),
                     cover: SyncRegister(piece.coverPhotoId, s), order: SyncRegister(piece.sources.map(\.photoId), s),
                     links: links, createdAt: piece.createdAt, updatedAt: piece.updatedAt, tomb: nil)))
+                // A new piece made from a photo already here (the store reuses it) uses that
+                // photo, as a link added to an existing piece does: a deletion elsewhere that
+                // never saw the piece does not hide the photo (audit C24-03). Not on a first
+                // sync, whose photos come back by the rules above.
+                if !c.seeding { touchLinked(piece.sources, current, &c) }
                 continue
             }
             // A model this build doesn't have: what stands here is the piece as it was before
@@ -318,12 +344,7 @@ enum SyncCapture {
                 guard old != new, shownLinks[photoId] != new || seen == nil else { continue }
                 if let new {
                     record.links[photoId] = SyncRegister(new, s)
-                    // The photo was in use here: a deletion that never saw the link keeps it.
-                    if let photo = current.photos.first(where: { $0.photoId == photoId }) {
-                        c.touch(SyncRecord.photoName(SyncFileInfo(photo).sourceHash))
-                    }
-                    // So was the observation a recognised link names (an undone take-off).
-                    if let observationId = new.observationId { c.touchObservation(observationId, heldIn: current) }
+                    touchLinked([new], current, &c)
                 } else {
                     // Off the piece under every id the photo has had.
                     for key in aliases.all(photoId) where record.links[key] != nil || key == photoId {
@@ -340,6 +361,17 @@ enum SyncCapture {
             guard case .furniture(var record) = c.replica["furniture.\(id)"], SyncRecord.furniture(record).isLive else { continue }
             record.tomb = c.tomb(.furniture(record))
             c.store(.furniture(record))
+        }
+    }
+
+    /// Links this device just wrote: the photo was in use here, so a deletion that never saw
+    /// the link keeps it; so was the observation a recognised link names (an undone take-off).
+    static func touchLinked(_ links: [PhotoCarrierSource], _ current: AppState, _ c: inout Context) {
+        for link in links {
+            if let photo = current.photos.first(where: { $0.photoId == link.photoId }) {
+                c.touch(SyncRecord.photoName(SyncFileInfo(photo).sourceHash))
+            }
+            if let observationId = link.observationId { c.touchObservation(observationId, heldIn: current) }
         }
     }
 

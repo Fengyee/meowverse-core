@@ -243,9 +243,10 @@ import Testing
         await QACheck.expectConverged([a, b, c])
     }
 
-    /// Nothing to go on from (sync's file and its backup unreadable): the new install starts
-    /// over, as before, and its first sync merges without losing the library.
-    @Test func aNewInstallWithAnUnreadableSyncFileStartsOver() async throws {
+    /// Nothing to go on from (sync's file and its backup unreadable): the new install does not
+    /// start over by itself, since nothing says which account the home synced with (QA review
+    /// round 20, G1). Once the user agrees to merge, its first sync merges without losing the library.
+    @Test func aNewInstallWithAnUnreadableSyncFileStartsOverOnlyWhenTheUserAgrees() async throws {
         let cloud = SyncMemoryCloud()
         let (a, b) = try await pair(cloud)
         try await furnish(a, b)
@@ -256,7 +257,8 @@ import Testing
             try Data("not json".utf8).write(to: c.root.appendingPathComponent(name))
         }
         _ = try await c.store.load()
-        #expect(try await c.session.startOnNewInstall() == .startedOver)
+        await #expect(throws: SyncStateError.unreadable) { try await c.session.startOnNewInstall() }
+        try await c.session.startOver(acceptingCurrentAccount: true)
         try await QACheck.settle([c, b])
         #expect(await c.state().photos.count == 3)
         await QACheck.expectConverged([b, c])

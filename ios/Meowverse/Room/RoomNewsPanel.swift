@@ -9,6 +9,12 @@ struct RoomNewsPanel: View {
     var body: some View {
         RoomFolio(title: String(localized: "公告", table: "News"), image: "TopNews", detents: [.large],
                   close: RoomFolioClose(label: Text("关闭"), id: "close-room-news") { dismiss() }) {
+            Text(verbatim: News.versionLine)
+                .font(.footnote)
+                .foregroundStyle(RoomPaper.note)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 32)
+                .accessibilityIdentifier("news-version")
             heading(Text("新功能", tableName: "News"), id: "news-features")
             items(News.features)
             if !News.plans.isEmpty {

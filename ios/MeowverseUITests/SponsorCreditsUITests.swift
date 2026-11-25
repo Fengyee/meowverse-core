@@ -3,17 +3,23 @@ import XCTest
 /// The sponsors by name (owner, 2026-11-22): in 关于, where the feature they supported opens and
 /// on their cat's card; and the labour-of-love note that opens 设置.
 ///
-/// What ships is one nickname per built-in cat. `-MeowverseSampleSponsors none|one|several` shows
-/// made-up sponsors instead (DEBUG only). `TEST_RUNNER_MV_LANG=en` runs it all in English.
+/// What ships is one sponsor per built-in cat: four by the nickname they gave (2026-11-24), the
+/// others as their cat's human. `-MeowverseSampleSponsors none|one|several` shows made-up sponsors
+/// instead (DEBUG only). `TEST_RUNNER_MV_LANG=en` runs it all in English.
 final class SponsorCreditsUITests: XCTestCase {
     private let english = ProcessInfo.processInfo.environment["MV_LANG"] == "en"
 
     private var catNames: [String] {
-        english ? ["Bella", "Airou", "Zhumi", "Mocha", "Mochi", "Luna", "Snowy", "Pinky"]
-                : ["贝咪", "艾露", "猪咪", "摩卡", "团团", "露娜", "雪球", "粉粉"]
+        english ? ["Bella", "Airou", "Zhumi", "Mocha", "Mochi", "Luna", "Snowy", "Pinky", "Zhaocai"]
+                : ["贝咪", "艾露", "猪咪", "摩卡", "团团", "露娜", "雪球", "粉粉", "招财"]
     }
 
-    private var nicknames: [String] { catNames.map { english ? "\($0)’s human" : "\($0)的铲屎官" } }
+    /// As listed: Bella, Airou, Zhumi, Mochi and Zhaocai by the names their sponsors gave.
+    private var nicknames: [String] {
+        let given: [Int: String] = english ? [0: "Omucat", 1: "Yoko", 2: "Chuibao", 4: "Xin", 8: "Cornelius"]
+                                           : [0: "Omucat", 1: "阳子", 2: "锤宝", 4: "Xin", 8: "科内利乌斯"]
+        return catNames.enumerated().map { given[$0.offset] ?? (english ? "\($0.element)’s human" : "\($0.element)的铲屎官") }
+    }
     private var oneName: String { english ? "Tangerine House" : "小橘子的家" }
     private let longName = "Captain Whiskers and the Very Long-Named Household of Seven Tabbies"
 
@@ -59,6 +65,20 @@ final class SponsorCreditsUITests: XCTestCase {
         for nickname in nicknames { XCTAssertTrue(sponsors.label.contains(nickname), nickname) }
         for _ in 0..<3 { room.swipeUp() }
         snap("news-sponsors")
+    }
+
+    /// A sponsor who gave a name is on their cat's card, in place of the bio line.
+    func testANamedSponsorIsOnTheirCatsCard() {
+        let app = launch("named-card")
+        app.openCatManager()
+        XCTAssertFalse(element(app, "sponsor-credit").exists, "no feature has a sponsor")
+        openCard(app, "bella")
+        let onCard = app.descendants(matching: .any)["cat-card"].descendants(matching: .any)["sponsor-credit"].firstMatch
+        XCTAssertTrue(onCard.waitForExistence(timeout: 10))
+        let words = english ? "This cat is supported by Omucat" : "这只猫咪由 Omucat 支持"
+        XCTAssertTrue(onCard.label.contains(words), onCard.label)
+        XCTAssertFalse(element(app, "cat-card-bio").exists, "the name replaces the nickname's line")
+        snap("card-shipped-named")
     }
 
     func testACardWithOnlyTheNicknameKeepsItsBioAndAddsNothing() {

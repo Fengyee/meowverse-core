@@ -186,6 +186,24 @@ public enum ReminderPlanner {
         return Array(calls.prefix(limit)) + kept + facts
     }
 
+    /// Whether the system's pending reminders (`pending`, this app's ids) are exactly `plan`,
+    /// so submitting it again would change nothing (FF24-01). Having submitted the same plan
+    /// before is no proof: the system may have dropped requests since. A one-off whose time has
+    /// come at `now` is not expected: it left by being shown, and is not sent again.
+    public static func pendingMatches(_ plan: [PlannedReminder], pending: Set<String>, now: Date, calendar: Calendar) -> Bool {
+        var gregorian = Calendar(identifier: .gregorian)
+        gregorian.timeZone = calendar.timeZone
+        let expected = plan.filter { reminder in
+            guard !reminder.repeats else { return true }
+            var components = reminder.fireDate
+            components.calendar = nil
+            components.timeZone = nil
+            guard let due = gregorian.date(from: components) else { return true }
+            return due > now
+        }
+        return Set(expected.map(\.id)) == pending
+    }
+
     // MARK: Calls
 
     private static func callPlan(_ settings: ReminderSettings) -> [PlannedReminder] {

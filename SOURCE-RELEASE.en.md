@@ -2,26 +2,26 @@
 
 [简体中文](SOURCE-RELEASE.md) | English
 
-From November 24, 2026, this repository publishes **all the code** of Meowverse 1.0, the version being prepared for the App Store: the app itself, the widgets and Live Activity, the Control Center controls, the cat download extension, the MeowverseCore library, the unit and interface tests, the Xcode project and the build scripts. The license is unchanged: PolyForm Noncommercial 1.0.0. **The art is not published.** This release replaces the plan of November 14, 2026, which published the core library only.
+From November 24, 2026, this repository publishes **all the code** of Meowverse 1.0, submitted for App Store review on November 24, 2026: the app itself, the widgets and Live Activity, the Control Center controls, the cat download extension, the MeowverseCore library, the unit and interface tests, the Xcode project and the build scripts. The license is unchanged: PolyForm Noncommercial 1.0.0. **The art is not published.** This release replaces the plan of November 14, 2026, which published the core library only.
 
 ## Version and scope
 
 <!-- export-facts:begin -->
 | Item | Value |
 | --- | --- |
-| Source commit | `50328a126753f611f2c9aec0c805c36a425a2b45` (2026-11-24) |
-| App version | 1.0 (9), iOS 26.0 or later |
+| Source commit | `2f9d0415a2a0244ee689cac77a7e8bc8e8f5706e` (2026-11-24) |
+| App version | 1.0 (14), iOS 26.0 or later |
 | Library schema | 12 |
 | App target | 244 files |
 | Widgets, Live Activity, Control Center and the cat download extension | 53 |
-| MeowverseCore and its tests | 226 |
-| UI tests | 79 |
+| MeowverseCore and its tests | 246 |
+| UI tests | 80 |
 | Xcode project and build settings | 13 |
 | Build and test scripts | 14 |
 | Tools (recognition evaluation, DINOv2 conversion) | 22 |
 | Technical documents | 10 |
 | Added for the release (placeholder art script, core test script) | 2 |
-| Art and resource files not published | 642 |
+| Art and resource files not published | 650 |
 <!-- export-facts:end -->
 
 The export script generates the numbers in this table from the source commit; the SHA-256 of every file is in [SOURCE-MANIFEST.json](SOURCE-MANIFEST.json) for checking one by one.
@@ -40,7 +40,7 @@ The export script generates the numbers in this table from the source commit; th
 
 Voice control (Talk to Bella) is hidden in 1.0 and left out at compile time; its source is published with this release, and `ios/Config.xcconfig` describes how to turn it on.
 
-The sponsor names on the About page and the cat cards are placeholders for now (for example “<cat’s name>’s human”) until the real details are confirmed. **They are not the final list of credits.**
+The sponsors on the About page, in News and on the cat cards appear under the nicknames they gave (Omucat, Yoko, Chuibao, Xin, Cornelius); a cat without one reads “<cat’s name>’s human”.
 
 ## What is not included
 

@@ -664,6 +664,26 @@
           }
         }
       }
+    },
+    "出品" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Made by"
+          }
+        }
+      }
+    },
+    "枫雪工作室" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fengxue Studio"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

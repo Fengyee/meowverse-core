@@ -135,7 +135,7 @@ struct PickerImportJournal {
         switch LibraryStore.decodeState(bytes) {
         case .valid(let state): return (bytes, state)
         case .newer: throw StoreError.newerSchema
-        case .invalid: return nil
+        case .invalid, .unreadable: return nil
         }
     }
 
@@ -203,13 +203,24 @@ struct PickerImportJournal {
 
     /// Retire the complete sequence in one rename. A crash during recursive cleanup cannot
     /// leave a prefix missing from a sequence which the next launch still needs to replay.
+    ///
+    /// The rename is the commit point: once it succeeds the journal is retired and the caller
+    /// must reset its count, so removing the retired copy afterwards cannot fail the call.
+    /// A copy that could not be removed is retried by the next retire (audit T24-02).
     func retire() throws {
-        if fm.fileExists(atPath: retired.path) { try fm.removeItem(at: retired) }
-        if fm.fileExists(atPath: folder.path) {
-            try LibraryStore.rename(folder, to: retired)
-            LibraryStore.fsyncDirectory(root)
-            try fm.removeItem(at: retired)
-        }
+        let leftovers = ((try? fm.contentsOfDirectory(atPath: root.path)) ?? []).filter(Self.isRetiredName)
+        for name in leftovers { try? fm.removeItem(at: root.appending(path: name)) }
+        guard fm.fileExists(atPath: folder.path) else { return }
+        let target = fm.fileExists(atPath: retired.path)
+            ? root.appending(path: Self.retiredDirectory + "-" + UUID().uuidString) : retired
+        try LibraryStore.rename(folder, to: target)
+        LibraryStore.fsyncDirectory(root)
+        try? fm.removeItem(at: target)
+    }
+
+    static func isRetiredName(_ name: String) -> Bool {
+        name == retiredDirectory
+            || (name.hasPrefix(retiredDirectory + "-") && UUID(uuidString: String(name.dropFirst(retiredDirectory.count + 1))) != nil)
     }
 
     private func filename(_ ordinal: Int) -> String { String(format: "%08ld.json", ordinal) }

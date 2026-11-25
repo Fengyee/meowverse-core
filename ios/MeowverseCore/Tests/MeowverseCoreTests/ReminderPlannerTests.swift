@@ -665,4 +665,37 @@ import Testing
         on.catFactsEnabled = true
         #expect(try JSONDecoder().decode(ReminderSettings.self, from: JSONEncoder().encode(on)) == on)
     }
+
+    // MARK: The system's queue (FF24-01)
+
+    private func dueOnce(_ id: String, at date: Date, in calendar: Calendar) -> PlannedReminder {
+        var fire = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        fire.calendar = nil
+        fire.timeZone = nil
+        return PlannedReminder(id: "\(ReminderPlanner.idPrefix)\(id)", kind: .catFact("fact.purr"), fireDate: fire, repeats: false)
+    }
+
+    /// The same plan as last time, but the system dropped two of the seven weekly calls without
+    /// an error: the queue does not match, so the plan goes in again.
+    @Test func aQueueMissingRequestsDoesNotMatchThePlan() {
+        let cal = calendar()
+        let now = moment(2026, 3, 2, in: cal)
+        let plan = ReminderPlanner.plan(state: state(photos: []), settings: settings(calls: true), now: now, calendar: cal)
+        #expect(plan.count == 7)
+        let all = Set(plan.map(\.id))
+        #expect(ReminderPlanner.pendingMatches(plan, pending: all, now: now, calendar: cal))
+        let dropped = Set(plan.dropFirst(2).map(\.id))
+        #expect(!ReminderPlanner.pendingMatches(plan, pending: dropped, now: now, calendar: cal))
+        #expect(!ReminderPlanner.pendingMatches(plan, pending: all.union(["\(ReminderPlanner.idPrefix)call.9.1"]), now: now, calendar: cal))
+    }
+
+    /// A one-off that left the queue because its time came is not missing: it is not sent again.
+    @Test func aOneOffWhoseTimeCameIsNotExpectedPending() {
+        let cal = calendar()
+        let now = moment(2026, 3, 2, 10, 0, in: cal)
+        let shown = dueOnce("catfact.a", at: moment(2026, 3, 2, 9, 59, in: cal), in: cal)
+        let waiting = dueOnce("catfact.b", at: moment(2026, 3, 3, 10, 0, in: cal), in: cal)
+        #expect(ReminderPlanner.pendingMatches([shown, waiting], pending: [waiting.id], now: now, calendar: cal))
+        #expect(!ReminderPlanner.pendingMatches([shown, waiting], pending: [], now: now, calendar: cal))
+    }
 }

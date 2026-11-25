@@ -91,6 +91,11 @@ final class RoomNewsUITests: XCTestCase {
         for id in ["news-features", "news-thanks"] {
             XCTAssertTrue(app.staticTexts[id].waitForExistence(timeout: 20), id)
         }
+        // The owner, 2026-11-24: 公告 says which version it is about and when it was last updated.
+        let line = app.staticTexts["news-version"]
+        XCTAssertTrue(line.waitForExistence(timeout: 20), "no version line")
+        XCTAssertNotNil(line.label.range(of: #"\d+\.\d+"#, options: .regularExpression), line.label)
+        XCTAssertTrue(line.label.contains("2026"), line.label)
         app.buttons["close-room-news"].firstMatch.tap()
         XCTAssertTrue(app.buttons["close-room-news"].waitForNonExistence(timeout: 20))
     }

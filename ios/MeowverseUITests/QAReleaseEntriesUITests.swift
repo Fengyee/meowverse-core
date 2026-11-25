@@ -292,5 +292,25 @@ final class QAReleaseEntriesUITests: XCTestCase {
         XCTAssertFalse(app.buttons["import-cat-pack"].exists)
         snap("qa-release-config-cats")
         app.buttons["close-home"].tap()
+
+        // 设置 as shipped: 用爱发电 is the first section, and 画质 (merged after 1.0's hiding)
+        // offers its four choices and leads nowhere else.
+        app.tapSettingsGear()
+        let note = element(app, "settings-labour-of-love")
+        XCTAssertTrue(note.waitForExistence(timeout: 10))
+        XCTAssertLessThan(element(app, "settings-github").frame.maxY, element(app, "open-cats-from-settings").frame.minY,
+                          "the first section")
+        let quality = app.buttons["open-render-quality"]
+        for _ in 0..<12 where !(quality.exists && quality.isHittable) { app.swipeUp(velocity: .slow) }
+        XCTAssertTrue(quality.exists && quality.isHittable, "the 画质 row")
+        snap("qa-release-config-settings-quality")
+        quality.tap()
+        for choice in ["auto", "high", "medium", "low"] {
+            XCTAssertTrue(app.buttons["render-quality-" + choice].waitForExistence(timeout: 5), choice)
+        }
+        XCTAssertTrue(app.buttons["render-quality-auto"].isSelected, "自动 by default")
+        snap("qa-release-config-quality-page")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.buttons["close-settings"].tap()
     }
 }

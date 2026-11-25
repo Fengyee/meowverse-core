@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
+    "iCloud 同步开着：确认后，这台设备先换成这份备份，再和 iCloud 里的家合并。备份之后删掉的内容会回到所有同步的设备上；备份之后改过并已同步的内容大多保持现在的样子。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud sync is on. When you confirm, this device switches to this backup and then merges with the home in iCloud. Things deleted since the backup come back on every synced device, and most changes synced since then stay as they are now." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 同步开着：确认后，这台设备先换成这份备份，再和 iCloud 里的家合并。备份之后删掉的内容会回到所有同步的设备上；备份之后改过并已同步的内容大多保持现在的样子。" } }
+      }
+    },
     "iCloud 里有 %lld 项内容读不出，或和这台设备上的内容对不上，没有合并进来。这台设备上已有的保持原样，还没有的先不显示；其中读不出的，在这台设备上对它们的修改也先不上传。每次同步都会再试。" : {
       "localizations" : {
         "en" : {

@@ -552,7 +552,7 @@ struct CloudBackupTests {
         _ = try await store.rename(instanceId: (await store.snapshot()).items[0].instanceId, displayName: "新名字")
         guard case .completed(let later) = try await run(store, destination, &settings, trigger: .manual, now: t0 + day) else { return }
 
-        #expect(try CloudBackupEngine.deleteBackups(shown, deviceID: device, in: destination) == 1)
+        #expect(try CloudBackupEngine.deleteBackups(shown, deviceID: device, account: FolderBackupDestination.defaultAccount, in: destination) == 1)
         #expect(Set(archives(folder)) == [foreign.archiveName, later.archiveName])
         #expect(!fm.fileExists(atPath: folder.appendingPathComponent(CloudBackupName(archiveName: first.archiveName)!.infoName).path))
     }

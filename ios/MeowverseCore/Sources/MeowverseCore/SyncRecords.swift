@@ -538,6 +538,17 @@ public enum SyncRecord: Sendable, Equatable {
         }
     }
 
+    /// The record's own `edits` as stored; nil for those without (observations, the home).
+    var edits: SyncVersion? {
+        switch self {
+        case .photo(let r): r.edits
+        case .furniture(let r): r.edits
+        case .room(let r): r.edits
+        case .cat(let r): r.edits
+        case .observation, .home: nil
+        }
+    }
+
     /// The newest stamp anywhere in the record, deletions included.
     var newestStamp: SyncStamp {
         switch self {
@@ -688,7 +699,13 @@ extension SyncTombstone {
 }
 
 extension SyncVersion {
-    var isInRange: Bool { stamps.values.allSatisfy(\.isInRange) }
+    /// Also only what `add` builds: each stamp under the id of the device that issued it, and
+    /// never the zero stamp. A vector with devB's stamp under devA's key joins as neither
+    /// idempotent nor commutative (`joined` adds by the stamp's own device), so devices holding
+    /// it would not settle on one record (audit C24-08). No build writes one; it is held back.
+    var isInRange: Bool {
+        stamps.allSatisfy { key, stamp in key == stamp.device && stamp != .zero && stamp.isInRange }
+    }
 }
 
 extension SyncPlace {
@@ -710,7 +727,8 @@ extension SyncRecord {
     /// merged, and what it names stays as this device has it. Wall times are not checked: a
     /// device whose clock runs ahead still writes honest records.
     var isInRange: Bool {
-        let stampsFit = version.isInRange && (tomb?.isInRange ?? true)
+        // `version` is a join and so always well keyed: the stored `edits` are checked as stored.
+        let stampsFit = version.isInRange && (tomb?.isInRange ?? true) && (edits?.isInRange ?? true)
         switch self {
         case .photo(let r):
             return stampsFit && r.copies.allSatisfy(\.isInRange)

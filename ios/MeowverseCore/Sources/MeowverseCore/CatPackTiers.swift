@@ -228,6 +228,12 @@ public struct CatPackVariant: Sendable, Equatable {
     public var manifest: CatPackManifest { pack.manifest }
 
     public var skinFile: String? { manifest.skinFile(tier: tier) }
+
+    /// Whether the room may show this variant on its baked poses when its skeleton does not load
+    /// (G24-01). Only 中: a 低/高 whose skin or rig fails is unusable, so the room falls back to 中
+    /// (which walks) and says so, instead of a still 低 cat reported as 低 ready.
+    public var showsPosesWithoutSkeleton: Bool { tier == .medium }
+
     public func poseFile(_ pose: CatPackPose) -> String { manifest.poseFile(pose, tier: tier) }
     public func material(_ role: String) -> CatPackManifest.Material? { manifest.material(role, tier: tier) }
 
@@ -407,7 +413,10 @@ public final class CatTierDownloads {
     /// app was opened again).
     public func retry(_ request: CatTierRequest) {
         switch state(of: request) {
-        case .notDownloaded, .failed: start(request)
+        case .notDownloaded: start(request)
+        // The folder already on the device is what failed: ask the transport for it again
+        // instead of trusting it once more (D24-07).
+        case .failed: start(request, trustsInstalled: false)
         case .downloading, .ready: return
         }
     }
@@ -435,7 +444,7 @@ public final class CatTierDownloads {
         await runs[Key(packID: request.packID, tier: request.tier)]?.value
     }
 
-    private func start(_ request: CatTierRequest) {
+    private func start(_ request: CatTierRequest, trustsInstalled: Bool = true) {
         let key = Key(packID: request.packID, tier: request.tier)
         generations[key, default: 0] += 1
         let generation = generations[key]!
@@ -446,10 +455,13 @@ public final class CatTierDownloads {
             Task { @MainActor in self.progress(key, generation, fraction) }
         }
         runs[key] = Task { [weak self] in
-            let outcome: CatTierDownloadState
-            if let folder = await transport.installed(request) {
+            var outcome: CatTierDownloadState = .notDownloaded
+            if trustsInstalled, let folder = await transport.installed(request) {
                 outcome = Self.check(folder, for: request)
-            } else {
+            }
+            // Not on the device, or on it but missing a file: download (D24-07). The downloaded
+            // folder's check is final, so a pack that really is incomplete still fails once.
+            if case .ready = outcome {} else {
                 do {
                     let folder = try await transport.download(request, progress: report)
                     outcome = Self.check(folder, for: request)

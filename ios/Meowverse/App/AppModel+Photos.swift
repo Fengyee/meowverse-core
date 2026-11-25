@@ -12,6 +12,8 @@ struct PhotoUIState {
     /// Non-nil while picked photos are being added to a piece of furniture.
     var adding: AddingProgress?
     var addTask: Task<AddPhotosSummary, Never>?
+    /// Which add `adding` counts: a stopped add's late photos never move a newer one's bar.
+    var addRun: UUID?
 
     struct AddingProgress: Equatable {
         /// Photos dealt with for good: added (or found already there) or unreadable.
@@ -124,10 +126,11 @@ extension AppModel {
     /// The user picked the furniture by hand, so every link is a manual (user) source.
     func addPhotos(to instanceId: String, loaders: [PhotoLoader], assetIdentifiers: [String?] = []) async -> AddPhotosSummary {
         guard !loaders.isEmpty, !switchingLibraries, photos.addTask == nil else { return .init() }
-        let generation = libraryGeneration
+        let generation = libraryGeneration, run = UUID()
         photos.adding = .init(done: 0, total: loaders.count)
+        photos.addRun = run
         let task = Task {
-            await appendPhotos(to: instanceId, loaders: loaders, assetIdentifiers: assetIdentifiers, generation: generation)
+            await appendPhotos(to: instanceId, loaders: loaders, assetIdentifiers: assetIdentifiers, generation: generation, run: run)
         }
         photos.addTask = task
         let result = await task.value
@@ -136,16 +139,17 @@ extension AppModel {
         guard photos.addTask == task, generation == libraryGeneration, !switchingLibraries else { return .init() }
         photos.addTask = nil
         photos.adding = nil
+        photos.addRun = nil
         return result
     }
 
     private func appendPhotos(to instanceId: String, loaders: [PhotoLoader], assetIdentifiers: [String?],
-                              generation: UUID) async -> AddPhotosSummary {
+                              generation: UUID, run: UUID) async -> AddPhotosSummary {
         var summary = AddPhotosSummary()
         // Each photo is saved as soon as it is ready: a silent request never holds back the
         // others, and a photo that arrived is kept even if the add is stopped.
         await prepareEach(loaders, assetIdentifiers: assetIdentifiers) { _, photo in
-            guard !switchingLibraries, generation == libraryGeneration else { return false }
+            guard !switchingLibraries, generation == libraryGeneration, photos.addRun == run else { return false }
             switch photo {
             case .unreadable:
                 summary.unreadable += 1
@@ -160,6 +164,8 @@ extension AppModel {
                 case .success(let imported):
                     summary.added += imported.filter(\.linked).map(\.photo.photoId)
                     summary.alreadyThere += imported.filter { !$0.linked }.count
+                    // Stopped (a library switch) while this photo saved: a newer add's bar is not this one's.
+                    guard photos.addRun == run, generation == libraryGeneration else { return false }
                     photos.adding?.done += 1
                     return true
                 case .failure(let failure):
@@ -169,7 +175,9 @@ extension AppModel {
             }
         }
         summary.notImported = max(0, loaders.count - summary.added.count - summary.alreadyThere - summary.unreadable)
-        await store?.finishPickerImport()
+        // The picker journal is compacted for this add's own library only; a stopped add leaves
+        // the library that replaced it (and any add running there) alone.
+        if photos.addRun == run, generation == libraryGeneration, !switchingLibraries { await store?.finishPickerImport() }
         return summary
     }
 
@@ -195,11 +203,17 @@ extension AppModel {
 
     // MARK: Several stored photos
 
-    /// Puts photos on a piece. Returns the ones that were not on it before, for undo.
-    func linkPhotos(_ photoIds: [String], to instanceId: String) async -> Result<[String], PhotoSaveFailure> {
-        let held = Set(anyFurniture(instanceId)?.sources.map(\.photoId) ?? [])
-        let fresh = photoIds.filter { !held.contains($0) }
-        return await perform { _ = try await $0.linkPhotos(photoIds: photoIds, toInstance: instanceId) }.map { fresh }
+    /// Puts photos on a piece. Returns the links this save made (not the ones already there),
+    /// as the store committed them, for undo.
+    func linkPhotos(_ photoIds: [String], to instanceId: String) async -> Result<LibraryStore.LinkReceipt, PhotoSaveFailure> {
+        await perform { try await $0.linkPhotosForUndo(photoIds: photoIds, toInstance: instanceId) }
+    }
+
+    /// Takes back the links `linkPhotos` made that are still as made, in the library it made them in.
+    func undoLink(_ receipt: LibraryStore.LinkReceipt) async -> PhotoSaveFailure? {
+        let result = await perform(in: receipt.generation) { try await $0.undoLink(receipt) }
+        if case .failure(let failure) = result { return failure }
+        return nil
     }
 
     func unlinkPhotos(_ photoIds: [String], from instanceId: String) async -> PhotoSaveFailure? {
@@ -221,7 +235,7 @@ extension AppModel {
 
     /// Puts back what `unlinkPhotos(_:fromPieces:)` took off, unless the user changed it since.
     func undoUnlink(_ receipt: LibraryStore.UnlinkReceipt) async -> PhotoSaveFailure? {
-        let result = await perform { try await $0.undoUnlink(receipt) }
+        let result = await perform(in: receipt.generation) { try await $0.undoUnlink(receipt) }
         if case .failure(let failure) = result { return failure }
         return nil
     }
@@ -234,10 +248,16 @@ extension AppModel {
         return nil
     }
 
-    /// Returns the photos whose mark changed, for undo.
-    func setFavorite(_ photoIds: [String], _ favorite: Bool) async -> Result<[String], PhotoSaveFailure> {
-        let changing = photoIds.filter { photo($0)?.favorite == !favorite }
-        return await perform { _ = try await $0.setFavorite(photoIds: photoIds, favorite) }.map { changing }
+    /// Returns the photos whose mark this save changed, as the store committed it, for undo.
+    func setFavorite(_ photoIds: [String], _ favorite: Bool) async -> Result<LibraryStore.FavoriteReceipt, PhotoSaveFailure> {
+        await perform { try await $0.setFavoriteForUndo(photoIds: photoIds, favorite) }
+    }
+
+    /// Puts back the marks `setFavorite` changed that are still as it set them.
+    func undoFavorite(_ receipt: LibraryStore.FavoriteReceipt) async -> PhotoSaveFailure? {
+        let result = await perform(in: receipt.generation) { try await $0.undoFavorite(receipt) }
+        if case .failure(let failure) = result { return failure }
+        return nil
     }
 
     /// Deletes the app's copies (never the Photos library originals).

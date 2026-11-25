@@ -31,10 +31,29 @@ final class ArtLibrary {
     /// Composed pattern tiles, keyed by pattern file and layer colours.
     private var patternTiles: [String: TextureResource] = [:]
 
+    /// Removed in `deinit`: a portrait makes its own short-lived library.
+    nonisolated(unsafe) private var memoryWarnings: (any NSObjectProtocol)?
+
     init() throws {
         catalog = try FurnitureCatalog.bundled()
         attribution = (try? String(decoding: Self.data("ATTRIBUTION", "txt"), as: UTF8.self)) ?? ""
         looks = FurnitureLooks.bundled
+        memoryWarnings = NotificationCenter.default.addObserver(
+            forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.releaseCaches() }
+        }
+    }
+
+    deinit {
+        if let memoryWarnings { NotificationCenter.default.removeObserver(memoryWarnings) }
+    }
+
+    /// Low memory (G24-02): forget the decoded meshes and composed pattern tiles kept for reuse.
+    /// Pieces already in a room keep theirs; the next piece of that model decodes it again.
+    /// Loads in flight are left to finish.
+    func releaseCaches() {
+        furnitureParts.removeAll()
+        patternTiles.removeAll()
     }
 
     nonisolated static func data(_ name: String, _ ext: String) throws -> Data {

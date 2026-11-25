@@ -6,15 +6,17 @@ enum Credits {
     /// One line per sponsor (owner, 2026-11-22). With `name: nil` they show as 「<猫名>的铲屎官」.
     /// Once someone has given a name and agreed to its being public, change that line's nil to
     /// `.init(zh: "…", en: "…")`; either language may be left out. Never make a name up.
+    /// The four nicknames are the ones the owner passed on, 2026-11-24 (docs/release/1.0/cat-credits.md).
     static let sponsors: [Sponsor] = [
-        Sponsor(name: nil, supports: [.cat(id: "bella")]),
-        Sponsor(name: nil, supports: [.cat(id: "airou")]),
-        Sponsor(name: nil, supports: [.cat(id: "zhumi")]),
+        Sponsor(name: .init(zh: "Omucat", en: "Omucat"), supports: [.cat(id: "bella")]), // not-localized: a sponsor's own nickname
+        Sponsor(name: .init(zh: "阳子", en: "Yoko"), supports: [.cat(id: "airou")]), // not-localized: a sponsor's own nickname, in both languages
+        Sponsor(name: .init(zh: "锤宝", en: "Chuibao"), supports: [.cat(id: "zhumi")]), // not-localized: a sponsor's own nickname, in both languages
         Sponsor(name: nil, supports: [.cat(id: "siamese")]),
-        Sponsor(name: nil, supports: [.cat(id: "ragdoll")]),
+        Sponsor(name: .init(zh: "Xin", en: "Xin"), supports: [.cat(id: "ragdoll")]), // not-localized: a sponsor's own nickname
         Sponsor(name: nil, supports: [.cat(id: "black")]),
         Sponsor(name: nil, supports: [.cat(id: "white")]),
         Sponsor(name: nil, supports: [.cat(id: "sphynx")]),
+        Sponsor(name: .init(zh: "科内利乌斯", en: "Cornelius"), supports: [.cat(id: "zhaocai")]), // not-localized: a sponsor's own nickname, in both languages
     ]
 
     /// The testers, as they agreed to be shown. While this is empty, 测试 does not show at all.

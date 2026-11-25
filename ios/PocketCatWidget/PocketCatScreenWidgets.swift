@@ -298,6 +298,12 @@ private struct PocketCatLockWidgetView: View {
 
     /// The one-colour cat (64 pt) and, beside it, what the cat is up to: a secondary line of up
     /// to two lines and the expression on one (re-review, decision 2). No background.
+    ///
+    /// The text column is whatever the cat leaves, so nothing else may take from it: a trailing
+    /// `Spacer` cost the HStack's 6 pt spacing a second time. On the larger iPhones the Lock
+    /// Screen sets this text a size up (footnote 15 pt), and "Keeping you company" then wrapped
+    /// as "Keeping / you compa…" (iPhone 18 Pro Max, 2026-11-24). The scale factor is only a
+    /// floor for a device or size not yet seen; two lines come first.
     private var rectangular: some View {
         HStack(spacing: 6) {
             Image("mono-figure-" + moment.mood.rawValue)
@@ -317,13 +323,14 @@ private struct PocketCatLockWidgetView: View {
                 .font(.system(.footnote, design: .rounded)).fontWeight(.semibold)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
+                .minimumScaleFactor(0.85)
                 .fixedSize(horizontal: false, vertical: true)
                 Text(moment.mood.title)
                     .font(.system(.headline, design: .rounded)).fontWeight(.semibold)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
             }
-            Spacer(minLength: 0)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("pocket-widget-rectangular")

@@ -183,11 +183,18 @@ public actor LibraryStore {
     private var pickerLookup: PickerPhotoLookup?
     private var pickerCheckpointCount = 0
     private var pickerQuarantinePending = false
+    /// The folder still carries `newLibraryMarker` (see `load`).
+    private var newLibraryMarked = false
     private var pickerJournal: PickerImportJournal { PickerImportJournal(root: root) }
 
     private func checkGeneration(_ expected: UUID?) throws {
         if let expected, generation != expected { throw CancellationError() }
     }
+
+    /// The library a caller's change is meant for (the app sets it around each change, and
+    /// around an undo to the library the receipt came from). A change that starts after the
+    /// library was replaced is refused (`CancellationError`) in the same step it would write in.
+    @TaskLocal public static var expectedGeneration: UUID?
     /// Whether `state.json` on disk is the decoded, valid state (vs. loaded from the backup).
     private var primaryIsGood = false
     public private(set) var deletionPending = false
@@ -213,6 +220,7 @@ public actor LibraryStore {
         primaryIsGood = false
         recoveredFromBackup = false
         try recoverInterruptedSwap()
+        newLibraryMarked = fm.fileExists(atPath: url(Self.newLibraryMarker).path)
         let primaryURL = url(Self.stateFile), backupURL = url(Self.backupFile)
         let primaryExists = fm.fileExists(atPath: primaryURL.path)
         let backupExists = fm.fileExists(atPath: backupURL.path)
@@ -236,6 +244,7 @@ public actor LibraryStore {
             if case .newer = decode(backupURL) { throw StoreError.newerSchema }
             switch decode(url(Self.deletionFile)) {
             case .newer: throw StoreError.newerSchema
+            case .unreadable(let code): throw unreadable(code, op: "loadDeletion")
             case .invalid: throw StoreError.corruptState
             case .valid(let committed):
                 state = committed
@@ -246,6 +255,9 @@ public actor LibraryStore {
             }
         }
         deletionPending = false
+        // A primary that exists but cannot be read now (I/O, protection) is unknown, not
+        // corrupt: an older backup must not take its place and be saved over it (audit T24-01).
+        if case .unreadable(let code) = primary { throw unreadable(code, op: "loadPrimary") }
 
         do {
             for dir in [root, url(Self.originalsDir), url(Self.thumbnailsDir)] {
@@ -255,10 +267,15 @@ public actor LibraryStore {
             throw ioError(error, op: "mkdir")
         }
 
-        let journal = try pickerJournal.read()
+        // A checkpoint that cannot be read now is unknown: open nothing, change nothing, and
+        // read the whole sequence again next time (audit T24-03).
+        let journal: PickerImportJournal.Entries
+        do { journal = try pickerJournal.read() } catch { throw ioError(error, op: "journalRead") }
         let hasJournal = journal.fileCount > 0 || !journal.compactionProofs.isEmpty
         let baseline: AppState?
-        if hasJournal, case .valid(let base) = decode(pickerJournal.base) {
+        let journalBase = hasJournal ? decode(pickerJournal.base) : .invalid
+        if case .unreadable(let code) = journalBase { throw unreadable(code, op: "journalBase") }
+        if case .valid(let base) = journalBase {
             baseline = base
         } else if hasJournal, !fm.fileExists(atPath: pickerJournal.base.path),
                   journal.prefix.first?.baseRevision == AppState.empty.revision {
@@ -276,7 +293,28 @@ public actor LibraryStore {
         } else if case .valid(let backupState) = backup {
             decoded = backupState
             recoveredFromBackup = true
+        } else if case .unreadable(let code) = backup {
+            throw unreadable(code, op: "loadBackup")
         } else if !primaryExists && !backupExists {
+            // No state at all is a new library only while the folder holds no photos. Media
+            // without any record means the metadata was lost: keep every file for recovery
+            // rather than let the orphan sweep below erase the only copies (audit T24-01).
+            // With a journal, its damaged-tail path parks the whole folder instead.
+            // Only a folder marked new, which has never committed anything, may hold the files
+            // of a first save that stopped before its state: those are ordinary leftovers.
+            if !hasJournal {
+                var media: [String] = []
+                for dir in [Self.originalsDir, Self.thumbnailsDir] {
+                    do { media += try fm.contentsOfDirectory(atPath: url(dir).path) } catch {
+                        throw ioError(error, op: "loadMedia")
+                    }
+                }
+                if !media.isEmpty, !newLibraryMarked {
+                    log.error("load: photos remain without a readable state; not starting an empty library")
+                    throw StoreError.corruptState
+                }
+                if !newLibraryMarked { markNewLibrary() }
+            }
             decoded = .empty
         } else {
             throw StoreError.corruptState
@@ -284,7 +322,9 @@ public actor LibraryStore {
 
         var damaged = false
         if hasJournal {
-            (decoded, damaged) = try recoverPickerSnapshot(decoded, baseline: baseline, journal: journal)
+            do {
+                (decoded, damaged) = try recoverPickerSnapshot(decoded, baseline: baseline, journal: journal)
+            } catch { throw ioError(error, op: "journalRead") }
             pickerCheckpointCount = journal.fileCount
         }
         state = decoded
@@ -298,6 +338,7 @@ public actor LibraryStore {
             return decoded
         }
         if recoveredFromBackup { rebaseSyncState(onto: decoded) }
+        if primaryExists || backupExists { forgetNewLibraryMarker() }
         if journal.fileCount == 0 { try? pickerJournal.retire() } else { finishPickerImport() }
         if primaryIsGood || (!primaryExists && !backupExists) {
             removeStaleTempFiles()
@@ -305,6 +346,39 @@ public actor LibraryStore {
             cleanOrphans(in: decoded)
         }
         return decoded
+    }
+
+    /// Written when an empty folder becomes a library, removed at its first commit (a state
+    /// file, a picker checkpoint). While it exists nothing was ever saved here (audit T24-01).
+    static let newLibraryMarker = "library.new"
+
+    private func markNewLibrary() {
+        do {
+            try writeDurably(Data(), to: url(Self.newLibraryMarker), fullSync: true)
+            Self.fsyncDirectory(root)
+            newLibraryMarked = true
+        } catch {
+            // Without it an interrupted first save asks for recovery instead of cleaning up.
+            log.error("load: new-library marker not written: \(Self.code(error), privacy: .public)")
+        }
+    }
+
+    /// After a commit: from now on, no state at all means lost metadata.
+    private func forgetNewLibraryMarker() {
+        guard newLibraryMarked else { return }
+        do {
+            try fm.removeItem(at: url(Self.newLibraryMarker))
+            Self.fsyncDirectory(root)
+            newLibraryMarked = false
+        } catch {
+            if Self.isMissingFile(error) { newLibraryMarked = false; return }
+            log.error("new-library marker not removed yet: \(Self.code(error), privacy: .public)")
+        }
+    }
+
+    private func unreadable(_ code: String, op: String) -> StoreError {
+        log.error("load: state exists but cannot be read now (\(op, privacy: .public) \(code, privacy: .public))")
+        return .io("\(op):\(code)")
     }
 
     private func recoverPickerSnapshot(_ snapshot: AppState, baseline: AppState?, journal: PickerImportJournal.Entries) throws
@@ -971,6 +1045,7 @@ public actor LibraryStore {
                     try Task.checkCancellation()
                 }
                 pickerCheckpointCount += 1
+                forgetNewLibraryMarker()
                 next.revision = delta.revision
                 var index = cachedIndex
                 let lookup = pickerLookup
@@ -1021,6 +1096,16 @@ public actor LibraryStore {
             let copy = staging.appending(path: name)
             try fm.copyItem(at: url(name), to: copy)
             try Self.fullFsync(copy)
+        }
+        // A held camera capture, and any set aside, is in no record and maybe nowhere else: it
+        // stays with this same library, still out of device backups (audit W24-02).
+        let held = ((try? fm.contentsOfDirectory(atPath: root.path)) ?? [])
+            .filter { $0 == PendingCapture.fileName || $0.hasPrefix(PendingCapture.keptPrefix) }
+        for name in held {
+            let copy = staging.appending(path: name)
+            try fm.copyItem(at: url(name), to: copy)
+            try Self.fullFsync(copy)
+            try Self.excludeFromBackup(copy)
         }
         // Existing disaster recovery parks the entire old tree and counts it until Clear All.
         let currentGeneration = generation
@@ -1241,6 +1326,8 @@ public actor LibraryStore {
         }
 
         public let removed: [Removed]
+        /// The library the links were taken off in.
+        public let generation: UUID
     }
 
     /// Takes photos off several pieces as one write: off the pieces in `instanceIds`, or, with
@@ -1269,7 +1356,7 @@ public actor LibraryStore {
             Self.advanceRevision(&next[keyPath: shelf][index].revision)
             next[keyPath: shelf][index].updatedAt = now
         }
-        let receipt = UnlinkReceipt(removed: removed)
+        let receipt = UnlinkReceipt(removed: removed, generation: generation)
         guard !removed.isEmpty else { return receipt }
         do {
             try persist(next)
@@ -1328,6 +1415,13 @@ public actor LibraryStore {
     }
 
     private func changeLinks(photoIds: [String], from source: String?, to target: String?, op: String) throws -> BatchOutcome {
+        var added: [PhotoCarrierSource] = []
+        return try changeLinks(photoIds: photoIds, from: source, to: target, op: op, added: &added)
+    }
+
+    /// `added` gets the links put on `target`, as written, once the write succeeded.
+    private func changeLinks(photoIds: [String], from source: String?, to target: String?, op: String,
+                             added: inout [PhotoCarrierSource]) throws -> BatchOutcome {
         let current = try loadedState()
         var seen = Set<String>()
         let ids = photoIds.filter { seen.insert($0).inserted }
@@ -1337,6 +1431,7 @@ public actor LibraryStore {
         let now = Self.now()
         var eligible = ids
         var changed = 0
+        var arrivingLinks: [PhotoCarrierSource] = []
         if let source {
             guard let (shelf, index) = Self.locate(source, in: next) else { throw StoreError.unknownInstance }
             let held = Set(next[keyPath: shelf][index].sources.map(\.photoId))
@@ -1354,7 +1449,8 @@ public actor LibraryStore {
             let held = Set(next[keyPath: shelf][index].sources.map(\.photoId))
             let arriving = eligible.filter { !held.contains($0) }
             if !arriving.isEmpty {
-                next[keyPath: shelf][index].sources += arriving.map { .manual(photoId: $0, addedAt: now) }
+                arrivingLinks = arriving.map { .manual(photoId: $0, addedAt: now) }
+                next[keyPath: shelf][index].sources += arrivingLinks
                 Self.advanceRevision(&next[keyPath: shelf][index].revision)
                 next[keyPath: shelf][index].updatedAt = now
             }
@@ -1370,7 +1466,50 @@ public actor LibraryStore {
             throw surfaced
         }
         log.info("\(op, privacy: .public): changed=\(outcome.changed, privacy: .public) unchanged=\(outcome.unchanged, privacy: .public)")
+        added = arrivingLinks
         return outcome
+    }
+
+    /// What `linkPhotosForUndo` added, exactly as added, so 撤销 takes back only those links.
+    public struct LinkReceipt: Sendable, Equatable {
+        public let instanceId: String
+        public let added: [PhotoCarrierSource]
+        /// The library the links were made in.
+        public let generation: UUID
+    }
+
+    /// `linkPhotos`, returning the links this save made (not the ones already there).
+    /// The links come from the save itself, so a photo another change put there first is not in it.
+    public func linkPhotosForUndo(photoIds: [String], toInstance instanceId: String) throws -> LinkReceipt {
+        var added: [PhotoCarrierSource] = []
+        _ = try changeLinks(photoIds: photoIds, from: nil, to: instanceId, op: "linkPhotos", added: &added)
+        return LinkReceipt(instanceId: instanceId, added: added, generation: generation)
+    }
+
+    /// Takes back the links of `receipt` that are still on the piece exactly as they were made,
+    /// as one write; a link taken off and made again since is someone else's and stays. Refused
+    /// (`CancellationError`) in another library than the receipt's. Returns how many went.
+    @discardableResult
+    public func undoLink(_ receipt: LinkReceipt) throws -> Int {
+        try checkGeneration(receipt.generation)
+        let current = try loadedState()
+        guard let (shelf, index) = Self.locate(receipt.instanceId, in: current) else { return 0 }
+        var next = current
+        let before = next[keyPath: shelf][index].sources.count
+        next[keyPath: shelf][index].sources.removeAll { receipt.added.contains($0) }
+        let removed = before - next[keyPath: shelf][index].sources.count
+        guard removed > 0 else { return 0 }
+        Self.advanceRevision(&next[keyPath: shelf][index].revision)
+        next[keyPath: shelf][index].updatedAt = Self.now()
+        do {
+            try persist(next)
+        } catch {
+            let surfaced = publicError(error, op: "undoLink")
+            log.error("undoLink failed: \(Self.code(surfaced), privacy: .public)")
+            throw surfaced
+        }
+        log.info("undoLink: removed=\(removed, privacy: .public)")
+        return removed
     }
 
     // MARK: - Suggestions confirmed in a batch
@@ -1396,6 +1535,11 @@ public actor LibraryStore {
         /// Offers that no longer described the home (filed or moved by hand meanwhile, piece
         /// gone, or a photo board as target) and were left alone.
         public let skipped: [String]
+        /// The library the photos were filed in.
+        public let generation: UUID
+        /// Nothing was filed because the offers were worked out on an older home than this one
+        /// (`basedOnRevision`): a refusal, not "no offer held" (owner 2026-11-24, L24-02).
+        public private(set) var homeChanged = false
     }
 
     /// Files confirmed suggestions as one write. Each photo gets a model-origin link backed by an
@@ -1405,9 +1549,14 @@ public actor LibraryStore {
     /// A photo on a board leaves the boards it was offered from. An offer that is no longer
     /// current (`BatchSuggestions.isCurrent`) is skipped: a move the user made by hand wins.
     public func fileSuggestions(_ offers: [BatchSuggestion], printsBy embedderAnalyzer: String,
-                                generation: UUID? = nil) throws -> SuggestionReceipt {
+                                generation: UUID? = nil, basedOnRevision: Int? = nil) throws -> SuggestionReceipt {
         try checkGeneration(generation)
         let current = try loadedState()
+        // Worked out on another home than this one (a remote change landed since): none holds.
+        if let basedOnRevision, current.revision != basedOnRevision {
+            log.notice("fileSuggestions: home changed since the offers, none filed")
+            return SuggestionReceipt(filed: [], skipped: offers.map(\.photoId), generation: self.generation, homeChanged: true)
+        }
         var next = current
         var filed: [SuggestionReceipt.Filed] = []
         var skipped: [String] = []
@@ -1446,7 +1595,7 @@ public actor LibraryStore {
             filed.append(.init(photoId: offer.photoId, instanceId: offer.instanceId, observationId: observation.observationId,
                                boardLinks: boardLinks))
         }
-        let receipt = SuggestionReceipt(filed: filed, skipped: skipped)
+        let receipt = SuggestionReceipt(filed: filed, skipped: skipped, generation: self.generation)
         guard !filed.isEmpty else { return receipt }
         do {
             try persist(next)
@@ -1502,26 +1651,55 @@ public actor LibraryStore {
     /// Sets or clears the favourite mark on several photos as one write. Returns how many changed.
     @discardableResult
     public func setFavorite(photoIds: [String], _ favorite: Bool) throws -> Int {
+        try changeFavorites(photoIds: photoIds, favorite, op: "setFavorite").count
+    }
+
+    /// The photos whose mark this write changed, in library order.
+    private func changeFavorites(photoIds: [String], _ favorite: Bool, op: String) throws -> [String] {
         let current = try loadedState()
         let ids = Set(photoIds)
         guard ids.isSubset(of: Set(current.photos.map(\.photoId))) else { throw StoreError.unknownPhoto }
         var next = current
-        var changed = 0
+        var changed: [String] = []
         for index in next.photos.indices where ids.contains(next.photos[index].photoId) && next.photos[index].favorite != favorite {
             next.photos[index].favorite = favorite
             Self.advanceRevision(&next.photos[index].revision)
-            changed += 1
+            changed.append(next.photos[index].photoId)
         }
-        guard changed > 0 else { return 0 }
+        guard !changed.isEmpty else { return [] }
         do {
             try persist(next)
         } catch {
-            let surfaced = publicError(error, op: "setFavorite")
-            log.error("setFavorite failed: \(Self.code(surfaced), privacy: .public)")
+            let surfaced = publicError(error, op: op)
+            log.error("\(op, privacy: .public) failed: \(Self.code(surfaced), privacy: .public)")
             throw surfaced
         }
-        log.info("setFavorite: changed=\(changed, privacy: .public)")
+        log.info("\(op, privacy: .public): changed=\(changed.count, privacy: .public)")
         return changed
+    }
+
+    /// What `setFavoriteForUndo` changed: the photos whose mark it set to `favorite`.
+    public struct FavoriteReceipt: Sendable, Equatable {
+        public let photoIds: [String]
+        public let favorite: Bool
+        /// The library the marks were changed in.
+        public let generation: UUID
+    }
+
+    /// `setFavorite`, returning the photos this save changed.
+    public func setFavoriteForUndo(photoIds: [String], _ favorite: Bool) throws -> FavoriteReceipt {
+        FavoriteReceipt(photoIds: try changeFavorites(photoIds: photoIds, favorite, op: "setFavorite"), favorite: favorite,
+                        generation: generation)
+    }
+
+    /// Puts back the marks of `receipt` that are still as it set them, as one write; a mark
+    /// changed again since stays. Refused (`CancellationError`) in another library than the
+    /// receipt's. Returns how many changed.
+    @discardableResult
+    public func undoFavorite(_ receipt: FavoriteReceipt) throws -> Int {
+        try checkGeneration(receipt.generation)
+        let present = Set(try loadedState().photos.map(\.photoId))
+        return try changeFavorites(photoIds: receipt.photoIds.filter(present.contains), !receipt.favorite, op: "undoFavorite").count
     }
 
     // MARK: - Settings, backup, restore
@@ -1622,7 +1800,8 @@ public actor LibraryStore {
 
     /// Renames a cat. The first cat's name is also `catName`.
     @discardableResult
-    public func renameCat(catId: String, name: String) throws -> Cat {
+    public func renameCat(catId: String, name: String, generation: UUID? = nil) throws -> Cat {
+        try checkGeneration(generation)
         guard let name = AppState.normalizedCatName(name) else { throw StoreError.invalidName }
         let state = try change(op: "renameCat") { next in
             var cats = next.allCats
@@ -1819,6 +1998,7 @@ public actor LibraryStore {
         state = next
         pickerCheckpointCount = 0
         pickerQuarantinePending = false
+        newLibraryMarked = false
         checkedHEIFOriginals.removeAll()
         generation = UUID()
         primaryIsGood = true
@@ -1937,35 +2117,70 @@ public actor LibraryStore {
         }
     }
 
-    /// The capture to offer again, if there is one. A file that can't be read, belongs to
-    /// another library, or whose photo the library already has (confirmed, then the app
-    /// stopped before the file went) is deleted without a word.
-    public func pendingCapture() -> PendingCapture? {
-        let file = url(PendingCapture.fileName)
-        try? fm.removeItem(at: url(PendingCapture.tempFileName))
+    /// The capture to offer again, if there is one (audit E24-04). Only a readable copy in the
+    /// library makes the file redundant; nothing else deletes it here:
+    /// - a file that cannot be read now, or a library that cannot be opened, stays as it is
+    ///   and is asked about next time;
+    /// - a file that is not a whole capture of this library is set aside unchanged
+    ///   (`PendingCapture.keptPrefix`), never offered, and goes only with clear-all or a restore.
+    /// `generation`: the library the caller asks about; another one's question gets nil.
+    public func pendingCapture(generation expected: UUID? = nil) -> PendingCapture? {
+        if let expected, expected != generation { return nil }
+        let file = url(PendingCapture.fileName), temp = url(PendingCapture.tempFileName)
+        let library = root.lastPathComponent
+        if fm.fileExists(atPath: temp.path) {
+            // Written in full but stopped before taking its name: the newest capture.
+            if let bytes = try? Data(contentsOf: temp), PendingCapture.decode(bytes, library: library) != nil,
+               (try? Self.rename(temp, to: file)) != nil {
+                try? Self.excludeFromBackup(file)
+            } else {
+                try? fm.removeItem(at: temp)
+            }
+        }
         guard fm.fileExists(atPath: file.path) else { return nil }
-        guard let bytes = try? Data(contentsOf: file),
-              let capture = PendingCapture.decode(bytes, library: root.lastPathComponent),
-              let current = try? state ?? load()
-        else {
-            log.info("pending capture unreadable; removed")
-            try? fm.removeItem(at: file)
+        let bytes: Data
+        do { bytes = try Data(contentsOf: file) } catch {
+            log.error("pending capture unreadable now; kept: \(Self.code(error), privacy: .public)")
+            return nil
+        }
+        guard let capture = PendingCapture.decode(bytes, library: library) else {
+            setPendingCaptureAside(file)
+            return nil
+        }
+        guard let current = try? state ?? load() else {
+            log.error("pending capture kept: the library did not open")
             return nil
         }
         let sha = capture.sha256
-        if current.photos.contains(where: { $0.sha256 == sha || $0.reducedFrom?.sha256 == sha }) {
+        if let stored = current.photos.first(where: { $0.sha256 == sha && $0.reducedFrom == nil }),
+           blobMatches(url(stored.originalFile), sha256: sha, byteSize: stored.byteSize) {
+            // Confirmed, then the app stopped before the file went.
             try? fm.removeItem(at: file)
             return nil
         }
         return capture
     }
 
-    /// Deletes the held capture, only if it is still this one (`sha256`): a newer capture
-    /// that replaced it stays.
-    public func removePendingCapture(sha256: String) {
+    private func setPendingCaptureAside(_ file: URL) {
+        let aside = url(PendingCapture.keptPrefix + UUID().uuidString)
+        do {
+            try Self.rename(file, to: aside)
+            Self.fsyncDirectory(root)
+            try? Self.excludeFromBackup(aside)
+            log.error("pending capture not offerable; set aside")
+        } catch {
+            log.error("pending capture not offerable; kept in place")
+        }
+    }
+
+    /// Deletes the held capture, only if it is still this one (`sha256`) of this library
+    /// (`generation`): a newer capture, a file that cannot be read or matched, and a later
+    /// library's file all stay.
+    public func removePendingCapture(sha256: String, generation expected: UUID? = nil) {
+        if let expected, expected != generation { return }
         let file = url(PendingCapture.fileName)
-        guard let bytes = try? Data(contentsOf: file) else { return }
-        if let held = PendingCapture.decode(bytes, library: root.lastPathComponent), held.sha256 != sha256 { return }
+        guard let bytes = try? Data(contentsOf: file),
+              let held = PendingCapture.decode(bytes, library: root.lastPathComponent), held.sha256 == sha256 else { return }
         try? fm.removeItem(at: file)
     }
 
@@ -2011,6 +2226,23 @@ public actor LibraryStore {
     public func writeSyncState(_ data: Data, generation expected: UUID) throws {
         guard generation == expected else { throw SyncApplyError.libraryReplaced }
         try writeSyncStateFile(data)
+    }
+
+    /// Suffix of the copies sync's file and its backup are moved to when neither could be read
+    /// and sync starts over: kept, not deleted (what to do with them is not decided here).
+    static let unreadableSuffix = ".unreadable"
+
+    /// Moves sync's file and its backup aside before a start over replaces them (both unreadable).
+    func setAsideUnreadableSyncState(generation expected: UUID) throws {
+        guard generation == expected else { throw SyncApplyError.libraryReplaced }
+        do {
+            for name in [Self.syncStateFile, Self.syncStateBackupFile] where fm.fileExists(atPath: url(name).path) {
+                try Self.rename(url(name), to: url(name + Self.unreadableSuffix))
+            }
+            Self.fsyncDirectory(root)
+        } catch {
+            throw ioError(error, op: "setAsideSyncState")
+        }
     }
 
     /// Switches to a library sync built from `syncSnapshot()`, as one write: new photos' files
@@ -2108,7 +2340,10 @@ public actor LibraryStore {
 
     /// Stores a downloaded copy whose bytes match `info` (the caller checked them and made the
     /// thumbnail), each file written in full before it takes its name.
-    func stageSyncedFile(_ data: Data, thumbnailJPEG: Data, info: SyncFileInfo) throws -> SyncIncomingFile {
+    /// Refused if the library was replaced since `generation` was read: a download from before a
+    /// restore is not written into the new library (DD24-02).
+    func stageSyncedFile(_ data: Data, thumbnailJPEG: Data, info: SyncFileInfo, generation expected: UUID) throws -> SyncIncomingFile {
+        guard generation == expected else { throw SyncApplyError.libraryReplaced }
         guard BackupArchive.isHash(info.sha256), data.count == info.byteSize else { throw StoreError.io("stageSyncedFile:name") }
         let (copy, thumbnail) = stagedPaths(info.sha256)
         do {
@@ -2155,6 +2390,9 @@ public actor LibraryStore {
     /// The generation changes, so a cycle that read the old base is refused and starts again.
     private func rebaseSyncState(onto opened: AppState) {
         let names = [Self.syncStateFile, Self.syncStateBackupFile]
+        // A newer version's file is never rewritten from an older copy (COMPAT-4).
+        let reads = names.compactMap { (try? Data(contentsOf: self.url($0))).map(SyncDeviceState.read) }
+        if reads.contains(where: { if case .newer = $0 { true } else { false } }) { return }
         guard var device = names.lazy.compactMap({ (try? Data(contentsOf: self.url($0))).flatMap(SyncDeviceState.decode) }).first,
               let base = device.base, base.revision >= opened.revision, base != opened else { return }
         device.base = opened
@@ -2177,8 +2415,12 @@ public actor LibraryStore {
             try? fm.removeItem(at: temp)
             try writeDurably(data, to: temp, fullSync: true)
             // The previous version becomes the backup. A crash between the two renames leaves
-            // only the backup, which is read as the previous write.
-            if fm.fileExists(atPath: primary.path) { try Self.rename(primary, to: url(Self.syncStateBackupFile)) }
+            // only the backup, which is read as the previous write. A previous version that
+            // cannot be read (sync fell back to the backup) does not replace the backup: until
+            // the new file has its name, the backup is the only good copy (AA24-02).
+            if fm.fileExists(atPath: primary.path), primaryWorthKeeping(primary) {
+                try Self.rename(primary, to: url(Self.syncStateBackupFile))
+            }
             try Self.rename(temp, to: primary)
             Self.fsyncDirectory(root)
         } catch {
@@ -2187,9 +2429,18 @@ public actor LibraryStore {
         }
     }
 
+    /// The file about to become the backup: kept unless it cannot be read while a backup is there.
+    private func primaryWorthKeeping(_ primary: URL) -> Bool {
+        guard fm.fileExists(atPath: url(Self.syncStateBackupFile).path) else { return true }
+        guard let data = try? Data(contentsOf: primary) else { return false }
+        if case .unreadable = SyncDeviceState.read(data) { return false }
+        return true
+    }
+
     // MARK: - Internals
 
     private func loadedState() throws -> AppState {
+        if let expected = Self.expectedGeneration, expected != generation { throw CancellationError() }
         let current = try state ?? load()
         if pickerQuarantinePending { try quarantinePickerTail(current) }
         if deletionPending { try finishDeletion(current) }
@@ -2309,6 +2560,7 @@ public actor LibraryStore {
             // The commit point: atomic replace of the primary.
             try Self.rename(tempURL, to: primaryURL)
             Self.fsyncDirectory(root)
+            forgetNewLibraryMarker()
             if stageBackup {
                 // The new primary is already durable; a failure here only leaves an older backup.
                 do { try Self.rename(tempBackupURL, to: backupURL) } catch {
@@ -2390,7 +2642,7 @@ public actor LibraryStore {
         return Self.hashFile(fileURL) == sha256
     }
 
-    /// Rewrites a record's original (missing or hash mismatch) and thumbnail (missing) from a
+    /// Rewrites a record's original (missing or hash mismatch) and thumbnail (missing or undecodable) from a
     /// draft whose bytes were verified against `photo.sha256`. The original is replaced
     /// atomically via a temp file + rename, so the old copy is never lost half-way.
     @discardableResult
@@ -2413,9 +2665,20 @@ public actor LibraryStore {
             healed.original = true
             log.notice("ingest: healed original photo=\(photo.photoId, privacy: .public)")
         }
+        // A thumbnail is derived from these verified bytes: one that is missing or does not
+        // decode (e.g. cut short) is replaced whole through a temp file (audit T24-06).
         let thumbURL = url(photo.thumbnailFile)
-        if !fm.fileExists(atPath: thumbURL.path), !draft.thumbnailJPEG.isEmpty {
-            try writeDurably(draft.thumbnailJPEG, to: thumbURL)
+        let thumbnailUsable = (try? Data(contentsOf: thumbURL)).flatMap { PhotoIngest.downsampledImage(data: $0, maxPixel: 16) } != nil
+        if !thumbnailUsable, !draft.thumbnailJPEG.isEmpty {
+            let tempURL = url("\(Self.thumbnailsDir)/\(photo.photoId).heal-tmp")
+            do {
+                try? fm.removeItem(at: tempURL)
+                try writeDurably(draft.thumbnailJPEG, to: tempURL)
+                try Self.rename(tempURL, to: thumbURL)
+            } catch {
+                try? fm.removeItem(at: tempURL)
+                throw error
+            }
             Self.fsyncDirectory(url(Self.thumbnailsDir))
             healed.thumbnail = true
             log.notice("ingest: healed thumbnail photo=\(photo.photoId, privacy: .public)")
@@ -2437,6 +2700,9 @@ public actor LibraryStore {
         case valid(AppState)
         case newer(Int)
         case invalid
+        /// The file is there but reading it failed (I/O, data protection): its contents are
+        /// unknown. A missing file is `.invalid`; callers check existence themselves.
+        case unreadable(String)
     }
 
     private struct SchemaProbe: Decodable {
@@ -2445,8 +2711,20 @@ public actor LibraryStore {
 
     /// Loading never depends on the catalog: only structural consistency is checked.
     private func decode(_ fileURL: URL) -> Decoded {
-        guard let data = try? Data(contentsOf: fileURL) else { return .invalid }
+        let data: Data
+        do { data = try Data(contentsOf: fileURL) } catch {
+            return Self.isMissingFile(error) ? .invalid : .unreadable(Self.code(error))
+        }
         return Self.decodeState(data)
+    }
+
+    static func isMissingFile(_ error: any Error) -> Bool {
+        let ns = error as NSError
+        if ns.domain == NSCocoaErrorDomain, ns.code == CocoaError.fileReadNoSuchFile.rawValue || ns.code == CocoaError.fileNoSuchFile.rawValue {
+            return true
+        }
+        if ns.domain == NSPOSIXErrorDomain, ns.code == Int(ENOENT) { return true }
+        return (ns.userInfo[NSUnderlyingErrorKey] as? NSError).map(isMissingFile) ?? false
     }
 
     /// The one way a state file is written, for the store and for backups alike.
@@ -2493,6 +2771,7 @@ public actor LibraryStore {
         guard !orphans.isEmpty else { return }
         switch decode(url(Self.backupFile)) {
         case .newer: return // A rollback from a different layout may still own these files.
+        case .unreadable: return // The backup may still own them; its contents are unknown now.
         case .valid(let backup):
             let referenced = Set(backup.photos.flatMap { [$0.originalFile, $0.thumbnailFile] })
             orphans.removeAll { referenced.contains($0) }

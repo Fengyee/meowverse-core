@@ -32,6 +32,15 @@ final class PrivacyWordingUITests: XCTestCase {
             : Words(guide: ["不会上传"], intro: ["也不会把任何照片上传"], about: ["不会把它们传到任何服务器"])
     }
 
+    /// What an on state must not say: "never uploaded", and that the originals never leave, since
+    /// the copies it uploads are the original files for smaller photos and ones taken in the app
+    /// (2026-11-24 audit B24-07).
+    private var onForbid: Words {
+        var words = noUpload
+        words.intro.append(english ? "never uploads the originals" : "不会上传相册里的原图")
+        return words
+    }
+
     func testBothOffPromisesNoUpload() {
         check(state: "off", backup: false, sync: false, expect: noUpload, forbid: nil)
     }
@@ -39,28 +48,28 @@ final class PrivacyWordingUITests: XCTestCase {
     func testBackupOnNamesICloudDrive() {
         let expect = english
             ? Words(guide: ["this device", "backups go only to your own iCloud Drive"],
-                    intro: ["Back Up to iCloud Drive", "with each backup"],
+                    intro: ["Back Up to iCloud Drive", "with each backup", "the original files"],
                     about: ["Back Up to iCloud Drive", "photo copies in each backup"])
             : Words(guide: ["这台设备", "备份只存进你自己的 iCloud 云盘"],
-                    intro: ["“备份到 iCloud 云盘”", "随备份存进你自己的 iCloud 云盘"],
+                    intro: ["“备份到 iCloud 云盘”", "随备份存进你自己的 iCloud 云盘", "就是原文件"],
                     about: ["“备份到 iCloud 云盘”", "备份里的照片副本存在你自己的 iCloud 云盘"])
-        check(state: "backup", backup: true, sync: false, expect: expect, forbid: noUpload)
+        check(state: "backup", backup: true, sync: false, expect: expect, forbid: onForbid)
     }
 
     func testSyncOnNamesICloudSync() {
         let expect = english
-            ? Words(guide: ["sync only to your own devices"], intro: ["You turned on iCloud Sync, so"], about: ["You turned on iCloud Sync, so"])
-            : Words(guide: ["只通过你的 iCloud 同步到你自己的设备。"], intro: ["你打开了 iCloud 同步，"], about: ["你打开了 iCloud 同步，"])
-        check(state: "sync", backup: false, sync: true, expect: expect, forbid: noUpload)
+            ? Words(guide: ["sync only to your own devices"], intro: ["You turned on iCloud Sync, so", "the original files"], about: ["You turned on iCloud Sync, so"])
+            : Words(guide: ["只通过你的 iCloud 同步到你自己的设备。"], intro: ["你打开了 iCloud 同步，", "就是原文件"], about: ["你打开了 iCloud 同步，"])
+        check(state: "sync", backup: false, sync: true, expect: expect, forbid: onForbid)
     }
 
     func testBackupAndSyncNameBoth() {
         let expect = english
             ? Words(guide: ["sync only to your own devices", "backups go only to your own iCloud Drive"],
-                    intro: ["iCloud Sync and Back Up to iCloud Drive"], about: ["iCloud Sync and Back Up to iCloud Drive"])
+                    intro: ["iCloud Sync and Back Up to iCloud Drive", "the original files"], about: ["iCloud Sync and Back Up to iCloud Drive"])
             : Words(guide: ["同步到你自己的设备，备份也只存进你自己的 iCloud 云盘"],
-                    intro: ["iCloud 同步和“备份到 iCloud 云盘”"], about: ["iCloud 同步和“备份到 iCloud 云盘”"])
-        check(state: "both", backup: true, sync: true, expect: expect, forbid: noUpload)
+                    intro: ["iCloud 同步和“备份到 iCloud 云盘”", "就是原文件"], about: ["iCloud 同步和“备份到 iCloud 云盘”"])
+        check(state: "both", backup: true, sync: true, expect: expect, forbid: onForbid)
     }
 
     // MARK: Steps

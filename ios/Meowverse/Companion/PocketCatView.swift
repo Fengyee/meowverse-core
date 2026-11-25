@@ -6,6 +6,9 @@ struct PocketCatView: View {
     /// the environment's `AppModel`: `PocketCatReturn` presents this page in a hosting
     /// controller of its own, outside the app's SwiftUI environment.
     let catName: String
+    /// The lead cat's name as it is now, for a page that stays open while the library changes
+    /// under it (`PocketCatReturn`, X24-04). Nil: `catName`.
+    var currentName: (() -> String)? = nil
     @Environment(\.scenePhase) private var phase
     @Environment(\.openURL) private var openURL
     @State private var available = TourDevice.liveActivitiesOn
@@ -131,7 +134,7 @@ struct PocketCatView: View {
         guard available, activity == nil else { return }
         do {
             let state = PocketCatState(startingWith: mood, at: .now, interval: LaunchOptions.current.pocketCatInterval)
-            activity = try PocketCatActivity.request(attributes: PocketCatAttributes(catName: catName),
+            activity = try PocketCatActivity.request(attributes: PocketCatAttributes(catName: currentName?() ?? catName),
                                                      content: .init(state: state, staleDate: nil))
             if let activity { PocketCatCompanyMirror.kept(activity.id, state) }
             display(state)

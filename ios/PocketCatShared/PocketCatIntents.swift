@@ -116,10 +116,12 @@ struct SetPocketCatCompany: SetValueIntent, LiveActivityIntent {
                 PocketCatCompanyMirror.kept(activity.id, activity.content.state)
             }
         case .end(let ids):
+            // Read before the awaits: a companion started meanwhile stays (D24-09).
+            let ending = PocketCatCompanyMirror.ending(ids)
             for activity in ongoing where ids.contains(activity.id) {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
-            PocketCatCompanyMirror.endedAll(ids)
+            PocketCatCompanyMirror.endedAll(ending)
         }
         return .result()
     }

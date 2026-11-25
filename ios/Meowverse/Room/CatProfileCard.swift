@@ -28,16 +28,19 @@ nonisolated struct CatPawMark: Shape {
 private func previewImage(of pack: CatPack) -> CGImage? {
     guard let preview = pack.manifest.preview else { return nil }
     let url = pack.url(for: preview)
-    if let kept = PreviewCutouts.kept[url] { return kept }
+    // Keyed by the pack's revision, not its URL: a pack replaced in the same folder gets a new
+    // revision, so the old picture is not shown for it (D24-08).
+    let key = pack.cacheKey + "/" + preview
+    if let kept = PreviewCutouts.kept[key] { return kept }
     guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
           let image = CatArt.thumbnail(from: source, edge: 512) else { return nil }
     let cutout = PreviewCutouts.cutout(image) ?? image
-    PreviewCutouts.kept[url] = cutout
+    PreviewCutouts.kept[key] = cutout
     return cutout
 }
 
 enum PreviewCutouts {
-    static var kept: [URL: CGImage] = [:]
+    static var kept: [String: CGImage] = [:]
 
     /// The previews are rendered on a flat grey (#EEEEEE) with no alpha. Everything of the corner's
     /// colour connected to the border is the backdrop; the cat's own pale fur is shaded and never
@@ -365,6 +368,10 @@ struct CatPackTile: View {
 /// Only 就选它 chooses her; closing the card changes nothing.
 struct CatProfileCardView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
+    /// The chips' corners: half a one-line chip's height or more, so a one-line chip stays a
+    /// capsule at every size (the corner is clamped to half the height); a chip whose words wrap
+    /// (English at the largest sizes) becomes a rounded rectangle instead of a circle.
+    @ScaledMetric(relativeTo: .subheadline) private var chipCorner: CGFloat = 17
     let pack: CatPack
     let profile: CatProfile
     let inUse: Bool
@@ -502,14 +509,22 @@ struct CatProfileCardView: View {
     }
 
     private func fact(_ title: Text, _ value: String, id: String) -> some View {
-        HStack(spacing: 6) {
-            title.foregroundStyle(RoomPaper.note)
-            Text(verbatim: value).fontWeight(.semibold)
+        let shape = RoundedRectangle(cornerRadius: chipCorner, style: .continuous)
+        // Side by side; when that is wider than the card, the title above the value.
+        return ViewThatFits(in: .horizontal) {
+            HStack(spacing: 6) {
+                title.foregroundStyle(RoomPaper.note)
+                Text(verbatim: value).fontWeight(.semibold)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                title.foregroundStyle(RoomPaper.note)
+                Text(verbatim: value).fontWeight(.semibold)
+            }
         }
         .font(.system(.subheadline, design: .rounded))
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(Capsule().fill(RoomPaper.paper).overlay { Capsule().strokeBorder(RoomPaper.edge, lineWidth: 1) })
+        .background(shape.fill(RoomPaper.paper).overlay { shape.strokeBorder(RoomPaper.edge, lineWidth: 1) })
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier(id)
     }
@@ -547,7 +562,7 @@ struct CatProfileCardView: View {
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .background(Capsule().fill(RoomPaper.moss.opacity(0.14)))
+                    .background(RoundedRectangle(cornerRadius: chipCorner, style: .continuous).fill(RoomPaper.moss.opacity(0.14)))
                 }
             }
         }

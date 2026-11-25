@@ -8,9 +8,14 @@ import RealityKit
 final class RoomFloorShadows {
     private var layout: [FurnitureFloorShadowPlacement] = []
     private var pending: Task<Void, Never>?
+    /// A layout whose texture failed, and how often: the next update with the same layout tries
+    /// again (a passing failure heals, W24-01), but not on every sync after `retries`.
+    private var failed: (layout: [FurnitureFloorShadowPlacement], count: Int)?
+    private static let retries = 2
 
     func update(_ placements: [FurnitureFloorShadowPlacement], apply: @escaping (TextureResource?) -> Void) {
-        guard placements != layout else { return }
+        let retrying = failed.map { $0.layout == placements && $0.count <= Self.retries } ?? false
+        guard placements != layout || (retrying && pending == nil) else { return }
         layout = placements
         pending?.cancel()
         apply(nil)
@@ -20,10 +25,15 @@ final class RoomFloorShadows {
                 let texture = try await Self.texture(for: placements)
                 try Task.checkCancellation()
                 apply(texture)
+                self?.failed = nil
             } catch is CancellationError {
                 return
             } catch {
                 Self.logger.error("Floor occlusion unavailable: \(error.localizedDescription, privacy: .public)")
+                if let self, !Task.isCancelled {
+                    let count = self.failed?.layout == placements ? (self.failed?.count ?? 0) + 1 : 1
+                    self.failed = (placements, count)
+                }
             }
             if !Task.isCancelled { self?.pending = nil }
         }
@@ -33,6 +43,7 @@ final class RoomFloorShadows {
         pending?.cancel()
         pending = nil
         layout = []
+        failed = nil
     }
 
     static func placements(for items: [PhotoFurniture], excluding lifted: String? = nil,

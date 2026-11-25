@@ -13,7 +13,8 @@ public struct FeedbackReport: Sendable, Equatable {
         public var build: String
         /// "Debug" or "Release".
         public var configuration: String
-        public var testFlight: Bool
+        /// TestFlight only for an archived test build; see `TestBuildNotice.channel`.
+        public var channel: BuildChannel
         public var osVersion: String
         /// e.g. "iPhone17,1"; the simulator reports the model it simulates.
         public var deviceModel: String
@@ -25,13 +26,13 @@ public struct FeedbackReport: Sendable, Equatable {
         /// nil when the volume could not be asked.
         public var freeDiskBytes: Int64?
 
-        public init(appVersion: String, build: String, configuration: String, testFlight: Bool,
+        public init(appVersion: String, build: String, configuration: String, channel: BuildChannel,
                     osVersion: String, deviceModel: String, locale: String, textSize: String,
                     reduceMotion: Bool, voiceOver: Bool, freeDiskBytes: Int64?) {
             self.appVersion = appVersion
             self.build = build
             self.configuration = configuration
-            self.testFlight = testFlight
+            self.channel = channel
             self.osVersion = osVersion
             self.deviceModel = deviceModel
             self.locale = locale
@@ -104,7 +105,7 @@ public struct FeedbackReport: Sendable, Equatable {
     public var summaryText: String {
         let env = environment, lib = library
         return [
-            "App: Meowverse \(env.appVersion) (build \(env.build), \(env.configuration)\(env.testFlight ? ", TestFlight" : ""))",
+            "App: Meowverse \(env.appVersion) (build \(env.build), \(env.configuration)\(env.channel.reportLabel.map { ", " + $0 } ?? ""))",
             "iOS: \(env.osVersion)",
             "Device: \(env.deviceModel)",
             "Locale: \(env.locale)",
@@ -146,6 +147,68 @@ public struct FeedbackReport: Sendable, Equatable {
         return text
     }
 
+    // MARK: Structured log messages
+
+    /// One argument of a log entry as the log store hands it over.
+    public enum LogArgument: Sendable, Equatable {
+        /// An integer or floating-point value, already printed.
+        case number(String)
+        /// A string, data or object argument as the store printed it.
+        case text(String)
+        /// The store gave no value (redacted, or a kind it cannot print).
+        case redacted
+    }
+
+    /// A string argument is kept only when it reads as a code: ASCII letters, digits and a few
+    /// punctuation marks, no spaces, at most 64 characters (error codes, ids, enum names). Prose,
+    /// error descriptions and anything a person typed fail this and become `<text>`.
+    static let codePattern = try! NSRegularExpression(pattern: #"^[A-Za-z0-9_.:()\[\]#=+\-/,@]{1,64}$"#)
+    /// A printf-style placeholder as os_log writes them, `%%` included.
+    static let placeholderPattern = try! NSRegularExpression(
+        pattern: #"%(?:%|(\{[^}]*\})?[-+ #0-9.*']*(?:hh|h|ll|l|q|L|z|t|j)?[diouxXeEfFgGaAcsSpPmn@])"#)
+
+    /// The message of one log entry, built from its fixed format string and an allow-list of its
+    /// arguments instead of the store's composed text (R01-001): numbers stay, a string stays only
+    /// when its placeholder is public and it reads as a code, private ones are `<private>` even
+    /// when the store handed over the value, everything else is `<text>`. When the arguments do
+    /// not line up with the placeholders, every placeholder becomes `<?>`. `arguments` may carry
+    /// one extra trailing entry (the store's component for the closing text); it is ignored.
+    public static func renderLogMessage(format: String, arguments: [LogArgument]) -> String {
+        let ns = format as NSString
+        let matches = placeholderPattern.matches(in: format, range: NSRange(location: 0, length: ns.length))
+        let slots = matches.filter { ns.substring(with: $0.range) != "%%" }
+        // The store hands over one component per placeholder, plus one for the text after the
+        // last placeholder when there is any.
+        let aligned = arguments.count == slots.count || arguments.count == slots.count + 1
+        var out = "", cursor = 0, index = 0
+        for match in matches {
+            out += ns.substring(with: NSRange(location: cursor, length: match.range.location - cursor))
+            cursor = match.range.location + match.range.length
+            let spec = ns.substring(with: match.range)
+            if spec == "%%" { out += "%"; continue }
+            defer { index += 1 }
+            guard aligned else { out += "<?>"; continue }
+            let privacy = match.range(at: 1).location == NSNotFound ? "" : ns.substring(with: match.range(at: 1))
+            out += render(arguments[index], public: privacy.contains("public"), spec: spec)
+        }
+        out += ns.substring(from: cursor)
+        return out
+    }
+
+    private static func render(_ argument: LogArgument, public isPublic: Bool, spec: String) -> String {
+        switch argument {
+        case .redacted: return "<private>"
+        case .number(let value):
+            // Swift's Logger writes numbers without a privacy word and makes them public; an
+            // explicit private one stays private.
+            return spec.contains("private") ? "<private>" : value
+        case .text(let value):
+            guard isPublic else { return "<private>" }
+            let range = NSRange(value.startIndex..., in: value)
+            return codePattern.firstMatch(in: value, range: range) != nil ? value : "<text>"
+        }
+    }
+
     // MARK: Disk
 
     /// Coarse on purpose: the exact number says more about the device than the bug needs.
@@ -163,12 +226,16 @@ public struct FeedbackReport: Sendable, Equatable {
 
     // MARK: Redaction
 
-    /// Every string in the library the user typed or that came from their files: the cat's
-    /// name, furniture names, tags, notes and photo file names. Used to scrub log lines; the
-    /// report itself never reads these fields.
+    /// Every string in the library the user typed or that came from their files: every cat's
+    /// and every room's name, furniture names, tags, notes and photo file names. Used to scrub log
+    /// lines; the report itself never reads these fields. Only today's values are known here: a
+    /// name changed earlier in the run is not, which is why log messages are rebuilt from their
+    /// format and allow-listed arguments (`renderLogMessage`) before this scrubbing.
     public static func privateTerms(in state: AppState) -> [String] {
         let pieces = state.items + state.storage
         var terms = [state.catName]
+        terms += state.allCats.map(\.name)
+        terms += state.allRooms.compactMap(\.name)
         terms += pieces.map(\.displayName)
         terms += pieces.flatMap(\.tags)
         terms += state.photos.map(\.note)
@@ -180,8 +247,15 @@ public struct FeedbackReport: Sendable, Equatable {
 
     /// Longest first so a name that contains another is replaced whole. Single characters are
     /// skipped: replacing them would shred every line without protecting anything.
+    /// A multi-line term (a note) is also matched as it reads once a log line's newlines become
+    /// spaces, and line by line.
     static func normalizedTerms(_ terms: [String]) -> [String] {
-        Set(terms.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) })
+        let expanded = terms.flatMap { term -> [String] in
+            let lines = term.components(separatedBy: .newlines)
+            guard lines.count > 1 else { return [term] }
+            return [term, lines.joined(separator: " ")] + lines
+        }
+        return Set(expanded.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) })
             .filter { $0.count >= 2 }
             .sorted { $0.count != $1.count ? $0.count > $1.count : $0 < $1 }
     }

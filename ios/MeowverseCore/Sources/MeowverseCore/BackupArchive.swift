@@ -309,7 +309,7 @@ public enum BackupArchive {
         let state: AppState
         switch LibraryStore.decodeState(stateData) {
         case .newer: throw BackupError.newerVersion
-        case .invalid: throw BackupError.damaged("state")
+        case .invalid, .unreadable: throw BackupError.damaged("state")
         case .valid(var decoded):
             // A hand-edited name must still be one the app could have stored.
             decoded.catName = AppState.normalizedCatName(decoded.catName) ?? AppState.defaultCatName
@@ -319,6 +319,14 @@ public enum BackupArchive {
         let referenced = try validateValuesAndPaths(state)
         guard state.photos.allSatisfy({ described[$0.originalFile] != nil }) else { throw BackupError.damaged("photoPaths") }
         guard described.keys.allSatisfy(referenced.contains) else { throw BackupError.damaged("extraFiles") }
+        // The manifest says the same as the state (audit R02-002, A24-08): each original's line
+        // has the state's size and hash, and the counts are the state's. A backup that contradicts
+        // itself is not trusted, even where the bytes would pass on their own.
+        guard state.photos.allSatisfy({ described[$0.originalFile]?.byteSize == $0.byteSize && described[$0.originalFile]?.sha256 == $0.sha256 })
+        else { throw BackupError.damaged("manifestFiles") }
+        guard manifest.photoCount == state.photos.count, manifest.furnitureCount == state.items.count + state.storage.count else {
+            throw BackupError.damaged("manifestCounts")
+        }
 
         try staging.create()
         let total = state.photos.reduce(0) { $0 + $1.byteSize }
@@ -336,8 +344,11 @@ public enum BackupArchive {
             try staging.write(original, to: photo.originalFile)
 
             var thumbnail: Data?
+            // A thumbnail is used only when it is what the manifest says, size and hash; else it
+            // is rebuilt from the original (and the preview says so).
             if let listed = described[photo.thumbnailFile], let entry = reader.entry(photo.thumbnailFile),
-               let data = try? reader.extract(entry), PhotoIngest.sha256Hex(data) == listed.sha256,
+               entry.uncompressedSize == listed.byteSize,
+               let data = try? reader.extract(entry), data.count == listed.byteSize, PhotoIngest.sha256Hex(data) == listed.sha256,
                PhotoIngest.downsampledImage(data: data, maxPixel: 16) != nil {
                 thumbnail = data
             } else if let draft = try? PhotoIngest.makeDraft(data: original, filename: nil, reduce: false) {

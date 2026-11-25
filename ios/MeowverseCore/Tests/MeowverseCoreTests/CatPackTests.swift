@@ -229,6 +229,47 @@ struct CatPackGeometryTests {
         }
     }
 
+    /// D24-06: lengths and indices were checked, what they mean was not. A vertex whose four
+    /// weights do not add up to one (or go negative), or a rotation that is not a unit quaternion,
+    /// draws a torn or collapsed cat; such a rig is refused like any other bad rig, so the room
+    /// falls back (a downloaded tier to 中) instead of wearing it.
+    @Test("skin weights and quaternions are checked for what they mean, not only their lengths", arguments: [
+        "negative weight", "weights sum to zero", "weights sum above one",
+        "zero joint rotation", "unnormalised joint rotation", "zero clip rotation",
+    ])
+    func semanticRig(defect: String) throws {
+        var rig = try #require(JSONSerialization.jsonObject(with: CatPackFixture.gaits()) as? [String: Any])
+        var joints = try #require(rig["joints"] as? [[String: Any]])
+        var parts = try #require(rig["parts"] as? [[String: Any]])
+        var clips = try #require(rig["clips"] as? [String: [String: Any]])
+        switch defect {
+        case "negative weight": parts[0]["weights"] = [1.5, -0.5, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+        case "weights sum to zero": parts[0]["weights"] = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+        case "weights sum above one": parts[0]["weights"] = [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+        case "zero joint rotation": joints[3]["rotation"] = [0, 0, 0, 0]
+        case "unnormalised joint rotation": joints[3]["rotation"] = [0, 0, 0, 2]
+        case "zero clip rotation":
+            clips["ground_walk"]?["tracks"] = [["joint": 1, "path": "rotation", "values": [0, 0, 0, 1, 0, 0, 0, 0]]]
+        default: Issue.record("unknown defect \(defect)")
+        }
+        rig["joints"] = joints
+        rig["parts"] = parts
+        rig["clips"] = clips
+        #expect(throws: CatPackError.badGaits) { try CatGaitRig.decode(CatPackFixture.json(rig)) }
+    }
+
+    @Test("weights and rotations within export rounding are accepted")
+    func semanticRigTolerance() throws {
+        var rig = try #require(JSONSerialization.jsonObject(with: CatPackFixture.gaits()) as? [String: Any])
+        var joints = try #require(rig["joints"] as? [[String: Any]])
+        var parts = try #require(rig["parts"] as? [[String: Any]])
+        joints[3]["rotation"] = [0, 0.7071068, 0, 0.7071068]
+        parts[0]["weights"] = [0.6, 0.3, 0.0999, 0, 1, 0, 0, 0, 0.5, 0.5, 0, 0]
+        rig["joints"] = joints
+        rig["parts"] = parts
+        _ = try CatGaitRig.decode(CatPackFixture.json(rig))
+    }
+
     @Test("the vertex and index budgets are cumulative across parts")
     func meshBudget() {
         #expect(CatPackValidator.fitsMeshBudget(vertices: [32_768, 32_768], indices: [196_608, 196_608]))

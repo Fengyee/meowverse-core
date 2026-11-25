@@ -187,6 +187,11 @@ extension AppModel {
         backup.task = Task {
             // Photos still arriving from a batch would land in the restored library.
             await stopPhotoImports()
+            // An iCloud Drive backup of the old library must not be published after it (A24-02).
+            await stopCloudTransfersBeforeLibrarySwitch()
+            // Nor may a sync cycle still out on the network carry on into the restored library
+            // (M05, DD24-02): it is stopped and waited for, as a local-only clear waits for it.
+            await stopSyncCycleBeforeLibrarySwitch()
             let undoSyncNote = noteLibraryReplacementForSync()
             do {
                 let restored = try await store.replaceLibrary(with: prepared, recoveringCorruptLibrary: recovering)
@@ -196,12 +201,16 @@ extension AppModel {
                 let message = prepared.preview.kind == .webBackup
                     ? String(localized: "网页版备份已导入：\(photos) 张照片、\(pieces) 件家具。")
                     : String(localized: "已从备份恢复：\(photos) 张照片、\(pieces) 件家具。")
-                // With sync on, the restored library merges with iCloud like a first sync.
-                let shown = sync.settings.enabled
+                // With sync on, the restored library merges with iCloud like a first sync. Asked of
+                // this library's saved setting too: restoring a damaged library happens before sync's
+                // settings are read, when `sync.settings` still says off (tech-craft).
+                let shown = syncOnForThisLibrary
                     ? Wording.sentences(message, String(localized: "iCloud 同步开着，它会和 iCloud 里的家合并。"))
                     : message
+                // An export of the old library that was never saved goes with it (audit B24-04).
+                discardExport()
                 finishBackupOperation(generation, notice: .init(text: shown, isFailure: false))
-                if recovering { finishCorruptLibraryRecovery(notice: message) }
+                if recovering { finishCorruptLibraryRecovery(notice: shown) }
             } catch {
                 undoSyncNote()
                 prepared.discard()
@@ -238,14 +247,19 @@ extension AppModel {
         backup.task = Task {
             // Photos still arriving from a batch would land in the emptied library.
             await stopPhotoImports()
+            // Nor may an iCloud Drive backup of it, or a download that opens a preview (A24-02).
+            await stopCloudTransfersBeforeLibrarySwitch()
             // Not queued behind it: waited for. A cycle still out on the network when the empty
             // library came in retried on it and brought the whole home back (audit round 12,
             // SYNC-1). Once this returns that cycle has stopped and sync has forgotten the home.
             await syncOff?.value
+            var unreadLeft = false
             if everywhere {
                 switch await deleteHomeInICloud() {
                 case .done:
                     break
+                case .doneExceptUnread:
+                    unreadLeft = true
                 case .unfinished(let problem):
                     finishBackupOperation(generation, notice: .init(text: Wording.sentences(
                         String(localized: "iCloud 里的家只删除了一部分，剩下的会在下次同步时接着删除，到时这台设备上的家也会跟着清空。"),
@@ -265,7 +279,12 @@ extension AppModel {
                 try await store.clearAll()
                 await libraryWasReplaced()
                 await endWhatStillShowsTheClearedHome()
-                let text = everywhere
+                // An export of the cleared library that was never saved (audit B24-04). Copies the
+                // user saved or shared are outside the app and stay.
+                discardExport()
+                let text = unreadLeft
+                    ? String(localized: "已清除这台设备上的全部数据，也删除了 iCloud 里的家，但 iCloud 里有些记录这台设备读不懂或还没取到，原样留着，没有删除。其他设备同步后也会清空，这些记录里的内容除外。")
+                    : everywhere
                     ? String(localized: "已删除 iCloud 里的家，也清除了这台设备上的全部数据。其他设备同步后也会清空。")
                     : syncWasOn
                     ? String(localized: "已清除这台设备上的全部数据，这台设备的 iCloud 同步也已关闭。iCloud 里的家和其他设备都没有动。")
@@ -277,6 +296,7 @@ extension AppModel {
             } catch StoreError.clearCleanupPending {
                 await libraryWasReplaced()
                 await endWhatStillShowsTheClearedHome()
+                discardExport()
                 finishBackupOperation(generation, notice: .init(text: String(localized: "房间已清空，旧资料库的本地副本还未清理完。请再次选择清除全部数据。"), isFailure: true))
             } catch {
                 undoSyncNote()
@@ -306,6 +326,16 @@ extension AppModel {
 
     // MARK: Internals
 
+    /// Before a restore switches the library while sync stays on: the cycle out on the network is
+    /// cancelled (it stops at its next step and leaves the library and sync's file as they were)
+    /// and everything queued for sync is waited for. No new cycle starts meanwhile: `runSync`
+    /// waits while `switchingLibraries`. The DD24-02 generation check still drops a late answer.
+    private func stopSyncCycleBeforeLibrarySwitch() async {
+        guard let worker = sync.worker else { return }
+        sync.cycleTask?.cancel()
+        await worker.value
+    }
+
     private func beginBackupOperation(_ operation: BackupUIState.Operation) -> Int {
         backup.generation += 1
         backup.busy = .init(operation: operation, fraction: 0)
@@ -332,9 +362,11 @@ extension AppModel {
     /// Everything on screen that pointed into the old library is closed.
     /// Company and delivered reminders carry the cat's and the furniture's names outside the app.
     private func endWhatStillShowsTheClearedHome() async {
+        // Read before the awaits: a companion started meanwhile stays on the widgets (D24-09).
+        let ending = PocketCatCompanyMirror.ending(PocketCatActivity.activities.map(\.id))
         let company = PocketCatActivity.activities
         for activity in company { await activity.end(nil, dismissalPolicy: .immediate) }
-        PocketCatCompanyMirror.endedAll(company.map(\.id))
+        PocketCatCompanyMirror.endedAll(ending)
         SystemNotificationCenter().removeDelivered()
     }
 

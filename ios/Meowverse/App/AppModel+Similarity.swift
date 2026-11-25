@@ -146,6 +146,7 @@ extension AppModel {
             similarity.reviewPrint = nil
             similarity.batchPrints = [:]
             batch.suggestions.offers = []
+            batch.suggestions.offersBasis = nil
             let old = similarity.warmTask
             similarity.backfillTask?.cancel()
             old?.cancel()
@@ -298,6 +299,8 @@ extension AppModel {
     /// After a clear or a restore no old print may survive, even one that a reused photoId would match.
     func forgetFeaturePrints() async {
         similarity.reviewPrint = nil
+        // A print the review is still making is dropped by the cache when it arrives (L24-01).
+        similarity.reviewTask?.cancel()
         similarity.backfillTask?.cancel()
         similarity.warmTask?.cancel()
         await similarity.warmTask?.value

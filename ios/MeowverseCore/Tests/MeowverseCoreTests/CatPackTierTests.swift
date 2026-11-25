@@ -27,7 +27,8 @@ enum CatTierFixture {
 
     /// A skin for the fixture rig: the same joints by name, one triangle on joint `joint`.
     static func skin(jointNames: [String] = (0..<48).map { "joint\($0)" }, skeleton: String? = CatGaitRig.v2Skeleton,
-                     format: String = CatSkin.formatName, joint: Int = 2) -> Data {
+                     format: String = CatSkin.formatName, joint: Int = 2,
+                     weights: [Float] = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]) -> Data {
         var json: [String: Any] = [
             "format": format,
             "jointNames": jointNames,
@@ -38,7 +39,7 @@ enum CatTierFixture {
                 "uvs": [0, 0, 1, 0, 0, 1],
                 "indices": [0, 1, 2],
                 "jointIndices": [joint, 0, 0, 0, joint, 0, 0, 0, joint, 0, 0, 0],
-                "weights": [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+                "weights": weights,
             ]],
         ]
         if let skeleton { json["skeleton"] = skeleton }
@@ -227,6 +228,7 @@ struct CatSkinTests {
         CatTierFixture.skin(skeleton: nil),
         CatTierFixture.skin(format: "meowverse.cat-skin/9"),
         CatTierFixture.skin(joint: 48),
+        CatTierFixture.skin(weights: [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]),
         CatTierFixture.gaits(),
         Data("{}".utf8),
     ])
@@ -295,6 +297,15 @@ struct CatPackVariantTests {
         #expect(pack.variant(for: .medium, downloaded: [.low: folder]).tier == .medium)
         #expect(pack.variant(for: .high, downloaded: [.low: folder]).tier == .medium)
         #expect(pack.downloadRequests.map(\.tier) == [.low])
+    }
+
+    @Test("only 中 may stand in on baked poses when its skeleton fails; another tier falls back to 中")
+    func posesWithoutSkeleton() throws {
+        let dir = TestSupport.tempDir()
+        let pack = try CatTierFixture.builtIn(in: dir)
+        let folder = CatTierLocation(directory: dir.appending(path: "cats/test-cat/low"))
+        #expect(pack.baseVariant.showsPosesWithoutSkeleton)
+        #expect(!pack.variant(for: .low, downloaded: [.low: folder]).showsPosesWithoutSkeleton)
     }
 
     @Test("an imported pack carries its tiers in its own folder; nothing is downloaded")
@@ -648,6 +659,41 @@ struct CatTierDownloadTests {
         await downloads.settle(request)
         #expect(downloads.state(of: request) == .failed(.incomplete("low-sit.mesh.json")))
         #expect(downloads.downloaded(packID: "bella").isEmpty)
+    }
+
+    /// D24-07: an asset pack the system says is on the device but whose folder misses a file
+    /// used to fail as 不完整 on every retry, because every run trusted the same installed folder.
+    @Test("an installed folder missing a file is downloaded again instead of failing for good")
+    func incompleteInstalledDownloadsAgain() async throws {
+        let transport = FakeTierTransport()
+        let request = request(files: ["low-skin.json", "low-sit.mesh.json"])
+        await transport.preinstall("cat-bella-low", at: try folder(with: ["low-skin.json"]))
+        let downloads = CatTierDownloads(transport: transport)
+        downloads.ensure(request)
+        await waitUntil { await transport.parked(request.assetPackID) == 1 }
+        let url = try folder(with: ["low-skin.json", "low-sit.mesh.json"])
+        await transport.finish(request.assetPackID, with: .success(url))
+        await downloads.settle(request)
+        #expect(downloads.state(of: request) == .ready(CatTierLocation(directory: url)))
+    }
+
+    @Test("retrying a tier that failed asks the transport again instead of reusing the installed folder")
+    func retryAfterFailureDownloads() async throws {
+        let transport = FakeTierTransport()
+        let url = try folder()
+        await transport.preinstall("cat-bella-low", at: url)
+        let downloads = CatTierDownloads(transport: transport)
+        let request = request()
+        downloads.ensure(request)
+        await downloads.settle(request)
+        #expect(await transport.downloads.isEmpty)
+        downloads.markUnusable(packID: "bella", tier: .low)
+        downloads.retry(request)
+        await waitUntil { await transport.parked(request.assetPackID) == 1 }
+        await transport.finish(request.assetPackID, with: .success(url))
+        await downloads.settle(request)
+        #expect(downloads.state(of: request) == .ready(CatTierLocation(directory: url)))
+        #expect(await transport.downloads == ["cat-bella-low"])
     }
 
     @Test("a download that finishes after it was cancelled does not come back as 已就绪")

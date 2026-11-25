@@ -8,7 +8,7 @@ import OSLog
 final class CatPackLibrary {
     /// Built-in packs. To add one, put `<id>-cat.json` and its `<id>-<file>` files in
     /// Resources/Art and add the id here. The first id is the fallback.
-    static let builtInIDs = ["bella", "airou", "zhumi", "siamese", "ragdoll", "black", "white", "sphynx"]
+    static let builtInIDs = ["bella", "airou", "zhumi", "siamese", "ragdoll", "black", "white", "sphynx", "zhaocai"]
     static var fallbackID: String { builtInIDs[0] }
     static let defaultsKey = "cat.activePack"
 

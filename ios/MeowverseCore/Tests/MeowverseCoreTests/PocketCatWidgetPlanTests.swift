@@ -149,4 +149,19 @@ import Testing
         #expect(plan.moments == [.init(date: start, mood: .thinking, sessionID: "s")])
         #expect(plan.reloadAt == start.addingTimeInterval(PocketCatWidgetPlan.fixedCompanionRecheck))
     }
+
+    /// X24-03: the system's limit falls exactly when the round would have asked again. The
+    /// timeline still ends company at the limit itself instead of leaving the last expression
+    /// up until WidgetKit gets round to the reload.
+    @Test func companyStopsAtTheLimitWhenItFallsOnTheReload() throws {
+        let state = PocketCatState(startingWith: .watching, at: start, interval: 300)
+        let now = start.addingTimeInterval(10)
+        let open = PocketCatWidgetPlan.plan(at: now, companion: .init(sessionID: "s", state: state))
+        let limit = open.reloadAt
+        let plan = PocketCatWidgetPlan.plan(at: now, companion: .init(sessionID: "s", state: state, endsBy: limit))
+        let after = try #require(shown(plan, at: limit))
+        #expect(after.button == .start)
+        #expect(after.date == limit)
+        #expect(plan.reloadAt > limit)
+    }
 }

@@ -33,34 +33,34 @@
         }
       }
     },
-    "亲人" : {
+    "会装出一副很乖的样子，趁人不注意打开放猫粮和零食的柜子，给自己开自助餐。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Loves people"
+            "value" : "He puts on his best good-boy face, then, when no one is looking, opens the cupboard with the food and treats and helps himself to the buffet."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "亲人"
+            "value" : "会装出一副很乖的样子，趁人不注意打开放猫粮和零食的柜子，给自己开自助餐。"
           }
         }
       }
     },
-    "呼噜大王" : {
+    "你走到哪儿，他就跟到哪儿，一路喵个不停，像在汇报家里今天发生的每一件事。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Champion purrer"
+            "value" : "Wherever you go, he follows, meowing all the way, as if reporting on everything that happened at home today."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "呼噜大王"
+            "value" : "你走到哪儿，他就跟到哪儿，一路喵个不停，像在汇报家里今天发生的每一件事。"
           }
         }
       }
@@ -77,6 +77,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "品种"
+          }
+        }
+      }
+    },
+    "埋伏高手" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambush expert"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "埋伏高手"
           }
         }
       }
@@ -113,50 +129,34 @@
         }
       }
     },
-    "好奇宝宝" : {
+    "家里来了客人，她先躲在床底下偷偷看；等客人走了才出来，把自己从头到尾舔得干干净净。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Curious"
+            "value" : "When guests come over, she watches from under the bed and only comes out once they’ve gone, to wash herself from head to tail."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好奇宝宝"
+            "value" : "家里来了客人，她先躲在床底下偷偷看；等客人走了才出来，把自己从头到尾舔得干干净净。"
           }
         }
       }
     },
-    "好脾气" : {
+    "小时候能趴在肩膀上睡觉；长大了一个肩膀不够睡，就像围巾一样围着脖子，趴在两个肩膀上。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Easygoing"
+            "value" : "As a kitten she could sleep on one shoulder. Now one isn’t enough, so she lies across both, wrapped round her human’s neck like a scarf."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好脾气"
-          }
-        }
-      }
-    },
-    "安静" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quiet"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "安静"
+            "value" : "小时候能趴在肩膀上睡觉；长大了一个肩膀不够睡，就像围巾一样围着脖子，趴在两个肩膀上。"
           }
         }
       }
@@ -209,6 +209,22 @@
         }
       }
     },
+    "小馋猫" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Little foodie"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小馋猫"
+          }
+        }
+      }
+    },
     "就选它" : {
       "localizations" : {
         "en" : {
@@ -237,22 +253,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "布偶（长毛）"
-          }
-        }
-      }
-    },
-    "干饭第一" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Food first"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "干饭第一"
           }
         }
       }
@@ -301,6 +301,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开%@的角色卡。"
+          }
+        }
+      }
+    },
+    "新买的自动猫砂盆转起来哗啦啦地响，艾露听了很生气，跑过去把它暴打了一顿。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The new self-cleaning litter box rattles as it turns. Airou finds this outrageous and runs over to give it a good thumping."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新买的自动猫砂盆转起来哗啦啦地响，艾露听了很生气，跑过去把它暴打了一顿。"
           }
         }
       }
@@ -385,6 +401,38 @@
         }
       }
     },
+    "没有毛，摸起来暖乎乎的，像个小暖水袋。天一凉，他就钻进被窝，只露出两只大耳朵。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With no fur, he feels warm to the touch, like a little hot-water bottle. When it turns chilly, he burrows under the duvet with just his big ears poking out."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有毛，摸起来暖乎乎的，像个小暖水袋。天一凉，他就钻进被窝，只露出两只大耳朵。"
+          }
+        }
+      }
+    },
+    "淘气包" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Little rascal"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "淘气包"
+          }
+        }
+      }
+    },
     "温柔" : {
       "localizations" : {
         "en" : {
@@ -397,6 +445,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "温柔"
+          }
+        }
+      }
+    },
+    "爱啃纸箱" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box chewer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "爱啃纸箱"
           }
         }
       }
@@ -417,34 +481,66 @@
         }
       }
     },
-    "爱晒太阳" : {
+    "爱拍屁屁" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunbather"
+            "value" : "Loves bum pats"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "爱晒太阳"
+            "value" : "爱拍屁屁"
           }
         }
       }
     },
-    "爱被摸摸" : {
+    "爱看松鼠" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Loves pets"
+            "value" : "Squirrel watcher"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "爱被摸摸"
+            "value" : "爱看松鼠"
+          }
+        }
+      }
+    },
+    "爱贴贴" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loves a cuddle"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "爱贴贴"
+          }
+        }
+      }
+    },
+    "爱运动" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sporty"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "爱运动"
           }
         }
       }
@@ -465,6 +561,22 @@
         }
       }
     },
+    "白天总在睡觉，一到晚上就来了精神。手表反射到墙上的一小块光，她能追着扑上好半天。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "She sleeps through most of the day and livens up at night. A little patch of light bounced off a watch onto the wall can keep her pouncing for ages."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "白天总在睡觉，一到晚上就来了精神。手表反射到墙上的一小块光，她能追着扑上好半天。"
+          }
+        }
+      }
+    },
     "白猫" : {
       "localizations" : {
         "en" : {
@@ -481,34 +593,34 @@
         }
       }
     },
-    "纸箱检查员" : {
+    "自律 ISTJ" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Box inspector"
+            "value" : "Disciplined ISTJ"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "纸箱检查员"
+            "value" : "自律 ISTJ"
           }
         }
       }
     },
-    "罐头雷达" : {
+    "被宠坏了" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Can-opener radar"
+            "value" : "Spoiled rotten"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "罐头雷达"
+            "value" : "被宠坏了"
           }
         }
       }
@@ -561,18 +673,34 @@
         }
       }
     },
-    "软绵绵" : {
+    "谨慎又好奇" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Floppy"
+            "value" : "Cautious but curious"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软绵绵"
+            "value" : "谨慎又好奇"
+          }
+        }
+      }
+    },
+    "躲抽屉" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drawer hider"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "躲抽屉"
           }
         }
       }
@@ -609,6 +737,22 @@
         }
       }
     },
+    "铲屎官躺在床上看电视，她就趴到胸口上要摸摸、要拍屁屁；不拍，就用湿漉漉的小鼻子拱铲屎官的手。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When her human lies in bed watching TV, she climbs onto their chest for pets and bum pats. No pats? Then her wet little nose nudges their hand."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "铲屎官躺在床上看电视，她就趴到胸口上要摸摸、要拍屁屁；不拍，就用湿漉漉的小鼻子拱铲屎官的手。"
+          }
+        }
+      }
+    },
     "黑猫" : {
       "localizations" : {
         "en" : {
@@ -637,6 +781,62 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "黑白奶牛猫"
+          }
+        }
+      }
+    },
+    "金渐层" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Golden shaded British Shorthair"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金渐层"
+          }
+        }
+      }
+    },
+    "高冷" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aloof"
+          }
+        }
+      }
+    },
+    "爱吃猫条" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loves lickable treats"
+          }
+        }
+      }
+    },
+    "捉迷藏" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide-and-seek"
+          }
+        }
+      }
+    },
+    "有一次不小心被关在厨房里，它不哭也不闹，默默坐在玻璃门旁，等主人自己发现它。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got shut in the kitchen by accident once. No crying, no fuss: just sat quietly by the glass door until someone noticed."
           }
         }
       }

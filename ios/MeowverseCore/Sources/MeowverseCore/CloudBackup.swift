@@ -34,6 +34,11 @@ public enum CloudBackupError: Error, Equatable, Sendable {
     case offline
     /// iCloud storage is full.
     case quotaExceeded
+    /// The Apple Account signed in is not the one this listing or delete was confirmed for.
+    /// Stopped there; nothing more was touched.
+    case accountChanged
+    /// A download made no progress for `CloudDownloadWatch.stallLimit`.
+    case downloadStalled
     case io(String)
 }
 
@@ -127,6 +132,8 @@ public struct CloudBackupInfo: Codable, Sendable, Equatable {
     public static let format = "meowverse-cloud-backup-info"
     public static let version = 1
     static let maxBytes = 64 * 1024
+    /// More pieces than any room can hold; only a bound for a number read from a file.
+    static let maxFurnitureCount = 1_000_000
 
     public var format: String
     public var version: Int
@@ -149,9 +156,40 @@ public struct CloudBackupInfo: Codable, Sendable, Equatable {
         guard let info = try? decoder.decode(CloudBackupInfo.self, from: data),
               info.format == format, info.version >= 1, info.version <= version,
               info.archiveName == name.archiveName, info.deviceID == name.deviceID, info.revision == name.revision,
-              info.photoCount >= 0, info.furnitureCount >= 0, info.byteSize > 0, BackupArchive.isHash(info.sha256)
+              // Bounded (audit B24-01): nothing a backup can have is larger, and these numbers are
+              // added and multiplied later (space checks, the delete total).
+              (0...ZipLimits.backup.maxEntries).contains(info.photoCount), (0...maxFurnitureCount).contains(info.furnitureCount),
+              (1...ZipLimits.backup.maxArchiveBytes).contains(info.byteSize), BackupArchive.isHash(info.sha256)
         else { return nil }
         return info
+    }
+
+    /// `CloudBackupError.io` code of a small file larger than an info file can be.
+    public static let tooLargeCode = "tooLarge"
+
+    /// Reads a small file through a cap (audit B24-03): at most one byte more than an info file
+    /// may be is ever read, whatever size the file reports. Larger is `io(tooLargeCode)`: not an
+    /// info file, which the listing treats as a bad one rather than one still downloading.
+    public static func readBounded(at url: URL) throws -> Data {
+        let handle: FileHandle
+        do { handle = try FileHandle(forReadingFrom: url) } catch {
+            let ns = error as NSError
+            if ns.domain == NSCocoaErrorDomain, ns.code == NSFileReadNoSuchFileError || ns.code == NSFileNoSuchFileError { throw CloudBackupError.notFound }
+            throw CloudBackupError.io("read")
+        }
+        defer { try? handle.close() }
+        let data: Data
+        do { data = try handle.read(upToCount: maxBytes + 1) ?? Data() } catch { throw CloudBackupError.io("read") }
+        guard data.count <= maxBytes else { throw CloudBackupError.io(tooLargeCode) }
+        return data
+    }
+
+    /// Whether the file at `url` is the archive this info was written for: its size and SHA-256
+    /// (audit A24-07). Reads the whole file; call off the main actor.
+    public func describes(fileAt url: URL) -> Bool {
+        guard let size = (try? FileManager.default.attributesOfItem(atPath: url.path))?[.size] as? NSNumber,
+              size.intValue == byteSize else { return false }
+        return LibraryStore.hashFile(url) == sha256
     }
 
     func encoded() throws -> Data {
@@ -245,9 +283,7 @@ public struct FolderBackupDestination: BackupDestination {
 
     public func readSmallFile(_ name: String) throws -> Data {
         let url = try url(name)
-        guard let size = (try? FileManager.default.attributesOfItem(atPath: url.path))?[.size] as? NSNumber else { throw CloudBackupError.notFound }
-        guard size.intValue <= CloudBackupInfo.maxBytes, let data = try? Data(contentsOf: url) else { throw CloudBackupError.io("read") }
-        return data
+        return try CloudBackupInfo.readBounded(at: url)
     }
 
     public func place(_ local: URL, as name: String) throws {
@@ -364,9 +400,14 @@ public enum CloudBackupCatalog {
         for file in files {
             guard let name = CloudBackupName(infoName: file.name) else { continue }
             infoFiles[name] = file.name
-            if let data = try? destination.readSmallFile(file.name) {
+            do {
+                let data = try destination.readSmallFile(file.name)
                 if let info = CloudBackupInfo.decode(data, for: name) { infos[name] = info } else { invalidInfos.insert(name) }
-            } else {
+            } catch CloudBackupError.io(CloudBackupInfo.tooLargeCode) {
+                // Larger than an info file can be: a bad one, not one on its way. It does not keep
+                // its archive "pending" (never pruned) for ever.
+                invalidInfos.insert(name)
+            } catch {
                 unreadInfos.insert(name)
             }
         }
@@ -392,6 +433,34 @@ public enum CloudBackupCatalog {
         entries.sort { CloudBackupName.newestFirst($0.name, $1.name) }
         let orphans = infoFiles.filter { $0.key.deviceID == deviceID && (!seen.contains($0.key) || invalidInfos.contains($0.key)) }.values.sorted()
         return CloudBackupListing(entries: entries, orphanInfoNames: orphans)
+    }
+}
+
+// MARK: - Downloads
+
+/// Whether a download is still moving (audit A24-06): an iCloud download that never reports
+/// progress again must not keep the restore waiting for ever. Only a new amount counts as
+/// progress; "amount unknown" and the same amount again do not.
+public struct CloudDownloadWatch: Sendable, Equatable {
+    /// Five minutes without any new amount. Long enough for a slow connection, which still
+    /// moves the percentage; short enough that a stuck download ends with an honest failure.
+    public static let stallLimit: TimeInterval = 5 * 60
+
+    private var lastFraction: Double?
+    private var lastChange: Date
+
+    public init(start: Date) {
+        lastChange = start
+    }
+
+    public mutating func note(_ fraction: Double?, at date: Date) {
+        guard let fraction, fraction != lastFraction else { return }
+        lastFraction = fraction
+        lastChange = date
+    }
+
+    public func isStalled(at date: Date, limit: TimeInterval = stallLimit) -> Bool {
+        date.timeIntervalSince(lastChange) >= limit
     }
 }
 
@@ -446,6 +515,10 @@ public struct CloudBackupSettings: Codable, Sendable, Equatable {
     /// user turned backup on, or later chose to keep backing up to. nil from builds before it
     /// was remembered. Never an account name or the token itself.
     public var account: String?
+    /// Backups this device wrote are still in an account backup was moved away from
+    /// (`moveBackups(to:)`). That account cannot be looked into any more, so this stays true:
+    /// a privacy sentence must not say nothing is left in iCloud (audit B24-05).
+    public var backupsLeftInAnotherAccount = false
 
     public init() {}
 
@@ -457,6 +530,15 @@ public struct CloudBackupSettings: Codable, Sendable, Equatable {
         damagedNames = try values.decodeIfPresent([String].self, forKey: .damagedNames) ?? []
         restoreOfferDismissed = try values.decodeIfPresent(Bool.self, forKey: .restoreOfferDismissed) ?? false
         account = try values.decodeIfPresent(String.self, forKey: .account)
+        backupsLeftInAnotherAccount = try values.decodeIfPresent(Bool.self, forKey: .backupsLeftInAnotherAccount) ?? false
+    }
+
+    /// The user's answer after an account switch: back up to `newAccount` from now on. A last
+    /// backup in the account remembered until now stays there, and that is remembered.
+    public mutating func moveBackups(to newAccount: String) {
+        if let account, account != newAccount, lastSuccess != nil { backupsLeftInAnotherAccount = true }
+        account = newAccount
+        lastFailure = nil
     }
 
     public mutating func rememberDamaged(_ archiveName: String) {
@@ -596,6 +678,42 @@ public enum CloudBackupPolicy {
         return true
     }
 
+    /// Whether iCloud Drive holds a backup that could restore the library (audit A24-03).
+    public enum Presence: Sendable, Equatable {
+        case some
+        case none
+        /// No current listing (signed out, the listing failed, the account is not known): unknown
+        /// is not empty, so nothing may say there is no backup.
+        case unknown
+    }
+
+    /// `listingIsCurrent`: `entries` are from a listing that succeeded under an account that was
+    /// the same before and after it, and nothing has failed or switched since.
+    public static func presence(listingIsCurrent: Bool, entries: [CloudBackupEntry]) -> Presence {
+        guard listingIsCurrent else { return .unknown }
+        return recommended(entries) != nil ? .some : .none
+    }
+
+    /// Free bytes a restore of a backup of `byteSize` needs: the download (unless it is already
+    /// here), the verified copy beside the library, and spare room. A size that is negative or
+    /// would overflow asks for `Int.max`: never enough, never a crash (audit B24-01).
+    public static func restoreSpaceNeeded(byteSize: Int, isDownloaded: Bool) -> Int {
+        guard byteSize >= 0 else { return .max }
+        let (copies, overflow) = byteSize.multipliedReportingOverflow(by: isDownloaded ? 1 : 2)
+        guard !overflow else { return .max }
+        let (total, overflow2) = copies.addingReportingOverflow(CloudBackupEngine.restoreSpareBytes)
+        return overflow2 ? .max : total
+    }
+
+    /// The sum of the known sizes, stopping at `Int.max` instead of overflowing.
+    public static func totalBytes(_ sizes: [Int?]) -> Int {
+        sizes.reduce(0) { sum, size in
+            guard let size, size > 0 else { return sum }
+            let (total, overflow) = sum.addingReportingOverflow(size)
+            return overflow ? .max : total
+        }
+    }
+
     /// Whether the backup is known to be stored safely: uploaded to iCloud, or in a plain folder.
     static func isStored(_ entry: CloudBackupEntry) -> Bool {
         entry.upload == .uploaded || entry.upload == .notApplicable
@@ -604,15 +722,19 @@ public enum CloudBackupPolicy {
     /// File names to delete after a successful backup. Only this device's files: verified
     /// backups beyond the newest `keep` (at least one always stays), and leftovers (no info, or
     /// damaged) older than the newest verified one. Without a verified backup nothing is deleted.
+    /// `protecting`: archive names that are never deleted, whatever their names' dates say: the
+    /// backup this run just wrote, or the last success (audit B24-02: after the clock went back a
+    /// new backup's name sorts older than the one before it).
     /// Never deleted: a backup whose info has not reached this device yet, and the newest
     /// verified backup that is known to be uploaded (so a full iCloud that stops uploads can
     /// never rotate the last uploaded backup out in favour of ones that only exist locally).
-    public static func prune(_ entries: [CloudBackupEntry], keep: Int = keepCount) -> [String] {
+    public static func prune(_ entries: [CloudBackupEntry], keep: Int = keepCount, protecting: Set<String> = []) -> [String] {
         let mine = entries.filter(\.isFromThisDevice).sorted { CloudBackupName.newestFirst($0.name, $1.name) }
         let verified = mine.filter { $0.condition == .verified }
         let kept = verified.prefix(max(1, keep))
         guard let newestKept = kept.first else { return [] }
         var keptNames = Set(kept.map(\.name))
+        keptNames.formUnion(mine.lazy.map(\.name).filter { protecting.contains($0.archiveName) })
         if let newestStored = verified.first(where: isStored) { keptNames.insert(newestStored.name) }
         var doomed: [CloudBackupEntry] = []
         for entry in mine where !keptNames.contains(entry.name) {
@@ -662,6 +784,23 @@ public enum CloudBackupEngine {
 
     /// Room kept free beside the work files, so a backup never fills the phone.
     static let spareBytes = 200 * 1024 * 1024
+    /// Room kept free beside a download and the verified copy a restore builds.
+    public static let restoreSpareBytes = 200 * 1024 * 1024
+
+    /// A short code for a failed backup that is safe to store and log: never a path or a name.
+    public static func failureCode(_ error: any Error) -> String {
+        switch error {
+        // iCloud is full, not this device (audit B24-10).
+        case CloudBackupError.quotaExceeded: "quota"
+        case BackupError.tooLarge: "tooLarge"
+        case BackupError.libraryDamaged: "libraryDamaged"
+        case CloudBackupError.unavailable(.signedOut): "signedOut"
+        case CloudBackupError.unavailable: "containerUnavailable"
+        case CloudBackupError.verificationFailed: "verification"
+        case CloudBackupError.io("space"): "space"
+        default: "other"
+        }
+    }
 
     /// Bytes a backup of `state` needs locally while it is built: the archive plus the
     /// verification copy that `BackupArchive.prepare` writes, each about the size of the originals.
@@ -699,6 +838,9 @@ public enum CloudBackupEngine {
         let availability = destination.availability()
         guard availability == .available else { throw CloudBackupError.unavailable(availability) }
 
+        // The library this backup is of. A clear or restore while it runs makes a new library:
+        // the old one is then not published (audit A24-02).
+        let generation = await store.generation
         let fingerprint = try await store.backupFingerprint()
         // Only into the account the user agreed for: never into another person's iCloud Drive.
         // Asked before and after the listing, so the listing is known to be of that account.
@@ -723,7 +865,16 @@ public enum CloudBackupEngine {
         let decision = CloudBackupPolicy.decide(
             enabled: settings.enabled, trigger: trigger, libraryIsEmpty: isEmpty, fingerprint: fingerprint,
             lastSuccess: settings.lastSuccess, lastSuccessStillPresent: lastPresent, lastFailure: settings.lastFailure?.date, now: now)
-        if case .skip(let reason) = decision { return .skipped(reason) }
+        if case .skip(let reason) = decision {
+            // Nothing to write, but an upload may have caught up since the last run, so the older
+            // backup kept while it was uploading can go now (audit B24-09). Only the last success
+            // is protected; pruning still needs a verified backup and keeps the newest uploaded one.
+            if reason == .unchanged, let account, let last = settings.lastSuccess, lastPresent {
+                prune(destination: destination, account: account, context: context, knownDamaged: Set(settings.damagedNames),
+                      protecting: [last.archiveName])
+            }
+            return .skipped(reason)
+        }
 
         // Refuse cheaply, before reading or writing anything, what cannot succeed: a library
         // over the single-file limit (no ZIP64), or a phone without room for the work files.
@@ -735,14 +886,16 @@ public enum CloudBackupEngine {
 
         let record: CloudBackupRecord
         do {
-            record = try await write(store: store, destination: destination, account: account, context: context, now: now, progress: progress)
+            record = try await write(store: store, generation: generation, destination: destination, account: account, context: context,
+                                     now: now, progress: progress)
         } catch AccountSwitched.during {
             log.notice("cloud backup stopped: the iCloud account changed")
             return .skipped(.otherAccount)
         }
         // Pruning lists and deletes in whatever account is signed in now: only in the one written to.
-        if destination.accountFingerprint() == account {
-            prune(destination: destination, context: context, knownDamaged: Set(settings.damagedNames))
+        if let account, destination.accountFingerprint() == account {
+            prune(destination: destination, account: account, context: context, knownDamaged: Set(settings.damagedNames),
+                  protecting: [record.archiveName])
         } else {
             log.notice("cloud backup not pruned: the iCloud account changed")
         }
@@ -755,7 +908,8 @@ public enum CloudBackupEngine {
     /// step: until it exists the new archive does not count, and nothing else was touched.
     /// The account is asked again before each step that writes, since every call reaches the
     /// iCloud Drive of whoever is signed in at that moment.
-    private static func write(store: LibraryStore, destination: any BackupDestination, account: String?, context: Context, now: Date,
+    private static func write(store: LibraryStore, generation: UUID, destination: any BackupDestination, account: String?,
+                              context: Context, now: Date,
                               progress: @escaping @Sendable (Double) -> Void) async throws -> CloudBackupRecord {
         let fm = FileManager.default
         let work = context.workDirectory
@@ -789,12 +943,17 @@ public enum CloudBackupEngine {
         try Task.checkCancellation()
 
         // 3. Move it in under a new name. An existing file is never replaced. Not at all if
-        // another account was signed in while it was built.
+        // another account was signed in while it was built, or the library was cleared or
+        // replaced meanwhile (that would publish the old library after the user removed it).
         guard destination.accountFingerprint() == account else { throw AccountSwitched.during }
+        guard await store.generation == generation else { throw CancellationError() }
         try destination.place(local, as: name.archiveName)
 
-        // 4. Read it back where it now is. If that fails the new file is taken out again.
+        // 4. Read it back where it now is. If that fails the new file is taken out again, but
+        // only from the account it went into: after a switch it stays there as an unverified
+        // leftover, pruned later in that account.
         guard let placed = destination.localURL(for: name.archiveName), LibraryStore.hashFile(placed) == sha256 else {
+            guard destination.accountFingerprint() == account else { throw AccountSwitched.during }
             try? destination.remove(name.archiveName)
             throw CloudBackupError.verificationFailed("placed")
         }
@@ -803,6 +962,11 @@ public enum CloudBackupEngine {
         // 5. The info file makes it count; not in an account switched to since the move. The
         // archive without it is an unverified leftover in the first account, pruned later there.
         guard destination.accountFingerprint() == account else { throw AccountSwitched.during }
+        guard await store.generation == generation else {
+            // Cleared or replaced since the move: the old library is taken out again, in this account only.
+            if destination.accountFingerprint() == account { try? destination.remove(name.archiveName) }
+            throw CancellationError()
+        }
         let info = CloudBackupInfo(
             format: CloudBackupInfo.format, version: CloudBackupInfo.version, archiveName: name.archiveName, deviceID: context.deviceID,
             deviceKind: String(context.deviceKind.prefix(40)), createdAt: name.createdAt, revision: state.revision,
@@ -816,22 +980,42 @@ public enum CloudBackupEngine {
     }
 
     /// After a success only. A failure here costs storage, never a backup, so it is not an error.
-    private static func prune(destination: any BackupDestination, context: Context, knownDamaged: Set<String>) {
-        guard let listing = try? CloudBackupCatalog.load(from: destination, deviceID: context.deviceID, knownDamaged: knownDamaged) else { return }
-        let doomed = CloudBackupPolicy.prune(listing.entries, keep: context.keepCount) + listing.orphanInfoNames
-        for name in doomed { try? destination.remove(name) }
-        if !doomed.isEmpty { log.info("cloud backup pruned files=\(doomed.count, privacy: .public)") }
+    /// Everything happens in `account`, the one just written to: asked before and after the
+    /// listing and before each delete, and stopped at once when another account is signed in
+    /// (audit A24-01), since every call reaches whoever is signed in at that moment.
+    private static func prune(destination: any BackupDestination, account: String, context: Context, knownDamaged: Set<String>,
+                              protecting: Set<String>) {
+        guard destination.accountFingerprint() == account,
+              let listing = try? CloudBackupCatalog.load(from: destination, deviceID: context.deviceID, knownDamaged: knownDamaged),
+              destination.accountFingerprint() == account
+        else { return }
+        let doomed = CloudBackupPolicy.prune(listing.entries, keep: context.keepCount, protecting: protecting) + listing.orphanInfoNames
+        var removed = 0
+        for name in doomed {
+            guard destination.accountFingerprint() == account else {
+                log.notice("cloud backup pruning stopped: the iCloud account changed")
+                break
+            }
+            try? destination.remove(name)
+            removed += 1
+        }
+        if removed > 0 { log.info("cloud backup pruned files=\(removed, privacy: .public)") }
     }
 
     /// Deletes exactly the backups the user was shown and confirmed (archive and info file of
     /// each), and only ones this device wrote. Anything else in the folder, including a backup
     /// that appeared after the user was asked, stays. Returns how many archives were deleted.
+    /// `account` is the one the confirmed list was read from: it is asked before every file,
+    /// and the delete stops with `accountChanged` once another account is signed in (A24-01).
     @discardableResult
-    public static func deleteBackups(_ names: [CloudBackupName], deviceID: String, in destination: any BackupDestination) throws -> Int {
+    public static func deleteBackups(_ names: [CloudBackupName], deviceID: String, account: String,
+                                     in destination: any BackupDestination) throws -> Int {
         var deleted = 0
         for name in names where name.deviceID == deviceID {
             // The info first: a half-finished delete leaves an "unverified" archive, never a verified ghost.
+            guard destination.accountFingerprint() == account else { throw CloudBackupError.accountChanged }
             try destination.remove(name.infoName)
+            guard destination.accountFingerprint() == account else { throw CloudBackupError.accountChanged }
             try destination.remove(name.archiveName)
             deleted += 1
         }

@@ -156,4 +156,33 @@ import Testing
         // The ended list holds session ids only.
         #expect(shelf.defaults.stringArray(forKey: PocketCatCompanyShelf.endedKey) == ["A"])
     }
+
+    /// X24-01: companion A ended where the app didn't hear it and B started; A's
+    /// "Change expression" then finishes late. The widgets keep following B.
+    @Test func aLateWriteFromAnOlderCompanionLeavesTheNewOne() throws {
+        let shelf = shelf()
+        shelf.keep(sessionID: "A", state: state(.sleeping, at: t0), at: t0)
+        let lateChange = state(.playing, at: t0.addingTimeInterval(50))
+        shelf.keep(sessionID: "B", state: state(.eating, at: t0.addingTimeInterval(60)), at: t0.addingTimeInterval(60))
+        shelf.keep(sessionID: "A", state: lateChange, at: t0.addingTimeInterval(61))
+        #expect(try #require(shelf.companion(at: t0.addingTimeInterval(62))).sessionID == "B")
+    }
+
+    /// A companion that really started after the one on the shelf still replaces it.
+    @Test func aCompanionStartedLaterStillReplacesTheShelvedOne() throws {
+        let shelf = shelf()
+        shelf.keep(sessionID: "A", state: state(.sleeping, at: t0), at: t0)
+        shelf.keep(sessionID: "B", state: state(.eating, at: t0.addingTimeInterval(60)), at: t0.addingTimeInterval(60))
+        #expect(try #require(shelf.companion(at: t0.addingTimeInterval(61))).sessionID == "B")
+    }
+
+    /// X24-02: the end was written but the record wasn't removed (the two keys landed apart).
+    /// The readers still see no company.
+    @Test func aRecordThatIsAlsoListedEndedIsNotCompany() throws {
+        let shelf = shelf()
+        shelf.keep(sessionID: "A", state: state(.sleeping, at: t0), at: t0)
+        shelf.defaults.set(["A"], forKey: PocketCatCompanyShelf.endedKey)
+        #expect(shelf.record != nil)
+        #expect(shelf.companion(at: t0.addingTimeInterval(1)) == nil)
+    }
 }

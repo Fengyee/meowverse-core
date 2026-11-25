@@ -314,12 +314,17 @@ final class AppModel {
     /// The capture the last run left unconfirmed, offered once the library is open. Nothing of
     /// it is in the library; 继续 reopens its review, 不要了 deletes it.
     func findPendingCapture() async {
-        guard phase == .ready, pendingCaptureOffer == nil, importSession == nil, !isPreparingImport, let store else { return }
+        guard phase == .ready, pendingCaptureOffer == nil, importSession == nil, !isPreparingImport, !switchingLibraries,
+              let store else { return }
         #if DEBUG || DRILLS
         // UI tests look at the library while the capture is still held (`-MeowverseNoCaptureOffer`).
         if ProcessInfo.processInfo.arguments.contains("-MeowverseNoCaptureOffer") { return }
         #endif
-        guard let capture = await store.pendingCapture(), phase == .ready, importSession == nil, !isPreparingImport else { return }
+        // Bound to the library it was asked about (audit V24-01): an answer arriving after a
+        // restore or clear-all switched libraries is not offered in the new one.
+        let library = libraryGeneration
+        guard let capture = await store.pendingCapture(generation: library), phase == .ready, importSession == nil,
+              !isPreparingImport, !switchingLibraries, library == libraryGeneration else { return }
         pendingCaptureOffer = capture
     }
 
@@ -337,12 +342,13 @@ final class AppModel {
     func discardPendingCapture() {
         guard let capture = pendingCaptureOffer else { return }
         pendingCaptureOffer = nil
-        forgetPendingCapture(capture.sha256)
+        forgetPendingCapture(capture.sha256, library: libraryGeneration)
     }
 
-    func forgetPendingCapture(_ sha256: String) {
+    /// `library`: the generation the capture belongs to; a later library's file is left alone.
+    func forgetPendingCapture(_ sha256: String, library: UUID) {
         guard let store else { return }
-        Task { await store.removePendingCapture(sha256: sha256) }
+        Task { await store.removePendingCapture(sha256: sha256, generation: library) }
     }
 
     /// What an import read, and where the photo also lives.
@@ -408,11 +414,15 @@ final class AppModel {
                 // user confirms or discards it, so quitting here does not lose it.
                 if loaded.capturedOutsidePhotos, let save = loaded.photosSave.flatMap(PendingCapture.Save.init), let store {
                     let capture = PendingCapture(data: loaded.data, save: save)
-                    do {
-                        try await store.keepPendingCapture(capture)
-                        held = capture.sha256
-                    } catch {
-                        log.error("capture not held for a relaunch")
+                    // Once more after a failure: a capture not held is lost if the app stops
+                    // before the review saves it, and the review then says so.
+                    for attempt in 1...2 where held == nil {
+                        do {
+                            try await store.keepPendingCapture(capture)
+                            held = capture.sha256
+                        } catch {
+                            log.error("capture not held for a relaunch (attempt \(attempt))")
+                        }
                     }
                     try Task.checkCancellation()
                 }
@@ -423,7 +433,7 @@ final class AppModel {
                 // Last suspension point passed: a cancel that arrived meanwhile still wins.
                 try Task.checkCancellation()
                 guard generation == prepareGeneration else {
-                    if let held, !keepsHeld { forgetPendingCapture(held) }
+                    if let held, !keepsHeld { forgetPendingCapture(held, library: library) }
                     return
                 }
                 let session = ImportSession(draft: draft, generation: library, preview: preview.map { UIImage(cgImage: $0) },
@@ -441,7 +451,7 @@ final class AppModel {
                 if !comparesWithRoom(excluding: existing?.photoId) { startRecognition(for: session) }
                 startSimilarity(for: session)
             } catch {
-                if let held, !keepsHeld { forgetPendingCapture(held) }
+                if let held, !keepsHeld { forgetPendingCapture(held, library: library) }
                 guard generation == prepareGeneration else { return }
                 if Task.isCancelled || error is CancellationError {
                     log.info("import cancelled before review")
@@ -565,10 +575,12 @@ final class AppModel {
 
     /// Runs one store change and then republishes the store's own state, whatever the outcome:
     /// the room and library always show what is on disk, never a stale or half-applied copy.
-    func perform<T: Sendable>(_ body: (LibraryStore) async throws -> T) async -> Result<T, PhotoSaveFailure> {
+    /// The change is for the library shown when it was asked (or, for an undo, the library its
+    /// receipt came from: `library`); once that library was replaced, the store refuses it.
+    func perform<T: Sendable>(in library: UUID? = nil, _ body: (LibraryStore) async throws -> T) async -> Result<T, PhotoSaveFailure> {
         guard let store else { return .failure(PhotoSaveFailure(message: String(localized: "房间还没有打开，请稍后再试。"), error: nil)) }
         do {
-            let value = try await body(store)
+            let value = try await LibraryStore.$expectedGeneration.withValue(library ?? libraryGeneration) { try await body(store) }
             (state, libraryIndex) = await store.indexedSnapshot()
             librarySaved()
             return .success(value)
@@ -585,7 +597,7 @@ final class AppModel {
         let interval = signposter.beginInterval("Save")
         defer { signposter.endInterval("Save", interval) }
         do {
-            let item = try await body(store)
+            let item = try await LibraryStore.$expectedGeneration.withValue(libraryGeneration) { try await body(store) }
             (state, libraryIndex) = await store.indexedSnapshot()
             librarySaved()
             Perf.mark("Saved")
@@ -689,6 +701,9 @@ final class ImportSession: Identifiable {
     var pendingCaptureSHA: String?
     /// Taken in an earlier run and reopened after a relaunch: no longer "just taken".
     var resumedCapture = false
+    /// The only copy of a photo just taken is in memory: holding it for a relaunch failed, so
+    /// quitting before it is saved loses it, and the review says so (audit E24-03).
+    var captureOnlyInMemory: Bool { capturedOutsidePhotos && pendingCaptureSHA == nil && !resumedCapture }
 
     init(draft: ImportDraft, generation: UUID, preview: UIImage?, alreadyIn: [PhotoFurniture], existingPhoto: PhotoRecord? = nil) {
         self.draft = draft

@@ -1,11 +1,11 @@
 {
-  "sourceCommit": "50328a126753f611f2c9aec0c805c36a425a2b45",
+  "sourceCommit": "2f9d0415a2a0244ee689cac77a7e8bc8e8f5706e",
   "generatedBy": "scripts/release/export-public-source.mjs in the private development repository",
   "counts": {
     "app": 244,
     "extensions": 53,
-    "core": 226,
-    "ui-tests": 79,
+    "core": 246,
+    "ui-tests": 80,
     "project": 13,
     "scripts": 14,
     "tools": 22,
@@ -13,9 +13,9 @@
     "overlay": 2
   },
   "excluded": {
-    "outside the allowlist (web demo, art/, assets/, scripts/, .claude/, internal docs, …)": 1551,
+    "outside the allowlist (web demo, art/, assets/, scripts/, .claude/, internal docs, …)": 1643,
     "art: images in asset catalogs (app icons, illustrations, pixel cat, control symbols)": 188,
-    "art: app resources (cat and furniture meshes, textures, room themes, sounds, fonts, DINOv2 weights)": 453,
+    "art: app resources (cat and furniture meshes, textures, room themes, sounds, fonts, DINOv2 weights)": 461,
     "private: evaluation notes on the owner's photos": 1,
     "art: media by extension": 1
   },
@@ -36,7 +36,7 @@
     },
     {
       "path": "docs/ICLOUD_SYNC.md",
-      "sha256": "fb29242caafa6ec401d98a2b2f31075c84424703c1a6e3b48a5fde88731f857e"
+      "sha256": "69d2366e11eb55627a943e74009828b748d402ade27a632fc7e9d699cfb96992"
     },
     {
       "path": "docs/IOS_LIBRARY_MODEL.md",
@@ -84,7 +84,7 @@
     },
     {
       "path": "ios/Meowverse.xcodeproj/project.pbxproj",
-      "sha256": "8552abf3a062aaa72e1b9ad5a3d0511529f1548d8ec8b3e8a75d2b99357f400a"
+      "sha256": "2c1b731f7750ccc06f0ea59293b4c57e399c000b2b4a539b9f95dfe733834af2"
     },
     {
       "path": "ios/Meowverse.xcodeproj/xcshareddata/xcschemes/Meowverse.xcscheme",
@@ -96,11 +96,11 @@
     },
     {
       "path": "ios/Meowverse/About.xcstrings",
-      "sha256": "101a89348f5a887aa32ce2c6545ff6f9259eb875df350ed9ce78debd07320298"
+      "sha256": "c360672a7d4fb0d8a508738d2bda367023c5ca3bc7de4103f4a8f5d3e6267e46"
     },
     {
       "path": "ios/Meowverse/App/AboutView.swift",
-      "sha256": "154a9cff85cff55b0ca7e6808f688229ebc7b6a6a262932c34f6c8187fbfe5be"
+      "sha256": "bcbf010ecd571204e71ce89406bf35f6faec5f90a9df5e0044b816833ad8a4d5"
     },
     {
       "path": "ios/Meowverse/App/AppIconPreview.swift",
@@ -112,11 +112,11 @@
     },
     {
       "path": "ios/Meowverse/App/AppModel+Backup.swift",
-      "sha256": "c635e866beae57fb3b52c210aa5683c87bcad699349cdaff3e8513048b0601c4"
+      "sha256": "64729076e6cf2f435563af24a0ad949407507a61d34bbf558bf103becb139582"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Batch.swift",
-      "sha256": "075c9ce5987727c10a8730e01ff5ab5a6df313ff40c341e204fddc70518d9683"
+      "sha256": "af9421e805ce4967f691459b80ad1b07141879f24c0e5bb154c43228701e74b7"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Furniture.swift",
@@ -124,35 +124,35 @@
     },
     {
       "path": "ios/Meowverse/App/AppModel+ICloudBackup.swift",
-      "sha256": "2a515f157f9d0fce447319e39d8db76020f824ce22616a4877a0599d40d2ab07"
+      "sha256": "1b42312192ae53039abd407f63aa70ffeafafe97d2a27ef2221f1fed4a08ecc4"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Photos.swift",
-      "sha256": "cc23e49a1b68f338dc8b27474e1de657f88f19488d945d0664eb5b61125934cb"
+      "sha256": "a648d8f4f928ca92aac465b18785a526ce1c6a7df6637ece2014156dfa75c712"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Rooms.swift",
-      "sha256": "135e57d8f0a9e4824a5441cd0722b45dc8c9a71465e0fbdbd4b7dbc130057891"
+      "sha256": "1ad78e42550b7348b409b38c6bf5f96dc22480110dbeadf67bd7a3defe1ffd22"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Similarity.swift",
-      "sha256": "813db26c8413920a01af507bc0452c1d971e380d8b46fff4bd4456ea62c3bbe6"
+      "sha256": "78ea58c7c30531d9d53dd532f110c1896c406cb9ae4a5bf2d615e5724e5c14db"
     },
     {
       "path": "ios/Meowverse/App/AppModel+Suggestions.swift",
-      "sha256": "c7665d9fc186ee6f04dd15a0e0712a612b5af5af80c64f26b9c366978e2b9e04"
+      "sha256": "1b15130536ef108c2fa10e4e4b9db682dd656f007c13fe583183c4ead582b8dc"
     },
     {
       "path": "ios/Meowverse/App/AppModel.swift",
-      "sha256": "a5989c244631ae7d271ca960cadcdd81daa9b4b4d7c48f5e5d28af8b0a5104f7"
+      "sha256": "d166b766e4573c869965996d0d09d2adf9ec3c2fd4ccb15e6ed1e84f60138c06"
     },
     {
       "path": "ios/Meowverse/App/CatPackLibrary.swift",
-      "sha256": "01d50e981456088c3b1eea409c740c738cbabad658b53aef7a859bb244a716cb"
+      "sha256": "01a3bb930b9459577feb9f0778645728ce035834b4c7b1f0a48758227fbbec24"
     },
     {
       "path": "ios/Meowverse/App/CatProfiles.swift",
-      "sha256": "42d2ccb88f37778155c769b27c348106701afba55f747540a32bfea3384ab850"
+      "sha256": "b077fe43cfc1f586cf47e1fd74f1c5334b7c7ef69911ee07d125428af5c4fe2f"
     },
     {
       "path": "ios/Meowverse/App/CatTierSupport.swift",
@@ -160,7 +160,7 @@
     },
     {
       "path": "ios/Meowverse/App/Credits.swift",
-      "sha256": "ac92b6ad3c84c0561bf81e74a2ceccc975eb919ee37165a6c6fcceb93b502a75"
+      "sha256": "5ef79c01613c8734070ed99843f7f2dff799289249ad2ba96c57568879d31253"
     },
     {
       "path": "ios/Meowverse/App/DinoPhotoEmbedder.swift",
@@ -176,11 +176,11 @@
     },
     {
       "path": "ios/Meowverse/App/ICloudBackupLifecycle.swift",
-      "sha256": "cbfc6d36638183c53a3e65558120948b057902ee850ebb30788b0fdc63a988dd"
+      "sha256": "99a3f3baa56902d4ddfface6c69fa589fe9891a4f54f6dd114ee3d290e02f930"
     },
     {
       "path": "ios/Meowverse/App/ICloudBackupView.swift",
-      "sha256": "d10e7bd78b6602df60dddb91272a00e367a90040238cb5ac56b69f3a05e4da53"
+      "sha256": "41926032f6eb6da56fcac9b1e756dbecb336618d54ae1bdf99e4d425f016e53c"
     },
     {
       "path": "ios/Meowverse/App/MeowverseApp.swift",
@@ -188,15 +188,15 @@
     },
     {
       "path": "ios/Meowverse/App/News.swift",
-      "sha256": "7895e11cc59c47d1ec66b2a85d7ea9ed145d62d39ceba9d9baf5a8f0ab928d5a"
+      "sha256": "ab08114cc004c8d546e449308599dfd589dfd96a9f72c830277d0e58c575b280"
     },
     {
       "path": "ios/Meowverse/App/PhotoLibraryLink.swift",
-      "sha256": "65339ffe3223897bdeb8b0afce9f7a2d53de03ad52805422c308267139720143"
+      "sha256": "8eb3602128658ae812c300e164d2e5e9bc8dea7445ed03077745aaac444ed91d"
     },
     {
       "path": "ios/Meowverse/App/PhotoReachWording.swift",
-      "sha256": "b6a1a752d92616c0f72b0a86af58754eee3f2aa9823ce4f5ddb54b488770980c"
+      "sha256": "fc9810e05aace3996375d957582fce06da72a717f99386203dad419e63751327"
     },
     {
       "path": "ios/Meowverse/App/QuickActions.swift",
@@ -208,7 +208,7 @@
     },
     {
       "path": "ios/Meowverse/App/SettingsView.swift",
-      "sha256": "48732f0acf69e9f698cc62715b7c8fc8a28a805cba5ed4cc624046fc704a4621"
+      "sha256": "e3615793dfe78e3131eab315a0a97816714cd2c7b56cc7f2693d2bbb4740903f"
     },
     {
       "path": "ios/Meowverse/App/SponsorCreditBanner.swift",
@@ -220,7 +220,7 @@
     },
     {
       "path": "ios/Meowverse/App/UbiquityBackupDestination.swift",
-      "sha256": "c70d2009b72f0e3cb6616ad7ac8360d740fbbf30132563c3f97f7e931d238358"
+      "sha256": "1e4b92e2efe6585e05e8954a0eab63dd299d95b0801d85840819ac6263cffe8b"
     },
     {
       "path": "ios/Meowverse/App/Wording.swift",
@@ -504,7 +504,7 @@
     },
     {
       "path": "ios/Meowverse/CatProfiles.xcstrings",
-      "sha256": "33f614fbc4cf7718a08e9f20c1e8d98188e364f6f4e714401bedd135bc3ed771"
+      "sha256": "3e708d17a376ef079efe84c750ebf68eef1b766d74499029cfd81d1240ad06c6"
     },
     {
       "path": "ios/Meowverse/CatalogNames.xcstrings",
@@ -512,7 +512,7 @@
     },
     {
       "path": "ios/Meowverse/Companion/PocketCatReturn.swift",
-      "sha256": "eb95506838f745ff62051ad30c8320c843a70acd3226de1184916b66f6ac9fc0"
+      "sha256": "e17344c0ec2ab47a6752158168048b62ec1b26412cc608fbfb11a087173ff9d7"
     },
     {
       "path": "ios/Meowverse/Companion/PocketCatRoute.swift",
@@ -520,7 +520,7 @@
     },
     {
       "path": "ios/Meowverse/Companion/PocketCatView.swift",
-      "sha256": "a08b9c49c720622e4f8d01350e58307dece2ed37631122ff4e4e7f59afc75926"
+      "sha256": "e92b8a7444351d62051a3ade968cc4e9cd2c6ebd972e3143908115cd4cde79ae"
     },
     {
       "path": "ios/Meowverse/Companion/PocketCatWatchGallery.swift",
@@ -564,7 +564,7 @@
     },
     {
       "path": "ios/Meowverse/DesignSystem/OverlayGallery.swift",
-      "sha256": "cb96f5c5b572b377b09e0132ace2ac2a4df7eb16e43e393590af7f224c040d84"
+      "sha256": "41d3632e3c70eb084031bce62c50ee882629d0c822859e14943a98713c22f459"
     },
     {
       "path": "ios/Meowverse/DesignSystem/PawRing.swift",
@@ -580,7 +580,7 @@
     },
     {
       "path": "ios/Meowverse/DesignSystem/RoomFolio.swift",
-      "sha256": "a793c044b04554a79148009d0a3f94e5f40b775e53a640ac2a5cdda386898f2b"
+      "sha256": "7aa8d55f4710b22b0cf86e00e2e9ee8b554bec018f038904ccf6489f0957587c"
     },
     {
       "path": "ios/Meowverse/DesignSystem/RoomLibraryControls.swift",
@@ -604,15 +604,15 @@
     },
     {
       "path": "ios/Meowverse/Feedback/FeedbackConfig.swift",
-      "sha256": "18530512ce7331a253772005c23f6ff386895a957d13e5be3ec79ccecf627cd9"
+      "sha256": "6c1f65b62e9294ab4aa26e5740fd46e7bf25d3ee1e4fc70717b75f29b342602c"
     },
     {
       "path": "ios/Meowverse/Feedback/FeedbackGatherer.swift",
-      "sha256": "23f777fb4f52cbb5c601bc44f0606846317a2a202cf009eabb63fcc4d6af2f3b"
+      "sha256": "6fa50fe9f46173e30c66c342e9efe58739a0b58093af4c4fca0a4030da01b526"
     },
     {
       "path": "ios/Meowverse/Feedback/FeedbackView.swift",
-      "sha256": "c5cea239d8c2411ae69194bc04b8de824a426614831dbcc201eebc41fe500948"
+      "sha256": "490d63970b437b62fd51cebcdad8868b4b4e0d482af8ecaf64f906dacc035a5a"
     },
     {
       "path": "ios/Meowverse/Feedback/MailComposer.swift",
@@ -628,7 +628,7 @@
     },
     {
       "path": "ios/Meowverse/ICloudSync.xcstrings",
-      "sha256": "138ac7bd56a4c804215915318d919d37d0177a0352dceb7cdf33038189da3e0f"
+      "sha256": "e8b9a80c8874d14cfa4b1f496ba60eb148528ada9abd531c74f28a38f7bb222f"
     },
     {
       "path": "ios/Meowverse/Import/AddFurnitureFlowView.swift",
@@ -644,7 +644,7 @@
     },
     {
       "path": "ios/Meowverse/Import/ImportFlowView.swift",
-      "sha256": "a7ce35740925f4bc9b82b0e1546d6850fdbbd4fade53ac58725f02795087071d"
+      "sha256": "0a03390a85f3e82bbafdda6d76b23832d8767e2f68b67bcc36b242a52c6b8b78"
     },
     {
       "path": "ios/Meowverse/Import/ImportQueueBar.swift",
@@ -664,15 +664,15 @@
     },
     {
       "path": "ios/Meowverse/Import/SuggestedFiling.swift",
-      "sha256": "203840c12abd5a70875b8243d5b11008b6958e07596e063f51f95460698d0e1b"
+      "sha256": "c8f5e1d6ed03c9747ec20e82744669f85ab4bf37ed41977c5c2da69193cd948b"
     },
     {
       "path": "ios/Meowverse/InfoPlist.xcstrings",
-      "sha256": "448f7e75568444044b1394ff5a60c9a5509ba5deeb6ea387a5ad9171e87d8d95"
+      "sha256": "cbf90d5ffa99226b70cdf0f2309e87b4a36ad5adf9044c22aac45f35754b472d"
     },
     {
       "path": "ios/Meowverse/Localizable.xcstrings",
-      "sha256": "4fc735d3656ed07aa368d53872d40ccec13543df80eaa83866a7c2141f7bc560"
+      "sha256": "78983ecfc20a3b0fbfd24b4f15834ada1df9ce7b9b1c7c38f5555609d101966d"
     },
     {
       "path": "ios/Meowverse/Memories/FurnitureDetailView.swift",
@@ -684,7 +684,7 @@
     },
     {
       "path": "ios/Meowverse/News.xcstrings",
-      "sha256": "80786ecb3997ac46942155d7a5cb2448123f0b7d7fb5c3f2476fe3d402323fd7"
+      "sha256": "6e539b2c6c9f8b01f87fe9396fbfc8dfebea4dcd3f5cf6136e2fe7e317a557e3"
     },
     {
       "path": "ios/Meowverse/Notifications/ClearedNotificationsDrill.swift",
@@ -700,7 +700,7 @@
     },
     {
       "path": "ios/Meowverse/Notifications/ReminderScheduler.swift",
-      "sha256": "be4389bd5decec4df82bcdc8ce37d04e48bbc25031f0acab02222af0ecfa2e79"
+      "sha256": "975ff783db5ab16f0281b60eee4397e60d5e4dfef62ee0e6b0e7d8e4f7fcbae5"
     },
     {
       "path": "ios/Meowverse/Notifications/ReminderSettingsView.swift",
@@ -728,7 +728,7 @@
     },
     {
       "path": "ios/Meowverse/Photos/PhotoLibraryView.swift",
-      "sha256": "ead69f35c2a3f9849d2059fc4195d1d86f1ca844d314416e66489a852c1a139c"
+      "sha256": "1efb5cede0a1d4e82ab2c0671df64d422868c4725d4307fef2e5759f678f7dff"
     },
     {
       "path": "ios/Meowverse/Photos/PhotoStorageNotice.swift",
@@ -744,11 +744,11 @@
     },
     {
       "path": "ios/Meowverse/Room/ArtLibrary.swift",
-      "sha256": "733babb66ad28d929a14ac3048c2017599034dca0aaf520ce6e8c3d8762e88fd"
+      "sha256": "0edbc1a031a61d3e7100df2ca0412a3071748d9846027ec25d922d1ddbcc1926"
     },
     {
       "path": "ios/Meowverse/Room/BellaActor.swift",
-      "sha256": "36ad7d38f52fc8d59219d8f81b622cefa09b155c09eb1179d5869356e617876c"
+      "sha256": "c8dee16ffa1f610841d98c112c64ffa7478a479a2d6df549f4254bdb63ccfe18"
     },
     {
       "path": "ios/Meowverse/Room/BellaCaption.swift",
@@ -768,7 +768,7 @@
     },
     {
       "path": "ios/Meowverse/Room/CatProfileCard.swift",
-      "sha256": "83d928be181f5edf56944f8a0680dd05b9217333a1590ce59ac38aa64f7ec558"
+      "sha256": "7855029d12c3cb1866ea96a80f03b3c4edb4da4937088520d42ee1bc6567472b"
     },
     {
       "path": "ios/Meowverse/Room/FurnitureBaseColors.swift",
@@ -832,7 +832,7 @@
     },
     {
       "path": "ios/Meowverse/Room/RoomARScreen.swift",
-      "sha256": "3b7f0c7ec53ced6a938c58b9bc96883588e539e2bfa4ec8f07864cd6c825f62d"
+      "sha256": "62fb482bcdefc70ef99d5fe5e54ffe37eb3a9e1fdde7de08f3fe77c916646882"
     },
     {
       "path": "ios/Meowverse/Room/RoomAppearance.swift",
@@ -852,7 +852,7 @@
     },
     {
       "path": "ios/Meowverse/Room/RoomFloorShadows.swift",
-      "sha256": "40131cda29f5c61f1f82c1f586414cdd501bd6fef67dd4d28926d705941e9f9e"
+      "sha256": "c681c3ad793e241d322aff165eb5b156818835ea6906660468b27af66d863ef9"
     },
     {
       "path": "ios/Meowverse/Room/RoomLighting.swift",
@@ -864,7 +864,7 @@
     },
     {
       "path": "ios/Meowverse/Room/RoomNewsPanel.swift",
-      "sha256": "5d1e623cdaccce8a9ef264a5524cfdfacdb0f7e2c010be42f01f42db866e239d"
+      "sha256": "81bc0f433eea7ca92fda0114824851de31f2bcfcc675e6cc450752890c337a2e"
     },
     {
       "path": "ios/Meowverse/Room/RoomPlaySession.swift",
@@ -872,15 +872,15 @@
     },
     {
       "path": "ios/Meowverse/Room/RoomPostcard.swift",
-      "sha256": "c9d76b64c9620337b7f49963f337ca49923ac2435dc7e466d9b3213b590ff596"
+      "sha256": "4859ad3f46b2400b791278df6bb613ee7084f3a9f6b065cf41fb2930e181ab0d"
     },
     {
       "path": "ios/Meowverse/Room/RoomSceneView.swift",
-      "sha256": "704ae14d62d1b5ed4b3b89cd51e550dc9ff459aacd53727cbaff3ee41c0e4146"
+      "sha256": "ba1210b9eff43c71bbdd2637fde3a20009fb897e6c71f03c928bb6a600094d75"
     },
     {
       "path": "ios/Meowverse/Room/RoomScreen.swift",
-      "sha256": "5e9e71bcc13c5e22a022ce5fc6d0e51712e922044e9a2d1bca05ad7b9b46eb0c"
+      "sha256": "6a759018580b1cd1497ab823ec185049b59a2251c188d8174b247d1ef6e1d49c"
     },
     {
       "path": "ios/Meowverse/Room/RoomSetThemeArt.swift",
@@ -940,11 +940,11 @@
     },
     {
       "path": "ios/Meowverse/Sync/AppModel+ICloudSync.swift",
-      "sha256": "fb763b0d5bf405f9c0b72711b42b8d6aafcd8b13cc5e62f87305ca2cd41dcd0f"
+      "sha256": "a54ec12cc15ec30aa47bfaf2e5d9ad26bdf787c0eb37a98982051e8c3dcabff3"
     },
     {
       "path": "ios/Meowverse/Sync/CloudKitSyncTransport.swift",
-      "sha256": "0c8d9152e9a4d3a6fea70bb9e9695d6a818687f26beede2ea1b7cddb297bb1b1"
+      "sha256": "27a3155a4ae19cacbb9762e9859f8f64da0d21a162c3319160046ce41b2ae68d"
     },
     {
       "path": "ios/Meowverse/Sync/FolderSyncCloud.swift",
@@ -952,7 +952,7 @@
     },
     {
       "path": "ios/Meowverse/Sync/ICloudSyncLifecycle.swift",
-      "sha256": "bdcd91dcae24154b6023bb7b45cb707848a965b2b04b9416330b27ebcd4f9517"
+      "sha256": "40251bed4420bd9c62fa9c044868949bf160a83ce1b8d2be602b1cfe3dd046d0"
     },
     {
       "path": "ios/Meowverse/Sync/ICloudSyncView.swift",
@@ -1012,7 +1012,7 @@
     },
     {
       "path": "ios/Meowverse/Tour/TourCoordinator.swift",
-      "sha256": "b2f36b1e5d80750837eec65380add6289d72280f6316b055163143d96295b150"
+      "sha256": "36a81b0ab6ffb2a72a6b1093ef87f78e1fda8c6ed34b75713250f0acc13a32f1"
     },
     {
       "path": "ios/Meowverse/Tour/TourHost.swift",
@@ -1108,11 +1108,11 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/BackupArchive.swift",
-      "sha256": "fe9f151a7b967399d7b7a0d44f93988253cca132a2b88ffb29eea22c7a52f277"
+      "sha256": "267d9e464e1394e9c3e567b24822ba65cf411cec939bd14ae3f4613f5e354080"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/BatchSuggestions.swift",
-      "sha256": "de9e8952459ab05873c50b3fcb9b580df4e14b7365a79d7b498006088b254421"
+      "sha256": "ccd26c0f6b2ca3d1e47fc3d83075fc6e590c8e6cc00d03fb8130540f85f46904"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/BellaCommand.swift",
@@ -1148,7 +1148,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CatPack.swift",
-      "sha256": "1aee36ced5380ceb6f2039112e50b65debacd88588be14918f399068a46f4815"
+      "sha256": "f939141f9d88a6fe20d27e10e3b5178b9d9474eec29304433243ebb746915489"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CatPackStore.swift",
@@ -1156,7 +1156,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CatPackTiers.swift",
-      "sha256": "7a5eb6eaa4ffc820296429635c805f7ad61e34b58a54b69c03cf8ee54e2ad03e"
+      "sha256": "4d5c9a66deea177d85ed6dcb6dd18caa307e8806e54a4797d9f86be8ef505f45"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CatPlay.swift",
@@ -1172,7 +1172,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CloudBackup.swift",
-      "sha256": "e946f602553b8c93220f25a6b4c311548e3ccd43177eb40467d5a8259203ed3c"
+      "sha256": "33a0ce0f40d5be757f1f4d2f1362cc411a7234b4152405923f71d7ae3f0da116"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CloudKitSyncCoding.swift",
@@ -1180,7 +1180,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/CloudSyncMirror.swift",
-      "sha256": "0d5d4630ec55192bb4f460c367a5d08656e862ec7ffc1984c25ae077d8fa3d2d"
+      "sha256": "62e00a507061174e1418d61ae5d17f3b9ac37a027d2424cb256fd3caeef1431e"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/ColorGridEmbedder.swift",
@@ -1204,7 +1204,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/FeedbackReport.swift",
-      "sha256": "84015a163c68573f6c3a6f4998b62d22a05e0d5a351dbd98e61d69dd4a4c13f3"
+      "sha256": "2c203f88b875dbeaf75f682b80ea50bbba0f1df5f1bd58bca1e1038d698a30e0"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/FurnitureFloorShadow.swift",
@@ -1240,7 +1240,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/LibraryStore.swift",
-      "sha256": "1c168015dc2eda8368d28b57b8ec9db59a5bdbd11e0bc24b66dd5e28855e019c"
+      "sha256": "855d8fc3588eade3161b7f60821b3c279bef2f7b70547817a180b4f8dc20a12a"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/LoadWatchdog.swift",
@@ -1276,7 +1276,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PendingCapture.swift",
-      "sha256": "4eadcca0f02ee0e7ef72606788740f7879e4fd424bf1117e88202e514956e808"
+      "sha256": "be313d96dbf58ad5611d1ad74017994694759da8a46b4eb392824b888ba5e1ba"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PhotoClustering.swift",
@@ -1299,8 +1299,12 @@
       "sha256": "80785ad066e56a676c0b8fc46b976f52dd4ac08aa9691081f0a4cf8ba3d11979"
     },
     {
+      "path": "ios/MeowverseCore/Sources/MeowverseCore/PhotoOriginalVersions.swift",
+      "sha256": "60c2093b19b701c5da316d29be285c47cc46ee0ab73e66518e3f5d969fb8f3d9"
+    },
+    {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PhotoReach.swift",
-      "sha256": "963f381db717b95681c6de91cccc92cfc811cd172b67ade72530df440de45887"
+      "sha256": "e9a8da4ce59d84ebbc68af56168747d7f6ac8c1befe863a473e7a73d3868aa3a"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PhotoRequest.swift",
@@ -1308,11 +1312,19 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PhotoSimilarity.swift",
-      "sha256": "f061f71efce04d9e80faddc4682596dec0695b85db40fff9accdc7a8ee0f1047"
+      "sha256": "921eb649b1de60573e7f6d6e5aba7707aa703fcc16f66a586f0a479686c71e3b"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PickerImportJournal.swift",
-      "sha256": "9e045025c255634b073c676e993cc8b282d5994627eb8c77d2ec20bcff204c54"
+      "sha256": "716a557d28027ed5c31122c39dd0059b77e0fe3dbe9d12f008d87c9160deebcc"
+    },
+    {
+      "path": "ios/MeowverseCore/Sources/MeowverseCore/PlacementPreview.swift",
+      "sha256": "24d72fcdecdc30c96662109708501b305baf893fe72b53227f14807a49a4c57c"
+    },
+    {
+      "path": "ios/MeowverseCore/Sources/MeowverseCore/PostcardBrand.swift",
+      "sha256": "0705fd4349b18e62947aa7844ad49f5ec2381fbcaac14d161552564b33a6171c"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/PublicPages.swift",
@@ -1328,7 +1340,7 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/ReminderPlanner.swift",
-      "sha256": "7d3ceebe9740f7c19ae58e6f4ed94138d1fb1377f7672a44e2f7bc85b5114653"
+      "sha256": "b30aec67bd832fcf0415f55376f015bc163a9c272a16b29a77d6a5d859822bbb"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/RenderQuality.swift",
@@ -1364,11 +1376,15 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncCapture.swift",
-      "sha256": "ac8864bf1b9c0630b4b4a43f01be16d8e31835c376101219ee46b816cee44ae0"
+      "sha256": "477840b071eb6f45f6ead82adf52096dc7b9981d448d76fd9e965df891602e71"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncClock.swift",
       "sha256": "b5829134ad3744f9fc65a8bb7a2a116dae02b0143a8e7816b5cebc8c3c0a2c23"
+    },
+    {
+      "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncDeadline.swift",
+      "sha256": "1f94e5f334db3161194a59dc18ce2702aef30e458fd656ff454cbd152afaae27"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncMemoryCloud.swift",
@@ -1380,19 +1396,19 @@
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncRecords.swift",
-      "sha256": "3e8059c0f59ce288ff3c3cf06cfc5055f47754684d339cce1be48745d74f5fef"
+      "sha256": "5417b39aba0e6ffdb71bdafa7a5fc3a53a4ba0df44c6aa50e681c0ce67bacc9f"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncSession.swift",
-      "sha256": "787d77f70d91b3ebb5f6becdfdb2b2bb7aa043c10908265c6b92b1f52dc01397"
+      "sha256": "84dfc49077c4eedc8416d6db1d676889f4d03dfe0609914ca2019452916bcb31"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/SyncTransport.swift",
-      "sha256": "c97dcf2327b3451fd87791b4b9b20034b19dcbaa50565a9e45e627fd59fd7628"
+      "sha256": "3dd07400d544893dc36f6dee7b5595892c02a50614b258acb34e6cd5bd663c05"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/TestBuildNotice.swift",
-      "sha256": "608b3ebf2f077e48eff8db80d0526bfbe5eb76c50343048ae2cc6e558cab1091"
+      "sha256": "960acc6a73156e98d324b8c713fa2dd6c59518785ab3f61c5013f8b87aff8168"
     },
     {
       "path": "ios/MeowverseCore/Sources/MeowverseCore/VisionFurnitureRecognizer.swift",
@@ -1421,6 +1437,10 @@
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/AppShared/CatProfiles.swift",
       "symlink": "../../../../Meowverse/App/CatProfiles.swift"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/BackupArchiveSidecarTests.swift",
+      "sha256": "cbc00d428d5d0b2af3806cd4d7b42a630a2213099c11deb6c0b855ed8ad9afe9"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/BackupCatNameTests.swift",
@@ -1476,11 +1496,11 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CatPackTests.swift",
-      "sha256": "b3979c5fc943b5297652400e15680ee62ac6928f1e6eee26e7ec079b5bee6a87"
+      "sha256": "582a5c17aac93550c01633d186d7517de76661fd2b15aa002af5b733d77e1e89"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CatPackTierTests.swift",
-      "sha256": "e2a7d6bee9b1e8d564bdfce60722d9b84e1b349af5d2d5db84c9bc943ed7fd6e"
+      "sha256": "5ab02389f6ba40828ba84f1d86f7147b25ff3db624c649cb59594e06c56c3fc7"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CatPlayTests.swift",
@@ -1488,7 +1508,7 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CatProfilesTests.swift",
-      "sha256": "5ce5199fa46381796b89c05fafc5ffb16eb7a49866de767c3896b9b9eca9e3f1"
+      "sha256": "ea149af49d88f83b130b80bca3061e3bf74319d23cb6216ba8b5608a15e5537b"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CatRoutineTests.swift",
@@ -1503,8 +1523,12 @@
       "sha256": "9ba7d0ed659999eb3e414a26cdfc3705ad320430992569a83e16c13ce2bf75db"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CloudBackupRetentionTests.swift",
+      "sha256": "43f349f7b3e9df4161c7c0127f46a73174fbfce47717e8a375fb9892ca53a718"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CloudBackupTests.swift",
-      "sha256": "57476b5e7707b8b7da44f9b94172dcb9be980e76bbd289dec671c7231d302b7c"
+      "sha256": "bdd560a91a8ed24d25f3bc3e1590edea45572986aef3a3cb9089d18a2d461eab"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CloudSyncTransportCodingTests.swift",
@@ -1521,6 +1545,14 @@
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/CreditsRollTests.swift",
       "sha256": "599aa6d63c49264d599181ca6ec0d1715553b40a6f71ddf7cf8daf9c0d22ae5a"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/DriveBackupLeaseTests.swift",
+      "sha256": "84af04e765e5676b2d159ee84f256305e906e8e1f83d505c268eb7160fed1a8e"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/DriveBackupOwnershipTests.swift",
+      "sha256": "6cc71ab8be75d906521bc36de3a86c7e586aa16233d90854c13f6b21c7c706de"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/ExpandedRoomBackupTests.swift",
@@ -1543,8 +1575,12 @@
       "sha256": "28b78028c824c3cb9c91710773bdcf09dd935598bf6ef1e2ae500b9ac3ddafc0"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/FeedbackDisclosureTests.swift",
+      "sha256": "90671dbf23a1bdc28470b89f6150656a588fd38bc52738b17384e152924e0be3"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/FeedbackReportTests.swift",
-      "sha256": "a9a1b22d2d4430fd391d6d62055746832fef89f0e9e1ca16d668bfcc489fb7d7"
+      "sha256": "bd12c90385a14e2ddd30ee64af8718cd15c63db22cbc73ead3d4f6c751794c93"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/FirstLaunchNameTests.swift",
@@ -1595,6 +1631,14 @@
       "sha256": "9adf460f5503303f8dbc06a2a2465b6b692daa25c08572f36f8c5d9d77a9cfcb"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/LocalLibraryRecoveryTests.swift",
+      "sha256": "6662d3005b9a45e6c2ecf858c674bb28d807f4ac43155f44b4c5effeb366392e"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/MutationReceiptTests.swift",
+      "sha256": "2acadab1d805eacbc7c4bc87883f3f8e281a41d478a48bb6c47bbb26d59b538e"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/NativePetFeaturesTests.swift",
       "sha256": "e2212c3bb1426dcc0ded8d15f1410ba2e197363349d58b1d90c045c237e0e8fb"
     },
@@ -1632,7 +1676,7 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PendingCaptureTests.swift",
-      "sha256": "8dc0e4594abee524f517609f2b93c03dace65d6be9b660baec7ce3dc057a7b7e"
+      "sha256": "66d42a7cba377be6e6e13488d6580bd1750520e3391b354bbf8b816a292c87b9"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PhotoBoardCoverTests.swift",
@@ -1659,6 +1703,10 @@
       "sha256": "abdfb65cfe85b87f4a972804abb278d0da89de5be5d7b174f5f764d050aef0bb"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PhotoOriginalVersionTests.swift",
+      "sha256": "c2cb926b94ee1f59480c89c2faae7c4de16f0cb62c4d297f109e447e85d0c673"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PhotoReachTests.swift",
       "sha256": "8d3fb43c23913674b0a12e5d15f0b6a26fce388f00b9d8cbe2a928b11240d20d"
     },
@@ -1683,6 +1731,10 @@
       "sha256": "012be2ba1acdf9533d9c93179ebd0fe44747829b75ff8f30013f7d8a1644a740"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PlacementPreviewPlanTests.swift",
+      "sha256": "ddb5751392de662820e100636f7c68e33c3fe73e521b61e0a333242d39d794f7"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PocketCatAttributesTests.swift",
       "sha256": "4e03f76d2cffba7186d47d19a3122a03bc36d55deaefb14f275a33df69b35429"
     },
@@ -1692,11 +1744,11 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PocketCatCompanyShelfTests.swift",
-      "sha256": "4130276aa10284556a4d49fc8adb7ed52bfcb43b766a92e64e6eacd9803d58fd"
+      "sha256": "dc24f0b3b5e011fbc338f6a496b020739999802135970a3514f5f085d146ef80"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PocketCatCompanyToggleTests.swift",
-      "sha256": "349742b6a9a17ad46e5f936741b195fcd65790c761e0b25d12a65566c99e1323"
+      "sha256": "64d283e8ab8067fb2f53dea8626b4bd0e19fca07bc3568974751839d5a935290"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PocketCatShared/PocketCatAttributes.swift",
@@ -1724,11 +1776,15 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PocketCatWidgetPlanTests.swift",
-      "sha256": "f6ae17b0148ab058eb02da8e5fa29541aa04342bd5fe1b54ea4b7c9e1e7ed9a7"
+      "sha256": "3de0c981066a6ef76ba1e86b68c6956f054a19ad480c13edf8afc6b25bfea3be"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/PostcardBrandTests.swift",
+      "sha256": "8eadba21cb0d7d756fe7c8d5476c41cb3067e8688d23f01efa1f35fffbd1478b"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/QACloudBackupAccountTests.swift",
-      "sha256": "46b83ab7c2a5c909477d18938d0337941e17aee22e963d4f8a223c5b7033bfab"
+      "sha256": "8173a3f07eab5a19587976b487f9dcfcbed0d75a5f94765bdfefb8b6d8d86fc9"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/QAPhotoMenuTests.swift",
@@ -1768,7 +1824,11 @@
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/ReminderPlannerTests.swift",
-      "sha256": "cb020a4d6c45ea74774a2b86a492f034d955047d66fe3c1e90a6a85557d7587a"
+      "sha256": "c06daffe1085e2a5589f18d5f63cd851aa0ef69ebd3010537ce004c033cc6bf6"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/RenameCatGenerationTests.swift",
+      "sha256": "29fbcce21a4521b23f7df901d1f8247c5e5aa7f32c11fca4c47ebec9e4e5e567"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/RenderQualityTests.swift",
@@ -1883,16 +1943,36 @@
       "sha256": "440b611533c229cf902f356db8d405c30e1607d89d6492bdcb646863f7486ec9"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncAccountAndStateTests.swift",
+      "sha256": "24a9efe899e4d8a618786cb0ff9ff819fc45452020c4ee869cb53fd6f7604240"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncCRDTFairnessTests.swift",
+      "sha256": "b263b747494b0be252f747866fb45098cdaed934c9ac66e4195efe2e56f1dbca"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncCloseAndNewInstallTests.swift",
-      "sha256": "9b12fb363b3b8b867eaec0bfa2c21bd04d43c11b9424d6b1667410915e66a5f3"
+      "sha256": "6c13274a4978447522617c4445baa58eb884b04428c6c064af20f3794b8d99eb"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncConvergenceTests.swift",
       "sha256": "cb9a7d16799a6923e0a7bd2038c30fa2ecf21835779babd1572d4af2fef8feb5"
     },
     {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncDeadlineTests.swift",
+      "sha256": "93fbf51b9232abe7fbfa866f21c9017e85c6a81c76cdaba2922ba48182f475e1"
+    },
+    {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncDeleteHomeTests.swift",
       "sha256": "b4099ffae1697c58d38fa2ae4f2d157bfa52091de39ebbf47d2b79c9fbc1dac0"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncDeleteTruthTests.swift",
+      "sha256": "6d510ac10d5ed2e20552bef1a457ad56a1cd7dc795543d881c6f363bb4219ce3"
+    },
+    {
+      "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncFileSurvivalTests.swift",
+      "sha256": "6a14b833862397a74ff17da7a704c1a7534d8639ca5ed3e82d124a6a85f67c4b"
     },
     {
       "path": "ios/MeowverseCore/Tests/MeowverseCoreTests/SyncFixTests.swift",
@@ -2000,7 +2080,7 @@
     },
     {
       "path": "ios/MeowverseUITests/AboutPageUITests.swift",
-      "sha256": "acd58984ab0178543e9c6b152345942018017072882024dc8e2616136a7c0da9"
+      "sha256": "1bb3a776b5c2b1f24789a2a94d0fe3276288c985608ebf0aa6ee37d1292b7727"
     },
     {
       "path": "ios/MeowverseUITests/AdditionalFeaturesUITests.swift",
@@ -2052,7 +2132,7 @@
     },
     {
       "path": "ios/MeowverseUITests/CatProfileCardUITests.swift",
-      "sha256": "dc251298d10d788542fd006b23c7b84ff841089d0dd35f079edc565efbd2a403"
+      "sha256": "f298d6bf86bc43349b1cfd6afafbdd175a857165bfd7a0f4826274d7f9449cfa"
     },
     {
       "path": "ios/MeowverseUITests/CatTierUITests.swift",
@@ -2135,6 +2215,10 @@
       "sha256": "55d22f100d10c722eec75dd1bd6a0597524fa2bd2b59525b82bbdc8bff4b1893"
     },
     {
+      "path": "ios/MeowverseUITests/PlacementPreviewNudgeUITests.swift",
+      "sha256": "51f8a48264ca7b3412008402843755414fbf5a09e8f2dbfbb2298bd93707f182"
+    },
+    {
       "path": "ios/MeowverseUITests/PlayLifecycleUITests.swift",
       "sha256": "714d6463ff158086ee82df051dacd85a9a2071cc93d1dea36760a51504c65137"
     },
@@ -2164,7 +2248,7 @@
     },
     {
       "path": "ios/MeowverseUITests/PrivacyWordingUITests.swift",
-      "sha256": "8cdb990cb03e84e84c840b43a169b106c343ef856210353a3e1649d95f9b4585"
+      "sha256": "5c4b9415e0d88ef8d1591a2c959db396a9709cd55df8abcc660ec9d6355ca7ef"
     },
     {
       "path": "ios/MeowverseUITests/QAICloudDriveBackupUITests.swift",
@@ -2176,7 +2260,7 @@
     },
     {
       "path": "ios/MeowverseUITests/QAReleaseEntriesUITests.swift",
-      "sha256": "5b6e3c526ed742fa78a188314397afe8fea43bcb5f9ce3833fe0a9453ac82224"
+      "sha256": "6b38a20733cda30b35eff80623faa6cf7737abc17a0675c7989950f322b2d89e"
     },
     {
       "path": "ios/MeowverseUITests/RecognitionRetryUITests.swift",
@@ -2220,7 +2304,7 @@
     },
     {
       "path": "ios/MeowverseUITests/RoomNewsUITests.swift",
-      "sha256": "b707d25a6579a92828e95cde407a262067d0633c539923a5398e630e1825d5ea"
+      "sha256": "682aa0775ac35c7d1e8e8e01ed5e964159059ce681a74d8dcf3654ce924756c5"
     },
     {
       "path": "ios/MeowverseUITests/RoomQuickAddDraftUITests.swift",
@@ -2252,7 +2336,7 @@
     },
     {
       "path": "ios/MeowverseUITests/SponsorCreditsUITests.swift",
-      "sha256": "c653be6b89046b5a4dcc3ce09b112320b4439fac58926a1fa97bebf47dcf8c11"
+      "sha256": "e22db48ccaad963b2ba7c0030ec4d28a6056f7555707867e6fdeb712b7e6e3af"
     },
     {
       "path": "ios/MeowverseUITests/StoreScreenshotsUITests.swift",
@@ -2396,7 +2480,7 @@
     },
     {
       "path": "ios/PocketCatShared/PocketCatCompanyMirror.swift",
-      "sha256": "7ec572d45b944e12353868839612517ebc5df206112aba1a9d518b4c37ddeab9"
+      "sha256": "471ce169f164ffcbf446cc8214b9cb0af9d5b9ca051cc3fe97e575a490fba634"
     },
     {
       "path": "ios/PocketCatShared/PocketCatCompanyMood.swift",
@@ -2404,11 +2488,11 @@
     },
     {
       "path": "ios/PocketCatShared/PocketCatCompanyShelf.swift",
-      "sha256": "57d397f138c8edb017cd23df572e41c2e8122e30f0067c953f05651f30eddb97"
+      "sha256": "9eff1193db86dca34f7fb5bb9c5898062aea6a7c742c1f5f3826e2279d325c45"
     },
     {
       "path": "ios/PocketCatShared/PocketCatCompanyToggle.swift",
-      "sha256": "072c8613b0ef7f1dcd30235f3033a2768baf4ad99c09c107366790d38095823c"
+      "sha256": "4cba057ecd20f7b434d50832e621de2ad7b6e3da50c5e31e5155a157bf86379e"
     },
     {
       "path": "ios/PocketCatShared/PocketCatControlFace.swift",
@@ -2416,7 +2500,7 @@
     },
     {
       "path": "ios/PocketCatShared/PocketCatIntents.swift",
-      "sha256": "fb8caa2045486b336224c256de0401a290b3fa695a93e815b10b505af8ee194a"
+      "sha256": "811e66563dfed68c2b9a51e0d72f8ef9dcc9c5ea2f9fdedfaea909645d8c2f1b"
     },
     {
       "path": "ios/PocketCatShared/PocketCatMonoArt.xcassets/Contents.json",
@@ -2484,7 +2568,7 @@
     },
     {
       "path": "ios/PocketCatShared/PocketCatWidgetPlan.swift",
-      "sha256": "5fa8c33554490d19b214a5c5002548a4c234fafceb25f6482271692e80344ddd"
+      "sha256": "bc0c01221f19b40bf8f810c1ae377e3c7e5458335121cb9a59c9f63108e03bd5"
     },
     {
       "path": "ios/PocketCatWidget-Info.plist",
@@ -2512,7 +2596,7 @@
     },
     {
       "path": "ios/PocketCatWidget/PocketCatScreenWidgets.swift",
-      "sha256": "ec727fae297ef87edc49040217a9cb38927af94fd9918035eafd61339e2fcb37"
+      "sha256": "d67064e69e448398108c532b7b7871de7ed65e33208563f07b119a7c1eb3b47a"
     },
     {
       "path": "ios/PocketCatWidget/PocketCatWidget.swift",
@@ -2524,7 +2608,7 @@
     },
     {
       "path": "ios/README.md",
-      "sha256": "ec8e971444fd437acc1e1596b41daa01c6a79dc6e72aad060ea6e8d695e2eea0"
+      "sha256": "85e5a568bde58613c18529bc4305594185691b4622bfa507f191fea1ab114d0b"
     },
     {
       "path": "ios/Tools/EmbeddingLab/PROVENANCE.md",
@@ -2632,7 +2716,7 @@
     },
     {
       "path": "ios/check-voice-build.py",
-      "sha256": "b3ddaabcb47af687c98c79b73a4b1a8f084a7ffeca764f00b7cdb1f4d3d915fd"
+      "sha256": "9eab119c057adb2f5c1e929d27e25b09d520916ca866574d3034b3cf1f3c8019"
     },
     {
       "path": "ios/export-shots.sh",
@@ -2660,11 +2744,11 @@
     },
     {
       "path": "ios/store-shots.sh",
-      "sha256": "7d709efb3420bcb17c5fb488ce01d981a8fece1ce068164ebd0fa4b9495546a7"
+      "sha256": "e1b84a141726788032e4c52fd1f86148801f7638603f122c7d392fadf2b60f85"
     },
     {
       "path": "ios/test-core.sh",
-      "sha256": "7d00e1d0fbc9cfbb45342c6bb69d98581506cf904df602a5ed67057c7f65fe90"
+      "sha256": "bc8a0c1982e7730871f883e6d5174b9181b001006f55651ff0c9dd7abcc07694"
     },
     {
       "path": "ios/test-one.sh",

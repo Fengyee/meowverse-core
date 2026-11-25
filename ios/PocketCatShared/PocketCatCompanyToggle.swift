@@ -50,10 +50,17 @@ nonisolated enum PocketCatCompanyToggle {
         return ongoing.first.map(Action.adopt) ?? .start(startingMood(mood))
     }
 
-    /// After ending `sessions`: none of them, nor the companion the shelf held (which may be
-    /// one the app never saw end), stays on the widgets or comes back with a late write.
+    /// What turning off ends, read before the activities are ended: the running companions,
+    /// and the one the shelf holds now (which may be one the app never saw end). Read first so
+    /// a companion started while the ends are awaited is not among them (D24-09).
+    static func ending(_ ongoing: [String], on shelf: PocketCatCompanyShelf) -> [String] {
+        guard let held = shelf.record?.sessionID, !ongoing.contains(held) else { return ongoing }
+        return ongoing + [held]
+    }
+
+    /// After ending `sessions` (from `ending`): none of them stays on the widgets or comes back
+    /// with a late write. Another companion on the shelf by now stays.
     static func ended(_ sessions: [String], on shelf: PocketCatCompanyShelf) {
         for id in sessions { shelf.end(sessionID: id) }
-        shelf.clear()
     }
 }

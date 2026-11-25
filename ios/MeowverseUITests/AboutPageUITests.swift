@@ -1,11 +1,12 @@
 import XCTest
 
-/// 关于与隐私: sponsors first when there are any, then thanks, open source and art, privacy and the
+/// 关于与隐私: who makes it (出品) first, then sponsors when there are any, then thanks, open source and art, privacy and the
 /// version; every second-level page opens. Thanks only: nothing here asks for money (App Review
 /// 3.1.1), and the one link out is the privacy policy on 隐私 (App Review 5.1.1(i)).
 ///
 /// `TEST_RUNNER_MV_LANG=en` runs the walk in English and also checks that no Chinese shows.
-/// `TEST_RUNNER_MV_SHOT_DIR=<folder>` writes each page as `<MV_SHOT_PREFIX>-<name>.png`.
+/// `TEST_RUNNER_MV_SHOT_DIR=<folder>` writes each page as `<MV_SHOT_PREFIX>-<name>.png`;
+/// `TEST_RUNNER_MV_TEXT_SIZE=<category>` sets the text size of `testEveryAboutPageOpens`.
 final class AboutPageUITests: XCTestCase {
     private let environment = ProcessInfo.processInfo.environment
     private var english: Bool { environment["MV_LANG"] == "en" }
@@ -20,14 +21,25 @@ final class AboutPageUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = (english ? TestLanguage.english : TestLanguage.chinese)
             + ["-MeowverseStore", "aboutpages", "-MeowverseResetStore"]
+        if let size = environment["MV_TEXT_SIZE"] { app.launchArguments += ["-UIPreferredContentSizeCategoryName", size] }
         app.launch()
         let settings = app.buttons["open-settings"]
         XCTAssertTrue(settings.waitForExistence(timeout: 25))
         settings.tap()
         reveal(app, "open-about").tap()
 
-        // The sponsors first (each is SponsorCreditsUITests'). No testers: no such group and no stand-in.
-        XCTAssertTrue(element(app, "about-sponsors-intro").waitForExistence(timeout: 10))
+        // Who makes it, then the sponsors (each is SponsorCreditsUITests'). No testers: no such
+        // group and no stand-in.
+        let intro = element(app, "about-sponsors-intro")
+        XCTAssertTrue(intro.waitForExistence(timeout: 10))
+        let studio = element(app, "about-studio")
+        XCTAssertTrue(studio.exists && studio.isHittable, "seen on opening")
+        // On a LabeledContent in a List the identifier lands on the value only; the title is its own text.
+        XCTAssertEqual(studio.label, english ? "Fengxue Studio" : "枫雪工作室")
+        let title = app.staticTexts[english ? "Made by" : "出品"]
+        XCTAssertTrue(title.exists)
+        XCTAssertLessThan(title.frame.maxY, intro.frame.minY, "the title is in the first section")
+        XCTAssertLessThan(studio.frame.maxY, intro.frame.minY, "first on the page")
         snap("about-0-sponsors")
         let idea = reveal(app, "about-thanks-idea")
         XCTAssertTrue(idea.label.contains("Omucat"), idea.label)

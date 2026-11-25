@@ -40,6 +40,10 @@ struct CloudBackupUIState {
     var task: Task<Void, Never>?
     /// The signed-in account against the one backups belong to, from the last listing.
     var account: CloudBackupPolicy.AccountCheck?
+    /// The account `entries` were listed under (the same before and after the listing); nil when
+    /// there is no such listing. A delete the user confirms from that list happens only in this
+    /// account, and stops if another one is signed in (audit A24-01).
+    var listedAccount: String?
 
     /// Signed in to another account than the one the user agreed for, or to one never compared
     /// (turned on while signed out, or by an older build): nothing is backed up until the user
@@ -187,9 +191,13 @@ extension AppModel {
         }
         if let listing = result.1 {
             cloud.entries = listing.entries
+            cloud.listedAccount = result.2
             cloud.listFailed = false
         } else {
-            if result.0 != .available { cloud.entries = [] }
+            if result.0 != .available {
+                cloud.entries = []
+                cloud.listedAccount = nil
+            }
             cloud.listFailed = result.0 == .available
         }
     }
@@ -218,8 +226,9 @@ extension AppModel {
         // Read again: the account may have changed since the question was shown.
         guard let account = cloudDestination.accountFingerprint() else { return }
         let wasAnother = cloud.account == .differs
-        cloud.settings.account = account
-        cloud.settings.lastFailure = nil
+        // A last backup in the account remembered until now stays there, and that is
+        // remembered for the privacy wording (audit B24-05).
+        cloud.settings.moveBackups(to: account)
         cloud.account = .matches
         saveCloudSettings()
         setCloudNotice(wasAnother
@@ -248,11 +257,19 @@ extension AppModel {
             setCloudNotice(String(localized: "已停止备份到 iCloud 云盘。已有的备份还在 iCloud 云盘里。"), isFailure: false)
             return
         }
+        // Only in the account the confirmed list was read from (audit A24-01). Without one, nothing
+        // is deleted: the list on screen cannot be tied to an account.
+        guard let lease = cloud.listedAccount else {
+            setCloudNotice(String(localized: "已停止备份到 iCloud 云盘，但没能删除全部备份。剩下的可以在“文件”App 的 iCloud 云盘 › Meowverse 里删除。"), isFailure: true)
+            return
+        }
         cloud.activity = .deleting
         let destination = cloudDestination, deviceID = cloud.deviceID, names = doomed.map(\.name)
         cloud.task = Task {
             do {
-                let count = try await Self.offMainAsync { try CloudBackupEngine.deleteBackups(names, deviceID: deviceID, in: destination) }
+                let count = try await Self.offMainAsync {
+                    try CloudBackupEngine.deleteBackups(names, deviceID: deviceID, account: lease, in: destination)
+                }
                 cloud.settings.lastSuccess = nil
                 saveCloudSettings()
                 setCloudNotice(String(localized: "已停止备份到 iCloud 云盘，并删除了这台设备存的 \(count) 份备份。"), isFailure: false)
@@ -277,6 +294,10 @@ extension AppModel {
             return
         }
         if trigger == .manual { cloud.notice = nil }
+        // This backup's number: progress, the background expiry and the end of the task act only
+        // while it is still the current cloud operation (audit A24-10).
+        cloud.generation += 1
+        let generation = cloud.generation
         cloud.activity = .backingUp(0)
         cloud.cancelling = false
         let destination = cloudDestination, settings = cloud.settings
@@ -285,7 +306,7 @@ extension AppModel {
             workDirectory: FileManager.default.temporaryDirectory.appending(path: Self.cloudWorkPrefix + UUID().uuidString, directoryHint: .isDirectory),
             catalog: catalog)
         let relay = ProgressRelay { [weak self] fraction in
-            guard let self, case .backingUp = self.cloud.activity else { return }
+            guard let self, generation == self.cloud.generation, case .backingUp = self.cloud.activity else { return }
             self.cloud.activity = .backingUp(fraction)
         }
         // A little more time when the app has just gone to the background. If it runs out the
@@ -294,7 +315,8 @@ extension AppModel {
         // The handler must end the task itself, or the system ends the app: the cancelled work
         // can only get back to the main actor once the handler has returned.
         let expired: @MainActor @Sendable () -> Void = { [weak self] in
-            self?.cloud.task?.cancel()
+            // This backup's task only: a later download or delete is not stopped by it.
+            if let self, generation == self.cloud.generation { self.cloud.task?.cancel() }
             background.end()
         }
         background.id = UIApplication.shared.beginBackgroundTask(withName: "CloudBackup", expirationHandler: expired)
@@ -321,7 +343,9 @@ extension AppModel {
                 }
             } catch {
                 if Task.isCancelled || error is CancellationError {
-                    if trigger == .manual { setCloudNotice(String(localized: "已取消，没有写入新的备份。之前的备份没有受影响。"), isFailure: false) }
+                    if trigger == .manual, generation == cloud.generation {
+                        setCloudNotice(String(localized: "已取消，没有写入新的备份。之前的备份没有受影响。"), isFailure: false)
+                    }
                 } else {
                     let code = Self.cloudFailureCode(error)
                     Self.cloudLog.error("cloud backup failed: \(code, privacy: .public)")
@@ -330,6 +354,9 @@ extension AppModel {
                     if trigger == .manual { setCloudNotice(Self.cloudFailureText(code: code), isFailure: true) }
                 }
             }
+            // Stopped for a clear or restore (`stopCloudTransfersBeforeLibrarySwitch`): that caller
+            // owns the state now.
+            guard generation == cloud.generation else { return }
             cloud.activity = nil
             cloud.cancelling = false
             await refreshCloudBackups()
@@ -357,8 +384,9 @@ extension AppModel {
         backup.notice = nil
         // Room for the download (unless it is already here) and for the verified copy the
         // restore builds beside the library. Checked first, so nothing half-fills the phone.
+        // Checked arithmetic: a listed size is never trusted to fit (audit B24-01).
         if let size = entry.byteSize, let free = CloudBackupEngine.freeSpace(at: FileManager.default.temporaryDirectory),
-           free < (entry.isDownloaded ? 1 : 2) * size + 200 * 1024 * 1024 {
+           free < CloudBackupPolicy.restoreSpaceNeeded(byteSize: size, isDownloaded: entry.isDownloaded) {
             setCloudNotice(Self.cloudDownloadFailureText(CloudBackupError.io("space")), isFailure: true)
             return
         }
@@ -378,6 +406,21 @@ extension AppModel {
                 }
                 // Cancelled while it downloaded: the file may stay local, but nothing is opened.
                 guard generation == cloud.generation, !Task.isCancelled else { return }
+                // The file must be the one its info file describes (audit A24-07): another archive
+                // under that name is not opened as this backup. Without an info file there is
+                // nothing to compare; the restore's full verification still runs.
+                if let info = entry.info {
+                    let matches = try await Self.offMainAsync { info.describes(fileAt: url) }
+                    guard generation == cloud.generation, !Task.isCancelled else { return }
+                    guard matches else {
+                        cloud.activity = nil
+                        cloud.settings.rememberDamaged(archiveName)
+                        saveCloudSettings()
+                        setCloudNotice(Self.backupMessage(for: BackupError.damaged("cloudInfo"), during: .reading), isFailure: true)
+                        await refreshCloudBackups()
+                        return
+                    }
+                }
                 cloud.activity = nil
                 backup.lastReadError = nil
                 openBackup(at: url)
@@ -418,6 +461,23 @@ extension AppModel {
         }
     }
 
+    /// Before a clear or a restore switches the library: a backup still running is stopped and
+    /// waited for, so it cannot publish the old library afterwards, and a download still running
+    /// is stopped, so it cannot open a preview over the new one (audit A24-02). Silent: the
+    /// clear or restore says what happened.
+    func stopCloudTransfersBeforeLibrarySwitch() async {
+        guard let task = cloud.task else { return }
+        switch cloud.activity {
+        case .backingUp, .downloading: break
+        case .deleting, nil: return
+        }
+        cloud.generation += 1
+        task.cancel()
+        await task.value
+        cloud.activity = nil
+        cloud.cancelling = false
+    }
+
     func dismissCloudRestoreOffer() {
         cloud.settings.restoreOfferDismissed = true
         saveCloudSettings()
@@ -438,7 +498,8 @@ extension AppModel {
         let listed = cloud.loaded && cloud.availability == .available && !cloud.listFailed
             && (cloud.account == .matches || { if case .adopt = cloud.account { true } else { false } }())
         return PhotoReach.backupsLeft(listedOwnBackups: listed ? cloudBackupsOfThisDevice.count : nil,
-                                      lastBackupKept: settings.lastSuccess != nil)
+                                      lastBackupKept: settings.lastSuccess != nil,
+                                      leftInAnotherAccount: settings.backupsLeftInAnotherAccount)
     }
 
     /// The settings as they are, or before they are read at launch, as saved: an unread setting
@@ -463,8 +524,17 @@ extension AppModel {
     var clearAllRestoreNote: String {
         // Any backup in this account's folder that could restore it: this device's, another
         // device's, or this device's own from before its id was remade. The empty room offers it.
-        let restorable = options.cloudBackupFeature && cloud.loaded && recommendedCloudBackup != nil
+        // Without a current listing that is unknown, and unknown is not "none" (audit A24-03).
+        let presence: CloudBackupPolicy.Presence = options.cloudBackupFeature
+            ? CloudBackupPolicy.presence(listingIsCurrent: cloudListingIsCurrent, entries: cloud.entries)
+            : .none
+        let restorable = presence == .some
         let backingUp = options.cloudBackupFeature && cloud.loaded && cloud.settings.enabled
+        if presence == .unknown {
+            return backingUp
+                ? String(localized: "现在没能确认 iCloud 云盘里有没有喵空间的备份。如果有，它们不会跟着删除。备份到 iCloud 云盘仍然开着：房间里再有内容时会备份新的一份，并删掉这台设备存的旧备份。")
+                : String(localized: "现在没能确认 iCloud 云盘里有没有喵空间的备份。如果有，它们不会跟着删除，可以在“文件”App 的 iCloud 云盘 › Meowverse 里查看。")
+        }
         switch (restorable, backingUp) {
         case (true, true):
             return String(localized: "iCloud 云盘里的喵空间备份不会跟着删除，还能用来恢复。备份到 iCloud 云盘仍然开着：房间里再有内容时会备份新的一份，并删掉这台设备存的旧备份。要现在删除，请到“备份到 iCloud 云盘”里停止备份并删除，或在“文件”App 的 iCloud 云盘 › Meowverse 里删除。")
@@ -475,6 +545,13 @@ extension AppModel {
         case (false, false):
             return String(localized: "只有导出过的备份能恢复这些内容。")
         }
+    }
+
+    /// `cloud.entries` are a fact about the account signed in: listed after launch, iCloud Drive
+    /// reachable, the listing did not fail, and taken under one known account.
+    private var cloudListingIsCurrent: Bool {
+        cloud.loaded && cloud.availability == .available && !cloud.listFailed && cloud.listedAccount != nil
+            && cloud.account != nil && cloud.account != .unknown
     }
 
     private func setCloudNotice(_ text: String, isFailure: Bool) {
@@ -496,15 +573,7 @@ extension AppModel {
 
     /// A short code that is safe to store and log: never a path or a name.
     static func cloudFailureCode(_ error: any Error) -> String {
-        switch error {
-        case BackupError.tooLarge: "tooLarge"
-        case BackupError.libraryDamaged: "libraryDamaged"
-        case CloudBackupError.unavailable(.signedOut): "signedOut"
-        case CloudBackupError.unavailable: "containerUnavailable"
-        case CloudBackupError.verificationFailed: "verification"
-        case CloudBackupError.io("space"): "space"
-        default: "other"
-        }
+        CloudBackupEngine.failureCode(error)
     }
 
     static func cloudFailureText(code: String) -> String {
@@ -515,6 +584,8 @@ extension AppModel {
         case "containerUnavailable": String(localized: "喵空间现在用不了 iCloud 云盘，所以这次没有备份。")
         case "verification": String(localized: "新生成的备份没有通过核对，已经丢弃。之前的备份没有受影响。")
         case "space": String(localized: "这台设备的存储空间不够，这次没有备份。之前的备份没有受影响。")
+        // iCloud, not this device, is full (audit B24-10).
+        case "quota": String(localized: "iCloud 储存空间已满，这次没有备份。之前的备份没有受影响。")
         default: String(localized: "这次没能备份，可能是这台设备的存储空间不够。之前的备份没有受影响。")
         }
     }

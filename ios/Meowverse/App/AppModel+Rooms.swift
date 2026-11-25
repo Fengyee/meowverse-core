@@ -137,8 +137,9 @@ extension AppModel {
         return failure(of: await perform { _ = try await $0.addCat(name: name) })
     }
 
-    func renameCat(_ catId: String, to name: String) async -> PhotoSaveFailure? {
-        failure(of: await perform { _ = try await $0.renameCat(catId: catId, name: name) })
+    /// `generation`: the library the name was typed for; another one refuses it.
+    func renameCat(_ catId: String, to name: String, generation: UUID? = nil) async -> PhotoSaveFailure? {
+        failure(of: await perform { _ = try await $0.renameCat(catId: catId, name: name, generation: generation) })
     }
 
     /// Says where a cat lives; nil = it keeps you company in whichever room you look at.

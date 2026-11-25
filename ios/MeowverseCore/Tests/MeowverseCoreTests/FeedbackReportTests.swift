@@ -38,7 +38,7 @@ import Testing
     }
 
     static func environment(freeDisk: Int64? = 12_345_678_901) -> FeedbackReport.Environment {
-        .init(appVersion: "1.0", build: "3", configuration: "Debug", testFlight: false, osVersion: "18.2",
+        .init(appVersion: "1.0", build: "3", configuration: "Debug", channel: .unknown, osVersion: "18.2",
               deviceModel: "iPhone17,1", locale: "zh_CN", textSize: "UICTContentSizeCategoryL",
               reduceMotion: true, voiceOver: false, freeDiskBytes: freeDisk)
     }

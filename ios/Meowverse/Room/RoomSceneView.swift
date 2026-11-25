@@ -362,7 +362,18 @@ final class LayoutReportingARView: ARView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        presentFramesAsRendered()
         onLayout?(bounds.size)
+    }
+
+    /// RealityKit's drawable layer presents with Core Animation transactions, so a rendered frame
+    /// reaches the screen only when something else in the app commits one. In 摆放 the draft is
+    /// added when its model has loaded, after the press's own commit: the preview kept showing
+    /// the frame before (no piece, or the piece a cell behind) until the next touch.
+    private func presentFramesAsRendered() {
+        for case let drawable as CAMetalLayer in layer.sublayers ?? [] where drawable.presentsWithTransaction {
+            drawable.presentsWithTransaction = false
+        }
     }
 }
 
@@ -436,7 +447,10 @@ final class RoomSceneController: NSObject {
     private var reportedReady = false
     private var previewState: PlacementPreviewState = .loading
     private var reportedPreviewState: PlacementPreviewState?
-    private var liftedEntity: Entity?
+    /// The draft's model and what it was built from: kept while the same piece is moved or
+    /// turned. `ghostKey` is set from the start of the load, `ghostEntity` once it has loaded.
+    private var ghostKey: PlacementPreviewKey<ArtLibrary.FurnitureDetails>?
+    private var ghostEntity: Entity?
     private var firstSync = true
     private weak var playSession: RoomPlaySession?
     private let playProp = PlayProp()
@@ -453,6 +467,16 @@ final class RoomSceneController: NSObject {
     /// `-MeowverseCatProbe`: the cat (`pack#tier`) on the last postcard taken, read after the
     /// share sheet is closed.
     private var postcardProbe: UIView?
+    /// `-MeowverseGhostProbe`: the placement preview's draft as drawn: its cell, turn, how many
+    /// furniture models stand in the draft layer (the footprint planes are not counted) and the
+    /// preview state, so a UI test can tell a draft that vanished from one still loading.
+    private var ghostProbe: UIView?
+    /// `-MeowverseGhostProbe`: how many times the draft's 3D model was loaded, and how many times
+    /// 「正在载入 3D 模型…」 was reported to the editor, since this view was made.
+    private var ghostLoadsProbe: UIView?
+    private var ghostModelLoads = 0
+    private var ghostLoadingReports = 0
+    private static let probesGhost = ProcessInfo.processInfo.arguments.contains("-MeowverseGhostProbe")
     #endif
     /// 设置 › 画质 as applied to this view; nil until the first update.
     private var appliedQuality: RenderQualitySettings?
@@ -529,6 +553,9 @@ final class RoomSceneController: NSObject {
             guard let self else { return }
             if let report = self.onPreviewState, self.previewState != self.reportedPreviewState {
                 self.reportedPreviewState = self.previewState
+                #if DEBUG || DRILLS
+                if self.previewState == .loading { self.ghostLoadingReports += 1 }
+                #endif
                 report(self.previewState)
             }
             self.bella.reduceMotion = self.reduceMotion
@@ -581,6 +608,41 @@ final class RoomSceneController: NSObject {
                 value += " hdr \(hdrEnvironmentActive ? "on" : "off") floor \(shell.hasFloorOcclusion ? "on" : "off") maps \(roughness),\(normals)"
             }
             if qualityProbe.accessibilityValue != value { qualityProbe.accessibilityValue = value }
+        }
+        if Self.probesGhost, let view, bella.onStatus == nil,
+           let ghost = shownGhost {
+            if ghostProbe == nil {
+                let made = UIView(frame: CGRect(x: 6, y: 0, width: 2, height: 2))
+                made.isAccessibilityElement = true
+                made.accessibilityIdentifier = "placement-ghost-probe"
+                made.accessibilityLabel = "placement-ghost-probe"
+                ghostProbe = made
+            }
+            if let ghostProbe, ghostProbe.superview !== view.window {
+                ghostProbe.removeFromSuperview()
+                view.window?.addSubview(ghostProbe)
+            }
+            let models = ghostRoot.children.filter { !($0 is ModelEntity) && $0.isEnabled }.count
+            let state = switch previewState { case .loading: "loading"; case .ready: "ready"; case .unavailable: "unavailable" }
+            let value = "\(ghost.placement.x) \(ghost.placement.z) turn \(ghost.placement.turn) models \(models) \(state)"
+            if ghostProbe?.accessibilityValue != value { ghostProbe?.accessibilityValue = value }
+            if ghostLoadsProbe == nil {
+                let made = UIView(frame: CGRect(x: 8, y: 0, width: 2, height: 2))
+                made.isAccessibilityElement = true
+                made.accessibilityIdentifier = "placement-ghost-loads-probe"
+                made.accessibilityLabel = "placement-ghost-loads-probe"
+                ghostLoadsProbe = made
+            }
+            if let ghostLoadsProbe, ghostLoadsProbe.superview !== view.window {
+                ghostLoadsProbe.removeFromSuperview()
+                view.window?.addSubview(ghostLoadsProbe)
+            }
+            let loads = "loads \(ghostModelLoads) loading \(ghostLoadingReports)"
+            if ghostLoadsProbe?.accessibilityValue != loads { ghostLoadsProbe?.accessibilityValue = loads }
+        } else {
+            // No draft on screen: no probe, rather than the last draft's value (BB24-05).
+            ghostProbe?.removeFromSuperview()
+            ghostLoadsProbe?.removeFromSuperview()
         }
         guard let probe else { return }
         // Only the saved room's cat, not the placement editor's still one.
@@ -652,6 +714,9 @@ final class RoomSceneController: NSObject {
         floorShadows.cancel()
         storageChestAppearanceTask?.cancel()
         ghostLoad?.cancel()
+        ghostLoad = nil
+        ghostKey = nil
+        ghostEntity = nil
         bellaTask?.cancel()
         for companion in companions.values { companion.task?.cancel() }
         updates?.cancel()
@@ -659,6 +724,11 @@ final class RoomSceneController: NSObject {
         #if DEBUG || DRILLS
         probe?.removeFromSuperview()
         qualityProbe?.removeFromSuperview()
+        // The window keeps its subviews; a placement opened again must not find this one (BB24-05).
+        ghostProbe?.removeFromSuperview()
+        ghostProbe = nil
+        ghostLoadsProbe?.removeFromSuperview()
+        ghostLoadsProbe = nil
         #endif
         bella.onStatus = nil
         bella.onPlayConsumed = nil
@@ -750,13 +820,19 @@ final class RoomSceneController: NSObject {
         }
         syncCompanions(wanted)
         let wanted = Dictionary(uniqueKeysWithValues: items.map { ($0.instanceId, $0) })
-        for (id, current) in shown where wanted[id] != current.item {
-            current.entity.removeFromParent()
-            shown[id] = nil
-            pendants[id] = nil
+        // Only what the entity is built from (model, size, finish, place) rebuilds it; a new name,
+        // photo, cover or lock keeps the piece (and a prop on it) as it is (G24-03).
+        for (id, current) in shown {
+            guard let item = wanted[id], item.placement == current.item.placement else {
+                current.entity.removeFromParent()
+                shown[id] = nil
+                pendants[id] = nil
+                continue
+            }
+            if item != current.item { shown[id] = (item, current.entity, current.details) }
         }
         for (id, load) in furnitureLoads
-        where wanted[id] != load.item || load.details != furnitureDetails(for: load.item.modelId, art: art) {
+        where wanted[id]?.placement != load.item.placement || load.details != furnitureDetails(for: load.item.modelId, art: art) {
             load.task.cancel()
             furnitureLoads[id] = nil
         }
@@ -772,39 +848,61 @@ final class RoomSceneController: NSObject {
         for (id, current) in shown { current.entity.isEnabled = id != ghost?.lifted }
         let details = ghost.map { furnitureDetails(for: $0.placement.modelId, art: art) } ?? .flat
         if ghost != shownGhost || details != ghostDetails {
-            let previous = shownGhost
             placementGrid.isEnabled = ghost != nil
             shownGhost = ghost
-            // A lifted piece keeps its entity from cell to cell, so it glides instead of blinking.
-            let carried = details == ghostDetails && ghost?.lifted != nil && ghost?.lifted == previous?.lifted
-                && ghost?.placement.sameShape(as: previous?.placement) == true ? liftedEntity : nil
             ghostDetails = details
-            ghostLoad?.cancel()
+            let model = ghost.flatMap { art.catalog.model(id: $0.placement.modelId) }
+            let wanted = ghost.flatMap { ghost in model.map { _ in PlacementPreviewKey(ghost.placement, lifted: ghost.lifted, details: details) } }
+            let shows = ghost.map { PlacementPreviewPlan.showsModel(valid: $0.valid, lifted: $0.lifted) } ?? false
+            // The same piece moved or turned keeps the model it has (or is loading), so the preview
+            // neither blinks nor goes back to 「正在载入 3D 模型…」 at every cell (l-placement-preview).
+            let plan = PlacementPreviewPlan.plan(held: ghostKey, wanted: wanted, shows: shows)
             ghostRoot.children.removeAll()
-            liftedEntity = nil
+            if !plan.keepsHeld {
+                ghostLoad?.cancel()
+                ghostLoad = nil
+                ghostEntity = nil
+                ghostKey = nil
+            }
             previewState = .ready
-            if let ghost, let model = art.catalog.model(id: ghost.placement.modelId) {
-                if let carried {
-                    ghostRoot.addChild(carried)
-                    float(carried, to: ghost.placement, rising: false)
-                    liftedEntity = carried
-                } else if ghost.lifted != nil || ghost.valid {
+            if let ghost, let model, let wanted {
+                let wallMount = model.mount == .wall
+                if plan.keepsHeld {
+                    if let ghostEntity {
+                        if shows {
+                            // Kept off the layer on a cell it may not take, it missed any 画质 change there.
+                            FurnitureOcclusion.set(furnitureOcclusion, on: ghostEntity)
+                            ghostRoot.addChild(ghostEntity)
+                            place(ghostEntity, for: ghost, wallMount: wallMount, rising: false)
+                        }
+                    } else if shows {
+                        // The first load is still on its way; it puts the model where the draft is then.
+                        previewState = .loading
+                    }
+                } else if plan.startsLoad {
                     previewState = .loading
+                    ghostKey = wanted
+                    #if DEBUG || DRILLS
+                    ghostModelLoads += 1
+                    #endif
                     ghostLoad = Task { [weak self] in
                         guard let self else { return }
                         let loaded = try? await art.furnitureEntity(model: model, placement: ghost.placement,
                                                                     details: details, occlusion: self.furnitureOcclusion)
-                        guard !Task.isCancelled, self.shownGhost == ghost else { return }
+                        guard !Task.isCancelled, self.ghostKey == wanted else { return }
+                        self.ghostLoad = nil
                         guard let entity = loaded else {
+                            self.ghostKey = nil
                             self.previewState = .unavailable
                             return
                         }
                         entity.components.remove(CollisionComponent.self)
                         FurnitureOcclusion.set(self.furnitureOcclusion, on: entity)
-                        self.ghostRoot.addChild(entity)
-                        if ghost.lifted != nil {
-                            self.float(entity, to: ghost.placement, rising: true)
-                            self.liftedEntity = entity
+                        self.ghostEntity = entity
+                        if let latest = self.shownGhost,
+                           PlacementPreviewPlan.showsModel(valid: latest.valid, lifted: latest.lifted) {
+                            self.ghostRoot.addChild(entity)
+                            self.place(entity, for: latest, wallMount: wallMount, rising: true)
                         }
                         self.previewState = .ready
                     }
@@ -864,12 +962,12 @@ final class RoomSceneController: NSObject {
                 if let piece = self.shown[id]?.entity {
                     try await art.applyFurnitureDetails(to: piece, placement: placement, details: details)
                     try Task.checkCancellation()
-                    self.shown[id] = (item, piece, details)
+                    self.shown[id] = (self.latest(item), piece, details)
                 } else {
                     let entity = try await art.furnitureEntity(model: model, placement: placement, details: details,
                                                                occlusion: self.furnitureOcclusion)
                     try Task.checkCancellation()
-                    self.addFurniture(entity, item: item, details: details, animate: animate)
+                    self.addFurniture(entity, item: self.latest(item), details: details, animate: animate)
                 }
                 self.hasAllFurniture = self.shown.count == self.playItems.count
             } catch {
@@ -881,6 +979,12 @@ final class RoomSceneController: NSObject {
             self?.reportReadyIfLoaded()
         }
         furnitureLoads[id] = (item, details, task)
+    }
+
+    /// The piece as last synced: a load keeps running across a change of name or photos (same
+    /// placement), so it records the newer record, not the one it started with.
+    private func latest(_ item: PhotoFurniture) -> PhotoFurniture {
+        playItems.first { $0.instanceId == item.instanceId && $0.placement == item.placement } ?? item
     }
 
     private func addFurniture(_ entity: Entity, item: PhotoFurniture, details: ArtLibrary.FurnitureDetails, animate: Bool) {
@@ -971,6 +1075,18 @@ final class RoomSceneController: NSObject {
         start.translation.y += 0.6
         entity.transform = start
         entity.move(to: rest, relativeTo: entity.parent, duration: 0.35, timingFunction: .easeOut)
+    }
+
+    /// The draft's model where the draft is: a lifted piece hovers there, a new one stands there.
+    private func place(_ entity: Entity, for ghost: GhostFurniture, wallMount: Bool, rising: Bool) {
+        guard ghost.lifted == nil else {
+            float(entity, to: ghost.placement, rising: rising)
+            return
+        }
+        var placement = ghost.placement
+        // As `ArtLibrary.furnitureEntity` hangs a wall model that names no wall yet.
+        if wallMount, placement.wall == nil { placement.wall = .back }
+        (entity.position, entity.orientation) = ArtLibrary.pose(of: placement)
     }
 
     /// The piece being edited hovers over its cell, or a wall piece in front of its wall; with
@@ -1076,24 +1192,72 @@ final class RoomSceneController: NSObject {
         }
     }
 
+    /// Nothing the postcard shows is still loading: the furniture, the first cat when the room
+    /// has one, and every other cat (in and visible, or failed).
+    private var postcardSceneSettled: Bool {
+        furnitureLoads.isEmpty
+            && (!showsLead || (bella.isLoaded && bella.root.isEnabled))
+            && companions.values.allSatisfy { $0.failed || ($0.actor.isLoaded && $0.actor.root.isEnabled) }
+    }
+
+    /// Settled and whole: every piece shown, the cats wearing the pack the room wants.
+    private var postcardSceneComplete: Bool {
+        hasAllFurniture && !firstSync && (!showsLead || bella.packKey == wantedCat?.key)
+            && companions.values.allSatisfy { !$0.failed && $0.actor.packKey == wantedCat?.key }
+    }
+
+    /// What the postcard copies, compared across its one wait (the finer skeleton) so a room that
+    /// changed meanwhile is waited for again instead of copied half-loaded (FF24-03).
+    private struct PostcardStamp: Equatable {
+        let cat: String?
+        let lead: String?
+        let furniture: [String: Placement]
+        let entities: [String: ObjectIdentifier]
+        let details: [String: ArtLibrary.FurnitureDetails]
+        let companions: [String: String?]
+    }
+
+    private var postcardStamp: PostcardStamp {
+        PostcardStamp(cat: wantedCat?.key, lead: bella.packKey,
+                      furniture: shown.mapValues(\.item.placement), entities: shown.mapValues { ObjectIdentifier($0.entity) },
+                      details: shown.mapValues(\.details), companions: companions.mapValues(\.actor.packKey))
+    }
+
     func capturePostcard() async throws -> CGImage {
         guard let view, view.window != nil, shownGhost == nil, let syncedArt else { throw RoomSnapshotError.unavailable }
         if bellaLoadFailed {
             bellaLoadFailed = false
             loadBella(from: syncedArt)
         }
-        let deadline = ContinuousClock.now + .seconds(12)
-        // A room no cat is in has nobody to wait for.
-        while !furnitureLoads.isEmpty || (showsLead && (!bella.isLoaded || !bella.root.isEnabled)) {
-            try Task.checkCancellation()
-            guard !bellaLoadFailed, ContinuousClock.now < deadline, view.window != nil else { throw RoomSnapshotError.unavailable }
-            try await Task.sleep(for: .milliseconds(50))
+        // Every cat of the room is on the card, not only the first (G24-04): one that failed
+        // gets one more try, as the first cat does above.
+        var retriedCompanions = false
+        for companion in companions.values where companion.failed {
+            companion.failed = false
+            retriedCompanions = true
         }
-        guard hasAllFurniture, !firstSync, !showsLead || bella.packKey == wantedCat?.key,
-              view.bounds.width > 0, view.bounds.height > 0 else { throw RoomSnapshotError.unavailable }
-        // The card shows the finest tier there is, whatever 画质 the room is drawn with.
-        let finer = await postcardSkeleton()
-        try Task.checkCancellation()
+        if retriedCompanions { loadCompanions(from: syncedArt) }
+        let deadline = ContinuousClock.now + .seconds(12)
+        var finer: GroundGaitPlayer?
+        while true {
+            // A room no cat is in has nobody to wait for.
+            while !postcardSceneSettled {
+                try Task.checkCancellation()
+                guard !bellaLoadFailed, !companions.values.contains(where: \.failed),
+                      ContinuousClock.now < deadline, view.window != nil else { throw RoomSnapshotError.unavailable }
+                try await Task.sleep(for: .milliseconds(50))
+            }
+            guard postcardSceneComplete, view.bounds.width > 0, view.bounds.height > 0 else { throw RoomSnapshotError.unavailable }
+            // The card shows the finest tier there is, whatever 画质 the room is drawn with.
+            let stamp = postcardStamp
+            finer = await postcardSkeleton()
+            try Task.checkCancellation()
+            // The room may have changed while that loaded (an iCloud update, another cat tier):
+            // the card is taken of the scene as it is now, so it must still be whole (FF24-03).
+            if postcardStamp == stamp, postcardSceneSettled, postcardSceneComplete { break }
+            finer = nil
+            guard ContinuousClock.now < deadline, view.window != nil else { throw RoomSnapshotError.unavailable }
+        }
         let cardCat = (finer != nil ? postcardCat?.key : bella.packKey) ?? "none"
         Logger(subsystem: "Meowverse", category: "art").notice("Postcard cat \(cardCat, privacy: .public)")
         #if DEBUG || DRILLS
@@ -1118,7 +1282,7 @@ final class RoomSceneController: NSObject {
             let copy = child.clone(recursive: true)
             if child === furnitureRoot { frozenFurniture = copy }
             if shell.isFloor(child) { frozenFloor = copy }
-            if child === bella.root { copy.components.remove(OpacityComponent.self) }
+            if cats.contains(where: { $0.root === child }) { copy.components.remove(OpacityComponent.self) }
             if let finer, let live = cats.first(where: { $0.root === child })?.skeletalPlayer,
                let skin = copy.findEntity(named: GroundGaitPlayer.entityName) as? ModelEntity {
                 finer.dress(skin, like: live)
@@ -1219,11 +1383,6 @@ extension Placement {
         self = item.placement
     }
 
-    /// Same model, size and finish: only where it stands or hangs and which way it faces may differ.
-    func sameShape(as other: Placement?) -> Bool {
-        guard let other else { return false }
-        return modelId == other.modelId && width == other.width && depth == other.depth && finish == other.finish
-    }
 }
 
 extension UIColor {

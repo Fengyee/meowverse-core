@@ -123,7 +123,8 @@ nonisolated struct UbiquityBackupDestination: BackupDestination {
         var result: Result<Data, any Error> = .failure(CloudBackupError.io("read"))
         var coordinationError: NSError?
         NSFileCoordinator().coordinate(readingItemAt: url, options: .withoutChanges, error: &coordinationError) { actual in
-            result = Result { try Data(contentsOf: actual) }
+            // Through the same cap as the plain folder: never more than an info file can be (B24-03).
+            result = Result { try CloudBackupInfo.readBounded(at: actual) }
         }
         if let coordinationError { throw Self.map(coordinationError, fallback: "read") }
         do { return try result.get() } catch { throw Self.map(error, fallback: "read") }
@@ -182,7 +183,14 @@ nonisolated struct UbiquityBackupDestination: BackupDestination {
             throw Self.map(error, fallback: "download")
         }
         progress(nil)
-        let watcher = await UbiquityDownloadWatcher(name: name, progress: progress)
+        // Online but no new amount for `CloudDownloadWatch.stallLimit`: the download ends with a
+        // failure the user can retry, instead of waiting for ever (audit A24-06).
+        let watch = OSAllocatedUnfairLock(initialState: CloudDownloadWatch(start: Date()))
+        let report: @Sendable (Double?) -> Void = { fraction in
+            watch.withLock { $0.note(fraction, at: Date()) }
+            progress(fraction)
+        }
+        let watcher = await UbiquityDownloadWatcher(name: name, progress: report)
         do {
             var ticks = 0
             while true {
@@ -191,6 +199,7 @@ nonisolated struct UbiquityBackupDestination: BackupDestination {
                 ticks += 1
                 // The connection went away mid-download: say so instead of waiting for ever.
                 if ticks % 20 == 0, !(await Self.isOnline()) { throw CloudBackupError.offline }
+                if watch.withLock({ $0.isStalled(at: Date()) }) { throw CloudBackupError.downloadStalled }
                 // A fresh URL each time: resource values are cached per URL object.
                 let fresh = documents.appendingPathComponent(name, isDirectory: false)
                 let values = try? fresh.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey, .ubiquitousItemDownloadingErrorKey])

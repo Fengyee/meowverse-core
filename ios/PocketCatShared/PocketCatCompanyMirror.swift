@@ -16,7 +16,14 @@ enum PocketCatCompanyMirror {
         PocketCatWidgetKind.reload()
     }
 
-    /// The control turned company off: these companions, and whatever the shelf held.
+    /// What turning company off ends (`PocketCatCompanyToggle.ending`): call before awaiting
+    /// the activities' ends, and pass the result to `endedAll`.
+    static func ending(_ sessionIDs: [String]) -> [String] {
+        guard let shelf = PocketCatCompanyShelf.shared else { return sessionIDs }
+        return PocketCatCompanyToggle.ending(sessionIDs, on: shelf)
+    }
+
+    /// Company was turned off: these companions (from `ending`), and nothing started since.
     static func endedAll(_ sessionIDs: [String]) {
         if let shelf = PocketCatCompanyShelf.shared { PocketCatCompanyToggle.ended(sessionIDs, on: shelf) }
         PocketCatWidgetKind.reload()
@@ -26,7 +33,13 @@ enum PocketCatCompanyMirror {
     /// Lock Screen while the app was away leaves the widgets here.
     static func reconcile() {
         guard let shelf = PocketCatCompanyShelf.shared else { return }
-        if let activity = PocketCatActivity.activities.first(where: \.isOngoing) {
+        let ongoing = PocketCatActivity.activities.filter(\.isOngoing)
+        // The shelf's companion is no longer running: it ended, so an older one that still
+        // runs isn't taken for a late write (`PocketCatCompanyShelf.keep`).
+        if let held = shelf.record?.sessionID, !ongoing.contains(where: { $0.id == held }) {
+            shelf.end(sessionID: held)
+        }
+        if let activity = ongoing.first {
             kept(activity.id, activity.content.state)
         } else if shelf.record != nil {
             shelf.clear()

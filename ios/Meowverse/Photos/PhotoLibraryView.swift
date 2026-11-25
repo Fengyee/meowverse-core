@@ -135,8 +135,10 @@ struct PhotoLibraryView: View {
         let undo: Undo
 
         enum Undo: Equatable {
-            case unlink(photoIds: [String], instanceId: String)
-            case favorite(photoIds: [String], Bool)
+            /// Takes off the links the save made, if still as made.
+            case unlink(LibraryStore.LinkReceipt)
+            /// Puts back the marks the save changed, if still as set.
+            case favorite(LibraryStore.FavoriteReceipt)
             /// Puts the links back exactly as they were (origin, place in the album).
             case relink(LibraryStore.UnlinkReceipt)
             /// The cover the piece had before; nil = its first photo.
@@ -302,8 +304,9 @@ struct PhotoLibraryView: View {
     private func link(_ ids: [String], to item: PhotoFurniture) {
         run {
             switch await model.linkPhotos(ids, to: item.instanceId) {
-            case .success(let fresh):
+            case .success(let receipt):
                 stopSelecting()
+                let fresh = receipt.added
                 guard !fresh.isEmpty else {
                     failure = String(localized: "这些照片已经在「\(item.shownName)」里了。")
                     return
@@ -313,7 +316,7 @@ struct PhotoLibraryView: View {
                     message: skipped == 0
                         ? String(localized: "已把 \(fresh.count) 张照片放进「\(item.shownName)」")
                         : String(localized: "已把 \(fresh.count) 张照片放进「\(item.shownName)」，另外 \(skipped) 张本来就在"),
-                    undo: .unlink(photoIds: fresh, instanceId: item.instanceId))
+                    undo: .unlink(receipt))
             case .failure(let failed):
                 failure = failed.message
             }
@@ -323,11 +326,12 @@ struct PhotoLibraryView: View {
     private func favorite(_ ids: [String], _ value: Bool) {
         run {
             switch await model.setFavorite(ids, value) {
-            case .success(let changed):
+            case .success(let receipt):
                 stopSelecting()
+                let changed = receipt.photoIds
                 guard !changed.isEmpty else { return }
                 notice = BatchNotice(message: value ? String(localized: "已收藏 \(changed.count) 张照片") : String(localized: "已取消收藏 \(changed.count) 张照片"),
-                                     undo: .favorite(photoIds: changed, !value))
+                                     undo: .favorite(receipt))
             case .failure(let failed):
                 failure = failed.message
             }
@@ -385,10 +389,10 @@ struct PhotoLibraryView: View {
         run {
             let failed: PhotoSaveFailure?
             switch notice.undo {
-            case .unlink(let ids, let instanceId):
-                failed = await model.unlinkPhotos(ids, from: instanceId)
-            case .favorite(let ids, let value):
-                if case .failure(let failure) = await model.setFavorite(ids, value) { failed = failure } else { failed = nil }
+            case .unlink(let receipt):
+                failed = await model.undoLink(receipt)
+            case .favorite(let receipt):
+                failed = await model.undoFavorite(receipt)
             case .relink(let receipt):
                 failed = await model.undoUnlink(receipt)
             case .cover(let instanceId, let previous):

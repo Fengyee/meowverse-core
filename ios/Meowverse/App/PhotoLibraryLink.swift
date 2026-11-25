@@ -221,13 +221,14 @@ final class PhotoLibraryLink {
     nonisolated static func originalData(for photo: PhotoRecord, linked: Bool) async throws -> Data {
         let asset = try await asset(for: photo, linked: linked)
         let expected = photo.reducedFrom?.sha256 ?? photo.sha256
-        // The picker used .current. If the asset has since been edited, its original may still match.
-        for version in [PHImageRequestOptionsVersion.current, .original] {
+        // The picker used .current. If the asset has since been edited, its original may still match;
+        // and if the current version cannot be read, the original is still tried (audit A24-09).
+        return try await PhotoOriginalVersions.read([PHImageRequestOptionsVersion.current, .original], expected: expected) { version in
             let options = PHImageRequestOptions()
             options.version = version
             options.deliveryMode = .highQualityFormat
             options.isNetworkAccessAllowed = true
-            let data: Data = try await PhotoRequest.value { reply in
+            return try await PhotoRequest.value { reply in
                 let id = PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, info in
                     if let data { reply(.success(data)) }
                     else { reply(.failure(sourceIssue(error: info?[PHImageErrorKey] as? Error,
@@ -235,9 +236,7 @@ final class PhotoLibraryLink {
                 }
                 return { PHImageManager.default().cancelImageRequest(id) }
             }
-            if PhotoIngest.sha256Hex(data) == expected { return data }
         }
-        throw PhotoSourceIssue.changed
     }
 
     private nonisolated static func request(_ asset: PHAsset, maxPixel: Int) async -> FullImage {

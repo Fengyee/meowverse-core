@@ -78,9 +78,15 @@ public protocol SyncTransport: Sendable {
     /// tell. Clean-up leaves a file stored within `SyncSession.fileGrace` alone: it may belong
     /// to a photo coming back whose record has not arrived yet.
     func fileStoredAt(sha256: String) async throws -> Date?
+    /// Whether the file is in the cloud, asked of the cloud itself now: never an answer the
+    /// transport remembers (`hasFile` may, within a cycle). Asked right before a record that
+    /// needs a file this cycle put up is sent, since another device may have removed it since.
+    func confirmFile(sha256: String) async throws -> Bool
 }
 
 extension SyncTransport {
     /// A transport that cannot tell: clean-up then judges on the records alone.
     public func fileStoredAt(sha256: String) async throws -> Date? { nil }
+    /// A transport whose `hasFile` always asks the cloud.
+    public func confirmFile(sha256: String) async throws -> Bool { try await hasFile(sha256: sha256) }
 }

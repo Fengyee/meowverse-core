@@ -10,6 +10,8 @@ import SwiftUI
 struct FiledNotice: Equatable, Identifiable {
     let id = UUID()
     let message: String
+    /// The confirmation it reports (`AppModel.lastAcceptanceID`): 撤销 takes back only that page.
+    var acceptance: UUID?
 }
 
 extension AppModel {
@@ -78,7 +80,7 @@ struct SuggestionReviewPage: View {
             if let failed {
                 failure = failed.message
             } else {
-                finish(model.lastAcceptanceMessage().map { FiledNotice(message: $0) })
+                finish(model.lastAcceptanceMessage().map { FiledNotice(message: $0, acceptance: model.lastAcceptanceID) })
             }
         }
     }
@@ -94,7 +96,7 @@ struct SuggestedFilingNotice: View {
     var body: some View {
         if let notice {
             FilingNoticeBar(message: notice.message, undoing: undoing,
-                            undo: model.canUndoLastAcceptance ? { undo(notice) } : nil)
+                            undo: model.canUndoAcceptance(notice.acceptance) ? { undo(notice) } : nil)
                 .task(id: notice.id) {
                     // Long enough to read and reach; the filing itself stays either way. A task
                     // cancelled because the bar left the screen for a moment (the page it came
@@ -109,7 +111,7 @@ struct SuggestedFilingNotice: View {
         guard !undoing else { return }
         undoing = true
         Task {
-            let failed = await model.undoLastAcceptance()
+            let failed = await model.undoLastAcceptance(shown.acceptance)
             undoing = false
             if let failed {
                 TransientNotice.show(failed.message)

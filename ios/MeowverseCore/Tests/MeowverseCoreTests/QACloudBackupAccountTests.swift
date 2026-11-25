@@ -171,7 +171,7 @@ struct QACloudBackupAccountTests {
         }
         let listing = try CloudBackupCatalog.load(from: bobs, deviceID: device)
         #expect(listing.entries.filter(\.isFromThisDevice).isEmpty)
-        let deleted = try CloudBackupEngine.deleteBackups(listing.entries.map(\.name), deviceID: device, in: bobs)
+        let deleted = try CloudBackupEngine.deleteBackups(listing.entries.map(\.name), deviceID: device, account: bob, in: bobs)
         #expect(deleted == 0)
         #expect(files(bobFolder).count == 2)
         #expect(files(aliceFolder) == aliceFiles)

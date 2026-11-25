@@ -38,7 +38,9 @@ nonisolated struct PocketCatCompanyShelf {
 
     /// The companion the widgets should follow at `now`, or nil.
     func companion(at now: Date) -> PocketCatWidgetPlan.Companion? {
-        guard let record else { return nil }
+        // The end is written before the record is removed, as two keys (X24-02): a record that
+        // is also listed as ended is over.
+        guard let record, !ended.contains(record.sessionID) else { return nil }
         let endsBy = record.startedAt.addingTimeInterval(Self.longestCompany)
         guard now < endsBy else { return nil }
         return .init(sessionID: record.sessionID, state: record.state, endsBy: endsBy)
@@ -59,12 +61,22 @@ nonisolated struct PocketCatCompanyShelf {
 
     /// A companion shows `state` now. A late write for the same companion never replaces a
     /// newer expression, keeps the earliest start, and never brings back one that has ended.
+    /// A write from another companion whose expression was chosen before the one on the shelf
+    /// began is a late one from an older companion that ended unheard (X24-01): it doesn't
+    /// replace the newer one. `PocketCatCompanyMirror.reconcile` ends a shelved companion the
+    /// system no longer runs first, so an older one that really runs still gets the shelf.
     func keep(sessionID: String, state: PocketCatState, at now: Date) {
-        guard !ended.contains(sessionID) else { return }
+        let endedIDs = ended
+        guard !endedIDs.contains(sessionID) else { return }
         var startedAt = now
-        if let old = record, old.sessionID == sessionID {
-            if Self.changedAt(old.state) > Self.changedAt(state) { return }
-            startedAt = min(old.startedAt, now)
+        if let old = record {
+            if old.sessionID == sessionID {
+                if Self.changedAt(old.state) > Self.changedAt(state) { return }
+                startedAt = min(old.startedAt, now)
+            } else if !endedIDs.contains(old.sessionID), now < old.startedAt.addingTimeInterval(Self.longestCompany),
+                      Self.changedAt(state) < old.startedAt {
+                return
+            }
         }
         write(Record(sessionID: sessionID, startedAt: startedAt, state: state))
     }

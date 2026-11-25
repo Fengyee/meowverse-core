@@ -43,13 +43,17 @@ public struct CloudSyncMirror: Codable, Sendable, Equatable {
     /// down), by name, with the change tag seen. Fetched again one by one; until then no file is
     /// deleted from the cloud, since such a record may list it.
     public private(set) var unfetched: [String: String] = [:]
+    /// The last name a refetch of unreadable records asked for: the next one goes on after it,
+    /// so records that stay unreadable do not take every turn from the ones after them (audit
+    /// D24-04). nil: start from the first.
+    public private(set) var refetchAfter: String?
 
     public init(epoch: String = UUID().uuidString) {
         self.epoch = epoch
     }
 
     private enum CodingKeys: String, CodingKey {
-        case version, epoch, account, zonesReady, cloudDataDeleted, zoneMarker, sequence, entries, unfetched
+        case version, epoch, account, zonesReady, cloudDataDeleted, zoneMarker, sequence, entries, unfetched, refetchAfter
     }
 
     /// Fields added after the first version may be missing: a mirror from before still reads.
@@ -64,6 +68,7 @@ public struct CloudSyncMirror: Codable, Sendable, Equatable {
         sequence = try c.decode(Int.self, forKey: .sequence)
         entries = try c.decode([String: Entry].self, forKey: .entries)
         unfetched = try c.decodeIfPresent([String: String].self, forKey: .unfetched) ?? [:]
+        refetchAfter = try c.decodeIfPresent(String.self, forKey: .refetchAfter)
     }
 
     /// Takes a version the server has. Returns false when it is the version already held.
@@ -93,6 +98,22 @@ public struct CloudSyncMirror: Codable, Sendable, Equatable {
 
     public var unfetchedNames: [String] { unfetched.keys.sorted() }
 
+    /// At most `limit` unreadable records to fetch again, in name order, going on after the
+    /// last ones asked for and round to the start: each one gets its turn however many of the
+    /// others stay unreadable for good.
+    public func unfetchedToRefetch(limit: Int) -> [String] {
+        let names = unfetchedNames
+        guard names.count > limit else { return names }
+        let start = refetchAfter.flatMap { cursor in names.firstIndex { $0 > cursor } } ?? 0
+        return (0..<max(limit, 0)).map { names[(start + $0) % names.count] }
+    }
+
+    /// `names` were asked for (whatever came back): the next refetch goes on after them.
+    public mutating func noteRefetched(_ names: [String]) {
+        guard let last = names.last else { return }
+        refetchAfter = last
+    }
+
     /// Files in the cloud may be deleted only while every record delivered could be read.
     public var mayDeleteFiles: Bool { unfetched.isEmpty }
 
@@ -118,6 +139,7 @@ public struct CloudSyncMirror: Codable, Sendable, Equatable {
         zoneMarker = nil
         entries = [:]
         unfetched = [:]
+        refetchAfter = nil
         // Kept increasing so a token from before can never look current.
         sequence += 1
     }
@@ -183,16 +205,20 @@ public struct CloudSyncMirrorFiles: Sendable {
     public let mirrorURL: URL
     public let stateURL: URL
     private let write: Writer
+    private let remove: @Sendable (URL) throws -> Void
     /// The mirror as last written; nil while this run has written or read none.
     private var onDisk: CloudSyncMirror?
     /// The engine's saved state is not to be used even if deleting it failed.
     private var stateDiscarded = false
 
     /// `write` must replace a file atomically (the app's `SyncFiles.writeDurably`).
-    public init(folder: URL, write: @escaping Writer) {
+    /// `remove` deletes a file (injected only by tests, to make it fail).
+    public init(folder: URL, write: @escaping Writer,
+                remove: @escaping @Sendable (URL) throws -> Void = { try FileManager.default.removeItem(at: $0) }) {
         mirrorURL = folder.appendingPathComponent("mirror.json")
         stateURL = folder.appendingPathComponent("engine-state.json")
         self.write = write
+        self.remove = remove
     }
 
     /// The mirror on disk, or an empty one. Without a readable mirror the engine's state goes
@@ -215,6 +241,11 @@ public struct CloudSyncMirrorFiles: Sendable {
     /// Returns false when the mirror could not be written.
     @discardableResult
     public mutating func save(_ mirror: CloudSyncMirror) -> Bool {
+        // A dropped state still on disk (deleting it failed) belongs to the mirror on disk: a
+        // relaunch would pair it with this one, its token past records this one never held, or
+        // another account's (audit GG24-01). The mirror waits until the state is gone; the
+        // state and mirror on disk stay a true pair meanwhile.
+        if stateDiscarded, !dropStateFile() { return false }
         guard let data = try? mirror.encoded() else { return false }
         do { try write(data, mirrorURL) } catch { return false }
         onDisk = mirror
@@ -235,7 +266,14 @@ public struct CloudSyncMirrorFiles: Sendable {
     /// The engine starts from nothing next time (another account, a reset, a lost mirror).
     public mutating func dropEngineState() {
         stateDiscarded = true
-        try? FileManager.default.removeItem(at: stateURL)
+        _ = dropStateFile()
+    }
+
+    /// Whether no engine state is on disk any more.
+    private func dropStateFile() -> Bool {
+        guard FileManager.default.fileExists(atPath: stateURL.path) else { return true }
+        do { try remove(stateURL) } catch { return false }
+        return true
     }
 
     /// What a cycle takes. The token claims no more than the mirror on disk: after a relaunch the

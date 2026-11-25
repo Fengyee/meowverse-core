@@ -498,6 +498,8 @@ public actor FeaturePrintCache {
     private var failed: [String: Failure] = [:]
     /// Photos a running `refresh` is making a print of, and the refreshes waiting for them.
     private var making = Set<String>()
+    /// Photos being made that a `retain` has since dropped: their print is not written (L24-01).
+    private var abandoned = Set<String>()
     private var waiting: [String: [CheckedContinuation<Void, Never>]] = [:]
 
     /// `fileURL` is the binary file (`FeaturePrintFile`). `legacyFileURL` is where older builds
@@ -554,6 +556,8 @@ public actor FeaturePrintCache {
     public func retain(only photoIds: Set<String>) {
         let current = loaded()
         let kept = current.filter { photoIds.contains($0.key) }
+        // A print still being made of a dropped photo belongs to the library it was asked in.
+        abandoned.formUnion(making.subtracting(photoIds))
         checked = checked.filter { photoIds.contains($0.key) }
         failed = failed.filter { photoIds.contains($0.key) }
         if kept.count != current.count {
@@ -689,6 +693,8 @@ public actor FeaturePrintCache {
             for _ in 0..<max(1, concurrency) { start() }
             for await (photoId, attempt) in group {
                 switch attempt {
+                case .made where abandoned.contains(photoId):
+                    break
                 case let .made(path, stamp, data, print) where isOurs(print):
                     var current = loaded()
                     current[photoId] = Entry(print: print, pipeline: pipeline, input: PhotoIngest.sha256Hex(data))
@@ -735,6 +741,7 @@ public actor FeaturePrintCache {
 
     private func finishedMaking(_ photoId: String) {
         making.remove(photoId)
+        abandoned.remove(photoId)
         for waiter in waiting.removeValue(forKey: photoId) ?? [] { waiter.resume() }
     }
 

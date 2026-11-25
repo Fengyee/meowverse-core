@@ -8,7 +8,7 @@ import MeowverseCore
 /// representative photos first. Free for everyone (owner, 2026-11-17).
 ///
 /// The interface binds to: `batchProgress`, `suggestionGroups`, `suggestedCount`,
-/// `acceptSuggestions(_:declining:)`, `declineSuggestions(_:)`, `undoLastAcceptance()`,
+/// `acceptSuggestions(_:declining:)`, `declineSuggestions(_:)`, `undoLastAcceptance(_:)`,
 /// `suggestForPending()`, `suggestForPhotoBoards()`, `sortingQueue`, `representativeRound`,
 /// `batch.suggestions.representativeOrderOn`.
 struct SuggestionState {
@@ -25,6 +25,10 @@ struct SuggestionState {
     var declined: Set<String> = []
     /// The last confirmed page, so it can be taken back in one step.
     var lastAcceptance: LibraryStore.SuggestionReceipt?
+    /// Which confirmation `lastAcceptance` is: a notice undoes only its own page.
+    var acceptanceID: UUID?
+    /// What `offers` were worked out on; nil when there are none worked out for this scope.
+    var offersBasis: SuggestionBasis?
     /// Ask about the most representative photos first (default on). Applies only to batches of
     /// at least `BatchSuggestionSettings.representativeMinimumBatch` photos once their prints are ready.
     var representativeOrderOn = true
@@ -52,6 +56,16 @@ struct SuggestionState {
     var roundTotal = 0
     /// The representatives still to ask about, in order, as `refreshReviewOrder` last chose them.
     var roundPicks: [String] = []
+}
+
+/// What a run of the rule looked at: the library and its revision, the prints' analyzer and the
+/// scope. Offers are shown only for the scope, library and analyzer they were made for, and
+/// filed only while the home is still at that revision (L24-02, L24-04, EE24-02, DATA-11).
+struct SuggestionBasis: Equatable {
+    let generation: UUID
+    let revision: Int
+    let analyzer: String
+    let scope: SuggestionScope
 }
 
 /// The representative round of a big batch: introduced (RepresentativeRoundIntro), running in
@@ -168,7 +182,8 @@ extension AppModel {
     /// Offers for photos on a photo board (and in no other piece).
     func suggestForPhotoBoards() {
         guard batchSuggestionsAvailable, let catalog else { return }
-        let ids = BatchSuggestions.candidates(.photoBoards, in: state, catalog: catalog).map(\.photoId)
+        let ids = BatchSuggestions.candidates(.photoBoards, in: state, catalog: catalog,
+                                              linkedElsewhere: sync.photosOnNewerPieces).map(\.photoId)
         recognise(ids, for: .photoBoards)
     }
 
@@ -178,6 +193,12 @@ extension AppModel {
     private func recognise(_ ids: [String], for scope: SuggestionScope) {
         batch.suggestions.printTask?.cancel()
         batch.suggestions.printTask = nil
+        // A run for the scope before this one reports nothing here (L24-04).
+        batch.suggestions.suggestTask?.cancel()
+        batch.suggestions.suggestTask = nil
+        batch.suggestions.token = nil
+        batch.suggestions.computing = false
+        batch.suggestions.offersBasis = nil
         batch.suggestions.scope = scope
         batch.suggestions.offers = []
         batch.suggestions.unfinished = false
@@ -196,12 +217,22 @@ extension AppModel {
     /// The offers still true of the home: not filed, moved or declined since, and not the photo
     /// the review is showing.
     var currentOffers: [BatchSuggestion] {
-        guard let catalog else { return [] }
+        guard let catalog, let basis = batch.suggestions.offersBasis, basis.generation == libraryGeneration,
+              basis.analyzer == embedder.analyzer, basis.scope == batch.suggestions.scope else { return [] }
         let reviewing = importSession?.sorting?.photoId ?? importSession?.existingPhoto?.photoId
+        // A photo also on a piece from a newer version is filed there, even if this device can't show it.
+        let hidden = sync.photosOnNewerPieces
         return batch.suggestions.offers.filter {
-            !batch.suggestions.declined.contains($0.photoId) && $0.photoId != reviewing
+            !batch.suggestions.declined.contains($0.photoId) && $0.photoId != reviewing && !hidden.contains($0.photoId)
                 && BatchSuggestions.isCurrent($0, in: state, catalog: catalog)
         }
+    }
+
+    /// The offers were worked out on the home as it is now, in this library, with these prints.
+    private var offersReflectTheHome: Bool {
+        guard let basis = batch.suggestions.offersBasis else { return false }
+        return basis == SuggestionBasis(generation: libraryGeneration, revision: state.revision, analyzer: embedder.analyzer,
+                                        scope: basis.scope) && basis.scope == batch.suggestions.scope
     }
 
     /// The confirmation page: offers by piece, the piece with the most first.
@@ -226,10 +257,11 @@ extension AppModel {
             return
         }
         let token = UUID(), generation = libraryGeneration, state = self.state
+        let basis = SuggestionBasis(generation: generation, revision: state.revision, analyzer: embedder.analyzer, scope: scope)
         batch.suggestions.token = token
         batch.suggestions.seenRevision = state.revision
         batch.suggestions.computing = true
-        let candidates = BatchSuggestions.candidates(scope, in: state, catalog: catalog)
+        let candidates = BatchSuggestions.candidates(scope, in: state, catalog: catalog, linkedElsewhere: sync.photosOnNewerPieces)
         let (links, boards) = BatchSuggestions.links(in: state, catalog: catalog)
         refreshFeaturePrints()
         batch.suggestions.suggestTask = Task {
@@ -237,30 +269,35 @@ extension AppModel {
             await featurePrintsSettled()
             guard !Task.isCancelled else { return }
             var references: [FurniturePhotoPrint] = []
+            var referencePrints: [String: FeaturePrint] = [:]
             for link in links {
                 if let print = await cache.print(for: link.photoId) {
                     references.append(FurniturePhotoPrint(instanceId: link.instanceId, photoId: link.photoId, print: print))
+                    referencePrints[link.photoId] = print
                 }
             }
             var prints: [String: FeaturePrint] = [:]
             for candidate in candidates {
                 if let print = await cache.print(for: candidate.photoId) { prints[candidate.photoId] = print }
             }
-            let declined = batch.suggestions.declined, candidatePrints = prints, filed = references
+            let declined = batch.suggestions.declined, candidatePrints = prints, filed = references, filedPrints = referencePrints
             let rule = suggestionRule
             // With nothing to compare, or nothing to compare with, none is simply true.
             let asked = candidates.filter { !declined.contains($0.photoId) }
             let allPrinted = references.count == links.count && asked.allSatisfy { prints[$0.photoId] != nil }
             let unfinished = !asked.isEmpty && !links.isEmpty && !allPrinted
             let result = try? await Self.offMain {
-                (BatchSuggestions.offers(for: candidates, prints: candidatePrints, references: filed, boards: boards,
-                                         declined: declined, rule: rule),
+                // No offer at all while a filed photo's print is missing: it may be the competitor (EE24-01).
+                (BatchSuggestions.offers(for: candidates, prints: candidatePrints, links: links, referencePrints: filedPrints,
+                                         boards: boards, declined: declined, rule: rule),
                  RecognitionDiagnostics.nearestDistances(of: candidatePrints, to: filed))
             }
             let (found, nearest) = result ?? ([], [])
-            guard !Task.isCancelled, batch.suggestions.token == token, generation == libraryGeneration else { return }
+            guard !Task.isCancelled, batch.suggestions.token == token, generation == libraryGeneration,
+                  embedder.analyzer == basis.analyzer, batch.suggestions.scope == scope else { return }
             similarity.lastBatch = .init(compared: candidatePrints.count, offers: found.count, nearest: nearest)
             batch.suggestions.offers = found
+            batch.suggestions.offersBasis = basis
             batch.suggestions.unfinished = unfinished || result == nil
             similarity.batchPrints = prints
             batch.suggestions.computing = false
@@ -273,21 +310,49 @@ extension AppModel {
     /// longer hold (the photo was filed or moved by hand meanwhile, or the rule now names
     /// another piece than the page showed) are left alone.
     func acceptSuggestions(_ selected: Set<SuggestionChoice>, declining unticked: Set<String> = []) async -> PhotoSaveFailure? {
+        // This page's notice is about this page only: an empty or failed one never shows the last (IMPORT-7).
+        batch.suggestions.lastAcceptance = nil
+        batch.suggestions.acceptanceID = nil
         if !unticked.isEmpty { declineSuggestions(unticked) }
-        // Confirm against offers worked out from the home as it is now.
-        await batch.suggestions.suggestTask?.value
+        // Confirm against offers worked out from the home as it is now: every run in flight is
+        // waited for, and a home changed since the last run (a remote change, say) is worked out
+        // again first (L24-02, EE24-02). Still not current after that: nothing is filed, and the
+        // page says so rather than closing as if it had worked (owner 2026-11-24).
+        for _ in 0..<3 {
+            await suggestionsSettled()
+            if offersReflectTheHome { break }
+            recomputeSuggestions()
+        }
+        guard offersReflectTheHome, let basis = batch.suggestions.offersBasis else { return Self.homeChangedFailure }
         let chosen = BatchSuggestions.confirmed(selected, among: currentOffers)
         guard !chosen.isEmpty else { return nil }
         let analyzer = embedder.analyzer, generation = libraryGeneration
-        let result = await perform { try await $0.fileSuggestions(chosen, printsBy: analyzer, generation: generation) }
+        // The store checks the revision again in the step that writes.
+        let result = await perform {
+            try await $0.fileSuggestions(chosen, printsBy: analyzer, generation: generation, basedOnRevision: basis.revision)
+        }
         switch result {
         case .success(let receipt):
-            if !receipt.filed.isEmpty { batch.suggestions.lastAcceptance = receipt }
+            // The home changed between the check above and the write: refused, not "none held".
+            if receipt.homeChanged {
+                suggestionsChangedQueue()
+                return Self.homeChangedFailure
+            }
+            if !receipt.filed.isEmpty {
+                batch.suggestions.lastAcceptance = receipt
+                batch.suggestions.acceptanceID = UUID()
+            }
             suggestionsChangedQueue()
             return nil
         case .failure(let failure):
             return failure
         }
+    }
+
+    /// Confirmed offers not filed because the home changed under them: the page stays and says
+    /// so (owner 2026-11-24, L24-02), in the existing words.
+    private static var homeChangedFailure: PhotoSaveFailure {
+        PhotoSaveFailure(message: String(localized: "没能保存。照片和家具都保持原样，可以重试。"), error: nil)
     }
 
     /// Never offers these photos again (they stay to be sorted by hand).
@@ -301,12 +366,13 @@ extension AppModel {
 
     /// Takes the last confirmed page back: the photos return to where they were, unless the
     /// user has moved them by hand since.
-    func undoLastAcceptance() async -> PhotoSaveFailure? {
-        guard let receipt = batch.suggestions.lastAcceptance else { return nil }
-        let result = await perform { try await $0.undoSuggestions(receipt) }
+    func undoLastAcceptance(_ acceptance: UUID?) async -> PhotoSaveFailure? {
+        guard let receipt = batch.suggestions.lastAcceptance, let acceptance, acceptance == batch.suggestions.acceptanceID else { return nil }
+        let result = await perform(in: receipt.generation) { try await $0.undoSuggestions(receipt) }
         switch result {
         case .success:
             batch.suggestions.lastAcceptance = nil
+            batch.suggestions.acceptanceID = nil
             suggestionsChangedQueue()
             return nil
         case .failure(let failure):
@@ -314,7 +380,13 @@ extension AppModel {
         }
     }
 
-    var canUndoLastAcceptance: Bool { batch.suggestions.lastAcceptance != nil }
+    /// Whether the notice of confirmation `acceptance` can still be taken back.
+    func canUndoAcceptance(_ acceptance: UUID?) -> Bool {
+        batch.suggestions.lastAcceptance != nil && acceptance != nil && acceptance == batch.suggestions.acceptanceID
+    }
+
+    /// The confirmation `lastAcceptanceMessage` describes, for its notice.
+    var lastAcceptanceID: UUID? { batch.suggestions.acceptanceID }
 
     /// Photos left the queue (or came back) other than one by one: the sorting count follows.
     /// The save itself already started a new run of the rule.
@@ -342,6 +414,13 @@ extension AppModel {
               state.revision != batch.suggestions.seenRevision else { return }
         batch.suggestions.seenRevision = state.revision
         recomputeSuggestions()
+    }
+
+    /// Sync wrote remote changes into the library and the app shows them: links the offers were
+    /// worked out on may have gone or moved, so they are worked out again (EE24-02). Until then
+    /// a confirmation waits for the new run (`acceptSuggestions`).
+    func remoteChangesApplied() {
+        librarySaved()
     }
 
     // MARK: Review order

@@ -30,7 +30,7 @@ enum FeedbackGatherer {
             appVersion: info["CFBundleShortVersionString"] as? String ?? "?",
             build: info["CFBundleVersion"] as? String ?? "?",
             configuration: configuration,
-            testFlight: FeedbackConfig.isTestFlight,
+            channel: FeedbackConfig.channel,
             osVersion: UIDevice.current.systemVersion,
             deviceModel: deviceModel(),
             locale: Locale.current.identifier,
@@ -63,8 +63,10 @@ enum FeedbackGatherer {
         var unavailable: String?
     }
 
-    /// The newest `limit` entries Meowverse itself logged in this run. Values logged as private
-    /// arrive as `<private>`. Slow on a long run, so call it off the main actor.
+    /// The newest `limit` entries Meowverse itself logged in this run. Each message is rebuilt from
+    /// its fixed format string and allow-listed arguments (`FeedbackReport.renderLogMessage`), never
+    /// taken from the store's composed text, so free text in an argument stays out (R01-001).
+    /// Slow on a long run, so call it off the main actor.
     nonisolated static func recentLog(limit: Int) -> LogRead {
         do {
             let store = try OSLogStore(scope: .currentProcessIdentifier)
@@ -74,13 +76,30 @@ enum FeedbackGatherer {
             var lines: [String] = []
             lines.reserveCapacity(limit * 2)
             for case let entry as OSLogEntryLog in entries {
-                lines.append("\(entry.date.formatted(clock)) \(name(entry.level)) \(entry.category): \(entry.composedMessage)")
+                lines.append("\(entry.date.formatted(clock)) \(name(entry.level)) \(entry.category): \(message(entry))")
                 if lines.count >= limit * 2 { lines.removeFirst(lines.count - limit) }
             }
             return LogRead(lines: Array(lines.suffix(limit)), unavailable: nil)
         } catch {
             return LogRead(lines: [], unavailable: "OSLogStore: \((error as NSError).domain) \((error as NSError).code)")
         }
+    }
+
+    nonisolated private static func message(_ entry: OSLogEntryLog) -> String {
+        // One component per placeholder (plus one for the closing text); a redacted argument
+        // reads as undefined, so it keeps its slot as `.redacted`.
+        let arguments = entry.components.map { component -> FeedbackReport.LogArgument in
+            switch component.argumentCategory {
+            case .undefined: return .redacted
+            case .int64: return .number(String(component.argumentInt64Value))
+            case .uInt64: return .number(String(component.argumentUInt64Value))
+            case .double: return .number(String(component.argumentDoubleValue))
+            case .string: return component.argumentStringValue.map { .text($0) } ?? .redacted
+            case .data: return .redacted
+            @unknown default: return .redacted
+            }
+        }
+        return FeedbackReport.renderLogMessage(format: entry.formatString, arguments: arguments)
     }
 
     nonisolated private static func name(_ level: OSLogEntryLog.Level) -> String {

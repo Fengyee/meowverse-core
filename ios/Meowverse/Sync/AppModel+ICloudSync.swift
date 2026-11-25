@@ -290,7 +290,7 @@ extension AppModel {
             self.sync.piecesFromNewerVersion = standing.piecesFromNewerVersion
             self.sync.photosOnNewerPieces = standing.photosOnNewerPieces
         }
-        SyncPushCenter.shared.handler = { [weak self] in await self?.syncForPush() }
+        SyncPushCenter.shared.handler = { [weak self] in await self?.syncForPush() ?? .noData }
         let remoteChanged: @Sendable () -> Void = { [weak self] in
             Task { @MainActor in self?.requestSync(.remote) }
         }
@@ -370,6 +370,11 @@ extension AppModel {
         sync.freshStartPending = false
         sync.newInstallPending = false
         sync.freshStartAnyAccount = false
+        // The cycle still out on the network belongs to the session closed here: it no longer
+        // keeps a session opened later from running, and nothing it reports reaches that one
+        // (audit CC24-02, `finishSync`).
+        sync.running = false
+        sync.rerun = false
         // Closed now, not when the queue gets to it: whatever the queue still holds for this
         // session does nothing. Closing waits for the cycle out on the network to stop, then
         // forgets what sync knew; nothing is deleted.
@@ -407,6 +412,10 @@ extension AppModel {
     enum CloudHomeDeletion: Equatable {
         /// Every deletion reached iCloud: the library can be cleared.
         case done
+        /// Every deletion this device could make reached iCloud, but records it can't read (a
+        /// newer version wrote them) or hasn't fetched yet stay there as they are: the library
+        /// can be cleared, and the result must not say the home is all gone (audit D24-01).
+        case doneExceptUnread
         /// Recorded, not all sent: the next cycles send the rest and empty this library too.
         case unfinished(CloudSyncUIState.Problem)
         /// Nothing was deleted anywhere.
@@ -427,7 +436,15 @@ extension AppModel {
                     try await self.freshStartIfPending(session, cloud)
                     let report = try await session.deleteHomeInCloud()
                     self.sync.unsent = report.unsent
-                    if report.problem == nil, report.unsent == 0 {
+                    if report.localStateUnsaved {
+                        // The cloud has what the report says; the next cycle resends from the file.
+                        Self.syncLog.error("sync: home deletion sent, sync's own file not saved")
+                    }
+                    let unread = report.heldBack.count + (await cloud?.recordsNotFetched() ?? 0)
+                    if report.problem == nil, report.unsent == 0, unread > 0 {
+                        Self.syncLog.notice("sync: home deleted in iCloud except \(unread, privacy: .public) records not read")
+                        continuation.resume(returning: .doneExceptUnread)
+                    } else if report.problem == nil, report.unsent == 0 {
                         Self.syncLog.notice("sync: home deleted in iCloud")
                         continuation.resume(returning: .done)
                     } else {
@@ -498,20 +515,37 @@ extension AppModel {
         }
     }
 
-    /// A push from CloudKit: one cycle, waited for, so the system's background time covers it.
-    func syncForPush() async {
-        guard sync.settings.enabled, sync.session != nil else { return }
-        requestSync(.remote)
-        // Waiting on a task's value ignores cancellation, so a push that runs out of time
-        // cancels the cycle itself (it leaves the library and sync's file as they were).
+    /// A push from CloudKit: a cycle of its own, waited for, so the system's background time
+    /// covers it. A cycle already running was not started for this push: the push waits for it
+    /// without ever cancelling it, then runs its own. When the push's time runs out
+    /// (`SyncPushCenter`) only that own cycle is cancelled (it leaves the library and sync's file
+    /// as they were), never one a later request queued meanwhile (audit CC24-03). The result
+    /// says what the cycle did: new data only when it wrote remote changes into the library.
+    func syncForPush() async -> SyncPushOutcome {
+        guard sync.settings.enabled, let session = sync.session else { return .noData }
+        // The push's own cycle covers whatever was waiting to run.
+        sync.scheduled?.cancel()
+        sync.scheduled = nil
+        if sync.running, let front = sync.cycleTask {
+            guard await SyncDeadline.value(of: front) != nil else { return .failed }
+            guard sync.settings.enabled, sync.session === session else { return .noData }
+            // A retry that cycle asked for is covered too.
+            sync.scheduled?.cancel()
+            sync.scheduled = nil
+        }
+        let result = SyncCycleResult()
+        guard let mine = runSync(.remote, result: result) else { return .noData }
         await withTaskCancellationHandler {
-            await sync.scheduled?.value
-            await sync.worker?.value
+            await mine.value
         } onCancel: {
-            Task { @MainActor [weak self] in
-                self?.sync.scheduled?.cancel()
-                self?.sync.cycleTask?.cancel()
-            }
+            mine.cancel()
+        }
+        switch result.outcome {
+        case .success(let report)?:
+            if report.problem != nil { return .failed }
+            return report.applied ? .newData : .noData
+        case .failure?, nil:
+            return .failed
         }
     }
 
@@ -522,27 +556,31 @@ extension AppModel {
             if delay > .zero {
                 do { try await Task.sleep(for: delay) } catch { return }
             }
-            guard let self else { return }
+            // Cancelled while it waited its turn (a push's own cycle covers it): nothing runs.
+            guard !Task.isCancelled, let self else { return }
             self.sync.scheduled = nil
             self.runSync(trigger)
         }
     }
 
-    private func runSync(_ trigger: SyncTrigger) {
-        guard sync.settings.enabled, let session = sync.session else { return }
+    /// Starts a cycle in the queue and returns its task; nil when none was started (one is
+    /// running, the user must answer first, or it was put off). `result` gets what it did.
+    @discardableResult
+    private func runSync(_ trigger: SyncTrigger, result: SyncCycleResult? = nil) -> Task<Void, Never>? {
+        guard sync.settings.enabled, let session = sync.session else { return nil }
         let cloud = sync.cloud
         // Not while a library is being switched in or photos are still arriving: each of their
         // writes would send the cycle back to the start. It runs once they are done.
         if switchingLibraries || batch.progress != nil || photos.adding != nil {
             requestSync(trigger, after: .seconds(5))
-            return
+            return nil
         }
         if sync.running {
             sync.rerun = true
-            return
+            return nil
         }
         // Waits for the user's answer; "立即同步" is not that answer.
-        if sync.problem?.needsUser == true { return }
+        if sync.problem?.needsUser == true { return nil }
         sync.running = true
         sync.lastAttempt = Date()
         Self.syncLog.notice("sync cycle starts: \(String(describing: trigger), privacy: .public)")
@@ -551,22 +589,29 @@ extension AppModel {
         // The expiry handler must end the task itself, or the system ends the app.
         let background = SyncBackgroundTask()
         if trigger == .background || UIApplication.shared.applicationState == .background {
-            background.id = UIApplication.shared.beginBackgroundTask(withName: "CloudSync") { [weak self] in
-                self?.sync.cycleTask?.cancel()
+            // This cycle's, not whichever is the latest when the time runs out (CC24-03).
+            background.id = UIApplication.shared.beginBackgroundTask(withName: "CloudSync") {
+                background.cycle?.cancel()
                 background.end()
             }
         }
-        sync.cycleTask = enqueueSync { [weak self] in
+        let task = enqueueSync { [weak self] in
             let outcome: Result<SyncReport, any Error>
             do {
+                // Cancelled while it waited behind the queue: it does not start.
+                try Task.checkCancellation()
                 try await self?.freshStartIfPending(session, cloud)
                 outcome = .success(try await session.sync())
             } catch {
                 outcome = .failure(error)
             }
-            await self?.finishSync(outcome, trigger: trigger)
+            result?.outcome = outcome
+            await self?.finishSync(outcome, trigger: trigger, session: session, cloud: cloud)
             background.end()
         }
+        sync.cycleTask = task
+        background.cycle = task
+        return task
     }
 
     /// In the queue, right before a cycle: never a cycle on the old file once a fresh start is due.
@@ -578,13 +623,28 @@ extension AppModel {
     /// On an install that never synced this library (`newInstallPending`) sync goes on from the
     /// file the library carried instead, under a new device id; the file's own account is
     /// checked by the cycle, as on any other launch.
+    ///
+    /// The marker then holds the account the home is bound to: the one sync's file names after
+    /// the start (the carried file's account, not the one signed in now, which the next cycle
+    /// refuses; audit CC24-01), or the one checked here. A marker that is there but cannot be
+    /// read stops the start (ERRORS-5): it is not taken for "no account known".
     private func freshStartIfPending(_ session: SyncSession, _ cloud: (any SyncCloud)?) async throws {
         guard sync.freshStartPending || sync.newInstallPending, let cloud else { return }
         let account = try await cloud.accountKey()
         if sync.freshStartPending {
-            let known = (try? String(contentsOf: syncInstallMarker, encoding: .utf8)) ?? ""
-            if !sync.freshStartAnyAccount, !known.isEmpty, known != account { throw SyncTransportError.accountChanged }
-            try await session.startOver(acceptingCurrentAccount: sync.freshStartAnyAccount)
+            // Checked only against a marker that names an account, or by the user's answer.
+            // Otherwise (a new install whose library fell back to its fallback copy) `account`
+            // is just whoever is signed in: an unreadable sync file then stops the start, and
+            // `finishSync` turns sync off (QA round 20, G1, the fallback path).
+            var checked = sync.freshStartAnyAccount
+            if !sync.freshStartAnyAccount, FileManager.default.fileExists(atPath: syncInstallMarker.path) {
+                let known = try String(contentsOf: syncInstallMarker, encoding: .utf8)
+                if !known.isEmpty, known != account { throw SyncTransportError.accountChanged }
+                checked = !known.isEmpty
+            }
+            // Bound to the account just checked: a switch before the cycle asks again stops it.
+            try await session.startOver(acceptingCurrentAccount: sync.freshStartAnyAccount, account: account,
+                                        accountChecked: checked)
             Self.syncLog.notice("sync started over: merges as on first sync")
         } else {
             switch try await session.startOnNewInstall() {
@@ -592,11 +652,14 @@ extension AppModel {
             case .startedOver: Self.syncLog.notice("sync on a new install: nothing to go on from, merges as on first sync")
             }
         }
+        // Turned off (and maybe on again) meanwhile: the flags are the new session's (CC24-02).
+        guard sync.session === session else { throw CancellationError() }
         sync.freshStartPending = false
         sync.newInstallPending = false
         sync.freshStartAnyAccount = false
+        let bound = (try? await session.deviceState())?.account ?? account
         do {
-            try SyncFiles.writeDurably(Data(account.utf8), to: syncInstallMarker)
+            try SyncFiles.writeDurably(Data(bound.utf8), to: syncInstallMarker)
         } catch {
             Self.syncLog.error("sync install marker not written")
         }
@@ -613,8 +676,14 @@ extension AppModel {
         return task
     }
 
-    private func finishSync(_ outcome: Result<SyncReport, any Error>, trigger: SyncTrigger) async {
-        sync.running = false
+    /// `session` and `cloud` are the ones the cycle ran on. Sync turned off while it ran, and
+    /// maybe on again with a new session: what the cycle wrote into the library is shown (that is
+    /// the library's, whichever session), but nothing it reports, no problem, success, retry or
+    /// fresh start, reaches the session open now. Checked again after every await (CC24-02).
+    private func finishSync(_ outcome: Result<SyncReport, any Error>, trigger: SyncTrigger,
+                            session: SyncSession, cloud: (any SyncCloud)?) async {
+        func owned() -> Bool { sync.settings.enabled && sync.session === session }
+        if owned() { sync.running = false }
         switch outcome {
         case .success(let report):
             if report.applied {
@@ -622,9 +691,13 @@ extension AppModel {
                 await republish()
                 sync.appliedRevision = state.revision
                 refreshFeaturePrints()
+                remoteChangesApplied()
             }
             // Turned off while it ran: what it wrote is shown, nothing more is reported.
-            guard sync.settings.enabled else { return }
+            guard owned() else { return }
+            // From the transport this cycle ran on, never a newer session's.
+            let notFetched = await cloud?.recordsNotFetched() ?? 0
+            guard owned() else { return }
             sync.unsent = report.unsent
             sync.waitingForFiles = report.waitingForFiles
             sync.unusableFiles = report.unusableFiles
@@ -634,7 +707,7 @@ extension AppModel {
             sync.photosOnNewerPieces = report.photosOnNewerPieces
             sync.quarantined = report.quarantined.count
             sync.heldBack = Set(report.heldBack).subtracting(report.quarantined).count
-            sync.notFetched = await sync.cloud?.recordsNotFetched() ?? 0
+            sync.notFetched = notFetched
             sync.notUploaded = report.photosNotUploaded
             sync.problem = Self.syncProblem(report.problem)
             if case .retryLater(let seconds) = report.problem { sync.retryAfter = seconds } else { sync.retryAfter = nil }
@@ -650,18 +723,50 @@ extension AppModel {
             if trigger == .manual {
                 if let problem = sync.problem {
                     setSyncNotice(Self.syncProblemText(problem), isFailure: true)
+                } else if report.localCleanupPending {
+                    // A deletion is in the library, its files not all removed yet (audit DD24-03).
+                    setSyncNotice(Wording.sentences(String(localized: "同步完成。"),
+                                                    Self.photoMessage(for: StoreError.deletionCleanupPending)), isFailure: false)
                 } else {
                     setSyncNotice(String(localized: "同步完成。"), isFailure: false)
                 }
             }
         case .failure(let error):
-            guard sync.settings.enabled else { return }
+            // A store error after the library was committed (sync's own file not written,
+            // T24-04): the library on disk is newer than the one shown. Shown, like any write.
+            if !(error is SyncApplyError), !(error is CancellationError) { await republishIfSyncWrote() }
+            guard owned() else { return }
             switch error {
+            case SyncStateError.unreadable:
+                // Sync's file and its backup are there and unreadable: not a first sync. The
+                // fresh start checks the account this install knows first (audit AA24-01).
+                // Without a marker (a new install) there is no account to check against, and
+                // starting over would take whichever one is signed in: sync is turned off, with
+                // nothing sent, and turning it on again asks first (QA round 20, G1). The same
+                // when the marker names no account: the fresh start refuses then too, and asking
+                // it again would only refuse again.
+                let marker = FileManager.default.fileExists(atPath: syncInstallMarker.path)
+                guard marker, (try? String(contentsOf: syncInstallMarker, encoding: .utf8))?.isEmpty != true else {
+                    Self.syncLog.error("sync state unreadable and no account known: sync turned off")
+                    disableCloudSync()
+                    return
+                }
+                Self.syncLog.error("sync state unreadable: fresh start with the account check")
+                sync.freshStartPending = true
+                sync.rerun = true
+            case SyncStateError.newerVersion:
+                // A newer version's file: left alone, nothing synced by this version.
+                Self.syncLog.error("sync state from a newer version: not synced")
+                sync.problem = .failed
+                sync.failures += 1
+                if trigger == .manual { setSyncNotice(Self.syncProblemText(.failed), isFailure: true) }
             case SyncApplyError.libraryReplaced:
                 // A restore or a clear switched in a library while the cycle ran. Without a sync
                 // file there, the session left it to the app: the fresh start (with its account
                 // check) runs before the next cycle, which never merges into it unchecked.
-                if (try? await sync.session?.deviceState()) == nil { sync.freshStartPending = true }
+                let file = try? await session.deviceState()
+                guard owned() else { return }
+                if file == nil { sync.freshStartPending = true }
                 sync.rerun = true
             case SyncApplyError.localChanged:
                 // Edits kept coming: once more, shortly.
@@ -689,6 +794,14 @@ extension AppModel {
         } else if let problem = sync.problem, problem.retries {
             requestSync(.retry, after: syncRetryDelay(problem))
         }
+    }
+
+    /// The library on disk is not the one shown (a cycle committed it, then failed): show it.
+    private func republishIfSyncWrote() async {
+        guard let store, await store.snapshot().revision != state.revision else { return }
+        await republish()
+        sync.appliedRevision = state.revision
+        refreshFeaturePrints()
     }
 
     /// 30 s, doubling to 15 min while it keeps failing; what the server asked for when it did.
@@ -757,6 +870,8 @@ extension AppModel {
 @MainActor
 final class SyncBackgroundTask {
     var id = UIBackgroundTaskIdentifier.invalid
+    /// The cycle this background time was asked for: the only one its expiry cancels.
+    var cycle: Task<Void, Never>?
 
     func end() {
         guard id != .invalid else { return }
@@ -765,22 +880,36 @@ final class SyncBackgroundTask {
     }
 }
 
+/// What a push's cycle did, for the system's background fetch result.
+enum SyncPushOutcome: Sendable {
+    /// Remote changes were written into the library.
+    case newData
+    /// Nothing ran, or the cycle brought nothing new.
+    case noData
+    /// The cycle stopped on a problem, was cancelled, or ran out of time.
+    case failed
+}
+
+/// What one cycle ended with, for whoever started it (a push).
+@MainActor
+final class SyncCycleResult {
+    var outcome: Result<SyncReport, any Error>?
+}
+
 /// Where a CloudKit push reaches the model (the app delegate has no other way in).
 @MainActor
 final class SyncPushCenter {
     static let shared = SyncPushCenter()
-    var handler: (() async -> Void)?
+    var handler: (@MainActor @Sendable () async -> SyncPushOutcome)?
 
-    /// Runs one cycle, at most about 25 seconds: the system gives a push 30.
-    func receive() async -> Bool {
-        guard let handler else { return false }
-        let work = Task { await handler() }
-        let timeout = Task {
-            try? await Task.sleep(for: .seconds(25))
-            work.cancel()
+    /// Runs the push's cycle, and returns within about 25 seconds whatever it is doing: the
+    /// system gives a push 30. At the limit only the push's own cycle is cancelled, and this
+    /// does not wait for a call inside it that does not return (audit CC24-03).
+    func receive() async -> SyncPushOutcome? {
+        guard let handler else { return nil }
+        switch await SyncDeadline.run(limit: .seconds(25), { await handler() }) {
+        case .finished(let outcome): return outcome
+        case .timedOut, .cancelled: return .failed
         }
-        await work.value
-        timeout.cancel()
-        return true
     }
 }

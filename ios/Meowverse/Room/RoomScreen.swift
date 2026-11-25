@@ -432,12 +432,16 @@ struct RoomScreen: View {
 
     /// Two overlapping presentations break, so wait for closing pages and alerts to slide
     /// away first. With `dismissingLeftovers`, anything still up after a second (the companion
-    /// screen, which SwiftUI does not track) is dismissed directly.
+    /// screen, which SwiftUI does not track) is dismissed directly. Only what was up when this
+    /// began is a leftover: a page that came up during the wait is newer than the request, so
+    /// it stays and the request is dropped (L24-06).
     private func whenNothingIsPresented(dismissingLeftovers: Bool = false, _ body: @escaping () -> Void) {
         quickAddTask?.cancel()
         quickAddTask = Task {
+            weak var leftover = Self.rootController?.presentedViewController
             for attempt in 0..<30 {
                 guard let root = Self.rootController, let presented = root.presentedViewController else { break }
+                if presented !== leftover, !presented.isBeingDismissed { return }
                 if dismissingLeftovers, attempt == 10, !presented.isBeingDismissed { root.dismiss(animated: true) }
                 do { try await Task.sleep(for: .milliseconds(100)) } catch { return }
             }

@@ -46,16 +46,23 @@ private struct PocketCatPresenter: UIViewControllerRepresentable {
 
         func presentCompanionIfRequested() {
             guard pendingRequest != nil, let root = view.window?.rootViewController else { return }
-            if companion != nil { pendingRequest = nil; didPresent?(); return }
             var top = root
             while let presented = top.presentedViewController { top = presented }
+            // A transition first: the companion page on its way out still counts as presented
+            // until it has gone, and would swallow this request (X24-05).
             if let transition = top.transitionCoordinator,
                transition.animate(alongsideTransition: nil, completion: { [weak self] _ in
                    self?.presentCompanionIfRequested()
                }) { return }
+            if let companion, companion.presentingViewController != nil, !companion.isBeingDismissed {
+                return consumeRequest()
+            }
 
+            // The page reads the name when company starts, not when it opened: the library may
+            // have been cleared or restored under it (X24-04).
+            let openedWith = catName
             let screen = UIHostingController(rootView: NavigationStack {
-                PocketCatView(catName: catName)
+                PocketCatView(catName: openedWith, currentName: { [weak self] in self?.catName ?? openedWith })
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button { [weak self] in self?.companion?.dismiss(animated: true) } label: {
@@ -66,9 +73,17 @@ private struct PocketCatPresenter: UIViewControllerRepresentable {
                     }
             })
             companion = screen
+            // Used up once the page is really up: a refused presentation leaves the request
+            // for the next update or appearance (X24-05).
+            top.present(screen, animated: true) { [weak self, weak screen] in
+                guard let self, let screen, self.companion === screen, screen.presentingViewController != nil else { return }
+                self.consumeRequest()
+            }
+        }
+
+        private func consumeRequest() {
             pendingRequest = nil
             didPresent?()
-            top.present(screen, animated: true)
         }
     }
 

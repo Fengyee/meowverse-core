@@ -16,6 +16,20 @@ public enum SyncApplyError: Error, Sendable, Equatable {
     case inconsistent
 }
 
+/// Why sync's own file (`LibraryStore.syncStateFile`, or the copy before it) cannot be used.
+/// Neither is "no file": a library without one merges as on first sync, these never do.
+public enum SyncStateError: Error, Sendable, Equatable {
+    /// The file and its backup are there and neither can be read. Not a first sync: which
+    /// account the home synced with is in there, so a new state would take whichever account
+    /// answers (audit AA24-01). The app checks the account it knows, then starts over, which
+    /// keeps the unreadable copies aside. Knowing none (a new install, no marker), it turns sync
+    /// off; turning it on again asks first (QA review round 20, G1).
+    case unreadable
+    /// A newer version of the app wrote it: this version leaves it as it is and does not sync
+    /// this library (no first sync, no start over, no rebase; COMPAT-4).
+    case newerVersion
+}
+
 /// Everything sync remembers on one device, in the library folder (`LibraryStore.syncStateFile`).
 public struct SyncDeviceState: Codable, Sendable, Equatable {
     public static let currentVersion = 1
@@ -57,16 +71,33 @@ public struct SyncDeviceState: Codable, Sendable, Equatable {
         tags = try c.decode([String: String].self, forKey: .tags)
         token = try c.decodeIfPresent(SyncToken.self, forKey: .token)
         collectedFiles = try c.decodeIfPresent(Set<String>.self, forKey: .collectedFiles) ?? []
-        repairCursor = try c.decodeIfPresent(Int.self, forKey: .repairCursor) ?? 0
+        // Only ever written in range; a damaged value starts the checks from the first photo (D24-05).
+        repairCursor = max(0, try c.decodeIfPresent(Int.self, forKey: .repairCursor) ?? 0)
     }
 
     func encoded() throws -> Data { try SyncCoding.encoder().encode(self) }
 
     static func decode(_ data: Data) -> SyncDeviceState? {
+        if case .valid(let state) = read(data) { return state }
+        return nil
+    }
+
+    enum Read {
+        case valid(SyncDeviceState)
+        /// Written by a newer version: kept, never replaced by this one.
+        case newer
+        case unreadable
+    }
+
+    private struct VersionProbe: Decodable { let version: Int }
+
+    /// The version is read on its own first: a newer version may have changed everything else.
+    static func read(_ data: Data) -> Read {
+        if let probe = try? JSONDecoder().decode(VersionProbe.self, from: data), probe.version > currentVersion { return .newer }
         guard var state = try? SyncCoding.decoder().decode(SyncDeviceState.self, from: data),
-              state.version <= currentVersion else { return nil }
+              state.version <= currentVersion else { return .unreadable }
         if state.replica.readHeldBack() { state.token = nil }
-        return state
+        return .valid(state)
     }
 }
 
@@ -104,6 +135,14 @@ public struct SyncReport: Sendable, Equatable {
     /// large share of them at once (`SyncSession.largeCleanup`); they go once the deletion is a
     /// week old. Space is taken meanwhile, nothing is lost.
     public var cleanupHeld = 0
+    /// The library committed a deletion (from another device, or one this device made earlier)
+    /// but its local files are not all removed yet. The store retries on its next read or write
+    /// and on the next launch; until then the deleted photo's files are still on this device.
+    public var localCleanupPending = false
+    /// Sync's own file could not be written at the end of `deleteHomeInCloud`. What the report
+    /// says about the cloud stands; the file on disk is one write behind (it still lists as
+    /// unsent records the cloud already has, and the next cycle sends them again, harmlessly).
+    public var localStateUnsaved = false
 }
 
 extension SyncTransportError {
@@ -162,6 +201,8 @@ public actor SyncSession {
     private var closed = false
     /// Files that arrived but can't be used, by hash; not downloaded again by this session.
     private var unusable = Set<String>()
+    /// Cloud copies checked whole by clean-up (`isSound`), by hash; not fetched again.
+    private var soundFiles = Set<String>()
     /// The running cycle's clock, so a setting written meanwhile is stamped after what it saw.
     private var cycleClock: SyncClock?
 
@@ -271,27 +312,56 @@ public actor SyncSession {
         await lockFile()
         defer { unlockFile() }
         log.notice("sync: session closed")
-        if forgetting { try await forget(acceptingCurrentAccount: false) }
+        if forgetting { try await forget(acceptingCurrentAccount: false, account: nil) }
     }
 
     /// Forgets everything sync knew (sync turned off, the cloud data deleted, or the user agreed
     /// to use another account). The library is not touched; the next sync merges it as a first.
     /// Which account the home synced with is kept: in another account the next sync stops with
     /// `accountChanged`, until the user's answer passes `acceptingCurrentAccount: true`.
-    public func startOver(acceptingCurrentAccount: Bool = false) async throws {
+    ///
+    /// `account` is the account the caller checked (the one it knows the home synced with, or
+    /// the one the user agreed to): the new state is bound to it when the file names none (no
+    /// file, an unreadable one), so the next cycle in any other account stops too, instead of
+    /// taking whichever account answers (audit AA24-01, CC24-01). With `acceptingCurrentAccount`
+    /// it replaces the file's account. An unreadable file and its backup are kept aside (the
+    /// `.unreadable` copies); a newer version's file is never replaced (`SyncStateError.newerVersion`).
+    ///
+    /// `accountChecked: false` says `account` is only the one signed in now, not one checked
+    /// against what the home synced with (a new install with no marker that opened its library
+    /// from the fallback copy). With an unreadable file that is not enough to bind: it throws
+    /// `SyncStateError.unreadable`, writing nothing and leaving the copies where they are, as
+    /// `startOnNewInstall` does (QA review round 20, G1, the fallback path).
+    public func startOver(acceptingCurrentAccount: Bool = false, account: String? = nil, accountChecked: Bool = true) async throws {
         await lockCycle()
         defer { unlockCycle() }
         try checkOpen()
         await lockFile()
         defer { unlockFile() }
-        try await forget(acceptingCurrentAccount: acceptingCurrentAccount)
+        try await forget(acceptingCurrentAccount: acceptingCurrentAccount, account: account,
+                         unreadableNeedsCheck: !accountChecked && !acceptingCurrentAccount)
     }
 
     /// `startOver` without the locks (the caller holds both).
-    private func forget(acceptingCurrentAccount: Bool) async throws {
+    private func forget(acceptingCurrentAccount: Bool, account: String?, unreadableNeedsCheck: Bool = false) async throws {
         let (_, generation) = try await store.syncSnapshot()
+        let stored = try await storedRead()
         var fresh = SyncDeviceState(device: deviceID)
-        if !acceptingCurrentAccount { fresh.account = try await storedDevice()?.account }
+        switch stored {
+        case .newer:
+            throw SyncStateError.newerVersion
+        case .unreadable:
+            if unreadableNeedsCheck {
+                log.error("sync: unreadable sync file and no account checked, not started over")
+                throw SyncStateError.unreadable
+            }
+            try await store.setAsideUnreadableSyncState(generation: generation)
+        case .valid(let device):
+            if !acceptingCurrentAccount { fresh.account = device.account }
+        case .absent:
+            break
+        }
+        fresh.account = fresh.account ?? account
         try await store.writeSyncState(try fresh.encoded(), generation: generation)
         // Turned off: downloads waiting to be shown are not kept.
         await store.pruneSyncIncoming(keeping: nil)
@@ -315,7 +385,13 @@ public actor SyncSession {
     /// It goes on under a new device id, as `checkOwnId` would once it heard the old phone: two
     /// installs under one id would hide each other's unseen edits behind their deletions. The
     /// file's account is kept, so in another account the next cycle stops with `accountChanged`.
-    /// Starts over only when no file reads, or the one there is from before any sync.
+    /// Starts over only when there is no file, or the one there is from before any sync.
+    ///
+    /// Both copies there and neither readable throws `SyncStateError.unreadable`, writing
+    /// nothing and leaving them where they are: the account the home synced with is in there,
+    /// and a new install has nothing else to check it against (no marker of its own). Starting
+    /// over took whichever account answered (QA review round 20, G1, the new-install side of
+    /// AA24-01). Only the user's explicit answer goes on (`startOver(acceptingCurrentAccount:)`).
     public func startOnNewInstall() async throws -> InstallStart {
         await lockCycle()
         defer { unlockCycle() }
@@ -323,8 +399,14 @@ public actor SyncSession {
         await lockFile()
         defer { unlockFile() }
         let (snapshot, generation) = try await store.syncSnapshot()
-        guard var device = try await storedDevice(), device.base != nil else {
-            try await forget(acceptingCurrentAccount: false)
+        let stored = try await storedRead()
+        if case .unreadable = stored {
+            log.error("sync: new install with an unreadable sync file, not started over")
+            throw SyncStateError.unreadable
+        }
+        // A newer version's file is left alone (`forget` throws).
+        guard case .valid(var device) = stored, device.base != nil else {
+            try await forget(acceptingCurrentAccount: false, account: nil)
             log.notice("sync: new install with nothing to go on from, started over")
             return .startedOver
         }
@@ -382,8 +464,24 @@ public actor SyncSession {
 
         let stamp = device.clock.tick(now: now())
         let empty = AppState.empty
+        // A photo shown through several records of one stored copy is deleted as an ordinary
+        // deletion of it is (`SyncCapture.photos`): each record names the others it was deleted
+        // with, held-back ones included, so an unseen edit that brings one back brings the photo
+        // back whole (audit 2026-11-24, DD24-01).
+        var together: [String: [String]] = [:]
+        for group in SyncPhotoGroups(device.replica).groups where group.members.count > 1 {
+            let listed = group.names.filter { name in
+                guard device.replica.unreadable[name] == nil else { return true }
+                return device.replica[name]?.isLive == true
+            }
+            guard listed.count > 1 else { continue }
+            for name in listed { together[name] = listed.sorted() }
+        }
+        // Records this build cannot read are left as they are (a newer build may have written
+        // them): said, so the deletion is not reported as complete (D24-01).
+        report.heldBack = device.replica.unreadable.keys.filter { $0 != SyncRecord.home(device.replica.home).name }.sorted()
         for (name, record) in device.replica.records.sorted(by: { $0.key < $1.key }) where device.replica.unreadable[name] == nil {
-            let tomb = { SyncTombstone.join(record.tomb, SyncTombstone(seen: record.version, at: stamp)) }
+            let tomb = { SyncTombstone.join(record.tomb, SyncTombstone(seen: record.version, at: stamp, together: together[name])) }
             var next: SyncRecord?
             switch record {
             case .home:
@@ -414,8 +512,14 @@ public actor SyncSession {
             report.problem = report.problem ?? error
         }
         report.unsent = device.dirty.count
-        try await save(&device, generation)
-        log.notice("sync: home deleted in the cloud, unsent=\(report.unsent, privacy: .public)")
+        // What went out is in the cloud whatever happens here: a failed write of sync's own file
+        // is said, not thrown as if nothing were deleted anywhere (C24-06). The file on disk is
+        // the one saved before sending, with every deletion in it: the next cycle resends them.
+        do { try await save(&device, generation) } catch {
+            report.localStateUnsaved = true
+            log.error("sync: home deleted in the cloud, sync's own file not saved")
+        }
+        log.notice("sync: home deleted in the cloud, unsent=\(report.unsent, privacy: .public) held=\(report.heldBack.count, privacy: .public)")
         return report
     }
 
@@ -446,12 +550,44 @@ public actor SyncSession {
     }
 
     /// Sync's own file, or the one before it when it cannot be read (damaged, or a crash in the
-    /// middle of replacing it). Only when neither reads does sync start over as a first sync.
+    /// middle of replacing it). nil only when there is neither: a first sync. Files that are
+    /// there but none can be read, or a newer version's, throw (`SyncStateError`); a read that
+    /// fails throws the store's error. None of them is taken for "no file".
     private func storedDevice() async throws -> SyncDeviceState? {
-        if let data = try await store.readSyncState(), let device = SyncDeviceState.decode(data) { return device }
-        guard let data = try await store.readSyncStateBackup(), let device = SyncDeviceState.decode(data) else { return nil }
-        log.error("sync: own file unreadable, using the previous one")
-        return device
+        switch try await storedRead() {
+        case .absent: return nil
+        case .valid(let device): return device
+        case .newer: throw SyncStateError.newerVersion
+        case .unreadable: throw SyncStateError.unreadable
+        }
+    }
+
+    private enum Stored {
+        case absent, valid(SyncDeviceState), newer, unreadable
+    }
+
+    private func storedRead() async throws -> Stored {
+        let primary = try await store.readSyncState()
+        if let primary {
+            switch SyncDeviceState.read(primary) {
+            case .valid(let device): return .valid(device)
+            case .newer: return .newer
+            case .unreadable: break
+            }
+        }
+        let backup = try await store.readSyncStateBackup()
+        if let backup {
+            switch SyncDeviceState.read(backup) {
+            case .valid(let device):
+                log.error("sync: own file unreadable, using the previous one")
+                return .valid(device)
+            case .newer: return .newer
+            case .unreadable: break
+            }
+        }
+        if primary == nil, backup == nil { return .absent }
+        log.error("sync: own file and the previous one unreadable")
+        return .unreadable
     }
 
     /// Records this device's edits without the network, so they are ordered by when they were
@@ -545,6 +681,7 @@ public actor SyncSession {
         device.account = account
 
         // Turning sync on: see everything first, so this device adds to the cloud's records.
+        var offeredNotes: [String: SyncRegister<String>] = [:]
         if device.base == nil {
             do { try await fetch(&device, &report) } catch let error as SyncTransportError {
                 report.problem = error
@@ -554,13 +691,17 @@ public actor SyncSession {
             let before = SyncProjection.project(device.replica, local: snapshot, catalog: catalog).state
             device.dirty.formUnion(SyncCapture.capture(base: nil, current: snapshot, projected: before, catalog: catalog,
                                                        into: &device.replica, clock: &device.clock, now: now()))
+            // The notes this first sync offers, for a save that meets another first sync (C24-04).
+            for name in device.dirty {
+                if case .photo(let photo) = device.replica[name] { offeredNotes[name] = photo.note }
+            }
             device.base = snapshot
             try await save(&device, generation)
         }
 
         var fetched = false
         do {
-            try await push(&device, snapshot, &report)
+            try await push(&device, snapshot, &report, offeredNotes: offeredNotes)
             try await fetch(&device, &report)
             fetched = true
         } catch let error as SyncTransportError {
@@ -575,7 +716,7 @@ public actor SyncSession {
         }
 
         var projection = SyncProjection.project(device.replica, local: snapshot, catalog: catalog)
-        let downloaded = await arrivedFiles(projection.missingFiles, online: report.problem != .offline)
+        let downloaded = await arrivedFiles(projection.missingFiles, online: report.problem != .offline, generation: generation)
         if !downloaded.isEmpty {
             projection = SyncProjection.project(device.replica, local: snapshot, downloaded: downloaded, catalog: catalog)
         }
@@ -618,6 +759,9 @@ public actor SyncSession {
         } else {
             try await store.writeSyncState(try device.encoded(), generation: generation)
         }
+        // A deletion committed whose local files are not all removed yet (the store retries):
+        // the cycle is not reported as if they were gone (audit 2026-11-24, DD24-03).
+        report.localCleanupPending = await store.deletionPending
         // Staged copies this cycle wrote are gone; the rest stay only while still waited for.
         await store.pruneSyncIncoming(keeping: Set(projection.missingFiles.flatMap { $0.map(\.sha256) }))
         log.info("sync: sent=\(report.sent, privacy: .public) received=\(report.received, privacy: .public) applied=\(report.applied, privacy: .public) waiting=\(report.waitingForFiles, privacy: .public)")
@@ -627,7 +771,9 @@ public actor SyncSession {
     /// For each photo still to come (its copies, best first), a copy it can be shown with: one
     /// staged by an earlier attempt or cycle, else downloaded now, checked and staged on disk
     /// before the next download starts (one file in memory at a time).
-    private func arrivedFiles(_ missing: [[SyncFileInfo]], online: Bool) async -> [String: SyncIncomingFile] {
+    /// Staged only into the library `generation` names: a download that returns after a restore
+    /// or a clear writes nothing into the new library (DD24-02).
+    private func arrivedFiles(_ missing: [[SyncFileInfo]], online: Bool, generation: UUID) async -> [String: SyncIncomingFile] {
         var arrived: [String: SyncIncomingFile] = [:]
         next: for copies in missing {
             for info in copies {
@@ -653,7 +799,7 @@ public actor SyncSession {
                     log.error("sync: a downloaded photo file can't be used here")
                     continue
                 }
-                guard let file = try? await store.stageSyncedFile(data, thumbnailJPEG: thumbnail, info: info) else { continue }
+                guard let file = try? await store.stageSyncedFile(data, thumbnailJPEG: thumbnail, info: info, generation: generation) else { continue }
                 arrived[info.sha256] = file
                 break
             }
@@ -663,8 +809,11 @@ public actor SyncSession {
 
     /// Sends dirty records, the file first for a photo whose copy is this device's. A conflict
     /// is merged and sent again (up to three rounds); a record the server already holds as
-    /// merged is no longer dirty.
-    private func push(_ device: inout SyncDeviceState, _ local: AppState, _ report: inout SyncReport) async throws {
+    /// merged is no longer dirty. `offeredNotes`: on the cycle that turns sync on, the photo
+    /// notes it offered (see `SyncCapture.concurrentFirstSyncNote`).
+    private func push(_ device: inout SyncDeviceState, _ local: AppState, _ report: inout SyncReport,
+                      offeredNotes: [String: SyncRegister<String>] = [:]) async throws {
+        var offeredNotes = offeredNotes
         let localFiles = Dictionary(local.photos.map { ($0.sha256, $0.photoId) }, uniquingKeysWith: { a, _ in a })
         var blocked = Set<String>()
         for _ in 0..<3 {
@@ -720,7 +869,8 @@ public actor SyncSession {
                     let name = batch[index].envelope.name
                     guard let file = uploaded[name] else { continue }
                     do {
-                        guard try await !transport.hasFile(sha256: file.sha256) else { continue }
+                        // The cloud itself, not an answer remembered from the upload (D24-02).
+                        guard try await !transport.confirmFile(sha256: file.sha256) else { continue }
                         guard let url = await store.originalURL(photoId: file.photoId), let data = try? Data(contentsOf: url),
                               PhotoIngest.sha256Hex(data) == file.sha256 else { throw SyncTransportError.rejected("localCopy") }
                         try await transport.uploadFile(sha256: file.sha256, data: data)
@@ -745,7 +895,18 @@ public actor SyncSession {
                             checkOwnId(theirs, &device)
                             device.clock.observe(theirs.newestStamp)
                         }
+                        let mine = device.replica[name]
                         device.replica.merge(server.envelope)
+                        // Another first sync got there first with its own note: both are kept,
+                        // as two parts, when both are still what the two first syncs offered.
+                        if let offered = offeredNotes[name], case .photo(let was)? = mine, was.note == offered,
+                           case .photo(let theirs)? = server.envelope.decoded(),
+                           let both = SyncCapture.concurrentFirstSyncNote(theirs.note, offered),
+                           device.replica.unreadable[name] == nil, case .photo(var merged)? = device.replica[name] {
+                            merged.note = both
+                            device.replica.merge(SyncRecord.photo(merged).written(device.clock.tick(now: now())))
+                            offeredNotes[name] = both
+                        }
                         if server.envelope.decoded() == device.replica[name] { device.dirty.remove(name) }
                     case .failed(let name, let error):
                         blocked.insert(name)
@@ -807,9 +968,20 @@ public actor SyncSession {
         guard device.replica.unreadable.isEmpty, !stopped else { return }
         let photos = device.replica.photos.sorted(by: { $0.sourceHash < $1.sourceHash })
         let comingBack = Self.photosLinkedUnheard(device.replica)
-        func kept(_ record: PhotoSyncRecord) -> Bool { SyncRecord.photo(record).isLive || comingBack.contains(record.sourceHash) }
+        // A deleted record shown again with a live one of its stored copy (`SyncPhotoGroups`)
+        // is part of a photo shown: its copies, and the best of the whole photo's, stay
+        // (audit 2026-11-24, C24-01).
+        var shown = Set<String>(), groupBest = Set<String>()
+        for group in SyncPhotoGroups(device.replica).groups {
+            shown.formUnion(group.members.map(\.sourceHash))
+            groupBest.insert(group.merged.file.sha256)
+        }
+        func kept(_ record: PhotoSyncRecord) -> Bool {
+            SyncRecord.photo(record).isLive || comingBack.contains(record.sourceHash) || shown.contains(record.sourceHash)
+        }
         let live = photos.filter(kept)
-        let best = Set(live.map(\.file.sha256)), inUse = Set(live.flatMap { $0.copies.map(\.sha256) })
+        let best = Set(live.map(\.file.sha256)).union(groupBest), inUse = Set(live.flatMap { $0.copies.map(\.sha256) })
+        var soundChecks = 0
         let nowDate = now()
         let cutoff = SyncClock.millis(nowDate.addingTimeInterval(-Self.fileGrace))
         var unneeded = Set<String>()
@@ -822,7 +994,8 @@ public actor SyncSession {
                     unneeded.formUnion(extra)
                     continue
                 }
-                guard (try? await transport.hasFile(sha256: record.file.sha256)) == true else { continue }
+                guard (try? await transport.hasFile(sha256: record.file.sha256)) == true,
+                      await isSound(record.file, checks: &soundChecks) else { continue }
                 unneeded.formUnion(extra)
             } else if let tomb = record.tomb, tomb.at.wall <= cutoff {
                 for sha in record.copies.map(\.sha256) where !inUse.contains(sha) {
@@ -846,12 +1019,40 @@ public actor SyncSession {
         }
         var deleted = 0
         for sha in due where deleted < Self.collectLimit {
-            if let stored = (try? await transport.fileStoredAt(sha256: sha)) ?? nil,
-               stored > nowDate.addingTimeInterval(-Self.fileGrace) { continue }
+            // An answer that failed is not "the cloud can't tell": the file waits for one
+            // (audit 2026-11-24, D24-03).
+            let stored: Date?
+            do { stored = try await transport.fileStoredAt(sha256: sha) } catch { continue }
+            if let stored, stored > nowDate.addingTimeInterval(-Self.fileGrace) { continue }
             guard (try? await transport.deleteFile(sha256: sha)) != nil else { continue }
             device.collectedFiles.insert(sha)
             deleted += 1
         }
+    }
+
+    /// Whether the cloud's copy of `info` is whole: fetched and checked against its name before
+    /// a lesser copy is deleted for it. A best copy stored damaged would otherwise pass for one
+    /// that is there, and the sound copies devices fall back to would go (audit 2026-11-24,
+    /// C24-07). A few checks per cycle; a copy found sound is not fetched again this session,
+    /// and one found damaged is kept as unusable. Any other failure: not now.
+    private func isSound(_ info: SyncFileInfo, checks: inout Int) async -> Bool {
+        if soundFiles.contains(info.sha256) { return true }
+        guard !unusable.contains(info.sha256), checks < Self.repairBatch, !stopped else { return false }
+        checks += 1
+        let data: Data
+        do { data = try await transport.downloadFile(sha256: info.sha256) } catch SyncTransportError.rejected {
+            unusable.insert(info.sha256)
+            return false
+        } catch {
+            return false
+        }
+        guard data.count == info.byteSize, PhotoIngest.sha256Hex(data) == info.sha256 else {
+            unusable.insert(info.sha256)
+            log.error("sync: the cloud's best copy of a photo is damaged; its other copies stay")
+            return false
+        }
+        soundFiles.insert(info.sha256)
+        return true
     }
 
     /// One cycle's clean-up is unusually large: at least `largeCleanupFloor` files and more
@@ -889,7 +1090,7 @@ public actor SyncSession {
             if let mine = record.copies.first(where: { localBySha[$0.sha256] != nil }) { held.append((record, mine, localBySha[mine.sha256]!)) }
         }
         guard !held.isEmpty else { return }
-        let start = device.repairCursor % held.count
+        let start = ((device.repairCursor % held.count) + held.count) % held.count
         for offset in 0..<min(Self.repairBatch, held.count) where !stopped {
             let (record, mine, photoId) = held[(start + offset) % held.count]
             guard (try? await transport.hasFile(sha256: record.file.sha256)) == false,

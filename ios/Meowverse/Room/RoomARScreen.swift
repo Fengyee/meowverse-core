@@ -94,6 +94,9 @@ struct RoomARScreen: View {
     /// `-MeowverseARDrill camera-off|controls`: the two states the simulator cannot reach, for
     /// the colour checks. `controls` is the bottom bar with a surface found, over black.
     private static let drill = UserDefaults.standard.string(forKey: "MeowverseARDrill")
+    private static var drillsCameraOff: Bool { drill == "camera-off" }
+    #else
+    private static let drillsCameraOff = false
     #endif
     @State private var mode: Mode?
     @State private var surfaceFound = false
@@ -180,6 +183,17 @@ struct RoomARScreen: View {
             }
             #endif
             mode = await Self.entryMode()
+        }
+        // Back from Settings with the camera turned on (FF24-02, EXTENSIONS-11): the page that
+        // said 相机权限已关闭 starts the table once, without asking again. Only on a yes already
+        // given; denied or restricted stays as it is.
+        .task(id: scenePhase) {
+            guard scenePhase == .active, mode == .cameraOff, !Self.drillsCameraOff,
+                  AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { return }
+            let next = await Self.entryMode()
+            guard !Task.isCancelled, mode == .cameraOff else { return }
+            RoomARLog.log.notice("camera access on after Settings: \(String(describing: next), privacy: .public)")
+            mode = next
         }
         .sheet(item: $detail) { piece in
             FurnitureDetailView(instanceId: piece.id, busyDetailID: $busyDetailID) {
@@ -320,6 +334,7 @@ struct RoomARScreen: View {
     private func handle(_ event: RoomARSceneView.Event) {
         switch event {
         case .surfaceFound: surfaceFound = true
+        case .surfaceLost: surfaceFound = false
         case .placed(let now): placed = now
         case .interrupted(let now): interrupted = now
         case .coaching(let now): coaching = now
@@ -344,6 +359,8 @@ struct RoomARScreen: View {
 struct RoomARSceneView: UIViewRepresentable {
     enum Event {
         case surfaceFound
+        /// Every table plane ARKit had found is gone (G24-06): look for one again.
+        case surfaceLost
         case placed(Bool)
         case interrupted(Bool)
         case coaching(Bool)
@@ -425,6 +442,8 @@ final class RoomARCoordinator: NSObject, @preconcurrency ARSessionDelegate, @pre
     private var pose: ARTabletopPose?
     private var running = false
     private var surfaceReported = false
+    /// The horizontal planes ARKit has now, so losing the last one is reported (G24-06).
+    private var planes: Set<UUID> = []
     /// The finger's last point on the table while dragging.
     private var dragPoint: SIMD3<Float>?
 
@@ -558,9 +577,18 @@ final class RoomARCoordinator: NSObject, @preconcurrency ARSessionDelegate, @pre
     // MARK: Session
 
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        guard !surfaceReported, anchors.contains(where: { ($0 as? ARPlaneAnchor)?.alignment == .horizontal }) else { return }
+        planes.formUnion(anchors.compactMap { ($0 as? ARPlaneAnchor)?.alignment == .horizontal ? $0.identifier : nil })
+        guard !surfaceReported, !planes.isEmpty else { return }
         surfaceReported = true
         onEvent?(.surfaceFound)
+    }
+
+    func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
+        planes.subtract(anchors.map(\.identifier))
+        guard surfaceReported, planes.isEmpty else { return }
+        RoomARLog.log.notice("table plane lost")
+        surfaceReported = false
+        onEvent?(.surfaceLost)
     }
 
     func session(_ session: ARSession, didFailWithError error: Error) {

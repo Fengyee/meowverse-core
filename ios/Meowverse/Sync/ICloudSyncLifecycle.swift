@@ -27,6 +27,10 @@ extension QuickActionAppDelegate {
     /// A silent push from CloudKit (another device changed something): one sync cycle.
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
         guard CKNotification(fromRemoteNotificationDictionary: userInfo) != nil else { return .noData }
-        return await SyncPushCenter.shared.receive() ? .newData : .noData
+        switch await SyncPushCenter.shared.receive() {
+        case .newData?: return .newData
+        case .failed?: return .failed
+        case .noData?, nil: return .noData
+        }
     }
 }

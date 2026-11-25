@@ -13,7 +13,9 @@ struct FeedbackView: View {
     @State private var report: FeedbackReport?
     @State private var composing = false
     @State private var outcome: MailOutcome?
-    @State private var copied = false
+    /// What was last put on the clipboard. "Copied" shows only while it is still what the page
+    /// would copy now: editing the description, the diagnostics switch or a late report ends it (R01-003).
+    @State private var copiedText: String?
     @FocusState private var describing: Bool
 
     private let recipient = FeedbackConfig.recipient
@@ -117,12 +119,13 @@ struct FeedbackView: View {
                 // Offered with or without diagnostics: the failure message below always points here.
                 if !includeDiagnostics || report != nil {
                     Button(includeDiagnostics ? "拷贝诊断信息" : "拷贝问题描述", systemImage: "doc.on.doc") {
-                        UIPasteboard.general.string = FeedbackMessage.plainText(description: problem, report: attachedReport)
-                        copied = true
+                        let text = copyText
+                        UIPasteboard.general.string = text
+                        copiedText = text
                     }
                     .buttonStyle(ListCommandStyle())
                     .accessibilityIdentifier("feedback-copy")
-                    if copied {
+                    if copiedText == copyText {
                         Label(includeDiagnostics ? "已拷贝问题描述和诊断信息。" : "已拷贝问题描述。", systemImage: "checkmark.circle")
                             .font(.subheadline)
                             .accessibilityIdentifier("feedback-copied")
@@ -137,6 +140,8 @@ struct FeedbackView: View {
         // No TestFlight hint here: App Review installs carry the same sandbox receipt, and a
         // reviewer reading "TestFlight" may treat the build as a beta (guideline 2.2).
     }
+
+    private var copyText: String { FeedbackMessage.plainText(description: problem, report: attachedReport) }
 
     private func compose() {
         outcome = nil

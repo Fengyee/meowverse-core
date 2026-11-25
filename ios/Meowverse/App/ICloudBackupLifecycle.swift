@@ -98,9 +98,11 @@ struct ICloudRestoreSheet: View {
             }
         }
         .onDisappear {
-            // Closing the sheet drops an unconfirmed preview and stops a download.
+            // Closing the sheet drops an unconfirmed preview and stops a download, and a read that
+            // is still verifying: its preview would arrive with no sheet to show it (audit B24-06).
             model.cancelPendingRestore()
             if case .downloading = model.cloud.activity { model.cancelCloudActivity() }
+            if model.backup.busy?.operation == .reading { model.cancelBackupOperation() }
         }
     }
 
